@@ -3,23 +3,33 @@
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { CheckCircle2Icon } from "lucide-react";
 
 export function WaitingListForm() {
+  const joinWaitlist = useMutation(api.waitlist.joinWaitlist);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // Simulated success - replace with actual API call
+      await joinWaitlist({ email });
+      setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return (
+  return isSubmitted ? (
+    <div className="flex items-center space-x-2 rounded-lg bg-green-100 p-4 text-green-600">
+      <CheckCircle2Icon className="size-4" />
+      <span>Thank you for joining our waiting list!</span>
+    </div>
+  ) : (
     <form onSubmit={handleSubmit} className="mb-8">
       <div className="mx-auto flex max-w-md flex-col gap-2 sm:flex-row">
         <Input
