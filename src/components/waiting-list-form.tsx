@@ -8,7 +8,7 @@ import { api } from "../../convex/_generated/api";
 import { CheckCircle2Icon } from "lucide-react";
 
 export function WaitingListForm() {
-  const joinWaitlist = useMutation(api.waitlist.joinWaitlist);
+  const joinMailingList = useMutation(api.mailingList.joinMailingList);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -17,7 +17,7 @@ export function WaitingListForm() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await joinWaitlist({ email });
+      await joinMailingList({ email });
       setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
