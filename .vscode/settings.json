@@ -1,0 +1,26 @@
+{
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.[tj]sx": "${dirname(1)}/${dirname} - Page",
+    "**/app/**/layout.[tj]sx": "${dirname(1)}/${dirname} - Layout",
+    "**/app/**/error.[tj]sx": "${dirname(1)}/${dirname} - Error",
+    "**/app/**/loading.[tj]sx": "${dirname(1)}/${dirname} - Loading",
+    "**/app/**/actions.[tj]s": "${filename} - Server Action",
+    "**/app/**/**.[tj]sx": "${filename} - Component",
+    "**/components/**/index.[tj]sx": "${dirname} - Component",
+    "**/components/**/**.[tj]sx": "${filename} - Component",
+    "**/app/api/**/route.[tj]s": "${dirname(1)}/${dirname} - API"
+  }
+}
