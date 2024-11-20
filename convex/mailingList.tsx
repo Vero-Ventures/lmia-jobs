@@ -2,6 +2,7 @@ import { internalAction, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { Resend } from "resend";
 import WaitListConfirmed from "./emails/waitlist-confirmed";
+import { internal } from "./_generated/api";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -16,6 +17,13 @@ export const joinMailingList = mutation({
       return;
     }
     await ctx.db.insert("mailingList", { email });
+    await ctx.scheduler.runAfter(
+      0,
+      internal.mailingList.sendWaitingListConfirmedEmail,
+      {
+        email,
+      }
+    );
   },
 });
 
