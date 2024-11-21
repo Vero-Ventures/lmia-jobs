@@ -1,7 +1,7 @@
 import { internalAction, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { Resend } from "resend";
-import WaitListConfirmed from "./emails/waitlist-confirmed";
+import WaitListConfirmed from "./emails/WaitListConfirmed";
 import { internal } from "./_generated/api";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);

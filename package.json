@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "email:dev": "email dev",
+    "email:dev": "email dev --dir convex/emails",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --list-different --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
   },
