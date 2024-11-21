@@ -11,6 +11,7 @@ import {
 import { FilterIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { JOB_TYPES, PROVINCES } from "./lib/constants";
+import JobPostingSection from "./components/job-posting-section";
 
 const JOB_SITES = [
   {
@@ -38,6 +39,7 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
   if (!jobSite) {
     notFound();
   }
+
   return (
     <>
       <header className="p-4">
@@ -83,7 +85,7 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
             </div>
           </CardContent>
         </Card>
-        <section></section>
+        <JobPostingSection />
       </main>
     </>
   );
