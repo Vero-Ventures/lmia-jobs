@@ -4,7 +4,9 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ConvexClientProvider } from "@/components/providers/convex-client-provider";
 
-const inter = Inter();
+const inter = Inter({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Job Bank",
