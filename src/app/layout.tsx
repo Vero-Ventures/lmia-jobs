@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Job Bank",
+  title: "LMIA Jobs",
   description: "Streamlining the LMIA process for Canadian employers",
 };
 

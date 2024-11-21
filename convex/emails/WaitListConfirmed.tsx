@@ -13,7 +13,7 @@ export default function WaitListConfirmed() {
     <Html>
       <Head />
       <Preview>
-        Great news! You&apos;ve been added to our waitlist for Job Bank.
+        Great news! You&apos;ve been added to our waitlist for LMIA Jobs.
       </Preview>
       <Body style={main}>
         <Container style={container}>
@@ -24,7 +24,8 @@ export default function WaitListConfirmed() {
               </Text>
               <Text style={mainText}>Hi,</Text>
               <Text style={validityText}>
-                Great news! You&apos;ve been added to our waitlist for Job Bank.
+                Great news! You&apos;ve been added to our waitlist for LMIA
+                Jobs.
               </Text>
               <Text style={validityText}>
                 We&apos;ll notify you as soon as it becomes available.
