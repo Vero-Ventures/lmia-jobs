@@ -33,7 +33,7 @@ export const sendWaitingListConfirmedEmail = internalAction({
   },
   handler: async (_ctx, { email }) => {
     await resend.emails.send({
-      from: "Job Bank <no-reply@livetimeless.veroventures.com>",
+      from: "Job Bank <no-reply@lmia.veroventures.com>",
       to: [email],
       subject: "You are on Job Bank's early access list",
       react: <WaitListConfirmed />,
