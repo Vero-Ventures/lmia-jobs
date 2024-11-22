@@ -5,6 +5,7 @@ import { useQuery } from "convex/react";
 import { JobListCard } from "./job-list-card";
 import { useState } from "react";
 import { JobPostingCard } from "./job-posting-card";
+import { Loader2Icon } from "lucide-react";
 
 export default function JobPostingSection({
   jobType,
@@ -29,9 +30,9 @@ export default function JobPostingSection({
     <section className="container mx-auto p-4">
       {!jobPostings ? (
         <div className="flex items-center justify-center">
-          <div className="h-20 w-20 animate-spin rounded-full border-8 border-gray-300 border-t-gray-600" />
+          <Loader2Icon className="size-20 animate-spin" />
         </div>
-      ) : (
+      ) : jobPostings.length > 0 ? (
         <div className="flex gap-4">
           <div className="w-4/12 space-y-8">
             {jobPostings.map((jobPosting) => {
@@ -57,6 +58,8 @@ export default function JobPostingSection({
             />
           </div>
         </div>
+      ) : (
+        <div className="text-center">No jobs matched the filter.</div>
       )}
     </section>
   );
