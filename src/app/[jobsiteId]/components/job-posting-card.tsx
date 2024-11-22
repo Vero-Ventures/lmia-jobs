@@ -32,7 +32,7 @@ export function JobPostingCard({
     return null;
   }
   return (
-    <Card className="sticky top-4">
+    <Card className="sticky top-4 max-h-[900px]">
       <CardHeader className="space-y-4">
         <div>
           <CardTitle className={`titleCase text-2xl font-bold dark:text-white`}>
@@ -45,6 +45,7 @@ export function JobPostingCard({
             {new Date(jobPosting.datePosted).toDateString()}
           </div>
         </div>
+
         <div className="grid gap-6 text-sm md:grid-cols-2">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -99,7 +100,9 @@ export function JobPostingCard({
             </div>
           </div>
         </div>
-        <Separator />
+      </CardHeader>
+      <Separator className="mb-4" />
+      <div className="max-h-[400px] overflow-y-auto">
         <CardContent>
           <h5 className={`text-base font-bold dark:text-white`}>
             Job Description
@@ -125,7 +128,7 @@ export function JobPostingCard({
             </div>
           </div>
         </CardFooter>
-      </CardHeader>
+      </div>
     </Card>
   );
 }
