@@ -28,20 +28,20 @@ const JOB_SITES = [
   },
 ];
 
-export default function Page({
+export default async function Page({
   params,
   searchParams,
 }: {
-  params: { jobsiteId: string };
-  searchParams: {
+  params: Promise<{ jobsiteId: string }>;
+  searchParams: Promise<{
     query?: string;
     jobType?: string;
     location?: string;
     jobPostingId?: string;
-  };
+  }>;
 }) {
-  const { jobsiteId } = params;
-  const { jobType, location } = searchParams;
+  const { jobsiteId } = await params;
+  const { jobType, location } = await searchParams;
 
   const jobSite = JOB_SITES.find((jobSite) => jobSite.id === jobsiteId);
 
