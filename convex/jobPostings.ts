@@ -24,6 +24,7 @@ export const listJobPostings = query({
           .withIndex("by_job_type", (q) => q.eq("employmentSubType", jobType))
           .collect();
       }
+      return await ctx.db.query("jobPostings").collect();
     }
   },
 });
