@@ -53,4 +53,4 @@ export const PROVINCES = [
   },
 ];
 
-export const JOB_TYPES = ["All", "Full Time", "Part Time"];
+export const JOB_TYPES = ["Full Time", "Part Time"];

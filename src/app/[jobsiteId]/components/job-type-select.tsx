@@ -41,6 +41,7 @@ export default function JobTypeSelect({
         <SelectValue placeholder="Choose job type" />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value="All">All</SelectItem>
         {JOB_TYPES.map((jobType) => (
           <SelectItem key={jobType} value={jobType}>
             {jobType}

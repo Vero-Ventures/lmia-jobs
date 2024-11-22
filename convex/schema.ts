@@ -26,5 +26,8 @@ export default defineSchema({
     maxCompValue: v.optional(v.string()),
     paid: v.boolean(),
     validThrough: v.string(),
-  }),
+  })
+    .index("by_location", ["addressRegion"])
+    .index("by_job_type", ["employmentSubType"])
+    .index("by_location_job_type", ["addressRegion", "employmentSubType"]),
 });

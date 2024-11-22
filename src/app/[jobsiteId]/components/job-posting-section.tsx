@@ -14,12 +14,23 @@ import type { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
 
-type JobPosting = FunctionReturnType<
-  typeof api.jobPostings.listJobPostings
->[number];
+type JobPosting = NonNullable<
+  FunctionReturnType<typeof api.jobPostings.getSingleJobPosting>
+>;
 
-export default function JobPostingSection() {
-  const jobPostings = useQuery(api.jobPostings.listJobPostings);
+export default function JobPostingSection({
+  jobType,
+  location,
+  jobPostingId,
+}: {
+  jobType?: string;
+  location?: string;
+  jobPostingId?: string;
+}) {
+  const jobPostings = useQuery(api.jobPostings.listJobPostings, {
+    jobType,
+    location,
+  });
 
   return (
     <section className="relative overflow-y-auto p-4">
@@ -38,7 +49,9 @@ export default function JobPostingSection() {
               })}
             </div>
             <div className="w-8/12">
-              <JobPostingCard jobPostingId={jobPostings[0]._id} />
+              <JobPostingCard
+                jobPostingId={jobPostingId ?? jobPostings[0]._id}
+              />
             </div>
           </div>
         )}
@@ -48,8 +61,30 @@ export default function JobPostingSection() {
 }
 
 function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  /**
+   * Get a new searchParams string by merging the current searchParams with a provided key/value pair
+   **/
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
   return (
-    <Card className="cursor-pointer space-y-3">
+    <Card
+      onClick={() =>
+        router.push(
+          pathname + "?" + createQueryString("jobPostingId", jobPosting._id)
+        )
+      }
+      className="cursor-pointer space-y-3"
+    >
       <CardHeader>
         <CardTitle className="titleCase text-xl font-bold">
           {jobPosting.jobTitle}
@@ -88,6 +123,8 @@ import {
   User2Icon,
   MailIcon,
 } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 function JobPostingCard({ jobPostingId }: { jobPostingId: Id<"jobPostings"> }) {
   const jobPosting = useQuery(api.jobPostings.getSingleJobPosting, {
