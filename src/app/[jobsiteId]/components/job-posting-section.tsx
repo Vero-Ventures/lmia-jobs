@@ -8,8 +8,8 @@ import { JobPostingCard } from "./job-posting-card";
 import { Loader2Icon } from "lucide-react";
 
 export default function JobPostingSection({
-  jobType = "",
-  location = "",
+  jobType,
+  location,
 }: {
   jobType?: string;
   location?: string;
@@ -18,6 +18,8 @@ export default function JobPostingSection({
     jobType,
     location,
   });
+  console.log({ jobType, location });
+  console.log(jobPostings);
 
   const [selectedJobPosting, setSelectedJobPosting] =
     useState<Id<"jobPostings"> | null>(null);
