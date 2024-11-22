@@ -26,7 +26,7 @@ export default function JobPostingSection({
   };
 
   return (
-    <section className="p-4">
+    <section className="container mx-auto p-4">
       <div>
         {!jobPostings ? (
           <div className="flex items-center justify-center">
