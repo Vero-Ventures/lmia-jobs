@@ -41,11 +41,11 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
   }
 
   return (
-    <>
+    <div className="flex min-h-dvh flex-col">
       <header className="p-4">
         <h1 className="text-xl font-bold">{jobSite.title}</h1>
       </header>
-      <main className="bg-secondary p-4">
+      <main className="flex-1 bg-secondary p-4">
         <Card>
           <CardContent className="space-y-4 pt-4">
             <div className="flex gap-2">
@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
             <div className="flex gap-2 font-semibold">
               <Select name="jobType">
                 <SelectTrigger>
-                  <SelectValue>Choose job type</SelectValue>
+                  <SelectValue placeholder="Choose job type" />
                 </SelectTrigger>
                 <SelectContent>
                   {JOB_TYPES.map((jobType) => (
@@ -71,7 +71,7 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
               </Select>
               <Select name="location">
                 <SelectTrigger>
-                  <SelectValue>Choose Location</SelectValue>
+                  <SelectValue placeholder="Choose location" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="All">All</SelectItem>
@@ -87,6 +87,6 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
         </Card>
         <JobPostingSection />
       </main>
-    </>
+    </div>
   );
 }
