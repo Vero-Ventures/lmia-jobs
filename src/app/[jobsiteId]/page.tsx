@@ -28,6 +28,18 @@ const JOB_SITES = [
   },
 ];
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ jobsiteId: string }>;
+}) {
+  const { jobsiteId } = await params;
+  const jobSite = JOB_SITES.find((jobSite) => jobSite.id === jobsiteId);
+  return {
+    title: jobSite?.title,
+  };
+}
+
 export default async function Page({
   params,
   searchParams,
