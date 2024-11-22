@@ -7,6 +7,7 @@ import JobPostingSection from "./components/job-posting-section";
 import Form from "next/form";
 import LocationSelect from "./components/location-select";
 import JobTypeSelect from "./components/job-type-select";
+import { cn } from "@/lib/utils";
 
 const JOB_SITES = [
   {
@@ -49,11 +50,11 @@ export default async function Page({
   }
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className={cn("flex min-h-dvh flex-col", jobsiteId)}>
       <header className="border-b p-4">
-        <h1 className="text-xl font-bold">{jobSite.title}</h1>
+        <h1 className="text-xl font-bold text-primary">{jobSite.title}</h1>
       </header>
-      <main className="flex-1 bg-secondary p-4">
+      <main className="flex-1 bg-background p-4">
         <Card>
           <CardContent className="space-y-4 pt-4">
             <Form action={`/${jobSite.id}`} className="flex gap-2">
