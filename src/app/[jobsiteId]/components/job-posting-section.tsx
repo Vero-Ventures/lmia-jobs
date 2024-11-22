@@ -52,7 +52,7 @@ export default function JobPostingSection({
                 );
               })}
             </div>
-            <div className="w-8/12">
+            <div className="sticky top-0 max-h-dvh w-8/12 flex-1 py-4">
               <JobPostingCard
                 jobPostingId={selectedJobPosting ?? jobPostings[0]._id}
               />

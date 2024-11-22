@@ -32,7 +32,7 @@ export function JobPostingCard({
     return null;
   }
   return (
-    <Card className="sticky top-4 max-h-[900px]">
+    <Card className="h-full overflow-y-auto">
       <CardHeader className="space-y-4">
         <div>
           <CardTitle className={`titleCase text-2xl font-bold dark:text-white`}>
@@ -102,7 +102,7 @@ export function JobPostingCard({
         </div>
       </CardHeader>
       <Separator />
-      <div className="max-h-[400px] overflow-y-auto pt-4">
+      <div className="pt-4">
         <CardContent>
           <h5 className={`text-base font-bold dark:text-white`}>
             Job Description
