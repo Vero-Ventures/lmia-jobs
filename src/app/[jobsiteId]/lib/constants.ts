@@ -1,17 +1,56 @@
 export const PROVINCES = [
-  "Alberta",
-  "British Columbia",
-  "Manitoba",
-  "New Brunswick",
-  "Newfoundland and Labrador",
-  "Northwest Territories",
-  "Nova Scotia",
-  "Nunavut",
-  "Ontario",
-  "Prince Edward Island",
-  "Québec",
-  "Saskatchewan",
-  "Yukon",
+  {
+    label: "Alberta",
+    value: "AB",
+  },
+  {
+    label: "British Columbia",
+    value: "BC",
+  },
+  {
+    label: "Manitoba",
+    value: "MB",
+  },
+  {
+    label: "New Brunswick",
+    value: "NB",
+  },
+  {
+    label: "Newfoundland and Labrador",
+    value: "NL",
+  },
+  {
+    label: "Nova Scotia",
+    value: "NS",
+  },
+  {
+    label: "Ontario",
+    value: "ON",
+  },
+  {
+    label: "Prince Edward Island",
+    value: "PE",
+  },
+  {
+    label: "Quebec",
+    value: "QC",
+  },
+  {
+    label: "Saskatchewan",
+    value: "SK",
+  },
+  {
+    label: "Northwest Territories",
+    value: "NT",
+  },
+  {
+    label: "Nunavut",
+    value: "NU",
+  },
+  {
+    label: "Yukon",
+    value: "YT",
+  },
 ];
 
 export const JOB_TYPES = ["All", "Full Time", "Part Time"];
