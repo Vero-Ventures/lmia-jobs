@@ -26,7 +26,7 @@ export default function JobPostingSection({
   };
 
   return (
-    <section className="relative overflow-y-auto p-4">
+    <section className="p-4">
       <div>
         {!jobPostings ? (
           <div className="flex items-center justify-center">

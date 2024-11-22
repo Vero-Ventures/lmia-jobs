@@ -32,7 +32,7 @@ export function JobPostingCard({
     return null;
   }
   return (
-    <Card>
+    <Card className="sticky top-4">
       <CardHeader className="space-y-4">
         <div>
           <CardTitle className={`titleCase text-2xl font-bold dark:text-white`}>
