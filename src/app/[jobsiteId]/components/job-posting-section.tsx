@@ -34,8 +34,6 @@ export default function JobPostingSection({
         <div className="flex items-center justify-center">
           <Loader2Icon className="size-20 animate-spin" />
         </div>
-      ) : jobPostings === null ? (
-        <div className="text-center">No jobs were found.</div>
       ) : jobPostings.length > 0 ? (
         <div className="flex gap-4">
           <div className="w-4/12 space-y-8">
