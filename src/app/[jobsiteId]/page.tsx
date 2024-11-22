@@ -42,14 +42,14 @@ export default function Page({ params }: { params: { jobsiteId: string } }) {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="p-4">
+      <header className="border-b p-4">
         <h1 className="text-xl font-bold">{jobSite.title}</h1>
       </header>
       <main className="flex-1 bg-secondary p-4">
         <Card>
           <CardContent className="space-y-4 pt-4">
             <div className="flex gap-2">
-              <Input className="bg-secondary" placeholder="Search Jobs..." />
+              <Input placeholder="Search Jobs..." />
               <Button>Search</Button>
             </div>
             <div className="flex gap-2 font-semibold">
