@@ -18,8 +18,6 @@ export default function JobPostingSection({
     jobType,
     location,
   });
-  console.log({ jobType, location });
-  console.log(jobPostings);
 
   const [selectedJobPosting, setSelectedJobPosting] =
     useState<Id<"jobPostings"> | null>(null);
@@ -30,11 +28,13 @@ export default function JobPostingSection({
 
   return (
     <section className="container mx-auto p-4">
-      {!jobPostings ? (
+      {jobPostings === undefined ? (
         <div className="flex items-center justify-center">
           <Loader2Icon className="size-20 animate-spin" />
         </div>
-      ) : jobPostings.length > 0 ? (
+      ) : jobPostings === null ? (
+        <div className="text-center">No jobs were found.</div>
+      ) : (
         <div className="flex gap-4">
           <div className="w-4/12 space-y-8">
             {jobPostings.map((jobPosting) => {
@@ -60,8 +60,6 @@ export default function JobPostingSection({
             />
           </div>
         </div>
-      ) : (
-        <div className="text-center">No jobs matched the filter.</div>
       )}
     </section>
   );

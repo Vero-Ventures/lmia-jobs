@@ -4,26 +4,27 @@ import { query } from "./_generated/server";
 export const listJobPostings = query({
   args: { jobType: v.optional(v.string()), location: v.optional(v.string()) },
   handler: async (ctx, { jobType, location }) => {
-    let query = null;
     if (location && jobType) {
-      query = ctx.db
+      return await ctx.db
         .query("jobPostings")
         .withIndex("by_location_job_type", (q) =>
           q.eq("addressRegion", location).eq("employmentSubType", jobType)
-        );
+        )
+        .collect();
     } else {
       if (location) {
-        query = ctx.db
+        return await ctx.db
           .query("jobPostings")
-          .withIndex("by_location", (q) => q.eq("addressRegion", location));
+          .withIndex("by_location", (q) => q.eq("addressRegion", location))
+          .collect();
       }
       if (jobType) {
-        query = ctx.db
+        return await ctx.db
           .query("jobPostings")
-          .withIndex("by_job_type", (q) => q.eq("employmentSubType", jobType));
+          .withIndex("by_job_type", (q) => q.eq("employmentSubType", jobType))
+          .collect();
       }
     }
-    return await query?.collect();
   },
 });
 
