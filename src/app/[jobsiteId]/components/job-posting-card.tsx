@@ -101,8 +101,8 @@ export function JobPostingCard({
           </div>
         </div>
       </CardHeader>
-      <Separator className="mb-4" />
-      <div className="max-h-[400px] overflow-y-auto">
+      <Separator />
+      <div className="max-h-[400px] overflow-y-auto pt-4">
         <CardContent>
           <h5 className={`text-base font-bold dark:text-white`}>
             Job Description
