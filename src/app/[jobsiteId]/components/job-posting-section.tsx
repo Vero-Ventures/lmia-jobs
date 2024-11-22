@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
@@ -21,16 +22,20 @@ type JobPosting = NonNullable<
 export default function JobPostingSection({
   jobType,
   location,
-  jobPostingId,
 }: {
   jobType?: string;
   location?: string;
-  jobPostingId?: string;
 }) {
   const jobPostings = useQuery(api.jobPostings.listJobPostings, {
     jobType,
     location,
   });
+  const [selectedJobPosting, setSelectedJobPosting] =
+    useState<Id<"jobPostings"> | null>(null);
+
+  const handleChangeSelectedJobPosting = (jobPostingId: Id<"jobPostings">) => {
+    setSelectedJobPosting(jobPostingId);
+  };
 
   return (
     <section className="relative overflow-y-auto p-4">
@@ -44,13 +49,24 @@ export default function JobPostingSection({
             <div className="w-4/12 space-y-8">
               {jobPostings.map((jobPosting) => {
                 return (
-                  <JobListCard key={jobPosting._id} jobPosting={jobPosting} />
+                  <JobListCard
+                    isSelected={
+                      selectedJobPosting
+                        ? selectedJobPosting === jobPosting._id
+                        : jobPostings[0]._id === jobPosting._id
+                    }
+                    handleChangeSelectedJobPosting={
+                      handleChangeSelectedJobPosting
+                    }
+                    key={jobPosting._id}
+                    jobPosting={jobPosting}
+                  />
                 );
               })}
             </div>
             <div className="w-8/12">
               <JobPostingCard
-                jobPostingId={jobPostingId ?? jobPostings[0]._id}
+                jobPostingId={selectedJobPosting ?? jobPostings[0]._id}
               />
             </div>
           </div>
@@ -60,30 +76,22 @@ export default function JobPostingSection({
   );
 }
 
-function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  /**
-   * Get a new searchParams string by merging the current searchParams with a provided key/value pair
-   **/
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
+function JobListCard({
+  jobPosting,
+  handleChangeSelectedJobPosting,
+  isSelected,
+}: {
+  jobPosting: JobPosting;
+  handleChangeSelectedJobPosting: (jobPostingId: Id<"jobPostings">) => void;
+  isSelected: boolean;
+}) {
   return (
     <Card
-      onClick={() =>
-        router.push(
-          pathname + "?" + createQueryString("jobPostingId", jobPosting._id)
-        )
-      }
-      className="cursor-pointer space-y-3"
+      onClick={() => handleChangeSelectedJobPosting(jobPosting._id)}
+      className={cn(
+        "cursor-pointer space-y-3 transition-colors",
+        isSelected && "border-2 border-primary"
+      )}
     >
       <CardHeader>
         <CardTitle className="titleCase text-xl font-bold">
@@ -123,8 +131,7 @@ import {
   User2Icon,
   MailIcon,
 } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useState } from "react";
 
 function JobPostingCard({ jobPostingId }: { jobPostingId: Id<"jobPostings"> }) {
   const jobPosting = useQuery(api.jobPostings.getSingleJobPosting, {

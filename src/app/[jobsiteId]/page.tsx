@@ -40,7 +40,7 @@ export default async function Page({
   }>;
 }) {
   const { jobsiteId } = await params;
-  const { jobType, location, jobPostingId } = await searchParams;
+  const { jobType, location } = await searchParams;
 
   const jobSite = JOB_SITES.find((jobSite) => jobSite.id === jobsiteId);
 
@@ -71,7 +71,6 @@ export default async function Page({
           </CardContent>
         </Card>
         <JobPostingSection
-          jobPostingId={jobPostingId}
           jobType={jobType === "All" ? "" : jobType}
           location={location === "All" ? "" : location}
         />
