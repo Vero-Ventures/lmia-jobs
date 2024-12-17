@@ -13,7 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as emails_WaitListConfirmed from "../emails/WaitListConfirmed.js";
+import type * as emails_WaitListConfirmed from "../../src/components/emails/waitlist-confirmed.jsx";
 import type * as jobPostings from "../jobPostings.js";
 import type * as mailingList from "../mailingList.js";
 
