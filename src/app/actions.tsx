@@ -12,10 +12,11 @@ export async function joinMailingList({ email }: { email: string }) {
   const existingEmail = await db
     .select()
     .from(mailingList)
-    .where(eq(mailingList.email, email));
+    .where(eq(mailingList.email, email))
+    .then((res) => res[0]);
 
   if (existingEmail) {
-    return;
+    throw new Error("You're already on the waiting list.");
   }
 
   await Promise.all([
