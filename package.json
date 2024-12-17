@@ -10,6 +10,7 @@
     "db:generate": "drizzle-kit generate && bun format",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
+    "db:drop": "drizzle-kit drop",
     "db:studio": "drizzle-kit studio",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --list-different --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
