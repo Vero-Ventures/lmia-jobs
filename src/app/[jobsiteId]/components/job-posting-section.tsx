@@ -1,31 +1,22 @@
 "use client";
-import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+
 import { JobListCard } from "./job-list-card";
 import { useState } from "react";
 import { JobPostingCard } from "./job-posting-card";
 import { Loader2Icon } from "lucide-react";
+import type { JobPosting } from "../lib/types";
 
 export default function JobPostingSection({
-  jobType,
-  location,
+  jobPostings,
 }: {
-  jobType?: string;
-  location?: string;
+  jobPostings: JobPosting[];
 }) {
-  const jobPostings = useQuery(api.jobPostings.listJobPostings, {
-    jobType,
-    location,
-  });
-  console.log({ jobType, location });
-  console.log(jobPostings);
+  const [selectedJobPosting, setSelectedJobPosting] = useState<JobPosting>(
+    jobPostings[0]
+  );
 
-  const [selectedJobPosting, setSelectedJobPosting] =
-    useState<Id<"jobPostings"> | null>(null);
-
-  const handleChangeSelectedJobPosting = (jobPostingId: Id<"jobPostings">) => {
-    setSelectedJobPosting(jobPostingId);
+  const handleChangeSelectedJobPosting = (jobPosting: JobPosting) => {
+    setSelectedJobPosting(jobPosting);
   };
 
   return (
@@ -40,28 +31,22 @@ export default function JobPostingSection({
             {jobPostings.map((jobPosting) => {
               return (
                 <JobListCard
-                  isSelected={
-                    selectedJobPosting
-                      ? selectedJobPosting === jobPosting._id
-                      : jobPostings[0]._id === jobPosting._id
-                  }
+                  isSelected={selectedJobPosting.id === jobPosting.id}
                   handleChangeSelectedJobPosting={
                     handleChangeSelectedJobPosting
                   }
-                  key={jobPosting._id}
+                  key={jobPosting.id}
                   jobPosting={jobPosting}
                 />
               );
             })}
           </div>
           <div className="sticky top-0 max-h-dvh w-8/12 flex-1 py-4">
-            <JobPostingCard
-              jobPostingId={selectedJobPosting ?? jobPostings[0]._id}
-            />
+            <JobPostingCard jobPosting={selectedJobPosting} />
           </div>
         </div>
       ) : (
-        <div className="text-center">No jobs matched the filter.</div>
+        <p className="mt-10 text-center">No jobs matched the filter.</p>
       )}
     </section>
   );

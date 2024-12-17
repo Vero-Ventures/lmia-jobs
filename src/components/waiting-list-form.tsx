@@ -3,12 +3,11 @@
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { CheckCircle2Icon } from "lucide-react";
+import { joinMailingList } from "@/app/actions";
+import { toast } from "sonner";
 
 export function WaitingListForm() {
-  const joinMailingList = useMutation(api.mailingList.joinMailingList);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -19,9 +18,14 @@ export function WaitingListForm() {
     try {
       await joinMailingList({ email });
       setIsSubmitted(true);
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
     } finally {
       setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return isSubmitted ? (
