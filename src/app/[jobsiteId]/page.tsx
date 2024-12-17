@@ -13,19 +13,23 @@ import { selectAllJobPostings } from "@/db/queries/jobPostings";
 const JOB_SITES = [
   {
     id: "newcomers",
-    title: "Newcomers Job Site",
+    title: "Newcomers Job Board",
   },
   {
     id: "youth",
-    title: "Students Job Site",
+    title: "Youth Job Board",
+  },
+  {
+    id: "disabled",
+    title: "Disabled Workers Job Board",
   },
   {
     id: "indigenous",
-    title: "Indigenous Job Site",
+    title: "Indigenous Job Board",
   },
   {
     id: "asylum",
-    title: "Asylum Refugees Job Site",
+    title: "Asylum Refugees Job Board",
   },
 ];
 
