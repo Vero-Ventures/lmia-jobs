@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ConvexClientProvider } from "@/components/providers/convex-client-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
@@ -22,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "antialiased")}>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        {children}
         <Toaster />
       </body>
     </html>
