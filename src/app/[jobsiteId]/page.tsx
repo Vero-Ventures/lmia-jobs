@@ -8,6 +8,7 @@ import LocationSelect from "./components/location-select";
 import JobTypeSelect from "./components/job-type-select";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { selectAllJobPostings } from "@/db/queries/jobPostings";
 
 const JOB_SITES = [
   {
@@ -61,6 +62,11 @@ export default async function Page({
     notFound();
   }
 
+  const jobPostings = await selectAllJobPostings({
+    location: location === "All" ? "" : location,
+    jobType: jobType === "All" ? "" : jobType,
+  });
+
   return (
     <div className={cn("flex min-h-dvh flex-col", jobsiteId)}>
       <header className="border-b p-4">
@@ -82,10 +88,7 @@ export default async function Page({
           </div>
         </div>
         <Separator className="mt-4" />
-        <JobPostingSection
-          jobType={jobType === "All" ? "" : jobType}
-          location={location === "All" ? "" : location}
-        />
+        <JobPostingSection jobPostings={jobPostings} />
       </main>
     </div>
   );

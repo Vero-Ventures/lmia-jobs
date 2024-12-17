@@ -1,4 +1,3 @@
-import type { Id } from "@convex/_generated/dataModel";
 import type { JobPosting } from "../lib/types";
 import {
   Card,
@@ -16,12 +15,12 @@ export function JobListCard({
   isSelected,
 }: {
   jobPosting: JobPosting;
-  handleChangeSelectedJobPosting: (jobPostingId: Id<"jobPostings">) => void;
+  handleChangeSelectedJobPosting: (jobPosting: JobPosting) => void;
   isSelected: boolean;
 }) {
   return (
     <Card
-      onClick={() => handleChangeSelectedJobPosting(jobPosting._id)}
+      onClick={() => handleChangeSelectedJobPosting(jobPosting)}
       className={cn(
         "cursor-pointer space-y-3 transition-colors",
         isSelected && "border-2 border-primary"

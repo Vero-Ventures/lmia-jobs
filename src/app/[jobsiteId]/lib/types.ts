@@ -1,6 +1,5 @@
-import type { api } from "@convex/_generated/api";
-import type { FunctionReturnType } from "convex/server";
+import type { selectAllJobPostings } from "@/db/queries/jobPostings";
 
-export type JobPosting = NonNullable<
-  FunctionReturnType<typeof api.jobPostings.getSingleJobPosting>
->;
+export type JobPosting = Awaited<
+  ReturnType<typeof selectAllJobPostings>
+>[number];

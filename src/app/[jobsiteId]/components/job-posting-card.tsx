@@ -7,9 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
-import { useQuery } from "convex/react";
 import {
   MapPinIcon,
   ClockIcon,
@@ -19,18 +16,9 @@ import {
   User2Icon,
   MailIcon,
 } from "lucide-react";
+import type { JobPosting } from "../lib/types";
 
-export function JobPostingCard({
-  jobPostingId,
-}: {
-  jobPostingId: Id<"jobPostings">;
-}) {
-  const jobPosting = useQuery(api.jobPostings.getSingleJobPosting, {
-    jobPostingId,
-  });
-  if (!jobPosting) {
-    return null;
-  }
+export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
   return (
     <Card className="h-full overflow-y-auto">
       <CardHeader className="space-y-4">
