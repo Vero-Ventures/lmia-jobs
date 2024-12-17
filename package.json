@@ -7,9 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "email:dev": "email dev --dir convex/emails",
+    "db:generate": "drizzle-kit generate && bun format",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --list-different --ignore-path .gitignore",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
+    "email:dev": "email dev --dir convex/emails"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
