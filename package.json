@@ -14,7 +14,7 @@
     "db:studio": "drizzle-kit studio",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --list-different --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
-    "email:dev": "email dev --dir convex/emails"
+    "email:dev": "email dev --dir ./src/components/emails"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -27,7 +27,6 @@
     "@react-email/components": "0.0.28",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "convex": "^1.17.0",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.2",
     "lucide-react": "^0.460.0",

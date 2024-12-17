@@ -26,7 +26,7 @@
     "*.md",
     ".vscode",
     "public",
-    "drizzle",
+    "migrations",
     "*.toml"
     // Add other file types you want to ignore
   ]
