@@ -46,7 +46,7 @@ export default function JobPostingSection({
           </div>
         </div>
       ) : (
-        <div className="text-center">No jobs matched the filter.</div>
+        <p className="mt-10 text-center">No jobs matched the filter.</p>
       )}
     </section>
   );
