@@ -1,3 +1,5 @@
+"use client";
+
 import { JobListCard } from "./job-list-card";
 import { useState } from "react";
 import { JobPostingCard } from "./job-posting-card";
