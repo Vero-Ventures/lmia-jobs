@@ -1,4 +1,6 @@
-import type { JobPosting } from "../lib/types";
+"use client";
+
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -7,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import type { JobPosting } from "../lib/types";
 
 export function JobListCard({
   jobPosting,

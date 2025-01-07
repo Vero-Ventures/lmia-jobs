@@ -1,12 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+"use client";
+
 import {
   MapPinIcon,
   ClockIcon,
@@ -16,6 +9,15 @@ import {
   User2Icon,
   MailIcon,
 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import type { JobPosting } from "../lib/types";
 
 export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
