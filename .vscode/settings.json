@@ -22,5 +22,9 @@
     "**/components/**/index.[tj]sx": "${dirname} - Component",
     "**/components/**/**.[tj]sx": "${filename} - Component",
     "**/app/api/**/route.[tj]s": "${dirname(1)}/${dirname} - API"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on",
+    "comments": "on"
   }
 }

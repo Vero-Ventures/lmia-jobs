@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { joinMailingList } from "@/app/actions";
+import { CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2Icon } from "lucide-react";
-import { joinMailingList } from "@/app/actions";
-import { toast } from "sonner";
 
 export function WaitingListForm() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,6 @@ export function WaitingListForm() {
     } finally {
       setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return isSubmitted ? (
@@ -47,8 +46,7 @@ export function WaitingListForm() {
         <Button
           type="submit"
           className="bg-blue-600 text-white hover:bg-blue-700"
-          disabled={isSubmitting}
-        >
+          disabled={isSubmitting}>
           {isSubmitting ? "Joining..." : "Join The Waitlist"}
         </Button>
       </div>

@@ -1,12 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+"use client";
+
 import {
   MapPinIcon,
   ClockIcon,
@@ -16,6 +9,15 @@ import {
   User2Icon,
   MailIcon,
 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import type { JobPosting } from "../lib/types";
 
 export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
@@ -109,8 +111,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-3 text-sm">
               <a
                 href={`mailto:${jobPosting.email}`}
-                className="text-blue-900 underline"
-              >
+                className="text-blue-900 underline">
                 {jobPosting.email}
               </a>
             </div>
