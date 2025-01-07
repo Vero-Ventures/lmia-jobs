@@ -47,8 +47,7 @@ export function WaitingListForm() {
         <Button
           type="submit"
           className="bg-blue-600 text-white hover:bg-blue-700"
-          disabled={isSubmitting}
-        >
+          disabled={isSubmitting}>
           {isSubmitting ? "Joining..." : "Join The Waitlist"}
         </Button>
       </div>

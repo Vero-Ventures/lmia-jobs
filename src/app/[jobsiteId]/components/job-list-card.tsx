@@ -24,8 +24,7 @@ export function JobListCard({
       className={cn(
         "cursor-pointer space-y-3 transition-colors",
         isSelected && "border-2 border-primary"
-      )}
-    >
+      )}>
       <CardHeader>
         <CardTitle className="titleCase text-xl font-bold">
           {jobPosting.jobTitle}

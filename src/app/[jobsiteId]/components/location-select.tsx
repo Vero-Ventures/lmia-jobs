@@ -36,8 +36,7 @@ export default function LocationSelect({
       onValueChange={(value) =>
         router.push(pathname + "?" + createQueryString("location", value))
       }
-      name="location"
-    >
+      name="location">
       <SelectTrigger>
         <SelectValue placeholder="Choose location" />
       </SelectTrigger>

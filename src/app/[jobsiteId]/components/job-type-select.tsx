@@ -35,8 +35,7 @@ export default function JobTypeSelect({
       defaultValue={initialJobType}
       onValueChange={(value) =>
         router.push(pathname + "?" + createQueryString("jobType", value))
-      }
-    >
+      }>
       <SelectTrigger>
         <SelectValue placeholder="Choose job type" />
       </SelectTrigger>
