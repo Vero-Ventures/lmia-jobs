@@ -41,3 +41,14 @@ export const jobPostings = pgTable("job_postings", {
     .notNull()
     .$onUpdate(() => new Date()),
 });
+
+export const users = pgTable("users", {
+  id: serial().primaryKey(),
+  email: text().notNull().unique(),
+  password: text().notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
+  newlyCreated: boolean().notNull().default(true),
+  optedOut: boolean().notNull().default(false),
+  activated: boolean().notNull().default(false),
+  ignore: boolean().notNull().default(false),
+});
