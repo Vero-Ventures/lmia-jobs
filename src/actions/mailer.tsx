@@ -112,3 +112,53 @@ async function sendInvitesAndReminders(
     return;
   }
 }
+
+function _createInviteBody(
+  postNames: string[],
+  postCompanies: string[],
+  postLocations: string[],
+  totalPosts: number
+) {
+  try {
+    const header = ``;
+    const posts = ``;
+    if (totalPosts >= 5) {
+    } else {
+    }
+    const optOut = ``;
+    const footer = ``;
+
+    const body = `${header}${posts}${optOut}${footer}`;
+
+    return body;
+  } catch (err) {
+    console.error("Error creating invite email body.");
+    console.error(err);
+    return;
+  }
+}
+
+function _createReminderBody(
+  postNames: string[],
+  postCompanies: string[],
+  postLocations: string[],
+  totalPosts: number
+) {
+  try {
+    const header = ``;
+    const posts = ``;
+    if (totalPosts >= 5) {
+    } else {
+    }
+    const optOut = ``;
+    const footer = ``;
+
+    const body = `${header}${posts}${optOut}${footer}`;
+
+    return body;
+  } catch (err) {
+    console.error("Error creating reminder email body.");
+    console.error(err);
+    return;
+  }
+}
