@@ -1,12 +1,11 @@
+import { notFound } from "next/navigation";
+import Form from "next/form";
+import JobPostingSection from "./components/job-posting-section";
+import FilterSelect from "./components/filter-select";
+import { cn } from "@/lib/utils";
+import { FilterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FilterIcon } from "lucide-react";
-import { notFound } from "next/navigation";
-import JobPostingSection from "./components/job-posting-section";
-import Form from "next/form";
-import LocationSelect from "./components/location-select";
-import JobTypeSelect from "./components/job-type-select";
-import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { selectAllJobPostings } from "@/db/queries/jobPostings";
 
@@ -87,8 +86,8 @@ export default async function Page({
             <span>Filters</span>
           </div>
           <div className="flex gap-2 font-semibold">
-            <JobTypeSelect initialJobType={jobType} />
-            <LocationSelect initialLocation={location} />
+            <FilterSelect initalValue={jobType} filterType="job type" />
+            <FilterSelect initalValue={location} filterType="location" />
           </div>
         </div>
         <Separator className="mt-4" />

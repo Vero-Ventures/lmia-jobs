@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { joinMailingList } from "@/app/actions";
+import { CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2Icon } from "lucide-react";
-import { joinMailingList } from "@/app/actions";
-import { toast } from "sonner";
 
 export function WaitingListForm() {
   const [email, setEmail] = useState("");

@@ -1,5 +1,5 @@
-import { WaitingListForm } from "@/components/waiting-list-form";
 import { BriefcaseBusinessIcon } from "lucide-react";
+import { WaitingListForm } from "@/components/waiting-list-form";
 
 export default function Home() {
   return (
