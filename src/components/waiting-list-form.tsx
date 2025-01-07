@@ -25,7 +25,6 @@ export function WaitingListForm() {
     } finally {
       setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return isSubmitted ? (
