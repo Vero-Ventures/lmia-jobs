@@ -17,7 +17,7 @@
     "**/app/**/layout.[tj]sx": "${dirname(1)}/${dirname} - Layout",
     "**/app/**/error.[tj]sx": "${dirname(1)}/${dirname} - Error",
     "**/app/**/loading.[tj]sx": "${dirname(1)}/${dirname} - Loading",
-    "**/app/**/actions.[tj]s": "${filename} - Server Action",
+    "**/app/**/actions/**.[tj]s": "${filename} - Server Action",
     "**/app/**/**.[tj]sx": "${filename} - Component",
     "**/components/**/index.[tj]sx": "${dirname} - Component",
     "**/components/**/**.[tj]sx": "${filename} - Component",
