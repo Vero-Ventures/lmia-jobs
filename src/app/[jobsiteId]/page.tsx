@@ -79,6 +79,18 @@ export default async function Page({
         <div className="container mx-auto space-y-4 pt-4 text-primary">
           <Form action={`/${jobSite.id}`} className="flex gap-2">
             <Input name="query" placeholder="Search Jobs..." />
+            <Input
+              type="hidden"
+              value={jobType}
+              name="jobType"
+              disabled={jobType === "ALL" || jobType === undefined}
+            />
+            <Input
+              type="hidden"
+              value={location}
+              name="location"
+              disabled={location === "ALL" || location === undefined}
+            />
             <Button>Search</Button>
           </Form>
           <div className="flex gap-2 font-semibold">
