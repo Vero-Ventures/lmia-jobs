@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { jobPostings, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
-import type { JobPosting } from "../[jobsiteId]/lib/types";
+import type { JobPosting } from "../app/[jobsiteId]/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
