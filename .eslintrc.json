@@ -27,7 +27,7 @@
     ".vscode",
     "public",
     "migrations",
-    "*.toml"
-    // Add other file types you want to ignore
+    "*.toml",
+    "*.lockb"
   ]
 }

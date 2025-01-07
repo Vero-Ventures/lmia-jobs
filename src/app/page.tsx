@@ -1,5 +1,5 @@
-import { WaitingListForm } from "@/components/waiting-list-form";
 import { BriefcaseBusinessIcon } from "lucide-react";
+import { WaitingListForm } from "@/components/waiting-list-form";
 
 export default function Home() {
   return (
@@ -26,8 +26,7 @@ export default function Home() {
           © {new Date().getFullYear()} LMIA Jobs - Developed by{" "}
           <a
             href="https://www.veroventures.com/"
-            className="text-blue-600 hover:text-blue-700"
-          >
+            className="text-blue-600 hover:text-blue-700">
             Vero Ventures
           </a>
         </p>

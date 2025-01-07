@@ -1,12 +1,11 @@
+import { notFound } from "next/navigation";
+import Form from "next/form";
+import JobPostingSection from "./components/job-posting-section";
+import FilterSelect from "./components/filter-select";
+import { cn } from "@/lib/utils";
+import { FilterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FilterIcon } from "lucide-react";
-import { notFound } from "next/navigation";
-import JobPostingSection from "./components/job-posting-section";
-import Form from "next/form";
-import LocationSelect from "./components/location-select";
-import JobTypeSelect from "./components/job-type-select";
-import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { selectAllJobPostings } from "@/db/queries/jobPostings";
 
@@ -80,6 +79,18 @@ export default async function Page({
         <div className="container mx-auto space-y-4 pt-4 text-primary">
           <Form action={`/${jobSite.id}`} className="flex gap-2">
             <Input name="query" placeholder="Search Jobs..." />
+            <Input
+              type="hidden"
+              value={jobType}
+              name="jobType"
+              disabled={jobType === "ALL" || jobType === undefined}
+            />
+            <Input
+              type="hidden"
+              value={location}
+              name="location"
+              disabled={location === "ALL" || location === undefined}
+            />
             <Button>Search</Button>
           </Form>
           <div className="flex gap-2 font-semibold">
@@ -87,8 +98,8 @@ export default async function Page({
             <span>Filters</span>
           </div>
           <div className="flex gap-2 font-semibold">
-            <JobTypeSelect initialJobType={jobType} />
-            <LocationSelect initialLocation={location} />
+            <FilterSelect initalValue={jobType} filterType="job type" />
+            <FilterSelect initalValue={location} filterType="location" />
           </div>
         </div>
         <Separator className="mt-4" />
