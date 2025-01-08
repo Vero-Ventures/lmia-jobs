@@ -8,7 +8,7 @@ function Navbar({ links }) {
     <header className="flex h-14 items-center border-y px-4 lg:px-6">
       <Link className="flex items-center justify-center" href="/">
         <BriefcaseIcon className="h-6 w-6" />
-        <span className="sr-only">Job Posting Site</span>
+        <span className="ml-2 font-semibold">Opportunites Dashboard</span>
       </Link>
       <nav className="ml-auto flex gap-4 sm:gap-6">
         {links.map((link, index) => (

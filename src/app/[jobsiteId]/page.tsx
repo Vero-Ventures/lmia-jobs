@@ -57,7 +57,7 @@ export default async function Page({
   }>;
 }) {
   const { jobsiteId } = await params;
-  const { jobType, location } = await searchParams;
+  const { jobType, location, query } = await searchParams;
 
   const jobSite = JOB_SITES.find((jobSite) => jobSite.id === jobsiteId);
 
@@ -68,6 +68,7 @@ export default async function Page({
   const jobPostings = await selectAllJobPostings({
     location: location === "All" ? "" : location,
     jobType: jobType === "All" ? "" : jobType,
+    query: query === undefined ? "" : query,
   });
 
   return (

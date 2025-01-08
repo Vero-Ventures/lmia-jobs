@@ -5,12 +5,15 @@ import { jobPostings } from "../schema";
 export async function selectAllJobPostings({
   location,
   jobType,
+  query,
 }: {
   jobType?: string;
   location?: string;
+  query?: string;
 }) {
+  let postings;
   if (location && jobType) {
-    return await db
+    postings = await db
       .select()
       .from(jobPostings)
       .where(
@@ -20,17 +23,28 @@ export async function selectAllJobPostings({
         )
       );
   }
-  if (location) {
-    return await db
+  else if (location) {
+    postings = await db
       .select()
       .from(jobPostings)
       .where(eq(jobPostings.addressRegion, location));
   }
-  if (jobType) {
-    return await db
+  else if (jobType) {
+    postings = await db
       .select()
       .from(jobPostings)
       .where(eq(jobPostings.employmentSubType, jobType));
   }
-  return await db.select().from(jobPostings);
+  else {
+    postings = await db.select().from(jobPostings);
+  }
+  console.log(postings.length)
+
+  if (query) {
+    postings = postings.filter((posting) =>
+      posting.jobTitle.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  return postings
 }
