@@ -83,7 +83,7 @@ async function sendInvitesAndReminders(
       if (isInvite) {
         // Create the email body and send it to the user.
         await resend.emails.send({
-          from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
+          from: `LMIA Jobs ${process.env.MAILER_ADDRESS}`,
           to: [email],
           subject: "Activate Your New Account",
           react: (
@@ -96,7 +96,7 @@ async function sendInvitesAndReminders(
         });
       } else {
         await resend.emails.send({
-          from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
+          from: `LMIA Jobs ${process.env.MAILER_ADDRESS}`,
           to: [email],
           subject: "Reminder About Your Account",
           react: (
