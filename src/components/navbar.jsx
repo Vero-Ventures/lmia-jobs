@@ -5,16 +5,16 @@ import Link from "next/link";
 
 function Navbar({ links }) {
   return (
-    <header className="flex h-14 items-center border-y px-4 lg:px-6">
-      <Link className="flex items-center justify-center" href="/">
+    <header className="flex h-16 flex-col items-center border-y px-4 sm:h-14 sm:flex-row lg:px-6">
+      <Link className="flex items-center justify-center" href="/admin">
         <BriefcaseIcon className="h-6 w-6" />
-        <span className="ml-2 font-semibold">Opportunites Dashboard</span>
+        <span className="ml-2 font-semibold">LMIA Opportunities</span>
       </Link>
-      <nav className="ml-auto flex gap-4 sm:gap-6">
+      <nav className="flex items-center justify-center gap-4 py-2 sm:ml-auto sm:mt-0 sm:gap-6">
         {links.map((link, index) => (
           <Link
             key={index}
-            className="text-sm font-medium underline-offset-4 hover:underline"
+            className="text-sm font-medium underline-offset-4 hover:underline sm:text-base"
             href={link.url}>
             {link.text}
           </Link>

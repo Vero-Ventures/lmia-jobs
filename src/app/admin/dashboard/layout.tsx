@@ -1,4 +1,4 @@
-import "../globals.css";
+import "@/app/globals.css";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,7 @@ export default function AdminLayout({
 }>) {
   const links = [
     { text: "Dashboard", url: "/dashboard" },
-    { text: "New Post", url: "dashboard/post" },
+    { text: "New Post", url: "/dashboard/post" },
     { text: "Account", url: "/dashboard/account" },
     { text: "Log Out", url: "/api/auth/login" },
   ];
