@@ -15,6 +15,13 @@
       "when": 1736286786148,
       "tag": "0001_mute_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736377146624,
+      "tag": "0002_lazy_iron_man",
+      "breakpoints": true
     }
   ]
 }
