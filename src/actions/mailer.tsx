@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPostings, users } from "@/db/schema";
+import { jobPostings, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
@@ -15,19 +15,19 @@ export async function mailInvitesAndReminders() {
     // Get all valid new mailer users.
     const newUsers = await db
       .select()
-      .from(users)
-      .where(eq(users.newlyCreated, true));
+      .from(user)
+      .where(eq(user.newlyCreated, true));
 
     // Gets all valid Inactive users who have previously recived an email.
     // (Have not opted out or had account marked as ignored due to age.)
     const remindUsers = await db
       .select()
-      .from(users)
+      .from(user)
       .where(
-        eq(users.newlyCreated, false) &&
-          eq(users.activated, false) &&
-          eq(users.optedOut, false) &&
-          eq(users.ignore, false)
+        eq(user.newlyCreated, false) &&
+          eq(user.activated, false) &&
+          eq(user.optedOut, false) &&
+          eq(user.ignore, false)
       );
 
     // Get the user posts for info to be sent as part of the emails.
@@ -37,9 +37,9 @@ export async function mailInvitesAndReminders() {
     if (newUsers.length > 0) {
       // Set the assosiated users as no longer newly created.
       await db
-        .update(users)
+        .update(user)
         .set({ newlyCreated: false })
-        .where(eq(users.newlyCreated, true));
+        .where(eq(user.newlyCreated, true));
 
       // Iterate over the new users to send invite emails first.
       newUsers.forEach(async (user) => {
