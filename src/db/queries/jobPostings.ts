@@ -22,23 +22,20 @@ export async function selectAllJobPostings({
           eq(jobPostings.employmentSubType, jobType)
         )
       );
-  }
-  else if (location) {
+  } else if (location) {
     postings = await db
       .select()
       .from(jobPostings)
       .where(eq(jobPostings.addressRegion, location));
-  }
-  else if (jobType) {
+  } else if (jobType) {
     postings = await db
       .select()
       .from(jobPostings)
       .where(eq(jobPostings.employmentSubType, jobType));
-  }
-  else {
+  } else {
     postings = await db.select().from(jobPostings);
   }
-  console.log(postings.length)
+  console.log(postings.length);
 
   if (query) {
     postings = postings.filter((posting) =>
@@ -46,5 +43,5 @@ export async function selectAllJobPostings({
     );
   }
 
-  return postings
+  return postings;
 }

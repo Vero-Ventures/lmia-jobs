@@ -4,7 +4,9 @@ import { db } from "@/db";
 import { jobPostings, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
-import type { JobPosting } from "../app/[jobsiteId]/lib/types";
+import InviteEmail from "@/components/emails/invite";
+import ReminderEmail from "@/components/emails/reminder";
+import type { JobPosting } from "@/app/[jobsiteId]/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -77,87 +79,39 @@ async function sendInvitesAndReminders(
 
       // Potentially included post data.
       const _topPostNames = topPosts.map((post) => post.jobTitle);
-      const _topPostComanies = topPosts.map((post) => post.hiringOrganization);
-      const _topPostLocations = topPosts.map(
-        (post) => post.addressLocality + ", " + post.addressRegion
-      );
 
-      // NOTE: Message should include names of the created posts (select 3 if 5 or more).
-      //       Includes the total number of created posts if total is 5 or higher.
-      //       Use the account creation timestamp to inform user of when posts will be deleted.
-      //       Posts will be deleted after a set time if account is not activated and payment is setup.
-      //       Include a link to the account activation page with URL params for user info.
-      //       Also includes an opt out link to update the user to no longer recive emails.
       if (isInvite) {
         // Create the email body and send it to the user.
         await resend.emails.send({
           from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
           to: [email],
           subject: "Activate Your New Account",
-          text: "Activate Your New Account",
+          react: (
+            <InviteEmail
+              postNames={_topPostNames}
+              totalPosts={totalPosts}
+              email={email}
+            />
+          ),
         });
       } else {
         await resend.emails.send({
           from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
           to: [email],
           subject: "Reminder About Your Account",
-          text: "Reminder About Your Account",
+          react: (
+            <ReminderEmail
+              postNames={_topPostNames}
+              totalPosts={totalPosts}
+              email={email}
+            />
+          ),
         });
       }
     }
     return;
   } catch (err) {
     console.error("Mailing process failed.");
-    console.error(err);
-    return;
-  }
-}
-
-function _createInviteBody(
-  postNames: string[],
-  postCompanies: string[],
-  postLocations: string[],
-  totalPosts: number
-) {
-  try {
-    const header = ``;
-    const posts = ``;
-    if (totalPosts >= 5) {
-    } else {
-    }
-    const optOut = ``;
-    const footer = ``;
-
-    const body = `${header}${posts}${optOut}${footer}`;
-
-    return body;
-  } catch (err) {
-    console.error("Error creating invite email body.");
-    console.error(err);
-    return;
-  }
-}
-
-function _createReminderBody(
-  postNames: string[],
-  postCompanies: string[],
-  postLocations: string[],
-  totalPosts: number
-) {
-  try {
-    const header = ``;
-    const posts = ``;
-    if (totalPosts >= 5) {
-    } else {
-    }
-    const optOut = ``;
-    const footer = ``;
-
-    const body = `${header}${posts}${optOut}${footer}`;
-
-    return body;
-  } catch (err) {
-    console.error("Error creating reminder email body.");
     console.error(err);
     return;
   }
