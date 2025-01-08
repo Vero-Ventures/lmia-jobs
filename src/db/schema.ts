@@ -15,7 +15,7 @@ export const mailingList = pgTable("mailing_list", {
 });
 
 export const user = pgTable("user", {
-  id: serial().primaryKey(),
+  id: text().primaryKey(),
   name: text().notNull(),
   email: text().notNull().unique(),
   emailVerified: boolean().notNull().default(false),
@@ -28,8 +28,8 @@ export const user = pgTable("user", {
 });
 
 export const session = pgTable("session", {
-  id: serial().primaryKey(),
-  userId: integer()
+  id: text().primaryKey(),
+  userId: text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   token: text().notNull().unique(),
@@ -39,8 +39,8 @@ export const session = pgTable("session", {
 });
 
 export const account = pgTable("account", {
-  id: serial().primaryKey(),
-  userId: integer()
+  id: text().primaryKey(),
+  userId: text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   accountId: text().notNull().unique(),
@@ -50,7 +50,7 @@ export const account = pgTable("account", {
 });
 
 export const verification = pgTable("verification", {
-  id: serial().primaryKey(),
+  id: text().primaryKey(),
   identifier: text().notNull().unique(),
   value: text().notNull(),
   expiresAt: timestamp().notNull(),
