@@ -6,24 +6,18 @@ import Link from "next/link";
 function Footer() {
   return (
     <footer className="w-full bg-gray-900 p-6 text-gray-50 md:py-12">
-      <div className="container grid max-w-7xl grid-cols-4 gap-8 text-sm sm:grid-cols-3 md:grid-cols-4">
-        <div className="grid justify-center gap-1">
-          <h3 className="text-lg font-semibold">Company</h3>
-          <Link href="/coming-soon" className="ml-1 pb-1">
+      <div className="container mx-auto grid max-w-7xl grid-cols-3 gap-8 text-sm">
+        <div className="grid content-start justify-center gap-y-4 text-base">
+          <h3 className="text-xl font-semibold">Company</h3>
+          <Link href="/coming-soon" className="h-fit pb-1">
             About Us
           </Link>
-          <Link href="/coming-soon" className="ml-1 pb-1">
-            Our Team
-          </Link>
-          <Link href="/coming-soon" className="ml-1 pb-1">
-            Careers
-          </Link>
-          <Link href="/coming-soon" className="ml-1 pb-1">
-            News
+          <Link href="/coming-soon" className="pb-1">
+            Contact
           </Link>
         </div>
         <div className="grid justify-center gap-1">
-          <h3 className="text-lg font-semibold">Job Sites</h3>
+          <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
           <Link
             href="https://lmia-jobs-indigenous.vercel.app"
             target="_blank"
@@ -55,29 +49,11 @@ function Footer() {
             Asylum-Refugees
           </Link>
         </div>
-        <div className="grid justify-center gap-1">
-          <h3 className="text-lg font-semibold">Legal</h3>
-          <Link href="/coming-soon" className="ml-1">
-            Privacy Policy
-          </Link>
-          <Link href="/coming-soon" className="ml-1">
-            Terms of Service
-          </Link>
-          <Link href="/coming-soon" className="ml-1">
-            Cookie Policy
-          </Link>
-        </div>
-        <div className="grid justify-center gap-1">
-          <h3 className="text-lg font-semibold">Contact</h3>
-          <Link href="/coming-soon" className="ml-1">
-            Support
-          </Link>
-          <Link href="/coming-soon" className="ml-1">
-            Sales
-          </Link>
-          <Link href="/coming-soon" className="ml-1">
-            Partnerships
-          </Link>
+        <div className="grid content-start justify-center gap-y-4 text-base">
+          <h3 className="text-xl font-semibold">Legal</h3>
+          <Link href="/coming-soon">Privacy Policy</Link>
+          <Link href="/coming-soon">Terms of Service</Link>
+          <Link href="/coming-soon">Cookie Policy</Link>
         </div>
       </div>
     </footer>
