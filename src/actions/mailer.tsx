@@ -43,7 +43,13 @@ export async function mailInvitesAndReminders() {
 
       // Iterate over the new users to send invite emails first.
       newUsers.forEach(async (user) => {
-        sendInvitesAndReminders(user.email, userPosts, true);
+        sendInvitesAndReminders(
+          user.email,
+          user.temporaryPasssword!,
+          user.createdAt,
+          userPosts,
+          true
+        );
       });
     }
 
@@ -51,7 +57,13 @@ export async function mailInvitesAndReminders() {
     if (remindUsers.length > 0) {
       // Iterate over the users to send an reminder email.
       remindUsers.forEach(async (user) => {
-        sendInvitesAndReminders(user.email, userPosts, false);
+        sendInvitesAndReminders(
+          user.email,
+          user.temporaryPasssword!,
+          user.createdAt,
+          userPosts,
+          false
+        );
       });
     }
 
@@ -65,6 +77,8 @@ export async function mailInvitesAndReminders() {
 
 async function sendInvitesAndReminders(
   email: string,
+  tempPassword: string,
+  creationDate: Date,
   userPosts: JobPosting[],
   isInvite: boolean
 ) {
@@ -78,7 +92,12 @@ async function sendInvitesAndReminders(
       const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
 
       // Potentially included post data.
-      const _topPostNames = topPosts.map((post) => post.jobTitle);
+      const topPostNames = topPosts.map((post) => post.jobTitle);
+
+      // Get one month from the creation date.
+      const expiredTimeStamp =
+        creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
+      const expiredDate = new Date(expiredTimeStamp);
 
       if (isInvite) {
         // Create the email body and send it to the user.
@@ -88,9 +107,11 @@ async function sendInvitesAndReminders(
           subject: "Activate Your New Account",
           react: (
             <InviteEmail
-              postNames={_topPostNames}
-              totalPosts={totalPosts}
               email={email}
+              tempPassword={tempPassword}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
             />
           ),
         });
@@ -101,9 +122,11 @@ async function sendInvitesAndReminders(
           subject: "Reminder About Your Account",
           react: (
             <ReminderEmail
-              postNames={_topPostNames}
-              totalPosts={totalPosts}
               email={email}
+              tempPassword={tempPassword}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
             />
           ),
         });
