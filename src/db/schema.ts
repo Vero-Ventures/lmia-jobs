@@ -19,6 +19,7 @@ export const user = pgTable("user", {
   name: text().notNull(),
   email: text().notNull().unique(),
   emailVerified: boolean().notNull().default(false),
+  image: text(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp(),
   newlyCreated: boolean().notNull().default(true),
@@ -34,6 +35,8 @@ export const session = pgTable("session", {
     .references(() => user.id, { onDelete: "cascade" }),
   token: text().notNull().unique(),
   expiresAt: timestamp().notNull(),
+  ipAddress: text(),
+  userAgent: text(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp(),
 });
@@ -44,7 +47,14 @@ export const account = pgTable("account", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   accountId: text().notNull().unique(),
-  providerId: text().notNull(),
+  providerId: text(),
+  accessToken: text(),
+  refreshToken: text(),
+  accessTokenExpiresAt: timestamp(),
+  refreshTokenExpiresAt: timestamp(),
+  scope: text(),
+  idToken: text(),
+  password: text(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp(),
 });
