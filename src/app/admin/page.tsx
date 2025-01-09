@@ -12,7 +12,13 @@ export default function Component() {
     { text: "Join Now", url: "/sign-up" },
     { text: "Log In", url: "/log-in" },
   ];
-  sendInvitesAndReminders('bradenrogersdev@gmail.com', 'password', new Date, [], true)
+  sendInvitesAndReminders(
+    "bradenrogersdev@gmail.com",
+    "password",
+    new Date(),
+    [],
+    true
+  );
 
   return (
     <div>

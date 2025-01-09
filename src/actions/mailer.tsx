@@ -109,12 +109,12 @@ export async function sendInvitesAndReminders(
               email={email}
               tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
-              postNames={['A', 'B', 'C']}
+              postNames={["A", "B", "C"]}
               totalPosts={6}
             />
           ),
         });
-        console.log(result)
+        console.log(result);
       } else {
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
