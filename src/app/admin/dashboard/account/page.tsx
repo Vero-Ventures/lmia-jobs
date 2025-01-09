@@ -1,8 +1,8 @@
 import { WrenchIcon } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+// import { authClient } from "@/lib/auth-client";
 
 export default function Component() {
-  const _session = authClient.useSession();
+  // const session = authClient.useSession();
   return (
     <div>
       <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-gray-100">
