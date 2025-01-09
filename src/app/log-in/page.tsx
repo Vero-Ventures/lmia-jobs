@@ -26,23 +26,6 @@ export default function SignUp() {
     );
   };
 
-  const signInWithGoogle = async () => {
-    await authClient.signIn.social(
-      {
-        provider: "google",
-        callbackURL: "/admin/dashboard",
-      },
-      {
-        onSuccess: () => {
-          router.push("/admin/dashboard");
-        },
-        onError: (response) => {
-          alert(response.error.message);
-        },
-      }
-    );
-  };
-
   return (
     <div>
       <input
@@ -56,7 +39,6 @@ export default function SignUp() {
         onChange={(e) => setEmail(e.target.value)}
       />
       <button onClick={signIn}>Log In</button>
-      <button onClick={signInWithGoogle}>Sign In With Google</button>
     </div>
   );
 }
