@@ -100,7 +100,7 @@ export async function sendInvitesAndReminders(
       const expiredDate = new Date(expiredTimeStamp);
 
       if (isInvite) {
-        const result = await resend.emails.send({
+        await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Activate Your New Account",
@@ -109,12 +109,11 @@ export async function sendInvitesAndReminders(
               email={email}
               tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
-              postNames={["A", "B", "C"]}
-              totalPosts={6}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
             />
           ),
         });
-        console.log(result);
       } else {
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,

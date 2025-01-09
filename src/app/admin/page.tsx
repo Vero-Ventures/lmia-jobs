@@ -2,7 +2,6 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { sendInvitesAndReminders } from "@/actions/mailer";
 
 export default function Component() {
   const links = [
@@ -12,13 +11,6 @@ export default function Component() {
     { text: "Join Now", url: "/sign-up" },
     { text: "Log In", url: "/log-in" },
   ];
-  sendInvitesAndReminders(
-    "bradenrogersdev@gmail.com",
-    "password",
-    new Date(),
-    [],
-    true
-  );
 
   return (
     <div>
@@ -36,12 +28,12 @@ export default function Component() {
           <div className="mt-8 flex flex-col sm:flex-row sm:space-x-12">
             <Button
               type="submit"
-              className="mt-4 w-64 bg-blue-600 py-8 text-2xl text-white hover:bg-blue-700">
+              className="mt-4 w-64 bg-blue-600 bg-gradient-to-r from-blue-500 to-blue-600 py-8 text-2xl font-bold text-white shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
               <Link href={"api/auth/login"}>Join Now</Link>
             </Button>
             <Button
               type="submit"
-              className="mt-8 w-64 bg-blue-600 py-8 text-2xl text-white hover:bg-blue-700 sm:mt-4">
+              className="mt-8 w-64 bg-blue-600 bg-gradient-to-r from-blue-500 to-blue-600 py-8 text-2xl font-bold text-white shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 sm:mt-4">
               <Link href={"api/auth/login"}>Log In</Link>
             </Button>
           </div>

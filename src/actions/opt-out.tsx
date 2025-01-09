@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function optOutOfReminders(email: string) {
+export async function optOutOfReminders(email: string): Promise<string> {
   const optedOutUser = await db
     .select()
     .from(user)
