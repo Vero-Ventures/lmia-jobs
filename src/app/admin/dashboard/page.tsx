@@ -1,6 +1,12 @@
+"use client";
+
 import { WrenchIcon } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
+  const router = useRouter();
+
   return (
     <div>
       <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-gray-100">
@@ -12,6 +18,18 @@ export default function Component() {
           This page is currently being worked on and will be available soon.
           Please check back later.
         </p>
+        <button
+          onClick={() =>
+            authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/admin");
+                },
+              },
+            })
+          }>
+          Sign Out
+        </button>
       </div>
     </div>
   );
