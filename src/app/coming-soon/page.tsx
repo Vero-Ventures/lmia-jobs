@@ -7,7 +7,8 @@ export default function Component() {
     { text: "Home", url: "/" },
     { text: "Pricing", url: "/pricing" },
     { text: "About", url: "/wip" },
-    { text: "Login / Signup", url: "/api/auth/login" },
+    { text: "Sign Up", url: "/sign-in" },
+    { text: "Log In", url: "/log-in" },
   ];
   return (
     <div>

@@ -24,7 +24,7 @@ export default function AdminLayout({
     { text: "Dashboard", url: "/dashboard" },
     { text: "New Post", url: "/dashboard/post" },
     { text: "Account", url: "/dashboard/account" },
-    { text: "Log Out", url: "/api/auth/login" },
+    { text: "Log Out", url: "/log-out" },
   ];
   return (
     <div className={cn(inter.className, "antialiased")}>
