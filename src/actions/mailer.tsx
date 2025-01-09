@@ -102,7 +102,7 @@ async function sendInvitesAndReminders(
 
       if (isInvite) {
         await resend.emails.send({
-          from: `Opportunities <no-reply@lmia.veroventures.com>`,
+          from: `Opportunities ${process.env.RESEND_ADDRESS}`,
           to: [email],
           subject: "Activate Your New Account",
           react: (
@@ -117,7 +117,7 @@ async function sendInvitesAndReminders(
         });
       } else {
         await resend.emails.send({
-          from: `Opportunities <no-reply@lmia.veroventures.com>`,
+          from: `Opportunities ${process.env.RESEND_ADDRESS}`,
           to: [email],
           subject: "Reminder About Your Account",
           react: (

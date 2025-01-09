@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <footer className="w-full bg-gray-900 p-6 text-gray-50 md:py-12">
+    <footer className="w-full bg-gray-900 p-6 text-gray-50 md:py-6">
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm sm:grid">
         <div className="grid content-start justify-center gap-y-4 text-base">
           <h3 className="text-xl font-semibold">Company</h3>
