@@ -22,7 +22,7 @@ export async function joinMailingList({ email }: { email: string }) {
   await Promise.all([
     db.insert(mailingList).values({ email }),
     resend.emails.send({
-      from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
+      from: `Opportunities ${process.env.RESEND_ADDRESS}`,
       to: [email],
       subject: "You are on LMIA Jobs's early access list",
       react: <WaitListConfirmed />,

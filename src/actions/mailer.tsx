@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPostings, users } from "@/db/schema";
+import { jobPostings, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
@@ -15,19 +15,19 @@ export async function mailInvitesAndReminders() {
     // Get all valid new mailer users.
     const newUsers = await db
       .select()
-      .from(users)
-      .where(eq(users.newlyCreated, true));
+      .from(user)
+      .where(eq(user.newlyCreated, true));
 
     // Gets all valid Inactive users who have previously recived an email.
     // (Have not opted out or had account marked as ignored due to age.)
     const remindUsers = await db
       .select()
-      .from(users)
+      .from(user)
       .where(
-        eq(users.newlyCreated, false) &&
-          eq(users.activated, false) &&
-          eq(users.optedOut, false) &&
-          eq(users.ignore, false)
+        eq(user.newlyCreated, false) &&
+          eq(user.activated, false) &&
+          eq(user.optedOut, false) &&
+          eq(user.ignore, false)
       );
 
     // Get the user posts for info to be sent as part of the emails.
@@ -37,13 +37,19 @@ export async function mailInvitesAndReminders() {
     if (newUsers.length > 0) {
       // Set the assosiated users as no longer newly created.
       await db
-        .update(users)
+        .update(user)
         .set({ newlyCreated: false })
-        .where(eq(users.newlyCreated, true));
+        .where(eq(user.newlyCreated, true));
 
       // Iterate over the new users to send invite emails first.
       newUsers.forEach(async (user) => {
-        sendInvitesAndReminders(user.email, userPosts, true);
+        sendInvitesAndReminders(
+          user.email,
+          user.temporaryPasssword!,
+          user.createdAt,
+          userPosts,
+          true
+        );
       });
     }
 
@@ -51,7 +57,13 @@ export async function mailInvitesAndReminders() {
     if (remindUsers.length > 0) {
       // Iterate over the users to send an reminder email.
       remindUsers.forEach(async (user) => {
-        sendInvitesAndReminders(user.email, userPosts, false);
+        sendInvitesAndReminders(
+          user.email,
+          user.temporaryPasssword!,
+          user.createdAt,
+          userPosts,
+          false
+        );
       });
     }
 
@@ -63,8 +75,10 @@ export async function mailInvitesAndReminders() {
   }
 }
 
-async function sendInvitesAndReminders(
+export async function sendInvitesAndReminders(
   email: string,
+  tempPassword: string,
+  creationDate: Date,
   userPosts: JobPosting[],
   isInvite: boolean
 ) {
@@ -72,38 +86,47 @@ async function sendInvitesAndReminders(
     // Get the posts for the current user by their email.
     const userPostings = userPosts.filter((post) => post.email === email);
 
-    if (userPostings) {
+    if (userPostings.length === 0) {
       // Get the total number of posts and the posts to display (based on number of posts).
       const totalPosts = userPostings.length;
       const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
 
       // Potentially included post data.
-      const _topPostNames = topPosts.map((post) => post.jobTitle);
+      const topPostNames = topPosts.map((post) => post.jobTitle);
+
+      // Get one month from the creation date.
+      const expiredTimeStamp =
+        creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
+      const expiredDate = new Date(expiredTimeStamp);
 
       if (isInvite) {
-        // Create the email body and send it to the user.
-        await resend.emails.send({
-          from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
+        const result = await resend.emails.send({
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Activate Your New Account",
           react: (
             <InviteEmail
-              postNames={_topPostNames}
-              totalPosts={totalPosts}
               email={email}
+              tempPassword={tempPassword}
+              expiredDate={expiredDate.toDateString()}
+              postNames={["A", "B", "C"]}
+              totalPosts={6}
             />
           ),
         });
+        console.log(result);
       } else {
         await resend.emails.send({
-          from: "LMIA Jobs <no-reply@lmia.veroventures.com>",
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Reminder About Your Account",
           react: (
             <ReminderEmail
-              postNames={_topPostNames}
-              totalPosts={totalPosts}
               email={email}
+              tempPassword={tempPassword}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
             />
           ),
         });

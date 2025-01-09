@@ -1,18 +1,10 @@
 import { WrenchIcon } from "lucide-react";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+// import { authClient } from "@/lib/auth-client";
 
 export default function Component() {
-  const links = [
-    { text: "Home", url: "/" },
-    { text: "Pricing", url: "/pricing" },
-    { text: "About", url: "/wip" },
-    { text: "Join Now", url: "/sign-up" },
-    { text: "Log In", url: "/log-in" },
-  ];
+  // const session = authClient.useSession();
   return (
     <div>
-      <Navbar links={links} />
       <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-gray-100">
         <WrenchIcon className="h-12 w-12 text-gray-500" />
         <h1 className="text-2xl font-bold text-gray-800">
@@ -23,7 +15,6 @@ export default function Component() {
           Please check back later.
         </p>
       </div>
-      <Footer />
     </div>
   );
 }

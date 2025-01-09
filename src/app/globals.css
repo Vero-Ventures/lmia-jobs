@@ -34,10 +34,10 @@
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
-    --card-foreground: 27 20% 24%;
+    --card-foreground: 27 20% 30%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 27 13% 16%;
+    --primary: 27 13% 30%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -57,6 +57,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .newcomers {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;

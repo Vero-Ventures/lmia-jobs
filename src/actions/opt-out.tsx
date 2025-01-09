@@ -1,21 +1,21 @@
 "use server";
 
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function optOutOfReminders(email: string) {
-  const user = await db
+  const optedOutUser = await db
     .select()
-    .from(users)
-    .where(eq(users.email, email))
+    .from(user)
+    .where(eq(user.email, email))
     .then((res) => res[0]);
 
-  if (user) {
+  if (!optedOutUser) {
     throw new Error("User with that email could not be found.");
   }
 
-  await db.update(users).set({ optedOut: true }).where(eq(users.email, email));
+  await db.update(user).set({ optedOut: true }).where(eq(user.email, email));
 
   return "true";
 }

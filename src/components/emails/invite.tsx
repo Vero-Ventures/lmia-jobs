@@ -9,38 +9,50 @@ import {
 } from "@react-email/components";
 
 export default function InviteEmail({
+  email,
+  tempPassword,
+  expiredDate,
   postNames,
   totalPosts,
-  email,
 }: {
+  email: string;
+  tempPassword: string;
+  expiredDate: string;
   postNames: string[];
   totalPosts: number;
-  email: string;
 }) {
   return (
     <Html>
       <Head />
-      <Preview>Join Now For Easy Job Postings For Your LMIA</Preview>
+      <Preview>
+        Join Now For Easy Job Board Postings To Help With Your LMIA
+      </Preview>
       <Body style={body}>
         <Container style={container}>
           <Section style={bodySection}>
             <Section style={titleSection}>
               <Text style={titleText}>
-                Join Us At At Opportunities To Easily Post Jobs For Your LMIA
+                Join Us Here At Opportunities To Easily Make And Manage Job
+                Board Postings For Your LMIA Requirements.
               </Text>
             </Section>
-            <Text style={mainText}>
-              Our goal is to make it easy for you to get your job postings up
-              across multiple job boards quickly and easily. Just create the
-              post once in our dashboard and we will automatically populated it
-              across our different job boards. Easily advertise to key groups
-              such as: At-Risk Youth, Asylum Seeksers, Disbabled Indeviduals,
-              Indigenous Groups, and Recent Immigrants.
+            <Text style={text}>
+              Our goal is to help you to get your job postings up across
+              multiple job boards quickly and easily. All you have to do is
+              create the post you want to make once in our admin dashboard. Our
+              system will then automatically populated it across our 5 different
+              job boards for key groups. We aim to make it quick and easy to
+              advertise to key groups such as: At-Risk Youth, Asylum Seeksers,
+              Disbabled Indeviduals, Indigenous Groups, and Recent Immigrants.
+              Avoid the hassle of having to create and keep track of multiple
+              job postings across each job board and join us at Opportunities.
             </Text>
-            <Text style={mainText}>
+            <Text style={text}>
               To get you started we have have an account ready for you with
-              these postings already created. Join now and activate your
-              pre-made account to keep these postings up as long as you want.
+              these postings already created. Join now to activate your pre-made
+              account and keep these postings up as long as you want. If you do
+              not activate the account, before {expiredDate}, it will be deleted
+              and the postings will be lost.
             </Text>
             <Section style={postSection}>
               {postNames.map((postName) => (
@@ -52,14 +64,30 @@ export default function InviteEmail({
                 <Text style={postText}>And {totalPosts - 3} more...</Text>
               )}
             </Section>
+            <Section style={accountSection}>
+              <Text style={text}>
+                Log in the following temporary credientals to setup your
+                account.
+              </Text>
+              <Text style={credentialText}>
+                Email: {email}
+                <br />
+                Temporary Password: {tempPassword}
+              </Text>
+              <Text style={linkText}>
+                <a href={`https://lmia-jobs.vercel.app/sign-in`}>
+                  Setup Your Account Now
+                </a>
+              </Text>
+            </Section>
             <Section style={footerSection}>
               <Text style={footerText}>
-                Join Opportunities Now For Easy Job Postings For Your LMIA
-                Requirements
+                Join Opportunities Now For Easy To Manage Job Postings That Make
+                Handling Your LMIA Easier
               </Text>
               <Text style={footerText}>
                 Opt Out From Further Messages:{" "}
-                <span style={optOutLink}>
+                <span style={linkText}>
                   <a
                     href={`https://lmia-jobs.vercel.app/opt-out?account=${email}`}>
                     Opt Out
@@ -75,26 +103,88 @@ export default function InviteEmail({
 }
 
 const body = {
-  backgroundColor: "#fff",
-  color: "#212121",
+  backgroundColor: "#f9f9f9",
+  padding: "20px",
+  margin: "0",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
 };
 
-const container = {};
+const container = {
+  backgroundColor: "#ffffff",
+  borderRadius: "8px",
+  padding: "20px",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  maxWidth: "600px",
+  margin: "0 auto",
+};
 
-const bodySection = {};
-const titleSection = {};
-const postSection = {};
-const footerSection = {};
+const bodySection = {
+  marginBottom: "20px",
+};
+
+const titleSection = {
+  marginBottom: "15px",
+  textAlign: "center" as const,
+};
+
+const postSection = {
+  backgroundColor: "#f4f4f4",
+  padding: "10px",
+  border: "1px solid #000000",
+  borderRadius: "5px",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  width: "50%",
+  margin: "10px auto",
+  textAlign: "center" as const,
+};
+
+const accountSection = {
+  textAlign: "center" as const,
+};
+
+const footerSection = {
+  marginTop: "30px",
+  paddingTop: "20px",
+  borderTop: "1px solid #dddddd",
+  textAlign: "center" as const,
+};
 
 const text = {
-  color: "#333",
+  color: "#333333",
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "16px",
+  lineHeight: "1.5",
 };
 
-const titleText = { ...text };
-const mainText = { ...text };
-const postText = { ...text };
-const footerText = { ...text };
-const optOutLink = { ...text };
+const titleText = {
+  ...text,
+  fontSize: "20px",
+  fontWeight: "bold",
+  color: "#1a73e8",
+};
+
+const credentialText = {
+  ...text,
+  fontWeight: "bold",
+};
+
+const postText = {
+  ...text,
+  color: "#000000",
+  fontWeight: "bold",
+};
+
+const linkText = {
+  ...text,
+  color: "#1a73e8",
+  textDecoration: "none",
+};
+
+const footerText = {
+  ...text,
+  fontSize: "14px",
+  color: "#777777",
+};
