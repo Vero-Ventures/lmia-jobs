@@ -20,6 +20,7 @@ export default function SignUp() {
   const router = useRouter();
 
   const handleSignUpError = (signUpResult: string) => {
+    // Set the error message based on the result returned by sign in.
     if (signUpResult === "existing user") {
       setSignUpError("An account with that email already exists.");
     } else if (signUpResult === "different passwords") {
@@ -34,7 +35,7 @@ export default function SignUp() {
   };
 
   const signUp = async () => {
-    // Set sign up process to be started
+    // Set sign up process to be started and clear the error message.
     setSignUpInProgress(true);
     setSignUpError("");
 

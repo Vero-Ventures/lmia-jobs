@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-// import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 export async function handleSignUp(
   email: string,
@@ -33,11 +33,11 @@ export async function handleSignUp(
     } else {
       // Try the sign up process and return an appropriate result string.
       try {
-        // await authClient.signUp.email({
-        //   email,
-        //   password,
-        //   name: email,
-        // });
+        await authClient.signUp.email({
+          email,
+          password,
+          name: email,
+        });
         return "success";
       } catch {
         return "unknown error";
