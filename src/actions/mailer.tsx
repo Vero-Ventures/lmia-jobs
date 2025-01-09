@@ -86,7 +86,8 @@ async function sendInvitesAndReminders(
     // Get the posts for the current user by their email.
     const userPostings = userPosts.filter((post) => post.email === email);
 
-    if (userPostings) {
+    console.log(userPostings);
+    if (userPostings.length === 0) {
       // Get the total number of posts and the posts to display (based on number of posts).
       const totalPosts = userPostings.length;
       const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
@@ -100,9 +101,8 @@ async function sendInvitesAndReminders(
       const expiredDate = new Date(expiredTimeStamp);
 
       if (isInvite) {
-        // Create the email body and send it to the user.
         await resend.emails.send({
-          from: `LMIA Jobs ${process.env.MAILER_ADDRESS}`,
+          from: `Opportunities <no-reply@lmia.veroventures.com>`,
           to: [email],
           subject: "Activate Your New Account",
           react: (
@@ -117,7 +117,7 @@ async function sendInvitesAndReminders(
         });
       } else {
         await resend.emails.send({
-          from: `LMIA Jobs ${process.env.MAILER_ADDRESS}`,
+          from: `Opportunities <no-reply@lmia.veroventures.com>`,
           to: [email],
           subject: "Reminder About Your Account",
           react: (

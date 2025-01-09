@@ -36,7 +36,7 @@ export default function InviteEmail({
                 Board Postings For Your LMIA Requirements.
               </Text>
             </Section>
-            <Text style={mainText}>
+            <Text style={text}>
               Our goal is to help you to get your job postings up across
               multiple job boards quickly and easily. All you have to do is
               create the post you want to make once in our admin dashboard. Our
@@ -47,7 +47,7 @@ export default function InviteEmail({
               Avoid the hassle of having to create and keep track of multiple
               job postings across each job board and join us at Opportunities.
             </Text>
-            <Text style={mainText}>
+            <Text style={text}>
               To get you started we have have an account ready for you with
               these postings already created. Join now to activate your pre-made
               account and keep these postings up as long as you want. If you do
@@ -64,20 +64,22 @@ export default function InviteEmail({
                 <Text style={postText}>And {totalPosts - 3} more...</Text>
               )}
             </Section>
-            <Text style={mainText}>
-              Log in the following temporary credientals to setup your account.
-            </Text>
-            <Text style={credentialText}>
-              Email: {email}
-              <br />
-              Temporary Password: {tempPassword}
-            </Text>
-            <Text style={footerText}>
-              Setup Your Account Now:{" "}
-              <span style={linkText}>
-                <a href={`https://lmia-jobs.vercel.app/sign-in`}>Here</a>
-              </span>
-            </Text>
+            <Section style={accountSection}>
+              <Text style={text}>
+                Log in the following temporary credientals to setup your
+                account.
+              </Text>
+              <Text style={credentialText}>
+                Email: {email}
+                <br />
+                Temporary Password: {tempPassword}
+              </Text>
+              <Text style={linkText}>
+                <a href={`https://lmia-jobs.vercel.app/sign-in`}>
+                  Setup Your Account Now
+                </a>
+              </Text>
+            </Section>
             <Section style={footerSection}>
               <Text style={footerText}>
                 Join Opportunities Now For Easy To Manage Job Postings That Make
@@ -100,25 +102,89 @@ export default function InviteEmail({
   );
 }
 
-const body = {};
+const body = {
+  backgroundColor: "#f9f9f9",
+  padding: "20px",
+  margin: "0",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+};
 
-const container = {};
+const container = {
+  backgroundColor: "#ffffff",
+  borderRadius: "8px",
+  padding: "20px",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  maxWidth: "600px",
+  margin: "0 auto",
+};
 
-const bodySection = {};
-const titleSection = {};
-const postSection = {};
-const footerSection = {};
+const bodySection = {
+  marginBottom: "20px",
+};
+
+const titleSection = {
+  marginBottom: "15px",
+  textAlign: "center" as const,
+};
+
+const postSection = {
+  backgroundColor: "#f4f4f4",
+  padding: "10px",
+  border: "1px solid #000000",
+  borderRadius: "5px",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  width: "50%",
+  margin: "10px auto",
+  textAlign: "center" as const,
+};
+
+const accountSection = {
+  textAlign: "center" as const,
+};
+
+const footerSection = {
+  marginTop: "30px",
+  paddingTop: "20px",
+  borderTop: "1px solid #dddddd",
+  textAlign: "center" as const,
+};
 
 const text = {
-  color: "#333",
+  color: "#333333",
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "16px",
+  lineHeight: "1.5",
 };
 
-const titleText = { ...text };
-const mainText = { ...text };
-const credentialText = { ...text };
-const postText = { ...text };
-const linkText = { ...text };
-const footerText = { ...text };
+const titleText = {
+  ...text,
+  fontSize: "20px",
+  fontWeight: "bold",
+  color: "#1a73e8",
+};
+
+const credentialText = {
+  ...text,
+  fontWeight: "bold",
+};
+
+const postText = {
+  ...text,
+  color: "#000000",
+  fontWeight: "bold",
+};
+
+const linkText = {
+  ...text,
+  color: "#1a73e8",
+  textDecoration: "none",
+};
+
+const footerText = {
+  ...text,
+  fontSize: "14px",
+  color: "#777777",
+};

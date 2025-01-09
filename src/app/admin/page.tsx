@@ -11,6 +11,7 @@ export default function Component() {
     { text: "Sign Up", url: "/sign-in" },
     { text: "Log In", url: "/log-in" },
   ];
+
   return (
     <div>
       <Navbar links={links} />
