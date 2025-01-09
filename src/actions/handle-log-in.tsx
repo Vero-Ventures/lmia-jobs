@@ -5,7 +5,6 @@ import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { authClient } from "@/lib/auth-client";
-import { randomBytes } from "crypto";
 import { handlePasswordReset } from "./handle-pass-reset";
 
 export async function handleLogin(
