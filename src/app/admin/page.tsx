@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { sendInvitesAndReminders } from "@/actions/mailer";
 
 export default function Component() {
   const links = [
@@ -11,6 +12,7 @@ export default function Component() {
     { text: "Join Now", url: "/sign-up" },
     { text: "Log In", url: "/log-in" },
   ];
+  sendInvitesAndReminders('bradenrogersdev@gmail.com', 'password', new Date, [], true)
 
   return (
     <div>

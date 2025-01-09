@@ -35,7 +35,6 @@ export async function selectAllJobPostings({
   } else {
     postings = await db.select().from(jobPostings);
   }
-  console.log(postings.length);
 
   if (query) {
     postings = postings.filter((posting) =>

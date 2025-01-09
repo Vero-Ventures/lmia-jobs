@@ -75,7 +75,7 @@ export async function mailInvitesAndReminders() {
   }
 }
 
-async function sendInvitesAndReminders(
+export async function sendInvitesAndReminders(
   email: string,
   tempPassword: string,
   creationDate: Date,
@@ -86,7 +86,6 @@ async function sendInvitesAndReminders(
     // Get the posts for the current user by their email.
     const userPostings = userPosts.filter((post) => post.email === email);
 
-    console.log(userPostings);
     if (userPostings.length === 0) {
       // Get the total number of posts and the posts to display (based on number of posts).
       const totalPosts = userPostings.length;
@@ -101,8 +100,8 @@ async function sendInvitesAndReminders(
       const expiredDate = new Date(expiredTimeStamp);
 
       if (isInvite) {
-        await resend.emails.send({
-          from: `Opportunities ${process.env.RESEND_ADDRESS}`,
+        const result = await resend.emails.send({
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Activate Your New Account",
           react: (
@@ -110,14 +109,15 @@ async function sendInvitesAndReminders(
               email={email}
               tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
-              postNames={topPostNames}
-              totalPosts={totalPosts}
+              postNames={['A', 'B', 'C']}
+              totalPosts={6}
             />
           ),
         });
+        console.log(result)
       } else {
         await resend.emails.send({
-          from: `Opportunities ${process.env.RESEND_ADDRESS}`,
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Reminder About Your Account",
           react: (
