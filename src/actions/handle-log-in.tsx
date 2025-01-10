@@ -17,32 +17,31 @@ export async function handleLogin(
       password,
     });
 
-    if (result.error) {
+    const loggedInUser = await db
+      .select()
+      .from(user)
+      .where(eq(user.email, email))
+      .then((res) => res[0]);
+
+    if (
+      loggedInUser &&
+      loggedInUser.temporaryPasssword &&
+      loggedInUser.temporaryPasssword === password
+    ) {
+      if (!loggedInUser.activated) {
+        handleSendPasswordReset(loggedInUser.email);
+      }
+
+      await db
+        .update(user)
+        .set({ activated: true, newlyCreated: false })
+        .where(eq(user.id, loggedInUser.id));
+
+      return "reset";
+    } else if (result.error) {
       return "error";
     } else {
-      const loggedInUser = await db
-        .select()
-        .from(user)
-        .where(eq(user.email, email))
-        .then((res) => res[0]);
-
-      if (
-        loggedInUser.temporaryPasssword &&
-        loggedInUser.temporaryPasssword === password
-      ) {
-        if (!loggedInUser.activated) {
-          handleSendPasswordReset(loggedInUser.email);
-        }
-
-        await db
-          .update(user)
-          .set({ activated: true, newlyCreated: false })
-          .where(eq(user.id, loggedInUser.id));
-
-        return "reset";
-      } else {
-        return "success";
-      }
+      return "success";
     }
   } catch {
     return "error";

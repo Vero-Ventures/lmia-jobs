@@ -39,7 +39,7 @@ export const auth = betterAuth({
         <h1 style="font-size: 24px; font-weight: bold; color: #333333; margin-bottom: 10px; text-align: center;">Password Reset Request</h1>
         <p style="text-align: center;">We received a request to reset your password. You can reset your password by clicking the button below and using the reset code ${dbUser.resetCode}:</p>
         <div style="margin: auto; width: fit-content;">
-            <a href="{${url}}" style="align-self: center; display: inline-block; background-color: #3498db; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; ">Reset Password</a>
+            <a href=${url} style="align-self: center; display: inline-block; background-color: #3498db; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; ">Reset Password</a>
         </div>
         <p style="text-align: center;">If you did not request a password reset, please ignore this email.</p>
         <p style="text-align: center;">

@@ -60,9 +60,13 @@ export async function handleResetPassword(
     } else if (alphaOnly.test(password)) {
       return "weak password";
     } else {
-      await authClient.resetPassword({
+      const result = await authClient.resetPassword({
         newPassword: password,
       });
+
+      if (result.error) {
+        return "error";
+      }
 
       await db
         .update(user)

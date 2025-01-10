@@ -81,7 +81,7 @@ export default function SignUp() {
 
       <div
         className={`mx-auto max-w-lg rounded-xl border-4 border-blue-200 bg-white p-8 ${showPasswordReset ? "opacity-60" : ""}`}>
-        <h2 className="mx-auto w-fit text-3xl font-semibold">Sign Up</h2>
+        <h2 className="mx-auto w-fit text-3xl font-semibold">Log In</h2>
 
         <div style={{ marginBottom: "1rem" }}>
           <label htmlFor="email" className="mb-2 block font-semibold">
