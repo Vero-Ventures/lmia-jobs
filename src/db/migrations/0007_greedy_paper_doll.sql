@@ -1,0 +1,1 @@
+ALTER TABLE "job_postings" ALTER COLUMN "comp_time_unit" SET NOT NULL;
