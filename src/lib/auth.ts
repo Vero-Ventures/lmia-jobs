@@ -11,39 +11,27 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await resend.emails.send({
+        from: "Opportunities <no-reply@manageopportunities.ca>",
+        to: [user.email],
+        subject: "Verify your email address",
+        text: `Click the link to verify your email: ${url}`,
+      });
+    },
+  },
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
       await resend.emails.send({
-        from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+        from: "Opportunities <no-reply@manageopportunities.ca>",
         to: [user.email],
         subject: "Reset Your Opportunities Password",
         text: `Click the link to reset your password: ${url}`,
-        //     html: `
-        // <!DOCTYPE html>
-        // <html>
-        //   <head>
-        //     <meta charset="UTF-8" />
-        //     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        //     <title>Opportunities Password Reset Request</title>
-        //   </head>
-        //   <body style="background-color: #f9f9f9; padding: 20px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
-        //     <div style="max-width: 600px;  margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-        //       <div style="margin-bottom: 20px; ">
-        //         <h1 style="font-size: 24px; font-weight: bold; color: #333333; margin-bottom: 10px; text-align: center;">Password Reset Request</h1>
-        //         <p style="text-align: center;">We received a request to reset your password. You can reset your password by clicking the button below:</p>
-        //         <div style="margin: auto; width: fit-content;">
-        //             <a href="{${url}}" style="align-self: center; display: inline-block; background-color: #3498db; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; ">Reset Password</a>
-        //         </div>
-        //         <p style="text-align: center;">If you did not request a password reset, please ignore this email.</p>
-        //         <p style="text-align: center;">
-        //           Thank you, The Opportunities Team
-        //         </p>
-        //       </div>
-        //     </div>
-        //   </body>
-        // </html>
-        // `,
       });
     },
   },

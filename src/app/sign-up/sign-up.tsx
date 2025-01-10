@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,6 +15,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { signUp } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -154,9 +154,13 @@ export function SignUp() {
               "Create an account"
             )}
           </Button>
+          <Link
+            href="/sign-in"
+            className="mx-auto inline-block text-sm underline">
+            Back to sign in
+          </Link>
         </div>
       </CardContent>
-      <CardFooter></CardFooter>
     </Card>
   );
 }

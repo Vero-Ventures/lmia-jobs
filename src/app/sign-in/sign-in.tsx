@@ -102,7 +102,6 @@ export default function SignIn() {
                     setLoading(true);
                   },
                   onError: (ctx) => {
-                    console.log(ctx.error.message);
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
@@ -113,6 +112,11 @@ export default function SignIn() {
             }}>
             {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
           </Button>
+          <Link
+            href="/sign-up"
+            className="mx-auto inline-block text-sm underline">
+            Create an account
+          </Link>
         </div>
       </CardContent>
     </Card>
