@@ -28,6 +28,8 @@ export default function SignUp() {
       setSignUpError("Your password must be 8 characters or longer.");
     } else if (signUpResult === "weak password") {
       setSignUpError("Your password must contain a number or symbol.");
+    } else if (signUpResult === "bad email") {
+      setSignUpError("Entered email is invalid.");
     } else {
       setSignUpError("An error occurred while creating your account.");
     }

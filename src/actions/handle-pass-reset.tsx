@@ -16,9 +16,13 @@ export async function handleSendPasswordReset(email: string) {
       .then((res) => res[0]);
 
     if (resetUser) {
-      const resetCode = randomBytes(8)
-        .toString("base64")
-        .replace(/[^a-zA-Z0-9]/g, "");
+      let resetCode = "";
+      while (resetCode.length < 8) {
+        resetCode += randomBytes(8)
+          .toString("base64")
+          .replace(/[^a-zA-Z0-9]/g, "");
+      }
+      resetCode = resetCode.slice(0, 8);
 
       await db
         .update(user)
