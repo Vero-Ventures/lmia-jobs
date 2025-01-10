@@ -7,6 +7,22 @@ import { useRouter } from "next/navigation";
 
 function Navbar({ links }) {
   const router = useRouter();
+
+  const handleLogOut = async () => {
+    console.log('Session')
+    const session = authClient.useSession()
+    console.log(session)
+
+    console.log('sign out')
+    const result = await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/admin");  
+        },
+      },
+    })
+    console.log(result)
+  }
   return (
     <header className="flex h-16 flex-col items-center border-y px-4 sm:h-14 sm:flex-row lg:px-6">
       <Link className="flex items-center justify-center" href="/admin">
@@ -19,15 +35,7 @@ function Navbar({ links }) {
             <button
               key={index}
               className="text-sm font-medium underline-offset-4 hover:underline sm:text-base"
-              onClick={() =>
-                authClient.signOut({
-                  fetchOptions: {
-                    onSuccess: () => {
-                      router.push("/admin");
-                    },
-                  },
-                })
-              }>
+              onClick={() =>handleLogOut()}>
               Log Out
             </button>
           ) : (

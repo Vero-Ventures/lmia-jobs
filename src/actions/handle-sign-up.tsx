@@ -28,15 +28,27 @@ export async function handleSignUp(
     } else if (alphaOnly.test(password)) {
       return "weak password";
     } else {
-      try {
-        await authClient.signUp.email({
-          email,
-          password,
-          name: email,
-        });
-        return "success";
-      } catch {
+      const result = await authClient.signUp.email({
+        email,
+        password,
+        name: email,
+      });
+      if (
+        result.error &&
+        result.error.message &&
+        result.error.message === "Invalid email"
+      ) {
+        return "bad email";
+      } else if (result.error) {
         return "unknown error";
+      } else {
+        await db
+          .update(user)
+          .set({ activated: true, newlyCreated: false })
+          .where(eq(user.email, email));
+
+        console.log(result);
+        return "success";
       }
     }
   }
