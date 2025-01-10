@@ -16,7 +16,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   const [activatedNewAccount, setActivatedNewAccount] = useState(false);
-  const [showPasswordReset, setShowPasswordReset] = useState(true);
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
 
@@ -34,6 +34,7 @@ export default function SignUp() {
     setResetPassword(false);
 
     const result = await handleLogin(email, password);
+    console.log(result)
 
     if (result === "reset") {
       setActivatedNewAccount(true);
@@ -141,7 +142,7 @@ export default function SignUp() {
           )}
           {loginError && (
             <p className="mb-4 w-2/3 text-center text-xl font-bold text-red-500">
-              {loginError}
+              Email or password is incorrect.
             </p>
           )}
           <Button
