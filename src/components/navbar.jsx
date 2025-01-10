@@ -10,7 +10,7 @@ function Navbar({ links }) {
 
   const handleLogOut = async () => {
     console.log("Session");
-    const session = authClient.useSession();
+    const session = await authClient.getSession();
     console.log(session);
 
     console.log("sign out");

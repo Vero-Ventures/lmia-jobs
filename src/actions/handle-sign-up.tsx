@@ -33,6 +33,7 @@ export async function handleSignUp(
         password,
         name: email,
       });
+      console.log(result);
 
       if (
         result.error &&
@@ -41,15 +42,12 @@ export async function handleSignUp(
       ) {
         return "bad email";
       } else if (result.error) {
-        console.log(result);
         return "unknown error";
       } else {
         await db
           .update(user)
           .set({ activated: true, newlyCreated: false })
           .where(eq(user.email, email));
-
-        console.log(result);
         return "success";
       }
     }
