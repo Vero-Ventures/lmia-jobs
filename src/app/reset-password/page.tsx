@@ -41,7 +41,7 @@ export default function ResetPassword() {
       confirmPassword
     );
 
-    if (result) {
+    if (result === "success") {
       router.push("/log-in");
     } else {
       handlePassResetError(result);

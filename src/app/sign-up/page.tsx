@@ -40,7 +40,6 @@ export default function SignUp() {
     setSignUpError("");
 
     const result = await handleSignUp(email, password, confirmPassword);
-    console.log(result)
 
     if (result === "success") {
       router.push("/admin/dashboard");

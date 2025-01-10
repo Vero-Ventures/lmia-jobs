@@ -34,7 +34,6 @@ export default function SignUp() {
     setResetPassword(false);
 
     const result = await handleLogin(email, password);
-    console.log(result)
 
     if (result === "reset") {
       setActivatedNewAccount(true);
