@@ -32,7 +32,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             {jobPosting.hiringOrganization}
           </CardDescription>
           <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
-            {new Date(jobPosting.datePosted).toDateString()}
+            Opened: {new Date(jobPosting.datePosted).toDateString()}
           </div>
         </div>
 
@@ -41,11 +41,8 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-2">
               <BriefcaseIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="titleCase text-gray-500 dark:text-gray-400">
-                {jobPosting.employmentSubType
-                  ? jobPosting.employmentSubType
-                  : ""}
                 {jobPosting.employmentType
-                  ? `, ${jobPosting.employmentType}`
+                  ? `${jobPosting.employmentType}`
                   : ""}
               </span>
             </div>
@@ -71,20 +68,20 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-2">
               <ClockIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
-                {`${jobPosting.workHours ?? "N/A"}`}
+                {`${jobPosting.workHours ? jobPosting.workHours + " / Week" : "N/A"}`}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <CalendarIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
-                {`${jobPosting.startTime ?? "N/A"}`}
+                {`${jobPosting.startTime ? "Start By: " + jobPosting.startTime : "N/A"}`}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <User2Icon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
                 {jobPosting.vacancies
-                  ? `${jobPosting.vacancies} vacancy`
+                  ? `${jobPosting.vacancies} ${jobPosting.vacancies > 1 ? 'vacancies' : 'vacancy'} `
                   : "N/A"}
               </span>
             </div>
@@ -98,7 +95,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             Job Description
           </h5>
           <p
-            className="text-gray-500 dark:text-gray-400"
+            className="text-gray-500 dark:text-gray-400 mt-4"
             dangerouslySetInnerHTML={{ __html: jobPosting.description }}
           />
         </CardContent>
@@ -111,7 +108,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-3 text-sm">
               <a
                 href={`mailto:${jobPosting.email}`}
-                className="text-blue-900 underline">
+                className="text-blue-900 underline text-lg">
                 {jobPosting.email}
               </a>
             </div>
