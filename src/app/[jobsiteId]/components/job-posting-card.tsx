@@ -81,7 +81,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
               <User2Icon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
                 {jobPosting.vacancies
-                  ? `${jobPosting.vacancies} ${jobPosting.vacancies > 1 ? 'vacancies' : 'vacancy'} `
+                  ? `${jobPosting.vacancies} ${jobPosting.vacancies > 1 ? "vacancies" : "vacancy"} `
                   : "N/A"}
               </span>
             </div>
@@ -95,7 +95,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             Job Description
           </h5>
           <p
-            className="text-gray-500 dark:text-gray-400 mt-4"
+            className="mt-4 text-gray-500 dark:text-gray-400"
             dangerouslySetInnerHTML={{ __html: jobPosting.description }}
           />
         </CardContent>
@@ -108,7 +108,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-3 text-sm">
               <a
                 href={`mailto:${jobPosting.email}`}
-                className="text-blue-900 underline text-lg">
+                className="text-lg text-blue-900 underline">
                 {jobPosting.email}
               </a>
             </div>
