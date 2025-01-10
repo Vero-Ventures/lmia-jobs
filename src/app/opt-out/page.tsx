@@ -11,14 +11,13 @@ export default function OptOut() {
   const handleOptOut = async () => {
     setIsUpdating(true);
     try {
-      // Get user email address from the url.
       const params = new URLSearchParams(window.location.search);
       const email = params.get("account");
+
       if (!email) {
         throw new Error("No email address found.");
       }
 
-      // Set the user as opted out and update the opt out state.
       const result = await optOutOfReminders(email);
       setOptedOut(result);
     } catch (err) {

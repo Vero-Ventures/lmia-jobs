@@ -5,7 +5,7 @@ import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { authClient } from "@/lib/auth-client";
-import { handlePasswordReset } from "./handle-pass-reset";
+import { handleSendPasswordReset } from "./handle-pass-reset";
 
 export async function handleLogin(
   email: string,
@@ -17,7 +17,6 @@ export async function handleLogin(
       password,
     });
 
-    // Check if the user was using a temporary password to activate the account.
     const loggedInUser = await db
       .select()
       .from(user)
@@ -28,12 +27,10 @@ export async function handleLogin(
       loggedInUser.temporaryPasssword &&
       loggedInUser.temporaryPasssword === password
     ) {
-      // If the account is not activated, send a password reset email.
       if (!loggedInUser.activated) {
-        handlePasswordReset(loggedInUser.email);
+        handleSendPasswordReset(loggedInUser.email);
       }
 
-      // Set the user as activated and no longer newly created.
       await db
         .update(user)
         .set({ activated: true, newlyCreated: false })

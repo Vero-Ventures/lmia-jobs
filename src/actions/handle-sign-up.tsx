@@ -11,18 +11,15 @@ export async function handleSignUp(
   password: string,
   confirmPassword: string
 ): Promise<string> {
-  // Check if the user account already exists.
   const existingUser = await db
     .select()
     .from(user)
     .where(eq(user.email, email))
     .then((res) => res[0]);
 
-  // Check if the user already exists for handing the error message.
   if (existingUser) {
     return "existing user";
   } else {
-    // Check the passwords match and are strong enough.
     const alphaOnly = /^[a-zA-Z]+$/;
     if (password !== confirmPassword) {
       return "different passwords";
@@ -31,7 +28,6 @@ export async function handleSignUp(
     } else if (alphaOnly.test(password)) {
       return "weak password";
     } else {
-      // Try the sign up process and return an appropriate result string.
       try {
         await authClient.signUp.email({
           email,

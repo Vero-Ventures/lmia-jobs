@@ -12,14 +12,11 @@ const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 export async function mailInvitesAndReminders() {
   try {
-    // Get all valid new mailer users.
     const newUsers = await db
       .select()
       .from(user)
       .where(eq(user.newlyCreated, true));
 
-    // Gets all valid Inactive users who have previously recived an email.
-    // (Have not opted out or had account marked as ignored due to age.)
     const remindUsers = await db
       .select()
       .from(user)
@@ -30,18 +27,14 @@ export async function mailInvitesAndReminders() {
           eq(user.ignore, false)
       );
 
-    // Get the user posts for info to be sent as part of the emails.
     const userPosts = await db.select().from(jobPostings);
 
-    // Check if any new users were found for mailing.
     if (newUsers.length > 0) {
-      // Set the assosiated users as no longer newly created.
       await db
         .update(user)
         .set({ newlyCreated: false })
         .where(eq(user.newlyCreated, true));
 
-      // Iterate over the new users to send invite emails first.
       newUsers.forEach(async (user) => {
         sendInvitesAndReminders(
           user.email,
@@ -53,9 +46,7 @@ export async function mailInvitesAndReminders() {
       });
     }
 
-    // Check if any users were found for reminders.
     if (remindUsers.length > 0) {
-      // Iterate over the users to send an reminder email.
       remindUsers.forEach(async (user) => {
         sendInvitesAndReminders(
           user.email,
@@ -83,18 +74,14 @@ export async function sendInvitesAndReminders(
   isInvite: boolean
 ) {
   try {
-    // Get the posts for the current user by their email.
     const userPostings = userPosts.filter((post) => post.email === email);
 
     if (userPostings.length === 0) {
-      // Get the total number of posts and the posts to display (based on number of posts).
       const totalPosts = userPostings.length;
-      const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
 
-      // Potentially included post data.
+      const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
       const topPostNames = topPosts.map((post) => post.jobTitle);
 
-      // Get one month from the creation date.
       const expiredTimeStamp =
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);

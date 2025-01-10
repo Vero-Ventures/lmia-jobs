@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { handleLogin } from "@/actions/handle-log-in";
 import { Button } from "@/components/ui/button";
-import { handlePasswordReset } from "@/actions/handle-pass-reset";
+import { handleSendPasswordReset } from "@/actions/handle-pass-reset";
 
 export default function SignUp() {
   const [loggingIn, setLoggingIn] = useState(false);
@@ -23,13 +23,12 @@ export default function SignUp() {
   const router = useRouter();
 
   const resetPasswordHandler = async () => {
-    await handlePasswordReset(resetPasswordEmail);
+    await handleSendPasswordReset(resetPasswordEmail);
     setResetPassword(true);
     setShowPasswordReset(false);
   };
 
   const logIn = async () => {
-    // Set login process to be started and clear.
     setLoggingIn(true);
     setLoginError(false);
     setResetPassword(false);
@@ -43,6 +42,7 @@ export default function SignUp() {
     } else {
       setLoginError(true);
     }
+
     setLoggingIn(false);
   };
 
@@ -52,7 +52,7 @@ export default function SignUp() {
         <div className="relative">
           <div className="absolute left-1/2 z-10 max-w-xl -translate-x-1/2 translate-y-16 transform rounded-xl border-4 border-blue-200 bg-white p-8 mb:min-w-[384px] sm:min-w-[448px]">
             <h2 className="mx-auto mb-4 w-fit text-center text-3xl font-semibold">
-              Reset Password
+              Send Password Code
             </h2>
             <div style={{ marginBottom: "1rem" }}>
               <label htmlFor="email" className="mb-2 block font-semibold">
