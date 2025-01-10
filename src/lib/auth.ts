@@ -13,7 +13,6 @@ export const auth = betterAuth({
   }),
   emailVerification: {
     sendOnSignUp: true,
-    autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       await resend.emails.send({
         from: "Opportunities <no-reply@manageopportunities.ca>",
