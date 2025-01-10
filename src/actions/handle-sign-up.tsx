@@ -33,6 +33,7 @@ export async function handleSignUp(
         password,
         name: email,
       });
+
       if (
         result.error &&
         result.error.message &&
@@ -40,6 +41,7 @@ export async function handleSignUp(
       ) {
         return "bad email";
       } else if (result.error) {
+        console.log(result);
         return "unknown error";
       } else {
         await db
