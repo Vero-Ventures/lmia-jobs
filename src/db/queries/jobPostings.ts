@@ -60,16 +60,11 @@ export async function selectAllJobPostings({
   return postings;
 }
 
-interface JobPostingFilters {
-  postAsylum: boolean;
-  postDisabled: boolean;
-  postIndigenous: boolean;
-  postNewcomers: boolean;
-  postYouth: boolean;
-}
+
 
 function filterPostingsByBoard(
-  postings: JobPostingFilters[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  postings: any[],
   jobBoard: string
 ) {
   if (jobBoard === "asylum") {
