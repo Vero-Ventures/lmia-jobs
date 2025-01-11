@@ -105,7 +105,7 @@ export default function SignIn() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.push("/admin/dashboard");
+                    router.replace("/admin/dashboard");
                   },
                 }
               );

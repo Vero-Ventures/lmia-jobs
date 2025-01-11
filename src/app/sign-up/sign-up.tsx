@@ -130,7 +130,7 @@ export function SignUp() {
                   email,
                   password,
                   name: `${firstName} ${lastName}`,
-                  callbackURL: "/admin/dashboard",
+                  callbackURL: "/sign-in",
                 },
                 {
                   onResponse: () => {
@@ -143,7 +143,7 @@ export function SignUp() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.push("/admin/dashboard");
+                    router.replace("/sign-in");
                   },
                 }
               );
