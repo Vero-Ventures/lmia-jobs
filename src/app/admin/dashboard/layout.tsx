@@ -23,7 +23,7 @@ export default function AdminLayout({
   const links = [
     { text: "Dashboard", url: "/dashboard" },
     { text: "New Post", url: "/dashboard/post" },
-    { text: "Account", url: "/dashboard/account" },
+    { text: "Account", url: "/admin/dashboard/account" },
     { text: "Log Out", url: "/log-out" },
   ];
   return (
