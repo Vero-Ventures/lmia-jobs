@@ -28,14 +28,14 @@ export function JobListCard({
         isSelected && "border-2 border-primary"
       )}>
       <CardHeader>
-        <CardTitle className="titleCase text-xl font-bold">
+        <CardTitle className="titleCase overflow-clip text-xl font-bold">
           {jobPosting.jobTitle}
         </CardTitle>
         <CardDescription>{jobPosting.hiringOrganization}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
-          <div className="text-gray-500 dark:text-gray-400">
+          <div className="overflow-clip text-gray-500 dark:text-gray-400">
             {jobPosting.addressLocality}, {jobPosting.addressRegion}
           </div>
         </div>

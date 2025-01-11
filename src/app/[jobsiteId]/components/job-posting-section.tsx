@@ -27,7 +27,7 @@ export default function JobPostingSection({
         </div>
       ) : jobPostings.length > 0 ? (
         <div className="flex gap-4">
-          <div className="w-4/12 space-y-8">
+          <div className="w-5/12 space-y-8 sm:w-4/12">
             {jobPostings.map((jobPosting) => {
               return (
                 <JobListCard
@@ -41,7 +41,7 @@ export default function JobPostingSection({
               );
             })}
           </div>
-          <div className="sticky top-0 max-h-dvh w-8/12 flex-1 py-4">
+          <div className="sticky top-0 mx-1 max-h-dvh w-7/12 flex-1 overflow-hidden py-4 sm:w-8/12">
             <JobPostingCard jobPosting={selectedJobPosting} />
           </div>
         </div>

@@ -22,7 +22,7 @@ import type { JobPosting } from "../lib/types";
 
 export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
   return (
-    <Card className="h-full overflow-y-auto">
+    <Card className="h-fit overflow-y-auto">
       <CardHeader className="space-y-4">
         <div>
           <CardTitle className={`titleCase text-2xl font-bold dark:text-white`}>
@@ -101,8 +101,8 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
         </CardContent>
         <CardFooter>
           <div className="flex gap-2">
-            <MailIcon />
-            <h5 className={`text-base font-bold dark:text-white`}>
+            <MailIcon className="mt-0.5" />
+            <h5 className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
               Apply by email
             </h5>
             <div className="flex items-center gap-3 text-sm">
