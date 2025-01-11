@@ -69,6 +69,7 @@ export default async function Page({
     location: location === "All" ? "" : location,
     jobType: jobType === "All" ? "" : jobType,
     query: query === undefined ? "" : query,
+    jobBoard: jobSite.id,
   });
 
   return (

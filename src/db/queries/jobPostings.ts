@@ -7,11 +7,13 @@ export async function selectAllJobPostings({
   jobType,
   query,
   email,
+  jobBoard,
 }: {
   jobType?: string;
   location?: string;
   query?: string;
   email?: string;
+  jobBoard?: string;
 }) {
   let postings;
   if (email) {
@@ -48,6 +50,51 @@ export async function selectAllJobPostings({
   if (query) {
     postings = postings!.filter((posting) =>
       posting.jobTitle.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  if (jobBoard) {
+    postings = filterPostingsByBoard(postings, jobBoard);
+  }
+
+  return postings;
+}
+
+interface JobPostingFilters {
+  postAsylum: boolean;
+  postDisabled: boolean;
+  postIndigenous: boolean;
+  postNewcomers: boolean;
+  postYouth: boolean;
+}
+
+function filterPostingsByBoard(
+  postings: JobPostingFilters[],
+  jobBoard: string
+) {
+  if (jobBoard === "asylum") {
+    postings = postings!.filter(
+      (posting: { postAsylum: boolean }) => posting.postAsylum
+    );
+  }
+  if (jobBoard === "disabled") {
+    postings = postings!.filter(
+      (posting: { postDisabled: boolean }) => posting.postDisabled
+    );
+  }
+  if (jobBoard === "indigenous") {
+    postings = postings!.filter(
+      (posting: { postIndigenous: boolean }) => posting.postIndigenous
+    );
+  }
+  if (jobBoard === "newcomers") {
+    postings = postings!.filter(
+      (posting: { postNewcomers: boolean }) => posting.postNewcomers
+    );
+  }
+  if (jobBoard === "youth") {
+    postings = postings!.filter(
+      (posting: { postYouth: boolean }) => posting.postYouth
     );
   }
   return postings;
