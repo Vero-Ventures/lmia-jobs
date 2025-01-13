@@ -81,6 +81,12 @@ export function ResetPassword() {
             disabled={loading}
             onClick={async () => {
               if (password !== passwordConfirmation) {
+                toast.error("Passwords must match");
+                return;
+              }
+              const alphaOnly = /^[a-zA-Z]+$/;
+              if (alphaOnly.test(password)) {
+                toast.error("Password must contain a number or symbol");
                 return;
               }
               await resetPassword(
