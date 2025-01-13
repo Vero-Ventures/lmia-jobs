@@ -15,17 +15,26 @@ export const metadata: Metadata = {
   description: "Streamlining the LMIA process for Canadian employers",
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const links = [
-    { text: "Dashboard", url: "/dashboard" },
-    { text: "New Post", url: "/dashboard/post" },
-    { text: "Account", url: "/dashboard/account" },
-    { text: "Log Out", url: "/log-out" },
+    { text: "Home", url: "/admin" },
+    { text: "Pricing", url: "/admin/pricing" },
+    { text: "About", url: "/admin/about-us" },
+    { text: "Join Now", url: "/admin/sign-up" },
+    { text: "Log In", url: "/admin/log-in" },
   ];
+
+  // const sessionLinks = [
+  //   { text: "Home", url: "/admin/dashboard" },
+  //   { text: "Pricing", url: "/admin/pricing" },
+  //   { text: "Contact Us", url: "/admin/contact-us" },
+  //   { text: "Log Out", url: "/admin/log-out" },
+  // ];
+
   return (
     <div className={cn(inter.className, "antialiased")}>
       <Navbar links={links} />

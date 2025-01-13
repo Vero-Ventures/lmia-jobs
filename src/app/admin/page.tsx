@@ -1,22 +1,11 @@
 "use client";
 
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Component() {
-  const links = [
-    { text: "Home", url: "/admin" },
-    { text: "Pricing", url: "/pricing" },
-    { text: "About", url: "/about-us" },
-    { text: "Join Now", url: "/sign-up" },
-    { text: "Log In", url: "/log-in" },
-  ];
-
   return (
     <div>
-      <Navbar links={links} />
       <div className="flex min-h-dvh flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
         <main className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center px-4 text-center">
           <div className="mb-8 flex items-center space-x-2">
@@ -51,7 +40,6 @@ export default function Component() {
           </p>
         </footer>
       </div>
-      <Footer />
     </div>
   );
 }

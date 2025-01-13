@@ -1,3 +1,5 @@
+("");
+
 import Form from "next/form";
 import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section";
 import { Button } from "@/components/ui/button";
