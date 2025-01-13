@@ -1,36 +1,14 @@
 import { notFound } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { selectAllJobPostings } from "@/db/queries/jobPostings";
 import Form from "next/form";
 import JobPostingSection from "./components/job-posting-section";
 import FilterSelect from "./components/filter-select";
-import { cn } from "@/lib/utils";
-import { FilterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { selectAllJobPostings } from "@/db/queries/jobPostings";
-
-const JOB_SITES = [
-  {
-    id: "newcomers",
-    title: "Newcomers Job Board",
-  },
-  {
-    id: "youth",
-    title: "Youth Job Board",
-  },
-  {
-    id: "disabled",
-    title: "Disabled Workers Job Board",
-  },
-  {
-    id: "indigenous",
-    title: "Indigenous Job Board",
-  },
-  {
-    id: "asylum",
-    title: "Asylum Refugees Job Board",
-  },
-];
+import { FilterIcon } from "lucide-react";
+import { JOB_SITES } from "./lib/constants";
 
 export async function generateMetadata({
   params,
