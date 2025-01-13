@@ -78,6 +78,13 @@
       "when": 1736803694184,
       "tag": "0010_slimy_vivisector",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1736804580958,
+      "tag": "0011_skinny_invaders",
+      "breakpoints": true
     }
   ]
 }

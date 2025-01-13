@@ -46,7 +46,7 @@ export const account = pgTable("account", {
   id: text("id").primaryKey(),
   userId: text("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   accountId: text("account_id").notNull(),
   password: text("password"),
   createdAt: timestamp("created_at").notNull(),

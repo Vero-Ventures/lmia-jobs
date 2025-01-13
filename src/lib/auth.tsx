@@ -15,12 +15,12 @@ export const auth = betterAuth({
   }),
   emailVerification: {
     sendOnSignUp: true,
-    sendVerificationEmail: async ({ user }) => {
+    sendVerificationEmail: async ({ user, url }) => {
       await resend.emails.send({
         from: "Opportunities <no-reply@manageopportunities.ca>",
         to: [user.email],
         subject: "Verify your email address",
-        react: <VerifyEmail url={"http://localhost:3000/admin/sign-in"} />,
+        react: <VerifyEmail url={url} />,
       });
     },
   },
