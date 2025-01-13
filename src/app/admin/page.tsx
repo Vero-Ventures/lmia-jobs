@@ -1,11 +1,20 @@
-"use client";
-
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Component() {
+  const links = [
+    { text: "Home", url: "/admin" },
+    { text: "Pricing", url: "/pricing" },
+    { text: "About", url: "/about-us" },
+    { text: "Join Now", url: "/sign-up" },
+    { text: "Log In", url: "/sign-in" },
+  ];
+
   return (
     <div>
+      <Navbar links={links} />
       <div className="flex min-h-dvh flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
         <main className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center px-4 text-center">
           <div className="mb-8 flex items-center space-x-2">
@@ -25,7 +34,7 @@ export default function Component() {
             <Button
               type="submit"
               className="mt-8 w-64 bg-blue-600 bg-gradient-to-r from-blue-500 to-blue-600 py-8 text-2xl font-bold text-white shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 sm:mt-4">
-              <Link href={"/log-in"}>Log In</Link>
+              <Link href={"/sign-in"}>Log In</Link>
             </Button>
           </div>
         </main>
@@ -39,6 +48,7 @@ export default function Component() {
             </a>
           </p>
         </footer>
+        <Footer />
       </div>
     </div>
   );

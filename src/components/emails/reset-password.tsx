@@ -1,0 +1,102 @@
+import {
+  Body,
+  Container,
+  Head,
+  Html,
+  Preview,
+  Section,
+  Text,
+  Button,
+} from "@react-email/components";
+
+interface ResetPasswordProps {
+  url: string;
+}
+
+export default function ResetPassword({ url }: ResetPasswordProps) {
+  return (
+    <Html>
+      <Head />
+      <Preview>Password Reset Request</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          <Section style={coverSection}>
+            <Section style={upperSection}>
+              <Text
+                style={{
+                  ...text,
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                }}>
+                Password Reset Request
+              </Text>
+              <Text style={mainText}>
+                We received a request to reset your password. You can reset your
+                password by clicking the button below:
+              </Text>
+              <Section>
+                <Section
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}>
+                  <Button style={button} href={url}>
+                    Reset Password
+                  </Button>
+                </Section>
+              </Section>
+              <Text style={mainText}>
+                If you did not request a password reset, please ignore this
+                email.
+              </Text>
+              <Text style={mainText}>Thank you, The Opportunities Team.</Text>
+            </Section>
+          </Section>
+        </Container>
+      </Body>
+    </Html>
+  );
+}
+
+const main = {
+  backgroundColor: "#fff",
+  color: "#212121",
+};
+
+const container = {
+  margin: "0 auto",
+  padding: "20px 0 48px",
+};
+
+const text = {
+  color: "#333",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fontSize: "16px",
+  margin: "24px 0",
+  textAlign: "center" as const,
+};
+
+const coverSection = { backgroundColor: "#fff" };
+
+const upperSection = { padding: "25px 35px" };
+
+const mainText = { ...text, marginBottom: "16px" };
+
+const button = {
+  ...text,
+  backgroundColor: "#3598DB",
+  borderRadius: "3px",
+  fontWeight: "600",
+  color: "#fff",
+  fontSize: "15px",
+  textDecoration: "none",
+  textAlign: "center" as const,
+  display: "block",
+  padding: "11px 23px",
+  width: "380px",
+};

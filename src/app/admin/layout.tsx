@@ -21,20 +21,13 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const links = [
-    { text: "Home", url: "/admin" },
+    { text: "Home", url: "/admin/dashboard" },
     { text: "Pricing", url: "/admin/pricing" },
-    { text: "About", url: "/admin/about-us" },
-    { text: "Join Now", url: "/admin/sign-up" },
-    { text: "Log In", url: "/admin/log-in" },
+    { text: "Contact Us", url: "/admin/contact-us" },
+    { text: "Account", url: "/admin/account" },
+    { text: "Log Out", url: "/log-out" },
   ];
-
-  // const sessionLinks = [
-  //   { text: "Home", url: "/admin/dashboard" },
-  //   { text: "Pricing", url: "/admin/pricing" },
-  //   { text: "Contact Us", url: "/admin/contact-us" },
-  //   { text: "Log Out", url: "/admin/log-out" },
-  // ];
-
+  
   return (
     <div className={cn(inter.className, "antialiased")}>
       <Navbar links={links} />

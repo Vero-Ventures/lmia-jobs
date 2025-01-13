@@ -2,27 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 function Navbar({ links }) {
   const router = useRouter();
-
-  const handleLogOut = async () => {
-    console.log("Session");
-    const session = await authClient.getSession();
-    console.log(session);
-
-    console.log("sign out");
-    const result = await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/admin");
-        },
-      },
-    });
-    console.log(result);
-  };
   return (
     <header className="flex h-16 flex-col items-center border-y px-4 sm:h-14 sm:flex-row lg:px-6">
       <Link className="flex items-center justify-center" href="/admin">
@@ -35,7 +19,16 @@ function Navbar({ links }) {
             <button
               key={index}
               className="text-sm font-medium underline-offset-4 hover:underline sm:text-base"
-              onClick={() => handleLogOut()}>
+              onClick={async () => {
+                const result = await signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.push("/sign-in");
+                    },
+                  },
+                });
+                console.log(result);
+              }}>
               Log Out
             </button>
           ) : (
