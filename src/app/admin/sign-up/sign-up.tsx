@@ -25,6 +25,8 @@ export function SignUp() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+
+  const [showVerifyEmail, setShowVerifyEmail] = useState(false);
   return (
     <Card className="z-50 mx-auto max-w-md rounded-md rounded-t-none">
       <CardHeader>
@@ -34,6 +36,29 @@ export function SignUp() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <div
+          className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${showVerifyEmail ? "" : "hidden"}`}>
+          <div className="mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 mb:w-[416px] sm:w-[448px]">
+            <p className="mt-2 text-center text-2xl font-bold text-gray-800 mb:text-3xl">
+              Verify Your Email
+            </p>
+            <p className="px-2 text-center text-lg text-gray-800 mb:pt-4 mb:text-xl">
+              A verification email has been sent to your inbox. Click the{" "}
+              <span className="font-bold">Verify Email</span> button to activate
+              your account be redirected to the sign-in page.
+            </p>
+            <p className="px-2 text-center text-lg italic text-gray-800 mb:pb-4 mb:text-xl">
+              If you do not see the email, please check your spam or junk
+              folder.
+            </p>
+            <Button
+              type="submit"
+              className="mx-auto w-3/5 py-6 text-base mb:text-lg"
+              onClick={() => router.replace("/admin/sign-in")}>
+              Go To Sign In
+            </Button>
+          </div>
+        </div>
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -121,7 +146,7 @@ export function SignUp() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.replace("/admin/sign-in");
+                    setShowVerifyEmail(true);
                   },
                 }
               );
