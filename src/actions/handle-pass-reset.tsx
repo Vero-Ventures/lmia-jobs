@@ -40,42 +40,54 @@ export async function handleSendPasswordReset(email: string) {
   }
 }
 
+const passwordResetErrors: Record<string, string> = {
+  "different passwords": "Your passwords must match each other.",
+  "short password": "Your password must be 8 characters or longer.",
+  "weak password": "Your password must contain a number or symbol.",
+  "invalid code": "Reset code may be invalid, please check and try again.",
+  error: "An error occurred while resetting your password.",
+};
+
 export async function handleResetPassword(
   resetPasscode: string,
   password: string,
   confirmPassword: string
 ): Promise<string> {
-  const resetUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.resetCode, resetPasscode))
-    .then((res) => res[0]);
+  try {
+    const resetUser = await db
+      .select()
+      .from(user)
+      .where(eq(user.resetCode, resetPasscode))
+      .then((res) => res[0]);
 
-  if (resetUser) {
-    const alphaOnly = /^[a-zA-Z]+$/;
-    if (password !== confirmPassword) {
-      return "different passwords";
-    } else if (password.length < 8) {
-      return "short password";
-    } else if (alphaOnly.test(password)) {
-      return "weak password";
-    } else {
-      const result = await authClient.resetPassword({
-        newPassword: password,
-      });
+    if (resetUser) {
+      const alphaOnly = /^[a-zA-Z]+$/;
+      if (password !== confirmPassword) {
+        return passwordResetErrors["different passwords"];
+      } else if (password.length < 8) {
+        return passwordResetErrors["short password"];
+      } else if (alphaOnly.test(password)) {
+        return passwordResetErrors["weak password"];
+      } else {
+        const result = await authClient.resetPassword({
+          newPassword: password,
+        });
 
-      if (result.error) {
-        return "error";
+        if (result.error) {
+          return passwordResetErrors["error"];
+        }
+
+        await db
+          .update(user)
+          .set({ resetCode: null })
+          .where(eq(user.id, resetUser.id));
+
+        return "success";
       }
-
-      await db
-        .update(user)
-        .set({ resetCode: null })
-        .where(eq(user.id, resetUser.id));
-
-      return "success";
+    } else {
+      return passwordResetErrors["invalid code"];
     }
-  } else {
-    return "error";
+  } catch {
+    return passwordResetErrors["error"];
   }
 }
