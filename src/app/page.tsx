@@ -1,36 +1,27 @@
-import { BriefcaseBusinessIcon } from "lucide-react";
-import { WaitingListForm } from "@/components/waiting-list-form";
+"use client";
 
 export default function Home() {
   return (
-    <div className="flex min-h-dvh flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
-      <main className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center px-4 text-center">
-        <div className="mb-8 flex items-center space-x-2">
-          <BriefcaseBusinessIcon className="size-10 text-blue-600" />
-          <span className="text-3xl font-bold tracking-tighter text-blue-800">
-            LMIA Jobs
-          </span>
-        </div>
-        <h1 className="mb-4 text-6xl font-bold leading-[4.5rem] tracking-tight text-gray-900">
-          Streamlining LMIA for Canadian employers
-        </h1>
-        <p className="mb-8 text-lg text-gray-600">
-          LMIA Jobs simplifies the Labour Market Impact Assessment process,
-          connecting Canadian employers with qualified foreign workers
-          efficiently and compliantly.
-        </p>
-        <WaitingListForm />
-      </main>
-      <footer className="mx-auto max-w-2xl px-4 py-8 text-center text-sm text-gray-600">
-        <p>
-          © {new Date().getFullYear()} LMIA Jobs - Developed by{" "}
-          <a
-            href="https://www.veroventures.com/"
-            className="text-blue-600 hover:text-blue-700">
-            Vero Ventures
-          </a>
-        </p>
-      </footer>
+    <div className="flex h-dvh w-dvw flex-col justify-center text-center">
+      <p className="text-4xl font-bold">Domain Redirect</p>
+      <p className="mt-4 text-xl">
+        Enter routes directly when testing locally.
+      </p>
+      <p className="mt-2 text-xl">
+        Middleware redirect is disabled on localhost.
+      </p>
+      <p className="mt-6 text-xl">ManageOpportunities.ca: /admin</p>
+      <p className="mt-4 text-xl">
+        AccessibleOpportunities.ca: /disability-job-board
+      </p>
+      <p className="mt-4 text-xl">AsylumOpportunities.ca: /asylum-job-board</p>
+      <p className="mt-4 text-xl">
+        IndigenousOpportunities.ca: /indigenous-job-board
+      </p>
+      <p className="mt-4 text-xl">
+        ImmigrantOpportunities.ca: /newcomers-job-board
+      </p>
+      <p className="mt-4 text-xl">YouthOpportunities.ca: /youth-job-board</p>
     </div>
   );
 }

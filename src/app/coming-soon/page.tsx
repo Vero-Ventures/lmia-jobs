@@ -6,7 +6,7 @@ export default function Component() {
   const links = [
     { text: "Home", url: "/" },
     { text: "Pricing", url: "/pricing" },
-    { text: "About", url: "/wip" },
+    { text: "About Us", url: "/about-us" },
     { text: "Join Now", url: "/sign-up" },
     { text: "Log In", url: "/log-in" },
   ];

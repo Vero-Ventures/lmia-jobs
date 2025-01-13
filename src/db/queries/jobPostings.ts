@@ -67,27 +67,27 @@ function filterPostingsByBoard(
   postings: any[],
   jobBoard: string
 ) {
-  if (jobBoard === "asylum") {
+  if (jobBoard === "asylum-job-board") {
     postings = postings!.filter(
       (posting: { postAsylum: boolean }) => posting.postAsylum
     );
   }
-  if (jobBoard === "disabled") {
+  if (jobBoard === "disabled-job-board") {
     postings = postings!.filter(
       (posting: { postDisabled: boolean }) => posting.postDisabled
     );
   }
-  if (jobBoard === "indigenous") {
+  if (jobBoard === "indigenous-job-board") {
     postings = postings!.filter(
       (posting: { postIndigenous: boolean }) => posting.postIndigenous
     );
   }
-  if (jobBoard === "newcomers") {
+  if (jobBoard === "newcomers-job-board") {
     postings = postings!.filter(
       (posting: { postNewcomers: boolean }) => posting.postNewcomers
     );
   }
-  if (jobBoard === "youth") {
+  if (jobBoard === "youth-job-board") {
     postings = postings!.filter(
       (posting: { postYouth: boolean }) => posting.postYouth
     );

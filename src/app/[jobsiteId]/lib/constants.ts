@@ -1,23 +1,23 @@
 export const JOB_SITES = [
   {
-    id: "newcomers-board",
-    title: "Newcomers Job Board",
+    id: "asylum-job-board",
+    title: "Asylum Refugees Job Board",
   },
   {
-    id: "youth-board",
-    title: "Youth Job Board",
-  },
-  {
-    id: "disabled-board",
+    id: "disability-job-board",
     title: "Disabled Workers Job Board",
   },
   {
-    id: "indigenous-board",
+    id: "indigenous-job-board",
     title: "Indigenous Job Board",
   },
   {
-    id: "asylum-board",
-    title: "Asylum Refugees Job Board",
+    id: "newcomers-job-board",
+    title: "Newcomers Job Board",
+  },
+  {
+    id: "youth-job-board",
+    title: "Youth Job Board",
   },
 ];
 
