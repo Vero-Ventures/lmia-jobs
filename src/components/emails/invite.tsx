@@ -66,8 +66,9 @@ export default function InviteEmail({
             </Section>
             <Section style={accountSection}>
               <Text style={text}>
-                Log in the following temporary credientals to setup your
-                account.
+                Use the following temporary credientals to log into your account
+                and recive an email verification message. Once verified, you
+                will be able to reset your password or log in to your account.
               </Text>
               <Text style={credentialText}>
                 Email: {email}

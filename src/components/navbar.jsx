@@ -23,7 +23,7 @@ function Navbar({ links }) {
                 const result = await signOut({
                   fetchOptions: {
                     onSuccess: () => {
-                      router.push("/sign-in");
+                      router.push("/admin");
                     },
                   },
                 });

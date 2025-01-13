@@ -3,8 +3,6 @@ import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,20 +18,10 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const links = [
-    { text: "Home", url: "/admin/dashboard" },
-    { text: "Pricing", url: "/admin/pricing" },
-    { text: "Contact Us", url: "/admin/contact-us" },
-    { text: "Account", url: "/admin/account" },
-    { text: "Log Out", url: "/log-out" },
-  ];
-  
   return (
     <div className={cn(inter.className, "antialiased")}>
-      <Navbar links={links} />
       {children}
       <Toaster />
-      <Footer />
     </div>
   );
 }

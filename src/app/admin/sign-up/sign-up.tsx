@@ -18,8 +18,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -37,38 +35,12 @@ export function SignUp() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="first-name">First name</Label>
-              <Input
-                id="first-name"
-                placeholder="Max"
-                required
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
-                value={firstName}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="last-name">Last name</Label>
-              <Input
-                id="last-name"
-                placeholder="Robinson"
-                required
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-                value={lastName}
-              />
-            </div>
-          </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="m@example.com"
+              placeholder="user@example.com"
               required
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -125,12 +97,16 @@ export function SignUp() {
               if (password !== passwordConfirmation) {
                 return;
               }
+              const alphaOnly = /^[a-zA-Z]+$/;
+              if (alphaOnly.test(password)) {
+                return;
+              }
               await signUp.email(
                 {
                   email,
                   password,
-                  name: `${firstName} ${lastName}`,
-                  callbackURL: "/sign-in",
+                  name: email,
+                  callbackURL: "/admin/sign-in",
                 },
                 {
                   onResponse: () => {
@@ -143,7 +119,7 @@ export function SignUp() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.replace("/sign-in");
+                    router.replace("/admin/sign-in");
                   },
                 }
               );
@@ -155,7 +131,7 @@ export function SignUp() {
             )}
           </Button>
           <Link
-            href="/sign-in"
+            href="/admin/sign-in"
             className="mx-auto inline-block text-sm underline">
             Back to sign in
           </Link>

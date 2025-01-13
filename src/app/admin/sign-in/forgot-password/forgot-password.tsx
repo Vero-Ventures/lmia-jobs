@@ -52,7 +52,7 @@ export default function ForgotPassword() {
             disabled={loading}
             onClick={async () => {
               await forgetPassword(
-                { email, redirectTo: "/reset-password" },
+                { email, redirectTo: "/admin/reset-password" },
                 {
                   onResponse: () => {
                     setLoading(false);
@@ -79,7 +79,7 @@ export default function ForgotPassword() {
             )}
           </Button>
           <Link
-            href="/sign-in"
+            href="/admin/sign-in"
             className="mx-auto inline-block text-sm underline">
             Back to Sign in
           </Link>

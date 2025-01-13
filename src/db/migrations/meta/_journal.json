@@ -57,6 +57,27 @@
       "when": 1736542386151,
       "tag": "0007_greedy_paper_doll",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1736799435550,
+      "tag": "0008_conscious_night_thrasher",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1736801176464,
+      "tag": "0009_nappy_reaper",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1736803694184,
+      "tag": "0010_slimy_vivisector",
+      "breakpoints": true
     }
   ]
 }

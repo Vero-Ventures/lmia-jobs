@@ -16,7 +16,6 @@ export default async function Page({
 }) {
   const { query } = await searchParams;
 
-  // NOTE: Replace with call to session once auth is implemented
   const userEmail = "";
 
   const jobPostings = await selectAllJobPostings({

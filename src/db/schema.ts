@@ -8,12 +8,6 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-export const mailingList = pgTable("mailing_list", {
-  id: serial().primaryKey(),
-  email: text().notNull().unique(),
-  createdAt: timestamp().notNull().defaultNow(),
-});
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -23,35 +17,47 @@ export const user = pgTable("user", {
   updatedAt: timestamp("updated_at").notNull(),
 });
 
+export const userMailing = pgTable("user_mailing", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  tempPassword: text("temp_password"),
+  newlyCreated: boolean("newly_created").notNull().default(true),
+  optedOut: boolean("opted_out").notNull().default(false),
+  activated: boolean("activated").notNull().default(false),
+  ignore: boolean("ignore").notNull().default(false),
+});
+
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
-  expiresAt: timestamp("expires_at").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-  ipAddress: text("ip_address"),
+  expiresAt: timestamp("expires_at").notNull(),
   userAgent: text("user_agent"),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id),
+  ipAddress: text("ip_address"),
 });
 
 export const account = pgTable("account", {
   id: text("id").primaryKey(),
-  accountId: text("account_id").notNull(),
-  providerId: text("provider_id").notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
-  accessToken: text("access_token"),
-  refreshToken: text("refresh_token"),
-  idToken: text("id_token"),
-  accessTokenExpiresAt: timestamp("access_token_expires_at"),
-  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  scope: text("scope"),
+  accountId: text("account_id").notNull(),
   password: text("password"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
+  providerId: text("provider_id").notNull(),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  idToken: text("id_token"),
+  scope: text("scope"),
 });
 
 export const verification = pgTable("verification", {
