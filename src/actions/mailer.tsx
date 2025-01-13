@@ -1,8 +1,8 @@
 "use server";
 
-import { db } from "@/db";
-import { jobPostings, user } from "@/db/schema";
-import { eq } from "drizzle-orm";
+// import { db } from "@/db";
+// import { jobPostings, user } from "@/db/schema";
+// import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
@@ -10,61 +10,61 @@ import type { JobPosting } from "@/app/[jobsiteId]/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
-export async function mailInvitesAndReminders() {
-  try {
-    const newUsers = await db
-      .select()
-      .from(user)
-      .where(eq(user.newlyCreated, true));
+// export async function mailInvitesAndReminders() {
+//   try {
+//     const newUsers = await db
+//       .select()
+//       .from(user)
+//       .where(eq(user.newlyCreated, true));
 
-    const remindUsers = await db
-      .select()
-      .from(user)
-      .where(
-        eq(user.newlyCreated, false) &&
-          eq(user.activated, false) &&
-          eq(user.optedOut, false) &&
-          eq(user.ignore, false)
-      );
+//     const remindUsers = await db
+//       .select()
+//       .from(user)
+//       .where(
+//         eq(user.newlyCreated, false) &&
+//           eq(user.activated, false) &&
+//           eq(user.optedOut, false) &&
+//           eq(user.ignore, false)
+//       );
 
-    const userPosts = await db.select().from(jobPostings);
+//     const userPosts = await db.select().from(jobPostings);
 
-    if (newUsers.length > 0) {
-      await db
-        .update(user)
-        .set({ newlyCreated: false })
-        .where(eq(user.newlyCreated, true));
+//     if (newUsers.length > 0) {
+//       await db
+//         .update(user)
+//         .set({ newlyCreated: false })
+//         .where(eq(user.newlyCreated, true));
 
-      newUsers.forEach(async (user) => {
-        sendInvitesAndReminders(
-          user.email,
-          user.temporaryPasssword!,
-          user.createdAt,
-          userPosts,
-          true
-        );
-      });
-    }
+//       newUsers.forEach(async (user) => {
+//         sendInvitesAndReminders(
+//           user.email,
+//           user.temporaryPasssword!,
+//           user.createdAt,
+//           userPosts,
+//           true
+//         );
+//       });
+//     }
 
-    if (remindUsers.length > 0) {
-      remindUsers.forEach(async (user) => {
-        sendInvitesAndReminders(
-          user.email,
-          user.temporaryPasssword!,
-          user.createdAt,
-          userPosts,
-          false
-        );
-      });
-    }
+//     if (remindUsers.length > 0) {
+//       remindUsers.forEach(async (user) => {
+//         sendInvitesAndReminders(
+//           user.email,
+//           user.temporaryPasssword!,
+//           user.createdAt,
+//           userPosts,
+//           false
+//         );
+//       });
+//     }
 
-    return;
-  } catch (err) {
-    console.error("Mailing process failed.");
-    console.error(err);
-    return;
-  }
-}
+//     return;
+//   } catch (err) {
+//     console.error("Mailing process failed.");
+//     console.error(err);
+//     return;
+//   }
+// }
 
 export async function sendInvitesAndReminders(
   email: string,
