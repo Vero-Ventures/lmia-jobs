@@ -60,8 +60,6 @@ export async function selectAllJobPostings({
   return postings;
 }
 
-
-
 function filterPostingsByBoard(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   postings: any[],
