@@ -15,7 +15,7 @@ export async function optOutOfReminders(email: string): Promise<string> {
     throw new Error("User with that email could not be found.");
   }
 
-  await db.update(user).set({ optedOut: true }).where(eq(user.email, email));
+  // await db.update(user).set({ optedOut: true }).where(eq(user.email, email));
 
   return "true";
 }
