@@ -9,12 +9,9 @@ function Footer() {
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm sm:grid">
         <div className="grid content-start justify-center gap-y-4 text-base">
           <h3 className="text-xl font-semibold">Company</h3>
-          <Link href="/about-us" className="h-fit pb-1">
-            About Us
-          </Link>
-          <Link href="/contact-us" className="pb-1">
-            Contact Us
-          </Link>
+          <Link href="/about-us">About Us</Link>
+          <Link href="/contact-us">Contact Us</Link>
+          <Link href="/pricing">Pricing</Link>
         </div>
         <div className="grid justify-center gap-1">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
@@ -60,12 +57,9 @@ function Footer() {
         <div className="mx-auto flex w-fit flex-col items-start justify-center gap-4">
           <div className="grid content-start justify-center gap-y-4 text-base">
             <h3 className="text-xl font-semibold">Company</h3>
-            <Link href="/about-us" className="h-fit pb-1">
-              About Us
-            </Link>
-            <Link href="/contact-us" className="pb-1">
-              Contact
-            </Link>
+            <Link href="/about-us">About Us</Link>
+            <Link href="/contact-us">Contact</Link>
+            <Link href="/pricing">Pricing</Link>
           </div>
           <div className="mt-4 grid content-start justify-center gap-y-4 text-base">
             <h3 className="text-xl font-semibold">Legal</h3>

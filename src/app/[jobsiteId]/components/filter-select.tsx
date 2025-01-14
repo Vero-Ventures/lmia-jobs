@@ -22,21 +22,14 @@ export default function SearchSelect({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Define the string used as the key in the searchParams object.
-  // Allows it to be updated to the correct value for Job Types.
   let paramString = filterType;
 
-  // Set constant for selection options based on select type.
-  // Ensure valid value by setting to PROVINCES by default.
   let selections = PROVINCES;
   if (filterType === "job type") {
     selections = JOB_TYPES;
     paramString = "jobType";
   }
 
-  /**
-   * Get a new searchParams string by merging the current searchParams with a provided key/value pair
-   **/
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());

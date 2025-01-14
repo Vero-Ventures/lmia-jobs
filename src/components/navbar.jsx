@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 function Navbar({ links }) {
@@ -19,15 +19,16 @@ function Navbar({ links }) {
             <button
               key={index}
               className="text-sm font-medium underline-offset-4 hover:underline sm:text-base"
-              onClick={() =>
-                authClient.signOut({
+              onClick={async () => {
+                const result = await signOut({
                   fetchOptions: {
                     onSuccess: () => {
                       router.push("/admin");
                     },
                   },
-                })
-              }>
+                });
+                console.log(result);
+              }}>
               Log Out
             </button>
           ) : (

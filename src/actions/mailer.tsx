@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPostings, user } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { jobPostings, user, userMailing } from "@/db/schema";
+import { eq, inArray } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
@@ -12,40 +12,41 @@ const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 export async function mailInvitesAndReminders() {
   try {
-    // Get all valid new mailer users.
-    const newUsers = await db
+    const newUsersMailing = await db
       .select()
-      .from(user)
-      .where(eq(user.newlyCreated, true));
+      .from(userMailing)
+      .where(eq(userMailing.newlyCreated, true));
 
-    // Gets all valid Inactive users who have previously recived an email.
-    // (Have not opted out or had account marked as ignored due to age.)
-    const remindUsers = await db
+    const remindUsersMailing = await db
       .select()
-      .from(user)
+      .from(userMailing)
       .where(
-        eq(user.newlyCreated, false) &&
-          eq(user.activated, false) &&
-          eq(user.optedOut, false) &&
-          eq(user.ignore, false)
+        eq(userMailing.newlyCreated, false) &&
+          eq(userMailing.activated, false) &&
+          eq(userMailing.optedOut, false) &&
+          eq(userMailing.ignore, false)
       );
 
-    // Get the user posts for info to be sent as part of the emails.
     const userPosts = await db.select().from(jobPostings);
 
-    // Check if any new users were found for mailing.
-    if (newUsers.length > 0) {
-      // Set the assosiated users as no longer newly created.
+    if (newUsersMailing.length > 0) {
       await db
-        .update(user)
+        .update(userMailing)
         .set({ newlyCreated: false })
-        .where(eq(user.newlyCreated, true));
+        .where(eq(userMailing.newlyCreated, true));
 
-      // Iterate over the new users to send invite emails first.
+      const newUserIds = newUsersMailing.map((user) => user.userId);
+
+      const newUsers = await db
+        .select()
+        .from(user)
+        .where(inArray(user.id, newUserIds));
+
       newUsers.forEach(async (user) => {
         sendInvitesAndReminders(
           user.email,
-          user.temporaryPasssword!,
+          newUsersMailing.find((mailing) => mailing.userId === user.id)!
+            .tempPassword!,
           user.createdAt,
           userPosts,
           true
@@ -53,13 +54,19 @@ export async function mailInvitesAndReminders() {
       });
     }
 
-    // Check if any users were found for reminders.
-    if (remindUsers.length > 0) {
-      // Iterate over the users to send an reminder email.
+    if (remindUsersMailing.length > 0) {
+      const remindUserIds = newUsersMailing.map((user) => user.userId);
+
+      const remindUsers = await db
+        .select()
+        .from(user)
+        .where(inArray(user.id, remindUserIds));
+
       remindUsers.forEach(async (user) => {
         sendInvitesAndReminders(
           user.email,
-          user.temporaryPasssword!,
+          remindUsersMailing.find((mailing) => mailing.userId === user.id)!
+            .tempPassword!,
           user.createdAt,
           userPosts,
           false
@@ -83,24 +90,20 @@ export async function sendInvitesAndReminders(
   isInvite: boolean
 ) {
   try {
-    // Get the posts for the current user by their email.
     const userPostings = userPosts.filter((post) => post.email === email);
 
     if (userPostings.length === 0) {
-      // Get the total number of posts and the posts to display (based on number of posts).
       const totalPosts = userPostings.length;
-      const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
 
-      // Potentially included post data.
+      const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
       const topPostNames = topPosts.map((post) => post.jobTitle);
 
-      // Get one month from the creation date.
       const expiredTimeStamp =
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
       if (isInvite) {
-        const result = await resend.emails.send({
+        await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Activate Your New Account",
@@ -109,12 +112,11 @@ export async function sendInvitesAndReminders(
               email={email}
               tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
-              postNames={["A", "B", "C"]}
-              totalPosts={6}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
             />
           ),
         });
-        console.log(result);
       } else {
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
@@ -138,4 +140,23 @@ export async function sendInvitesAndReminders(
     console.error(err);
     return;
   }
+}
+
+export async function optOutOfReminders(email: string): Promise<string> {
+  const optedOutUser = await db
+    .select()
+    .from(user)
+    .where(eq(user.email, email))
+    .then((res) => res[0]);
+
+  if (!optedOutUser) {
+    throw new Error("User with that email could not be found.");
+  }
+
+  await db
+    .update(userMailing)
+    .set({ optedOut: true })
+    .where(eq(userMailing.userId, optedOutUser.id));
+
+  return "true";
 }
