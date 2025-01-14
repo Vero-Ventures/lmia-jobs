@@ -6,7 +6,7 @@ import { eq, inArray } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
-import type { JobPosting } from "@/app/[jobsiteId]/lib/types";
+import type { JobPosting } from "@/app/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 

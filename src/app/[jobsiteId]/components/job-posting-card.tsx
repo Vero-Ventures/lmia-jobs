@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { JobPosting } from "../lib/types";
+import type { JobPosting } from "@/app/lib/types";
 
 export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
   return (

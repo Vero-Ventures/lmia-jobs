@@ -4,7 +4,7 @@ import { useState } from "react";
 import { JobListCard } from "./job-list-card";
 import { JobPostingCard } from "./job-posting-card";
 import { Loader2Icon } from "lucide-react";
-import type { JobPosting } from "../lib/types";
+import type { JobPosting } from "@/app/lib/types";
 
 export default function JobPostingSection({
   jobPostings,

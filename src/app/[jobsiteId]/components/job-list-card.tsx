@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { JobPosting } from "../lib/types";
+import type { JobPosting } from "@/app/lib/types";
 
 export function JobListCard({
   jobPosting,

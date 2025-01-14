@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
 import { jobPostings } from "../schema";
+import type { JobPosting } from "@/app/lib/types";
 
 export async function selectAllJobPostings({
   location,
@@ -60,11 +61,7 @@ export async function selectAllJobPostings({
   return postings;
 }
 
-function filterPostingsByBoard(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  postings: any[],
-  jobBoard: string
-) {
+function filterPostingsByBoard(postings: JobPosting[], jobBoard: string) {
   if (jobBoard === "asylum-job-board") {
     postings = postings!.filter(
       (posting: { postAsylum: boolean }) => posting.postAsylum

@@ -21,6 +21,17 @@ export const JOB_SITES = [
   },
 ];
 
+export const JOB_TYPES = [
+  {
+    label: "Full Time",
+    value: "Full Time",
+  },
+  {
+    label: "Part Time",
+    value: "Part Time",
+  },
+];
+
 export const PROVINCES = [
   {
     label: "Alberta",
@@ -73,16 +84,5 @@ export const PROVINCES = [
   {
     label: "Yukon",
     value: "YT",
-  },
-];
-
-export const JOB_TYPES = [
-  {
-    label: "Full Time",
-    value: "Full Time",
-  },
-  {
-    label: "Part Time",
-    value: "Part Time",
   },
 ];
