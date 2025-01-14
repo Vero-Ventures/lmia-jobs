@@ -60,7 +60,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
                 {jobPosting.maxCompValue
                   ? `to $${jobPosting.maxCompValue}`
                   : ""}{" "}
-                hourly
+                {jobPosting.compTimeUnit}
               </span>
             </div>
           </div>
