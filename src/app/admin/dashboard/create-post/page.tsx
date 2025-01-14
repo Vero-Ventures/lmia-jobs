@@ -1,9 +1,12 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { XCircle } from "lucide-react";
 import { PROVINCES } from "@/app/lib/constants";
 import Form from "next/form";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,21 +17,30 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { createJobPost } from "@/actions/create-job-post";
 
 export default function Page() {
+  const { data: session, isPending } = authClient.useSession();
+
+  if (!session && !isPending) {
+    redirect("/admin");
+  }
+
+  const [submittingPost, setSubmittingPost] = useState(false);
+
   const [formValues, setFormValues] = useState({
     jobTitle: "",
-    organizationName: "",
+    hiringOrganization: "",
     employmentType: "",
-    province: "",
-    city: "",
-    address: "",
-    paymentType: "",
-    minCompValue: undefined,
-    maxCompValue: undefined,
+    addressRegion: "",
+    addressLocality: "",
+    streetAddress: "",
+    compTimeUnit: "",
+    minCompValue: "",
+    maxCompValue: "",
     workHours: "",
     startTime: new Date().toISOString().split("T")[0],
-    vacancies: null,
+    vacancies: "",
     description: "",
     language: "",
     postAsylum: false,
@@ -37,6 +49,12 @@ export default function Page() {
     postNewcomers: false,
     postYouth: false,
   });
+
+  const [showNoBoardsSelected, setShowNoBoardsSelected] = useState(false);
+  const [postToNoBoards, setPostToNoBoards] = useState(false);
+
+  const [showPostingError, setShowPostingError] = useState(false);
+  const [showPostingSuccess, setShowPostingSuccess] = useState(false);
 
   const handleValueChange = (
     e:
@@ -48,17 +66,34 @@ export default function Page() {
       | undefined,
     fieldName: string | null = null
   ) => {
-    if (typeof e === "string") {
+    console.log(formValues);
+    if (typeof e === "string" || typeof e === "boolean") {
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
-    } else if (typeof e === "boolean") {
     } else if (e) {
       const { name, value } = e.target;
       setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
     }
   };
 
-  const submitForm = () => {
-    console.log("Form Submitted");
+  const submitForm = async () => {
+    setSubmittingPost(true);
+    setShowPostingError(false);
+
+    const result = await createJobPost(formValues, postToNoBoards);
+    if (result === "no boards") {
+      setShowNoBoardsSelected(true);
+      setPostToNoBoards(true);
+    }
+    if (result === "error") {
+      setShowPostingError(true);
+    }
+    if (result === "success") {
+      setShowPostingSuccess(true);
+      setTimeout(() => {
+        redirect("/admin/dashboard");
+      }, 750);
+    }
+    setSubmittingPost(false);
   };
 
   return (
@@ -76,6 +111,7 @@ export default function Page() {
             name="jobTitle"
             value={formValues.jobTitle}
             onChange={handleValueChange}
+            required
           />
         </div>
 
@@ -86,9 +122,10 @@ export default function Page() {
           <Input
             className="border-2 border-gray-500"
             type="text"
-            name="organizationName"
-            value={formValues.organizationName}
+            name="hiringOrganization"
+            value={formValues.hiringOrganization}
             onChange={handleValueChange}
+            required
           />
         </div>
 
@@ -97,8 +134,9 @@ export default function Page() {
             Province / Territory
           </label>
           <Select
-            defaultValue={formValues.province}
-            onValueChange={(value) => handleValueChange(value, "province")}>
+            defaultValue={formValues.addressRegion}
+            onValueChange={(value) => handleValueChange(value, "addressRegion")}
+            required>
             <SelectTrigger className="border-2 border-gray-500 text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -110,14 +148,21 @@ export default function Page() {
               ))}
             </SelectContent>
           </Select>
+          <Input
+            className="h-1 -translate-y-4 opacity-0"
+            required
+            value={formValues.addressRegion}
+            onChange={handleValueChange}
+          />
 
           <label className="mt-2 p-2 font-semibold md:text-lg">City</label>
           <Input
             className="border-2 border-gray-500"
             type="text"
-            name="city"
-            value={formValues.city}
+            name="addressLocality"
+            value={formValues.addressLocality}
             onChange={handleValueChange}
+            required
           />
         </div>
 
@@ -128,8 +173,8 @@ export default function Page() {
           <Input
             className="border-2 border-gray-500"
             type="text"
-            name="address"
-            value={formValues.address}
+            name="streetAddress"
+            value={formValues.streetAddress}
             onChange={handleValueChange}
           />
         </div>
@@ -139,10 +184,11 @@ export default function Page() {
             Employment Type
           </label>
           <Select
-            defaultValue={formValues.province}
+            defaultValue={formValues.employmentType}
             onValueChange={(value) =>
               handleValueChange(value, "employmentType")
-            }>
+            }
+            required>
             <SelectTrigger className="border-2 border-gray-500 text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -151,17 +197,23 @@ export default function Page() {
               <SelectItem value="Part Time">Part Time</SelectItem>
             </SelectContent>
           </Select>
+          <Input
+            className="h-1 -translate-y-4 opacity-0"
+            required
+            value={formValues.employmentType}
+            onChange={handleValueChange}
+          />
 
           <label className="mt-4 p-2 font-semibold md:text-lg">
             Weekly Hours <span className="text-sm italic"> (Optional)</span>
           </label>
           <Input
             className="border-2 border-gray-500"
-            type="text"
+            type="number"
             name="workHours"
             value={formValues.workHours}
             onChange={handleValueChange}
-            placeholder="0"
+            placeholder=""
           />
 
           <label className="mt-4 p-2 font-semibold md:text-lg">
@@ -179,8 +231,9 @@ export default function Page() {
         <div className="mt-4 flex flex-col">
           <label className="p-2 font-semibold md:text-lg">Payment Type</label>
           <Select
-            defaultValue={formValues.province}
-            onValueChange={(value) => handleValueChange(value, "paymentType")}>
+            defaultValue={formValues.compTimeUnit}
+            onValueChange={(value) => handleValueChange(value, "compTimeUnit")}
+            required>
             <SelectTrigger className="border-2 border-gray-500 text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -189,6 +242,12 @@ export default function Page() {
               <SelectItem value="Salary">Salary</SelectItem>
             </SelectContent>
           </Select>
+          <Input
+            className="h-1 -translate-y-4 opacity-0"
+            required
+            value={formValues.compTimeUnit}
+            onChange={handleValueChange}
+          />
 
           <label className="mt-4 p-2 font-semibold md:text-lg">
             Min Pay Range
@@ -199,7 +258,8 @@ export default function Page() {
             name="minCompValue"
             value={formValues.minCompValue}
             onChange={handleValueChange}
-            placeholder="0"
+            placeholder=""
+            required
           />
 
           <label className="mt-4 p-2 font-semibold md:text-lg">
@@ -211,7 +271,7 @@ export default function Page() {
             name="maxCompValue"
             value={formValues.maxCompValue}
             onChange={handleValueChange}
-            placeholder="0"
+            placeholder=""
           />
         </div>
 
@@ -221,14 +281,16 @@ export default function Page() {
             className="h-24 w-full rounded-md border-2 border-gray-500 p-2"
             name="description"
             value={formValues.description}
-            onChange={handleValueChange}></textarea>
+            onChange={handleValueChange}
+            required></textarea>
         </div>
 
         <div className="mt-2 flex flex-col">
           <label className="p-2 font-semibold md:text-lg">Language</label>
           <Select
-            defaultValue={formValues.province}
-            onValueChange={(value) => handleValueChange(value, "language")}>
+            defaultValue={formValues.language}
+            onValueChange={(value) => handleValueChange(value, "language")}
+            required>
             <SelectTrigger className="border-2 border-gray-500 text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -238,6 +300,12 @@ export default function Page() {
             </SelectContent>
           </Select>
         </div>
+        <Input
+          className="h-1 -translate-y-4 opacity-0"
+          required
+          value={formValues.language}
+          onChange={handleValueChange}
+        />
 
         <div className="mt-2 flex flex-col">
           <div className="mt-4 flex flex-row">
@@ -247,7 +315,9 @@ export default function Page() {
             <Checkbox
               className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
               name="Asylum"
-              onChange={() => handleValueChange(!formValues.postAsylum)}
+              onCheckedChange={() =>
+                handleValueChange(!formValues.postAsylum, "postAsylum")
+              }
             />
           </div>
 
@@ -258,7 +328,9 @@ export default function Page() {
             <Checkbox
               className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
               name="Disabled"
-              onChange={() => handleValueChange(!formValues.postAsylum)}
+              onCheckedChange={() =>
+                handleValueChange(!formValues.postDisabled, "postDisabled")
+              }
             />
           </div>
 
@@ -269,7 +341,9 @@ export default function Page() {
             <Checkbox
               className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
               name="Indigenous"
-              onChange={() => handleValueChange(!formValues.postAsylum)}
+              onCheckedChange={() =>
+                handleValueChange(!formValues.postIndigenous, "postIndigenous")
+              }
             />
           </div>
 
@@ -280,7 +354,9 @@ export default function Page() {
             <Checkbox
               className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
               name="Newcomers"
-              onChange={() => handleValueChange(!formValues.postAsylum)}
+              onCheckedChange={() =>
+                handleValueChange(!formValues.postNewcomers, "postNewcomers")
+              }
             />
           </div>
 
@@ -291,17 +367,39 @@ export default function Page() {
             <Checkbox
               className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
               name="Youth"
-              onChange={() => handleValueChange(!formValues.postAsylum)}
+              onCheckedChange={() =>
+                handleValueChange(!formValues.postYouth, "postYouth")
+              }
             />
           </div>
         </div>
 
+        <div className={showNoBoardsSelected ? "mx-auto mt-6 w-fit" : "hidden"}>
+          <p className="text-center text-lg font-semibold text-red-500">
+            No Job Boards Are Selected <br />
+            Are You Sure?
+          </p>
+        </div>
+
+        <div className={showPostingError ? "mx-auto mt-6 w-fit" : "hidden"}>
+          <p className="text-center text-xl font-semibold text-red-500">
+            <span className="text-2xl"> Error</span> <br />
+            Please Try Again
+          </p>
+        </div>
+
+        <div className={showPostingSuccess ? "mx-auto mt-6 w-fit" : "hidden"}>
+          <p className="text-center text-xl font-semibold text-blue-600">
+            Post Created <br /> Successfully
+          </p>
+        </div>
+
         <div className="mt-4 flex flex-row justify-evenly py-2">
-          <Button type="submit" className="w-1/3">
-            Submit
+          <Button type="button" className="w-2/5" disabled={submittingPost}>
+            <Link href="/admin/dashboard">Cancel</Link>
           </Button>
-          <Button type="button" className="w-1/3">
-            Cancel
+          <Button type="submit" className="w-2/5" disabled={submittingPost}>
+            Submit
           </Button>
         </div>
       </Form>
