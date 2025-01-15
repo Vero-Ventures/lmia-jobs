@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { deleteJobPost } from "@/actions/create-job-post";
+import { deleteJobPost } from "@/actions/handle-job-posts";
 
 export default function DeletePost({ postId }: { postId: string }) {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function DeletePost({ postId }: { postId: string }) {
   const handleDelete = async () => {
     const deleteResult = await deleteJobPost(postId);
     if (deleteResult === "error") {
-      console.log("Error");
+      console.error("Error");
     } else {
       setShowConfirmDelete(false);
       router.push("/admin/dashboard");
@@ -48,7 +48,8 @@ export default function DeletePost({ postId }: { postId: string }) {
           if (postId !== "") {
             setShowConfirmDelete(true);
           }
-        }}>
+        }}
+        disabled={postId === ""}>
         <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
           Delete <br />
           Selected Post

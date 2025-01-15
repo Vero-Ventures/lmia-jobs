@@ -4,7 +4,8 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
+import type { JobPosting } from "@/app/lib/types";
 
 type jobPostForm = {
   jobTitle: string;
@@ -28,9 +29,10 @@ type jobPostForm = {
   postYouth: boolean;
 };
 
-export async function createJobPost(
+export async function handleJobPost(
   formData: jobPostForm,
-  noBoards: boolean
+  noBoards: boolean,
+  postId: string | null = null
 ): Promise<string> {
   try {
     if (
@@ -58,17 +60,36 @@ export async function createJobPost(
     } else {
       const postData = {
         ...formData,
+        streetAddress:
+          formData.streetAddress === "" ? null : formData.streetAddress,
+        language: formData.language === "" ? null : formData.language,
+        maxCompValue:
+          formData.maxCompValue === ""
+            ? null
+            : Math.ceil(Number(formData.maxCompValue)),
+        workHours:
+          formData.workHours === ""
+            ? null
+            : Math.ceil(Number(formData.workHours)),
+        vacancies:
+          formData.vacancies === ""
+            ? null
+            : Math.ceil(Number(formData.vacancies)),
         minCompValue: Math.ceil(Number(formData.minCompValue)),
-        maxCompValue: Math.ceil(Number(formData.maxCompValue)),
-        workHours: Math.ceil(Number(formData.workHours)),
-        vacancies: Math.ceil(Number(formData.vacancies)),
         startTime: formData.startTime.toISOString().split("T")[0],
         email: session.user.email,
         datePosted: datePosted,
         validThrough: new Date().toISOString().split("T")[0],
       };
 
-      await db.insert(jobPostings).values(postData);
+      if (postId) {
+        await db
+          .update(jobPostings)
+          .set(postData)
+          .where(eq(jobPostings.id, Number(postId)));
+      } else {
+        await db.insert(jobPostings).values(postData);
+      }
 
       return "success";
     }
@@ -78,18 +99,35 @@ export async function createJobPost(
   }
 }
 
+export async function getJobPost(
+  postId: string,
+  email: string
+): Promise<[boolean, JobPosting | null]> {
+  try {
+    const result = await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(eq(jobPostings.id, Number(postId)), eq(jobPostings.email, email))
+      )
+      .then((res) => res[0]);
+
+    console.log(result);
+    if (result) {
+      return [true, result];
+    } else {
+      return [false, null];
+    }
+  } catch (error) {
+    console.error(error);
+    return [false, null];
+  }
+}
+
 export async function deleteJobPost(postId: string): Promise<string> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    if (!session) {
-      return "error";
-    } else {
-      await db.delete(jobPostings).where(eq(jobPostings.id, Number(postId)));
-      return "success";
-    }
+    await db.delete(jobPostings).where(eq(jobPostings.id, Number(postId)));
+    return "success";
   } catch (error) {
     console.error(error);
     return "error";

@@ -11,11 +11,11 @@ export type JobPosting = {
   minCompValue: number;
   maxCompValue: number | null;
   workHours: number | null;
-  startTime: string | null;
+  startTime: string;
   vacancies: number | null;
   description: string;
   email: string;
-  language: string;
+  language: string | null;
   createdAt: Date;
   updatedAt: Date;
   validThrough: string;

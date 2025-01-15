@@ -62,12 +62,13 @@ export async function selectAllJobPostings({
 }
 
 function filterPostingsByBoard(postings: JobPosting[], jobBoard: string) {
+  console.log(jobBoard);
   if (jobBoard === "asylum-job-board") {
     postings = postings!.filter(
       (posting: { postAsylum: boolean }) => posting.postAsylum
     );
   }
-  if (jobBoard === "disabled-job-board") {
+  if (jobBoard === "disability-job-board") {
     postings = postings!.filter(
       (posting: { postDisabled: boolean }) => posting.postDisabled
     );

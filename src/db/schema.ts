@@ -82,11 +82,11 @@ export const jobPostings = pgTable("job_postings", {
   minCompValue: integer().notNull(),
   maxCompValue: integer(),
   workHours: integer(),
-  startTime: date(),
+  startTime: date().notNull(),
   vacancies: integer(),
   description: text().notNull(),
   email: text().notNull(),
-  language: text().notNull(),
+  language: text(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp()
     .notNull()

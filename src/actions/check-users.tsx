@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { jobPostings, user, userMailing } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export async function checkInactiveUserAges() {
   try {
@@ -18,7 +18,10 @@ export async function checkInactiveUserAges() {
           .update(userMailing)
           .set({ ignore: true })
           .where(
-            eq(userMailing.userId, user.id) && eq(userMailing.activated, false)
+            and(
+              eq(userMailing.userId, user.id),
+              eq(userMailing.activated, false)
+            )
           );
 
         await db.delete(jobPostings).where(eq(jobPostings.email, user.email));

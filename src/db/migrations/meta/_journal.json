@@ -8,6 +8,20 @@
       "when": 1736875068181,
       "tag": "0000_far_turbo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1736976268066,
+      "tag": "0001_wide_shocker",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736978848943,
+      "tag": "0002_optimal_vindicator",
+      "breakpoints": true
     }
   ]
 }

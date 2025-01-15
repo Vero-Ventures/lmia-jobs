@@ -11,7 +11,7 @@ import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import DeletePost from "./delete-post/delete-handler";
+import DeletePost from "@/app/admin/dashboard/delete-post/delete-handler";
 
 export default async function Page({
   searchParams,
@@ -30,8 +30,6 @@ export default async function Page({
   }
 
   const { query, postId } = await searchParams;
-
-  console.log(postId);
 
   const jobPostings = await selectAllJobPostings({
     query: query === undefined ? "" : query,
@@ -71,21 +69,33 @@ export default async function Page({
               <div className="flex">
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
                   <Link
-                    href={"/admin/dashboard/create-post"}
+                    href={"/admin/dashboard/handle-post?create=true"}
                     className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
                     Create A<br />
                     New Post
                   </Link>
                 </button>
               </div>
-              <div className="flex">
-                <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
-                  <Link
-                    href={"/admin/dashboard/create-post"}
-                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                    Modify <br />
-                    Selected Post
-                  </Link>
+              <div className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
+                <button disabled={postId ? false : true}>
+                  {postId ? (
+                    <Link
+                      href={
+                        "/admin/dashboard/handle-post?postId=" +
+                        postId +
+                        "&email=" +
+                        session!.user.email
+                      }
+                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                      Modify <br />
+                      Selected Post
+                    </Link>
+                  ) : (
+                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                      Modify <br />
+                      Selected Post
+                    </p>
+                  )}
                 </button>
               </div>
               <div className="flex">
