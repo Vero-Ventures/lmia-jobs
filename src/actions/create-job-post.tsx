@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 type jobPostForm = {
   jobTitle: string;
@@ -52,7 +53,7 @@ export async function createJobPost(
     });
 
     if (!session) {
-      console.log("session error");
+      console.error("session error");
       return "error";
     } else {
       const postData = {
@@ -67,14 +68,30 @@ export async function createJobPost(
         validThrough: new Date().toISOString().split("T")[0],
       };
 
-      console.log(postData);
-
       await db.insert(jobPostings).values(postData);
 
       return "success";
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return "error";
+  }
+}
+
+export async function deleteJobPost(postId: string): Promise<string> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return "error";
+    } else {
+      await db.delete(jobPostings).where(eq(jobPostings.id, Number(postId)));
+      return "success";
+    }
+  } catch (error) {
+    console.error(error);
     return "error";
   }
 }

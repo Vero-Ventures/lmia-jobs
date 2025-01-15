@@ -11,12 +11,14 @@ import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import DeletePost from "./delete-post/delete-handler";
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{
     query?: string;
+    postId?: string;
   }>;
 }) {
   const session = await auth.api.getSession({
@@ -27,7 +29,9 @@ export default async function Page({
     redirect("/admin");
   }
 
-  const { query } = await searchParams;
+  const { query, postId } = await searchParams;
+
+  console.log(postId);
 
   const jobPostings = await selectAllJobPostings({
     query: query === undefined ? "" : query,
@@ -66,33 +70,26 @@ export default async function Page({
               </div>
               <div className="flex">
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
-                  <Link href={"/admin/dashboard/create-post"}>
-                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                      Create A<br />
-                      New Post
-                    </p>
+                  <Link
+                    href={"/admin/dashboard/create-post"}
+                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                    Create A<br />
+                    New Post
                   </Link>
                 </button>
               </div>
               <div className="flex">
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
-                  <Link href={"/admin/dashboard/create-post"}>
-                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                      Modify <br />
-                      Selected Post
-                    </p>
+                  <Link
+                    href={"/admin/dashboard/create-post"}
+                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                    Modify <br />
+                    Selected Post
                   </Link>
                 </button>
               </div>
               <div className="flex">
-                <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
-                  <Link href={"/admin/dashboard/create-post"}>
-                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
-                      Delete <br />
-                      Selected Post
-                    </p>
-                  </Link>
-                </button>
+                <DeletePost postId={postId === undefined ? "" : postId} />
               </div>
             </div>
             <a
