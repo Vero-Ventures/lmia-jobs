@@ -97,14 +97,14 @@ export default function Page() {
   };
 
   return (
-    <div className="m-6 mx-auto flex w-4/5 flex-col rounded-lg border-2 border-gray-800 p-2 px-4">
+    <div className="m-6 mx-auto flex w-4/5 flex-col rounded-lg border-2 border-gray-800 p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6">
       <Form className="flex flex-col" action={submitForm}>
         <Button className="w-10 self-end justify-self-end bg-white">
           <XCircle className="min-h-8 min-w-8 bg-white text-black" />
         </Button>
 
         <div>
-          <label className="p-2 font-semibold md:text-lg">Job Title</label>
+          <label className="p-2 font-semibold mb:text-lg">Job Title</label>
           <Input
             className="border-2 border-gray-500"
             type="text"
@@ -116,7 +116,7 @@ export default function Page() {
         </div>
 
         <div className="mt-4">
-          <label className="p-2 font-semibold md:text-lg">
+          <label className="p-2 font-semibold mb:text-lg">
             Organization Name
           </label>
           <Input
@@ -129,15 +129,15 @@ export default function Page() {
           />
         </div>
 
-        <div className="mt-4 flex flex-col">
-          <label className="p-2 font-semibold md:text-lg">
-            Province / Territory
+        <div className="mt-4 flex flex-col mb:flex-row">
+          <label className="p-2 font-semibold mb:mr-1 mb:mt-2.5 mb:block mb:text-lg">
+            Province
           </label>
           <Select
             defaultValue={formValues.addressRegion}
             onValueChange={(value) => handleValueChange(value, "addressRegion")}
             required>
-            <SelectTrigger className="border-2 border-gray-500 text-base">
+            <SelectTrigger className="border-2 border-gray-500 text-base mb:mr-2 mb:mt-3 mb:w-28 sm:text-lg sm:font-semibold">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -149,15 +149,17 @@ export default function Page() {
             </SelectContent>
           </Select>
           <Input
-            className="h-1 -translate-y-4 opacity-0"
+            className="h-1 w-0 -translate-y-4 p-0 opacity-0"
             required
             value={formValues.addressRegion}
             onChange={handleValueChange}
           />
 
-          <label className="mt-2 p-2 font-semibold md:text-lg">City</label>
+          <label className="mt-2 p-2 font-semibold mb:mr-1 mb:mt-2.5 mb:text-lg">
+            City
+          </label>
           <Input
-            className="border-2 border-gray-500"
+            className="w-full border-2 border-gray-500 mb:mt-3"
             type="text"
             name="addressLocality"
             value={formValues.addressLocality}
@@ -166,8 +168,8 @@ export default function Page() {
           />
         </div>
 
-        <div className="mt-4">
-          <label className="p-1 font-semibold md:text-lg">
+        <div className="mt-4 flex flex-col">
+          <label className="p-1 font-semibold mb:text-lg">
             Address <span className="text-sm italic"> (Optional)</span>
           </label>
           <Input
@@ -179,8 +181,21 @@ export default function Page() {
           />
         </div>
 
-        <div className="mt-4 flex flex-col">
-          <label className="p-2 font-semibold md:text-lg">
+        <div className="mt-2 flex flex-col">
+          <label className="p-2 text-center font-semibold mb:text-lg">
+            Hiring Date <span className="text-sm italic"> (Optional)</span>
+          </label>
+          <Input
+            className="mx-auto w-max border-2 border-gray-500 text-center mb:text-lg mb:font-semibold sm:text-xl md:text-xl"
+            type="date"
+            name="startTime"
+            value={formValues.startTime}
+            onChange={handleValueChange}
+          />
+        </div>
+
+        <div className="mt-4 flex flex-col mb:flex-row mb:justify-evenly">
+          <label className="p-2 font-semibold mb:mt-3 mb:w-28 mb:text-center md:text-lg">
             Employment Type
           </label>
           <Select
@@ -189,7 +204,7 @@ export default function Page() {
               handleValueChange(value, "employmentType")
             }
             required>
-            <SelectTrigger className="border-2 border-gray-500 text-base">
+            <SelectTrigger className="border-2 border-gray-500 text-base mb:ml-1 mb:mr-2 mb:mt-7 mb:max-w-32 sm:w-36 sm:text-lg sm:font-semibold">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -198,85 +213,87 @@ export default function Page() {
             </SelectContent>
           </Select>
           <Input
-            className="h-1 -translate-y-4 opacity-0"
+            className="h-1 w-0 -translate-y-4 p-0 opacity-0"
             required
             value={formValues.employmentType}
             onChange={handleValueChange}
           />
 
-          <label className="mt-4 p-2 font-semibold md:text-lg">
+          <label className="mt-4 p-2 font-semibold mb:mr-1 mb:mt-2.5 mb:w-20 mb:text-center md:text-lg">
             Weekly Hours <span className="text-sm italic"> (Optional)</span>
           </label>
           <Input
-            className="border-2 border-gray-500"
+            className="mt-7 border-2 border-gray-500 mb:w-16"
             type="number"
             name="workHours"
             value={formValues.workHours}
             onChange={handleValueChange}
             placeholder=""
           />
-
-          <label className="mt-4 p-2 font-semibold md:text-lg">
-            Hiring Date <span className="text-sm italic"> (Optional)</span>
-          </label>
-          <Input
-            className="mx-auto w-max border-2 border-gray-500 text-center"
-            type="date"
-            name="startTime"
-            value={formValues.startTime}
-            onChange={handleValueChange}
-          />
         </div>
 
-        <div className="mt-4 flex flex-col">
-          <label className="p-2 font-semibold md:text-lg">Payment Type</label>
-          <Select
-            defaultValue={formValues.compTimeUnit}
-            onValueChange={(value) => handleValueChange(value, "compTimeUnit")}
-            required>
-            <SelectTrigger className="border-2 border-gray-500 text-base">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Hourly">Hourly</SelectItem>
-              <SelectItem value="Salary">Salary</SelectItem>
-            </SelectContent>
-          </Select>
-          <Input
-            className="h-1 -translate-y-4 opacity-0"
-            required
-            value={formValues.compTimeUnit}
-            onChange={handleValueChange}
-          />
+        <div className="mt-4 flex flex-col sm:flex-row sm:justify-evenly">
+          <div className="mx-auto flex w-fit flex-col mb:text-lg sm:mt-5 md:mt-7">
+            <label className="p-2 font-semibold sm:text-center">
+              Payment Type
+            </label>
+            <Select
+              defaultValue={formValues.compTimeUnit}
+              onValueChange={(value) =>
+                handleValueChange(value, "compTimeUnit")
+              }
+              required>
+              <SelectTrigger className="border-2 border-gray-500 text-base sm:mx-auto sm:w-40">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Hourly">Hourly</SelectItem>
+                <SelectItem value="Salary">Salary</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              className="h-1 -translate-y-4 opacity-0"
+              required
+              value={formValues.compTimeUnit}
+              onChange={handleValueChange}
+            />
+          </div>
 
-          <label className="mt-4 p-2 font-semibold md:text-lg">
-            Min Pay Range
-          </label>
-          <Input
-            className="border-2 border-gray-500"
-            type="number"
-            name="minCompValue"
-            value={formValues.minCompValue}
-            onChange={handleValueChange}
-            placeholder=""
-            required
-          />
+          <div className="flex flex-col mb:flex-row mb:justify-evenly">
+            <div className="flex flex-col mb:flex-row sm:mx-2 sm:flex-col">
+              <label className="mt-4 p-2 font-semibold mb:min-w-20 mb:max-w-24 mb:text-center sm:mx-auto sm:mt-0 sm:text-center md:text-lg">
+                Min Pay Range
+              </label>
+              <Input
+                className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44"
+                type="number"
+                name="minCompValue"
+                value={formValues.minCompValue}
+                onChange={handleValueChange}
+                placeholder=""
+                required
+              />
+            </div>
 
-          <label className="mt-4 p-2 font-semibold md:text-lg">
-            Max Pay Range <span className="text-sm italic"> (Optional)</span>
-          </label>
-          <Input
-            className="border-2 border-gray-500"
-            type="number"
-            name="maxCompValue"
-            value={formValues.maxCompValue}
-            onChange={handleValueChange}
-            placeholder=""
-          />
+            <div className="flex flex-col mb:flex-row sm:mx-2 sm:flex-col">
+              <label className="mt-4 p-2 font-semibold mb:max-w-36 mb:text-center sm:mx-auto sm:mt-0 sm:w-36 md:text-lg">
+                Max Pay Range{" "}
+                <span className="text-sm italic"> (Optional)</span>
+              </label>
+              <Input
+                className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44"
+                type="number"
+                name="maxCompValue"
+                value={formValues.maxCompValue}
+                onChange={handleValueChange}
+                placeholder=""
+              />
+            </div>
+          </div>
         </div>
 
         <div className="mt-2 flex w-full flex-col">
-          <label className="p-2 font-semibold md:text-lg">Description</label>
+          <label className="p-2 font-semibold mb:text-lg">Description</label>
           <textarea
             className="h-24 w-full rounded-md border-2 border-gray-500 p-2"
             name="description"
@@ -286,12 +303,14 @@ export default function Page() {
         </div>
 
         <div className="mt-2 flex flex-col">
-          <label className="p-2 font-semibold md:text-lg">Language</label>
+          <label className="p-2 text-center font-semibold mb:text-lg">
+            Language
+          </label>
           <Select
             defaultValue={formValues.language}
             onValueChange={(value) => handleValueChange(value, "language")}
             required>
-            <SelectTrigger className="border-2 border-gray-500 text-base">
+            <SelectTrigger className="mx-auto w-48 border-2 border-gray-500 text-base mb:text-lg mb:font-semibold sm:text-lg sm:font-semibold">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -307,13 +326,13 @@ export default function Page() {
           onChange={handleValueChange}
         />
 
-        <div className="mt-2 flex flex-col">
-          <div className="mt-4 flex flex-row">
-            <label className="mt-2 w-2/3 font-semibold md:text-lg">
+        <div className="mt-2 flex flex-col text-center sm:mx-auto sm:w-1/2 md:w-full md:flex-row md:justify-evenly">
+          <div className="mt-4 flex flex-row md:flex-col">
+            <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
               Asylum Board
             </label>
             <Checkbox
-              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
+              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 md:mx-auto"
               name="Asylum"
               onCheckedChange={() =>
                 handleValueChange(!formValues.postAsylum, "postAsylum")
@@ -321,12 +340,12 @@ export default function Page() {
             />
           </div>
 
-          <div className="mt-4 flex flex-row">
-            <label className="mt-2 w-2/3 font-semibold md:text-lg">
+          <div className="mt-4 flex flex-row md:flex-col">
+            <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
               Disablility Board
             </label>
             <Checkbox
-              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
+              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 md:mx-auto"
               name="Disabled"
               onCheckedChange={() =>
                 handleValueChange(!formValues.postDisabled, "postDisabled")
@@ -334,12 +353,12 @@ export default function Page() {
             />
           </div>
 
-          <div className="mt-4 flex flex-row">
-            <label className="mt-2 w-2/3 font-semibold md:text-lg">
+          <div className="mt-4 flex flex-row md:flex-col">
+            <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
               Indigenous Board
             </label>
             <Checkbox
-              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
+              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 md:mx-auto"
               name="Indigenous"
               onCheckedChange={() =>
                 handleValueChange(!formValues.postIndigenous, "postIndigenous")
@@ -347,12 +366,12 @@ export default function Page() {
             />
           </div>
 
-          <div className="mt-4 flex flex-row">
-            <label className="mt-2 w-2/3 font-semibold md:text-lg">
+          <div className="mt-4 flex flex-row md:flex-col">
+            <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
               Newcomers Board
             </label>
             <Checkbox
-              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
+              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 md:mx-auto"
               name="Newcomers"
               onCheckedChange={() =>
                 handleValueChange(!formValues.postNewcomers, "postNewcomers")
@@ -360,12 +379,12 @@ export default function Page() {
             />
           </div>
 
-          <div className="mt-4 flex flex-row">
-            <label className="mt-2 w-2/3 font-semibold md:text-lg">
+          <div className="mt-4 flex flex-row md:flex-col">
+            <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
               Youth Board
             </label>
             <Checkbox
-              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300"
+              className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 md:mx-auto"
               name="Youth"
               onCheckedChange={() =>
                 handleValueChange(!formValues.postYouth, "postYouth")
@@ -394,11 +413,17 @@ export default function Page() {
           </p>
         </div>
 
-        <div className="mt-4 flex flex-row justify-evenly py-2">
-          <Button type="button" className="w-2/5" disabled={submittingPost}>
+        <div className="mt-4 flex flex-row justify-evenly py-2 mb:mt-6">
+          <Button
+            type="button"
+            className="w-2/5 mb:py-6 mb:text-lg sm:w-1/3 md:text-xl"
+            disabled={submittingPost}>
             <Link href="/admin/dashboard">Cancel</Link>
           </Button>
-          <Button type="submit" className="w-2/5" disabled={submittingPost}>
+          <Button
+            type="submit"
+            className="w-2/5 mb:py-6 mb:text-lg sm:w-1/3 md:text-xl"
+            disabled={submittingPost}>
             Submit
           </Button>
         </div>
