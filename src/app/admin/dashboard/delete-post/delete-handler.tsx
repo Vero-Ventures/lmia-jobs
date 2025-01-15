@@ -20,7 +20,7 @@ export default function DeletePost({ postId }: { postId: string }) {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div
         className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${showConfirmDelete ? "" : "hidden"}`}>
         <div className="mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 mb:w-[416px] sm:w-[448px]">
