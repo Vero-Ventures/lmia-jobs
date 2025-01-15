@@ -61,7 +61,6 @@ export default function ForgotPassword() {
                     setLoading(true);
                   },
                   onError: (ctx) => {
-                    console.log(ctx.error.message);
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {

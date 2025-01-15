@@ -66,7 +66,6 @@ export default function Page() {
       | undefined,
     fieldName: string | null = null
   ) => {
-    console.log(formValues);
     if (typeof e === "string" || typeof e === "boolean") {
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
     } else if (e) {
