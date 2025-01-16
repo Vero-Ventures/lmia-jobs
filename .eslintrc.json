@@ -14,7 +14,9 @@
     "@typescript-eslint/no-empty-object-type": [
       "error",
       { "allowInterfaces": "with-single-extends" }
-    ]
+    ],
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-namespace": "off"
   },
   "ignorePatterns": [
     "node_modules",

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import DeletePost from "@/app/admin/dashboard/delete-post/delete-handler";
+import { createStripeUser } from "@/actions/stripe";
 
 export default async function Page({
   searchParams,
@@ -27,6 +28,8 @@ export default async function Page({
 
   if (!session) {
     redirect("/admin");
+  } else {
+    await createStripeUser(session.user.email);
   }
 
   const { query, postId } = await searchParams;
