@@ -446,6 +446,9 @@ export default function Page({
               <SelectItem value="French" className="text-lg font-semibold">
                 French
               </SelectItem>
+              <SelectItem value="Other" className="text-lg font-semibold">
+                Other
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
