@@ -27,7 +27,7 @@ export function SignUp() {
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
 
   const [showVerifyEmail, setShowVerifyEmail] = useState(false);
-  return (
+  return !showVerifyEmail ? (
     <Card className="z-50 mx-auto max-w-md rounded-md rounded-t-none">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
@@ -163,6 +163,25 @@ export function SignUp() {
             Back to sign in
           </Link>
         </div>
+      </CardContent>
+    </Card>
+  ) : (
+    <Card className="z-50 mx-auto max-w-md rounded-md rounded-t-none">
+      <CardHeader>
+        <CardTitle className="text-lg md:text-xl">Verify Your Email</CardTitle>
+        <CardDescription>
+          A verification email has been sent to your inbox. Click the{" "}
+          <span className="font-bold">Verify Email</span> button to activate
+          your account be redirected to the sign-in page.
+        </CardDescription>
+        <CardDescription>
+          If you do not see the email, please check your spam or junk folder.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Button className="w-full" asChild>
+          <Link href="/admin/sign-in">Go To Sign In</Link>
+        </Button>
       </CardContent>
     </Card>
   );
