@@ -62,7 +62,6 @@ export async function selectAllJobPostings({
 }
 
 function filterPostingsByBoard(postings: JobPosting[], jobBoard: string) {
-  console.log(jobBoard);
   if (jobBoard === "asylum-job-board") {
     postings = postings!.filter(
       (posting: { postAsylum: boolean }) => posting.postAsylum

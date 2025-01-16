@@ -75,7 +75,6 @@ export default function Page({
       | undefined,
     fieldName: string | null = null
   ) => {
-    console.log(formValues);
     if (typeof e === "string" || typeof e === "boolean") {
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
     } else if (e) {
@@ -92,8 +91,6 @@ export default function Page({
         redirect("/admin/dashboard");
       } else if (email && postId) {
         setLoadingPostData(true);
-
-        console.log(postId);
 
         const [result, jobPosting] = await getJobPost(postId, email);
 
@@ -143,7 +140,23 @@ export default function Page({
     setShowPostingError(false);
     setShowNoBoardsSelected(false);
 
-    const result = await handleJobPost(formValues, postToNoBoards);
+    const { postId, email, create } = await searchParams;
+
+    let existingPostId = null;
+    let userEmail = null;
+
+    if (!create && postId && email) {
+      existingPostId = postId;
+      userEmail = email;
+    }
+
+    const result = await handleJobPost(
+      formValues,
+      postToNoBoards,
+      existingPostId,
+      userEmail
+    );
+
     if (result === "no boards") {
       setShowNoBoardsSelected(true);
       setPostToNoBoards(true);
@@ -201,7 +214,7 @@ export default function Page({
             </label>
             <div className="flex flex-col">
               <Select
-                defaultValue={formValues.addressRegion}
+                value={formValues.addressRegion}
                 onValueChange={(value) =>
                   handleValueChange(value, "addressRegion")
                 }
@@ -294,7 +307,7 @@ export default function Page({
             </label>
             <div className="flex flex-col">
               <Select
-                defaultValue={formValues.employmentType}
+                value={formValues.employmentType}
                 onValueChange={(value) =>
                   handleValueChange(value, "employmentType")
                 }
@@ -346,7 +359,7 @@ export default function Page({
             </label>
             <div className="flex flex-col">
               <Select
-                defaultValue={formValues.compTimeUnit}
+                value={formValues.compTimeUnit}
                 onValueChange={(value) =>
                   handleValueChange(value, "compTimeUnit")
                 }
@@ -420,7 +433,7 @@ export default function Page({
             Language
           </label>
           <Select
-            defaultValue={formValues.language}
+            value={formValues.language}
             onValueChange={(value) => handleValueChange(value, "language")}
             required>
             <SelectTrigger className="mx-auto w-48 border-2 border-gray-500 text-base mb:text-lg mb:font-semibold sm:text-lg sm:font-semibold md:w-64">

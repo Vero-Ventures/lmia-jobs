@@ -32,7 +32,8 @@ type jobPostForm = {
 export async function handleJobPost(
   formData: jobPostForm,
   noBoards: boolean,
-  postId: string | null = null
+  postId: string | null,
+  userEmail: string | null
 ): Promise<string> {
   try {
     if (
@@ -82,11 +83,16 @@ export async function handleJobPost(
         validThrough: new Date().toISOString().split("T")[0],
       };
 
-      if (postId) {
+      if (postId && userEmail) {
         await db
           .update(jobPostings)
           .set(postData)
-          .where(eq(jobPostings.id, Number(postId)));
+          .where(
+            and(
+              eq(jobPostings.id, Number(postId)),
+              eq(jobPostings.email, userEmail)
+            )
+          );
       } else {
         await db.insert(jobPostings).values(postData);
       }
@@ -112,7 +118,6 @@ export async function getJobPost(
       )
       .then((res) => res[0]);
 
-    console.log(result);
     if (result) {
       return [true, result];
     } else {
