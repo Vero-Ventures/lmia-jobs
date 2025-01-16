@@ -58,7 +58,7 @@ function Footer() {
           <div className="grid content-start justify-center gap-y-4 text-base">
             <h3 className="text-xl font-semibold">Company</h3>
             <Link href="/about-us">About Us</Link>
-            <Link href="/contact-us">Contact</Link>
+            <Link href="/contact-us">Contact Us</Link>
             <Link href="/pricing">Pricing</Link>
           </div>
           <div className="mt-4 grid content-start justify-center gap-y-4 text-base">

@@ -5,7 +5,7 @@ import Form from "next/form";
 import Link from "next/link";
 import { selectAllJobPostings } from "@/db/queries/jobPostings";
 import Navbar from "@/components/navbar";
-import { Links } from "./lib/constants";
+import { SessionLinks } from "@/app/admin/dashboard/lib/constants";
 import Footer from "@/components/footer";
 import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ export default async function Page({
 
   return (
     <div>
-      <Navbar links={Links} />
+      <Navbar links={SessionLinks} />
       <div className="flex min-h-[90dvh] flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
         <main className="flex flex-col px-4 pb-4 md:flex-row md:items-center">
           <div className="mx-2 my-4 max-h-[90dvh] w-full overflow-y-scroll rounded-xl border-2 bg-white p-2 mb:p-6 md:w-3/5 lg:mx-6 xl:w-2/3">
