@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { optOutOfReminders } from "@/actions/opt-out";
+import { optOutOfReminders } from "@/actions/mailer";
 import { Button } from "@/components/ui/button";
 
 export default function OptOut() {

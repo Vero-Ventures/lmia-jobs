@@ -1,0 +1,1 @@
+ALTER TABLE "user_mailing" ADD COLUMN "temp_password" text;

@@ -1,3 +1,26 @@
+export const JOB_SITES = [
+  {
+    id: "asylum-job-board",
+    title: "Asylum Refugees Job Board",
+  },
+  {
+    id: "disability-job-board",
+    title: "Disabled Workers Job Board",
+  },
+  {
+    id: "indigenous-job-board",
+    title: "Indigenous Job Board",
+  },
+  {
+    id: "newcomers-job-board",
+    title: "Newcomers Job Board",
+  },
+  {
+    id: "youth-job-board",
+    title: "Youth Job Board",
+  },
+];
+
 export const PROVINCES = [
   {
     label: "Alberta",

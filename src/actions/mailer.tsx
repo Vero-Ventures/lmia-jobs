@@ -1,8 +1,8 @@
 "use server";
 
-// import { db } from "@/db";
-// import { jobPostings, user } from "@/db/schema";
-// import { eq } from "drizzle-orm";
+import { db } from "@/db";
+import { jobPostings, user, userMailing } from "@/db/schema";
+import { eq, inArray } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
@@ -10,61 +10,77 @@ import type { JobPosting } from "@/app/[jobsiteId]/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
-// export async function mailInvitesAndReminders() {
-//   try {
-//     const newUsers = await db
-//       .select()
-//       .from(user)
-//       .where(eq(user.newlyCreated, true));
+export async function mailInvitesAndReminders() {
+  try {
+    const newUsersMailing = await db
+      .select()
+      .from(userMailing)
+      .where(eq(userMailing.newlyCreated, true));
 
-//     const remindUsers = await db
-//       .select()
-//       .from(user)
-//       .where(
-//         eq(user.newlyCreated, false) &&
-//           eq(user.activated, false) &&
-//           eq(user.optedOut, false) &&
-//           eq(user.ignore, false)
-//       );
+    const remindUsersMailing = await db
+      .select()
+      .from(userMailing)
+      .where(
+        eq(userMailing.newlyCreated, false) &&
+          eq(userMailing.activated, false) &&
+          eq(userMailing.optedOut, false) &&
+          eq(userMailing.ignore, false)
+      );
 
-//     const userPosts = await db.select().from(jobPostings);
+    const userPosts = await db.select().from(jobPostings);
 
-//     if (newUsers.length > 0) {
-//       await db
-//         .update(user)
-//         .set({ newlyCreated: false })
-//         .where(eq(user.newlyCreated, true));
+    if (newUsersMailing.length > 0) {
+      await db
+        .update(userMailing)
+        .set({ newlyCreated: false })
+        .where(eq(userMailing.newlyCreated, true));
 
-//       newUsers.forEach(async (user) => {
-//         sendInvitesAndReminders(
-//           user.email,
-//           user.temporaryPasssword!,
-//           user.createdAt,
-//           userPosts,
-//           true
-//         );
-//       });
-//     }
+      const newUserIds = newUsersMailing.map((user) => user.userId);
 
-//     if (remindUsers.length > 0) {
-//       remindUsers.forEach(async (user) => {
-//         sendInvitesAndReminders(
-//           user.email,
-//           user.temporaryPasssword!,
-//           user.createdAt,
-//           userPosts,
-//           false
-//         );
-//       });
-//     }
+      const newUsers = await db
+        .select()
+        .from(user)
+        .where(inArray(user.id, newUserIds));
 
-//     return;
-//   } catch (err) {
-//     console.error("Mailing process failed.");
-//     console.error(err);
-//     return;
-//   }
-// }
+      newUsers.forEach(async (user) => {
+        sendInvitesAndReminders(
+          user.email,
+          newUsersMailing.find((mailing) => mailing.userId === user.id)!
+            .tempPassword!,
+          user.createdAt,
+          userPosts,
+          true
+        );
+      });
+    }
+
+    if (remindUsersMailing.length > 0) {
+      const remindUserIds = newUsersMailing.map((user) => user.userId);
+
+      const remindUsers = await db
+        .select()
+        .from(user)
+        .where(inArray(user.id, remindUserIds));
+
+      remindUsers.forEach(async (user) => {
+        sendInvitesAndReminders(
+          user.email,
+          remindUsersMailing.find((mailing) => mailing.userId === user.id)!
+            .tempPassword!,
+          user.createdAt,
+          userPosts,
+          false
+        );
+      });
+    }
+
+    return;
+  } catch (err) {
+    console.error("Mailing process failed.");
+    console.error(err);
+    return;
+  }
+}
 
 export async function sendInvitesAndReminders(
   email: string,
@@ -124,4 +140,23 @@ export async function sendInvitesAndReminders(
     console.error(err);
     return;
   }
+}
+
+export async function optOutOfReminders(email: string): Promise<string> {
+  const optedOutUser = await db
+    .select()
+    .from(user)
+    .where(eq(user.email, email))
+    .then((res) => res[0]);
+
+  if (!optedOutUser) {
+    throw new Error("User with that email could not be found.");
+  }
+
+  await db
+    .update(userMailing)
+    .set({ optedOut: true })
+    .where(eq(userMailing.userId, optedOutUser.id));
+
+  return "true";
 }
