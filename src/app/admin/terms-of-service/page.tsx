@@ -1,4 +1,4 @@
-import TermsOfService from "@/app/admin/privacy-policy/terms-of-service.mdx";
+import TermsOfService from "@/app/admin/terms-of-service/terms-of-service.mdx";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Navbar from "@/components/navbar";
