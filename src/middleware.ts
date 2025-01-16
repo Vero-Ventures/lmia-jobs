@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const domainName = req.headers.get("host") || "";
 
-  if (domainName.includes("localhost")) {
+  if (domainName.includes("localhost") || domainName.includes("127.0.0.1")) {
     return NextResponse.next();
   }
 
