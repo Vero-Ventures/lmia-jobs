@@ -9,12 +9,12 @@ export function middleware(req: NextRequest) {
   }
 
   const validRoutes: Record<string, string> = {
-    "ManageOpportunities.ca": "/admin",
-    "AccessibleOpportunities.ca": "/disability-job-board",
-    "AsylumOpportunities.ca": "/asylum-job-board",
-    "IndigenousOpportunities.ca": "/indigenous-job-board",
-    "ImmigrantOpportunities.ca": "/newcomers-job-board",
-    "YouthOpportunities.ca": "/youth-job-board",
+    "manageopportunities.ca": "/admin",
+    "accessibleopportunities.ca": "/disability-job-board",
+    "asylumopportunities.ca": "/asylum-job-board",
+    "indigenousopportunities.ca": "/indigenous-job-board",
+    "immigrantopportunities.ca": "/newcomers-job-board",
+    "youthopportunities.ca": "/youth-job-board",
   };
 
   const targetPath = validRoutes[domainName];
