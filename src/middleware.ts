@@ -14,15 +14,12 @@ export function middleware(req: NextRequest) {
   };
 
   const targetPath = validRoutes[domainName];
-  const pathName = req.nextUrl.pathname;
+  const route = req.nextUrl.pathname;
 
-  console.log('Target Path: ' + targetPath)
-  console.log('Base Route: ' + pathName)
-
-  // if (targetPath && formattedBaseRoute !== targetPath) {
-  //   const url = new URL(validRoutes[domainName], req.nextUrl.origin);
-  //   return NextResponse.redirect(url);
-  // }
+  if (targetPath && route === '/') {
+    const url = new URL(validRoutes[domainName], req.nextUrl.origin);
+    return NextResponse.redirect(url);
+  }
 
   return NextResponse.next();
 }
