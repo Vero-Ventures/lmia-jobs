@@ -66,7 +66,7 @@ export async function updatePassword(
     if (newPassword !== confirmPassword) {
       return "not matching";
     } else if (newPassword.length < 8) {
-      return "too short";
+      return "short password";
     } else if (alphaOnly.test(newPassword)) {
       return "weak password";
     }

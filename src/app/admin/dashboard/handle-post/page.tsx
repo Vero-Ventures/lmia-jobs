@@ -177,10 +177,10 @@ export default function Page({
   };
 
   return (
-    <div>
+    <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-white">
       <Navbar links={SessionLinks} />
       <div
-        className={`m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
+        className={`m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 bg-white p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
         <Form className="flex flex-col" action={submitForm}>
           <Button className="w-10 self-end justify-self-end bg-white">
             <XCircle className="min-h-8 min-w-8 bg-white text-black" />
