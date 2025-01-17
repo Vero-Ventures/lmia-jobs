@@ -2,6 +2,7 @@ import {
   boolean,
   date,
   integer,
+  uuid,
   pgTable,
   serial,
   text,
@@ -29,19 +30,6 @@ export const userMailing = pgTable("user_mailing", {
   ignore: boolean("ignore").notNull().default(false),
 });
 
-export const session = pgTable("session", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  token: text("token").notNull().unique(),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  userAgent: text("user_agent"),
-  ipAddress: text("ip_address"),
-});
-
 export const account = pgTable("account", {
   id: text("id").primaryKey(),
   userId: text("user_id")
@@ -58,6 +46,28 @@ export const account = pgTable("account", {
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   idToken: text("id_token"),
   scope: text("scope"),
+});
+
+export const subscription = pgTable("subscription", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  userId: text("user_id")
+    .unique()
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  stripeId: text("stripe_id").notNull().unique(),
+});
+
+export const session = pgTable("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  userAgent: text("user_agent"),
+  ipAddress: text("ip_address"),
 });
 
 export const verification = pgTable("verification", {
