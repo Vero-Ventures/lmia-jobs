@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { JOB_TYPES, PROVINCES } from "../lib/constants";
+import { JOB_TYPES, PROVINCES } from "@/app/lib/constants";
 
-export default function SearchSelect({
+export default function FilterSelect({
   initalValue,
   filterType,
 }: {

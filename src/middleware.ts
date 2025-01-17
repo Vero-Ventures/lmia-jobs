@@ -4,32 +4,24 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const domainName = req.headers.get("host") || "";
 
-  if (domainName.includes("localhost")) {
+  if (domainName.includes("localhost") || domainName.includes("127.0.0.1")) {
     return NextResponse.next();
   }
 
-  const validRoutes: Record<string, string[]> = {
-    "ManageOpportunities.ca": [
-      "/admin",
-      "/admin/dashboard",
-      "/admin/opt-out",
-      "/admin/sign-up",
-      "/admin/sign-in",
-      "/admin/reset-password",
-    ],
-    "AccessibleOpportunities.ca": ["/disability-job-board"],
-    "AsylumOpportunities.ca": ["/asylum-job-board"],
-    "IndigenousOpportunities.ca": ["/indigenous-job-board"],
-    "ImmigrantOpportunities.ca": ["/newcomers-job-board"],
-    "YouthOpportunities.ca": ["/youth-job-board"],
+  const validRoutes: Record<string, string> = {
+    "ManageOpportunities.ca": "/admin",
+    "AccessibleOpportunities.ca": "/disability-job-board",
+    "AsylumOpportunities.ca": "/asylum-job-board",
+    "IndigenousOpportunities.ca": "/indigenous-job-board",
+    "ImmigrantOpportunities.ca": "/newcomers-job-board",
+    "YouthOpportunities.ca": "/youth-job-board",
   };
 
   const pathname = req.nextUrl.pathname;
 
   if (validRoutes[domainName]) {
-    if (!validRoutes[domainName].includes(pathname)) {
-      const redirectPath = validRoutes[domainName][0];
-      const url = new URL(redirectPath, req.nextUrl.origin);
+    if (!pathname.includes(validRoutes[domainName])) {
+      const url = new URL(validRoutes[domainName], req.nextUrl.origin);
       return NextResponse.redirect(url);
     }
   } else {

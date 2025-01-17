@@ -1,0 +1,1 @@
+ALTER TABLE "job_postings" ALTER COLUMN "language" DROP NOT NULL;

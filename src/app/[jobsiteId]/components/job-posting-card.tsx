@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { JobPosting } from "../lib/types";
+import type { JobPosting } from "@/app/lib/types";
 
 export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
   return (
@@ -60,7 +60,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
                 {jobPosting.maxCompValue
                   ? `to $${jobPosting.maxCompValue}`
                   : ""}{" "}
-                hourly
+                {jobPosting.compTimeUnit}
               </span>
             </div>
           </div>
@@ -100,17 +100,22 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
           />
         </CardContent>
         <CardFooter>
-          <div className="flex gap-2">
-            <MailIcon className="mt-0.5" />
-            <h5 className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
-              Apply by email
-            </h5>
-            <div className="flex items-center gap-3 text-sm">
-              <a
-                href={`mailto:${jobPosting.email}`}
-                className="text-lg text-blue-900 underline">
-                {jobPosting.email}
-              </a>
+          <div className="flex flex-col gap-2">
+            <div className="flex">
+              <MailIcon className="mt-0.5" />
+              <h5 className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
+                Apply by email
+              </h5>
+              <div className="flex items-center gap-3 text-sm">
+                <a
+                  href={`mailto:${jobPosting.email}`}
+                  className="text-lg text-blue-900 underline">
+                  {jobPosting.email}
+                </a>
+              </div>
+            </div>
+            <div>
+              <p className="mt-2 italic text-gray-600">{jobPosting.language}</p>
             </div>
           </div>
         </CardFooter>

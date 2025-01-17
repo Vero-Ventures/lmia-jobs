@@ -2,11 +2,11 @@
 
 import { db } from "@/db";
 import { jobPostings, user, userMailing } from "@/db/schema";
-import { eq, inArray } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
-import type { JobPosting } from "@/app/[jobsiteId]/lib/types";
+import type { JobPosting } from "@/app/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -21,10 +21,12 @@ export async function mailInvitesAndReminders() {
       .select()
       .from(userMailing)
       .where(
-        eq(userMailing.newlyCreated, false) &&
-          eq(userMailing.activated, false) &&
-          eq(userMailing.optedOut, false) &&
+        and(
+          eq(userMailing.newlyCreated, false),
+          eq(userMailing.activated, false),
+          eq(userMailing.optedOut, false),
           eq(userMailing.ignore, false)
+        )
       );
 
     const userPosts = await db.select().from(jobPostings);

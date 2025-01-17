@@ -1,0 +1,27 @@
+export type JobPosting = {
+  id: number;
+  jobTitle: string;
+  hiringOrganization: string;
+  datePosted: string;
+  employmentType: string;
+  addressRegion: string;
+  addressLocality: string;
+  streetAddress: string | null;
+  compTimeUnit: string;
+  minCompValue: number;
+  maxCompValue: number | null;
+  workHours: number | null;
+  startTime: string;
+  vacancies: number | null;
+  description: string;
+  email: string;
+  language: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  validThrough: string;
+  postAsylum: boolean;
+  postDisabled: boolean;
+  postIndigenous: boolean;
+  postNewcomers: boolean;
+  postYouth: boolean;
+};

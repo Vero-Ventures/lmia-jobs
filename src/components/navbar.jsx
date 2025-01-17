@@ -20,14 +20,13 @@ function Navbar({ links }) {
               key={index}
               className="text-sm font-medium underline-offset-4 hover:underline sm:text-base"
               onClick={async () => {
-                const result = await signOut({
+                await signOut({
                   fetchOptions: {
                     onSuccess: () => {
                       router.push("/admin");
                     },
                   },
                 });
-                console.log(result);
               }}>
               Log Out
             </button>

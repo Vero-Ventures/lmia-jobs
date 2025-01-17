@@ -4,7 +4,8 @@ import { useState } from "react";
 import { JobListCard } from "./job-list-card";
 import { JobPostingCard } from "./job-posting-card";
 import { Loader2Icon } from "lucide-react";
-import type { JobPosting } from "../lib/types";
+import type { JobPosting } from "@/app/lib/types";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function JobPostingSection({
   jobPostings,
@@ -15,8 +16,16 @@ export default function JobPostingSection({
     jobPostings[0]
   );
 
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const handleChangeSelectedJobPosting = (jobPosting: JobPosting) => {
     setSelectedJobPosting(jobPosting);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("postId", String(jobPosting.id));
+    router.push(pathname + "?" + params);
+    return params.toString();
   };
 
   return (
