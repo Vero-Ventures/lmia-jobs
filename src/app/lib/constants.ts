@@ -9,11 +9,11 @@ export const JOB_SITES = [
   },
   {
     id: "indigenous-job-board",
-    title: "Indigenous Job Board",
+    title: "Indigenous Peoples Job Board",
   },
   {
     id: "newcomers-job-board",
-    title: "Newcomers Job Board",
+    title: "Canadian Newcomers Job Board",
   },
   {
     id: "youth-job-board",
