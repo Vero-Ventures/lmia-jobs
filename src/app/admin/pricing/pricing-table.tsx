@@ -69,7 +69,7 @@ export default function PricingTable({
 
   return (
     <div
-      className="relative mx-auto my-6 w-fit rounded-lg border-4 border-gray-300 py-4 shadow-lg transition-all duration-500 hover:scale-105 hover:shadow-2xl sm:px-6"
+      className="relative mx-auto my-6 w-fit rounded-lg border-4 border-gray-300 bg-gray-100 p-4 shadow-lg transition-all duration-500 hover:scale-105 hover:shadow-2xl sm:px-6"
       onClick={handleClick}>
       <Script
         id="StripePricingTableScript"
