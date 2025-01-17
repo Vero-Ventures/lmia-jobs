@@ -15,13 +15,14 @@ export function middleware(req: NextRequest) {
 
   const targetPath = validRoutes[domainName];
   const baseRoute = req.nextUrl.pathname.split("/")[1];
+  const formattedBaseRoute = `/${baseRoute}`;
 
   console.log("Domain: " + domainName);
   console.log("Target Path: " + targetPath);
   console.log("Base Route: " + baseRoute);
-  console.log("Formatted Base Route: " + '/' + baseRoute)
+  console.log("Formatted Base Route: " + formattedBaseRoute);
 
-  if (targetPath && ('/' + baseRoute) !== targetPath) {
+  if (targetPath && formattedBaseRoute !== targetPath) {
     const url = new URL(validRoutes[domainName], req.nextUrl.origin);
     return NextResponse.redirect(url);
   }
