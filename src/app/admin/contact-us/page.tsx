@@ -1,7 +1,12 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import { BaseLinks, SessionLinks } from "@/app/admin/dashboard/lib/constants";
 
 import Link from "next/link";
 
@@ -36,6 +41,8 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+  const { data: session } = authClient.useSession();
+
   // Define loading state and form information.
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -100,8 +107,9 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-dvh w-dvw items-center justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-white">
-      <div className="flex min-h-fit w-full max-w-3xl px-8 py-10 sm:w-3/4">
+    <div className="flex flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
+      <Navbar links={session ? SessionLinks : BaseLinks} />
+      <div className="mx-auto flex min-h-fit w-full max-w-3xl px-8 py-10 sm:w-3/4">
         <section
           className="flex-grow transform overflow-auto rounded-lg bg-white px-8 py-10 shadow-lg transition-all duration-500 hover:scale-105 hover:shadow-2xl"
           style={{ maxHeight: "90vh", width: "40vw", maxWidth: "none" }}>
@@ -202,6 +210,7 @@ export default function Page() {
         </section>
       </div>
       <Toaster />
+      <Footer />
     </div>
   );
 }

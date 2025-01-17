@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 function Navbar({ links }) {
   const router = useRouter();
   return (
-    <header className="flex h-16 flex-col items-center border-y px-4 sm:h-14 sm:flex-row lg:px-6">
+    <header className="flex h-16 flex-col items-center border-y bg-white px-4 sm:h-14 sm:flex-row lg:px-6">
       <Link className="flex items-center justify-center" href="/admin">
         <BriefcaseIcon className="h-6 w-6" />
         <span className="ml-2 font-semibold">LMIA Opportunities</span>
