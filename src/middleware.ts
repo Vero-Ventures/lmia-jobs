@@ -17,15 +17,12 @@ export function middleware(req: NextRequest) {
     "YouthOpportunities.ca": "/youth-job-board",
   };
 
+  const targetPath = validRoutes[domainName];
   const pathname = req.nextUrl.pathname;
 
-  if (validRoutes[domainName]) {
-    if (!pathname.includes(validRoutes[domainName])) {
-      const url = new URL(validRoutes[domainName], req.nextUrl.origin);
-      return NextResponse.redirect(url);
-    }
-  } else {
-    return NextResponse.redirect(new URL("/404", req.nextUrl.origin));
+  if (targetPath && (pathname === "/" || !pathname.startsWith(targetPath))) {
+    const url = new URL(validRoutes[domainName], req.nextUrl.origin);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
