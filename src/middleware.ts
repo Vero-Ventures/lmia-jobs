@@ -20,7 +20,12 @@ export function middleware(req: NextRequest) {
   const targetPath = validRoutes[domainName];
   const pathname = req.nextUrl.pathname;
 
-  if (targetPath && (pathname === "/" || !pathname.startsWith(targetPath))) {
+  console.log("Domain: " + domainName);
+  console.log("Target Path: " + targetPath);
+  console.log("Path Name: " + pathname);
+  console.log("Inital Route: " + pathname.split("/")[1]);
+
+  if (targetPath && pathname.split("/")[1] !== targetPath) {
     const url = new URL(validRoutes[domainName], req.nextUrl.origin);
     return NextResponse.redirect(url);
   }
