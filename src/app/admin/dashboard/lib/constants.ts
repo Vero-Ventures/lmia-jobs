@@ -12,7 +12,7 @@ export const SessionLinks = [
     url: "/admin/dashboard",
   },
   {
-    text: "Purchase",
+    text: "Pricing",
     url: "/admin/pricing",
   },
   {

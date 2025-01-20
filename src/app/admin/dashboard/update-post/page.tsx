@@ -79,8 +79,28 @@ export default function Page({
       | undefined,
     fieldName: string | null = null
   ) => {
-    if (typeof e === "string" || typeof e === "boolean") {
+    if (typeof e === "string") {
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
+    } else if (typeof e === "string" || typeof e === "boolean") {
+      let boards = 0;
+
+      const jobBoards = [
+        formValues.postAsylum,
+        formValues.postDisabled,
+        formValues.postIndigenous,
+        formValues.postNewcomers,
+        formValues.postYouth,
+      ];
+
+      for (const board of jobBoards) {
+        if (board) {
+          boards += 1;
+        }
+      }
+
+      if ((boards < maxBoards && e) || !e) {
+        setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
+      }
     } else if (e) {
       const { name, value } = e.target;
       setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
@@ -202,7 +222,7 @@ export default function Page({
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
-              name="hiringOrganization"
+              name="organizationName"
               value={formValues.organizationName}
               onChange={handleValueChange}
               required
@@ -250,7 +270,7 @@ export default function Page({
               <Input
                 className="w-full border-2 border-gray-500 sm:mt-3 md:text-base"
                 type="text"
-                name="addressLocality"
+                name="city"
                 value={formValues.city}
                 onChange={handleValueChange}
                 required
@@ -265,7 +285,7 @@ export default function Page({
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
-              name="streetAddress"
+              name="address"
               value={formValues.address}
               onChange={handleValueChange}
             />
@@ -397,7 +417,7 @@ export default function Page({
                 <Input
                   className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
-                  name="minCompValue"
+                  name="minPayValue"
                   value={formValues.minPayValue}
                   onChange={handleValueChange}
                   placeholder=""
@@ -413,7 +433,7 @@ export default function Page({
                 <Input
                   className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
-                  name="maxCompValue"
+                  name="maxPayValue"
                   value={formValues.maxPayValue}
                   onChange={handleValueChange}
                   placeholder=""
@@ -457,14 +477,14 @@ export default function Page({
             </Select>
           </div>
 
-          <div className="mt-2 flex flex-col">
-            <label className="p-2 text-center font-semibold mb:text-lg">
+          <div className="mb-2 mt-6 flex flex-col md:mt-10">
+            <label className="text-center text-xl font-semibold mb:text-2xl">
               Max Boards: {maxBoards}
             </label>
           </div>
 
-          <div className="mt-2 flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
-            <div className="mt-4 flex flex-row md:flex-col">
+          <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
+            <div className="mt-2 flex flex-row md:flex-col">
               <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Accessible Job Board
               </label>
@@ -478,7 +498,7 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
+            <div className="mt-2 flex flex-row md:flex-col">
               <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Asylum Job Board
               </label>
@@ -492,7 +512,7 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
+            <div className="mt-2 flex flex-row md:flex-col">
               <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Indigenous Job Board
               </label>
@@ -509,7 +529,7 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
+            <div className="mt-2 flex flex-row md:flex-col">
               <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Newcomers Job Board
               </label>
@@ -523,7 +543,7 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
+            <div className="mt-2 flex flex-row md:flex-col">
               <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Youth Job Board
               </label>

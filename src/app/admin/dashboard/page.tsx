@@ -78,7 +78,7 @@ export default async function Page({
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
                   <Link
                     href={"/admin/pricing"}
-                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-900 lg:text-2xl">
                     Create A<br />
                     New Post
                   </Link>
@@ -94,12 +94,12 @@ export default async function Page({
                         "&email=" +
                         session!.user.email
                       }
-                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
                       Set Post <br />
                       Content
                     </Link>
                   ) : (
-                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-600 lg:text-2xl">
                       Set Post <br />
                       Content
                     </p>

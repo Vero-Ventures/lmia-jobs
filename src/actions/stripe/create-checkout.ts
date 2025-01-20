@@ -6,7 +6,11 @@ import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
 
-const stripe = new Stripe(process.env.DEV_STRIPE_PRIVATE_KEY!);
+const stripe = new Stripe(
+  process.env.STRIPE_CONFIG! === "production"
+    ? process.env.PRODUCTION_STRIPE_PRIVATE_KEY!
+    : process.env.DEVELOPER_STRIPE_PRIVATE_KEY!
+);
 
 export async function createStripeCheckout(
   userEmail: string,

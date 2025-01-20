@@ -90,7 +90,8 @@ export default function HidePost({
           }
         }}
         disabled={postId === ""}>
-        <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
+        <p
+          className={`mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic lg:text-2xl ${postId !== "" ? "text-gray-800" : "text-gray-600"}`}>
           Hide / Show <br />
           Selected Post
         </p>
