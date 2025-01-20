@@ -51,6 +51,9 @@ export function JobListCard({
         <div className="text-xs text-gray-400">
           Opened: {new Date(jobPosting.createdAt).toDateString()}
         </div>
+        <div className="text-xs text-gray-400">
+          Closes: {new Date(jobPosting.expiresAt).toDateString()}
+        </div>
       </CardFooter>
     </Card>
   );

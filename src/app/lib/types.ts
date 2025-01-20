@@ -14,6 +14,7 @@ export type JobPosting = {
   maxPayValue: number | null;
   description: string;
   language: string | null;
+  maxBoards: number;
   postAsylum: boolean;
   postDisabled: boolean;
   postIndigenous: boolean;

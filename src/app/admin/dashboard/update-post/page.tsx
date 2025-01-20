@@ -67,6 +67,8 @@ export default function Page({
   const [showPostingError, setShowPostingError] = useState(false);
   const [showPostingSuccess, setShowPostingSuccess] = useState(false);
 
+  const [maxBoards, setMaxBoards] = useState(0);
+
   const handleValueChange = (
     e:
       | React.ChangeEvent<
@@ -96,34 +98,36 @@ export default function Page({
 
         const [result, jobPosting] = await getJobPost(postId, email);
 
-        if (result) {
+        if (result && jobPosting) {
           setFormValues({
-            jobTitle: jobPosting!.jobTitle,
-            organizationName: jobPosting!.organizationName,
-            region: jobPosting!.region,
-            city: jobPosting!.city,
-            address: jobPosting!.address ? jobPosting!.address! : "",
-            startTime: jobPosting!.startTime,
-            vacancies: jobPosting!.vacancies
-              ? String(jobPosting!.vacancies!)
+            jobTitle: jobPosting.jobTitle,
+            organizationName: jobPosting.organizationName,
+            region: jobPosting.region,
+            city: jobPosting.city,
+            address: jobPosting.address ? jobPosting.address! : "",
+            startTime: jobPosting.startTime,
+            vacancies: jobPosting.vacancies
+              ? String(jobPosting.vacancies!)
               : "",
-            employmentType: jobPosting!.employmentType,
-            workHours: jobPosting!.workHours
-              ? String(jobPosting!.workHours!)
+            employmentType: jobPosting.employmentType,
+            workHours: jobPosting.workHours
+              ? String(jobPosting.workHours!)
               : "",
-            paymentType: jobPosting!.paymentType,
-            minPayValue: String(jobPosting!.maxPayValue),
-            maxPayValue: jobPosting!.maxPayValue
-              ? String(jobPosting!.maxPayValue!)
+            paymentType: jobPosting.paymentType,
+            minPayValue: String(jobPosting.maxPayValue),
+            maxPayValue: jobPosting.maxPayValue
+              ? String(jobPosting.maxPayValue!)
               : "",
-            description: jobPosting!.description,
-            language: jobPosting!.language ? jobPosting!.language! : "",
-            postAsylum: jobPosting!.postAsylum,
-            postDisabled: jobPosting!.postDisabled,
-            postIndigenous: jobPosting!.postIndigenous,
-            postNewcomers: jobPosting!.postNewcomers,
-            postYouth: jobPosting!.postYouth,
+            description: jobPosting.description,
+            language: jobPosting.language ? jobPosting!.language! : "",
+            postAsylum: jobPosting.postAsylum,
+            postDisabled: jobPosting.postDisabled,
+            postIndigenous: jobPosting.postIndigenous,
+            postNewcomers: jobPosting.postNewcomers,
+            postYouth: jobPosting.postYouth,
           });
+
+          setMaxBoards(jobPosting.maxBoards);
         } else {
           redirect("/admin/dashboard");
         }
@@ -453,24 +457,16 @@ export default function Page({
             </Select>
           </div>
 
-          <div className="mt-2 flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-evenly md:p-0">
-            <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Asylum Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Asylum"
-                onCheckedChange={() =>
-                  handleValueChange(!formValues.postAsylum, "postAsylum")
-                }
-                checked={formValues.postAsylum}
-              />
-            </div>
+          <div className="mt-2 flex flex-col">
+            <label className="p-2 text-center font-semibold mb:text-lg">
+              Max Boards: {maxBoards}
+            </label>
+          </div>
 
+          <div className="mt-2 flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
             <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Disablility Board
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Accessible Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -483,8 +479,22 @@ export default function Page({
             </div>
 
             <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Indigenous Board
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Asylum Job Board
+              </label>
+              <Checkbox
+                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                name="Asylum"
+                onCheckedChange={() =>
+                  handleValueChange(!formValues.postAsylum, "postAsylum")
+                }
+                checked={formValues.postAsylum}
+              />
+            </div>
+
+            <div className="mt-4 flex flex-row md:flex-col">
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Indigenous Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -500,8 +510,8 @@ export default function Page({
             </div>
 
             <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Newcomers Board
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Newcomers Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -514,8 +524,8 @@ export default function Page({
             </div>
 
             <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Youth Board
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Youth Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"

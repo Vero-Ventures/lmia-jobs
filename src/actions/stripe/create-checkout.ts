@@ -47,7 +47,12 @@ export async function createStripeCheckout(
             price_data: {
               currency: "cad",
               product_data: {
-                name: "Post on up to " + postBoards + " boards for " + postTime + " months.",
+                name:
+                  "Post on up to " +
+                  postBoards +
+                  " boards for " +
+                  postTime +
+                  " months.",
                 description:
                   "Create an Opportunties job board posting to appear on up to " +
                   postBoards +
@@ -59,7 +64,7 @@ export async function createStripeCheckout(
                   time: postTime,
                 },
               },
-              unit_amount: postBoards * postTime * 1000,
+              unit_amount: postBoards * postTime * 500,
             },
             quantity: 1,
           },

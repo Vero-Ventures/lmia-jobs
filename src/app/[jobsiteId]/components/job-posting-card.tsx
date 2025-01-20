@@ -34,6 +34,9 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
           <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
             Opened: {new Date(jobPosting.createdAt).toDateString()}
           </div>
+          <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
+            Closes: {new Date(jobPosting.expiresAt).toDateString()}
+          </div>
         </div>
 
         <div className="grid gap-6 text-sm md:grid-cols-2">

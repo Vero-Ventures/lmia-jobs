@@ -16,29 +16,29 @@ function Footer() {
         <div className="grid justify-center gap-1 text-center">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
           <Link
-            href="https://asylumopportunities.ca/asylum-job-board"
-            className="ml-1 pb-1.5 text-base">
-            Asylum Refugees
-          </Link>
-          <Link
             href="https://accessibleopportunities.ca/disability-job-board"
             className="ml-1 pb-1.5 text-base">
-            Disabled Workers
+            Accessible Opportunities
           </Link>
           <Link
-            href="https://indigenousopportunities.ca/indigenous-job-board"
+            href="https://asylumopportunities.ca/asylum-job-board"
             className="ml-1 pb-1.5 text-base">
-            Indigenous People
+            Asylum Opportunities
           </Link>
           <Link
             href="https://immigrantopportunities.ca/newcomers-job-board"
             className="ml-1 pb-1.5 text-base">
-            Canadian Newcomers
+            Immigrant Opportunities
+          </Link>
+          <Link
+            href="https://indigenousopportunities.ca/indigenous-job-board"
+            className="ml-1 pb-1.5 text-base">
+            Indigenous Opportunities
           </Link>
           <Link
             href="https://youthopportunities.ca/youth-job-board"
             className="ml-1 text-base">
-            Vulnerable Youth
+            Youth Opportunities
           </Link>
         </div>
         <div className="grid content-start justify-center gap-y-4 text-center text-base">
@@ -63,31 +63,30 @@ function Footer() {
         </div>
         <div className="mx-auto grid w-fit justify-center gap-1 text-base">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
-
-          <Link
-            href="https://asylumopportunities.ca/asylum-job-board"
-            className="ml-1 pb-1.5">
-            Asylum Refugees
-          </Link>
           <Link
             href="https://accessibleopportunities.ca/disability-job-board"
-            className="ml-1 pb-1.5 pt-1">
-            Disabled Workers
+            className="ml-1 pb-1.5">
+            Accessible Opportunities
           </Link>
           <Link
-            href="https://indigenousopportunities.ca/indigenous-job-board"
+            href="https://asylumopportunities.ca/asylum-job-board"
             className="ml-1 pb-1.5 pt-1">
-            Indigenous People
+            Asylum Opportunities
           </Link>
           <Link
             href="https://immigrantopportunities.ca/newcomers-job-board"
             className="ml-1 pb-1.5 pt-1">
-            Canadian Newcomers
+            Immigrant Opportunities
+          </Link>
+          <Link
+            href="https://indigenousopportunities.ca/indigenous-job-board"
+            className="ml-1 pb-1.5 pt-1">
+            Indigenous Opportunities
           </Link>
           <Link
             href="https://youthopportunities.ca/youth-job-board"
             className="ml-1 pt-1">
-            Vulnerable Youth
+            Youth Opportunities
           </Link>
         </div>
       </div>
