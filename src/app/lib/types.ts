@@ -23,4 +23,5 @@ export type JobPosting = {
   createdAt: Date;
   updatedAt: Date;
   expiresAt: string;
+  hidden: boolean;
 };

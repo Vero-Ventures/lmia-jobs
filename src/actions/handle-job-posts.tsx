@@ -123,9 +123,12 @@ export async function getJobPost(
   }
 }
 
-export async function deleteJobPost(postId: string): Promise<string> {
+export async function changePostVisibility(postId: string): Promise<string> {
   try {
-    await db.delete(jobPostings).where(eq(jobPostings.id, Number(postId)));
+    await db
+      .update(jobPostings)
+      .set({ hidden: !jobPostings.hidden })
+      .where(eq(jobPostings.id, Number(postId)));
     return "success";
   } catch (error) {
     console.error(error);

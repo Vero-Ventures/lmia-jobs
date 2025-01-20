@@ -106,4 +106,5 @@ export const jobPostings = pgTable("job_postings", {
     .notNull()
     .$onUpdate(() => new Date()),
   expiresAt: date("expires_at").notNull(),
+  hidden: boolean("hidden").notNull().default(false),
 });

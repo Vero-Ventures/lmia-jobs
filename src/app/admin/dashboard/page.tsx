@@ -11,7 +11,7 @@ import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import DeletePost from "@/app/admin/dashboard/hide-post/hide-post";
+import HidePost from "@/app/admin/dashboard/hide-post/hide-post";
 import { createStripeUser } from "@/actions/stripe/create-user";
 
 export default async function Page({
@@ -102,7 +102,10 @@ export default async function Page({
                 </button>
               </div>
               <div className="flex">
-                <DeletePost postId={postId === undefined ? "" : postId} />
+                <HidePost
+                  postId={postId === undefined ? "" : postId}
+                  userEmail={session!.user.email}
+                />
               </div>
             </div>
             <a
