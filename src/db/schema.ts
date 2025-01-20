@@ -48,7 +48,7 @@ export const account = pgTable("account", {
   scope: text("scope"),
 });
 
-export const subscription = pgTable("subscription", {
+export const stripeCustomer = pgTable("stripeCustomer", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   userId: text("user_id")
     .unique()

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/index";
-import { subscription, user } from "@/db/schema";
+import { user, userStripe } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
@@ -22,19 +22,19 @@ export async function createStripeUser(
       return { error: "User Not Found." };
     }
 
-    const userSubscription = await db
+    const stripeUser = await db
       .select()
-      .from(subscription)
-      .where(eq(subscription.userId, userEmail))
+      .from(userStripe)
+      .where(eq(userStripe.userId, userEmail))
       .then((res) => res[0]);
 
-    if (!userSubscription) {
+    if (!stripeUser) {
       const customer = await stripe.customers.create({
         email: currentUser.email,
       });
 
       await db
-        .insert(subscription)
+        .insert(userStripe)
         .values({ userId: currentUser.id, stripeId: customer.id });
 
       return { result: "created" };

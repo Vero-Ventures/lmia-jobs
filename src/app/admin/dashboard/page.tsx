@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import DeletePost from "@/app/admin/dashboard/delete-post/delete-handler";
-import { createStripeUser } from "@/actions/stripe";
+import { createStripeUser } from "@/actions/create-stripe-user";
 
 export default async function Page({
   searchParams,
