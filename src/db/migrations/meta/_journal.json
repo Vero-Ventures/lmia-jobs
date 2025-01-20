@@ -50,6 +50,13 @@
       "when": 1737400162451,
       "tag": "0006_misty_preak",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1737405744633,
+      "tag": "0007_good_maelstrom",
+      "breakpoints": true
     }
   ]
 }

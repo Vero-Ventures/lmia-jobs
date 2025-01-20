@@ -49,7 +49,7 @@ export function JobListCard({
       </CardContent>
       <CardFooter>
         <div className="text-xs text-gray-400">
-          Opened: {new Date(jobPosting.datePosted).toDateString()}
+          Opened: {new Date(jobPosting.createdAt).toDateString()}
         </div>
       </CardFooter>
     </Card>

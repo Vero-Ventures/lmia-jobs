@@ -11,8 +11,8 @@ import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import DeletePost from "@/app/admin/dashboard/delete-post/delete-handler";
-import { createStripeUser } from "@/actions/create-stripe-user";
+import DeletePost from "@/app/admin/dashboard/hide-post/hide-post";
+import { createStripeUser } from "@/actions/stripe/create-user";
 
 export default async function Page({
   searchParams,
@@ -72,7 +72,7 @@ export default async function Page({
               <div className="flex">
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
                   <Link
-                    href={"/admin/dashboard/handle-post?create=true"}
+                    href={"/admin/pricing"}
                     className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
                     Create A<br />
                     New Post
@@ -84,19 +84,19 @@ export default async function Page({
                   {postId ? (
                     <Link
                       href={
-                        "/admin/dashboard/handle-post?postId=" +
+                        "/admin/dashboard/update-post?postId=" +
                         postId +
                         "&email=" +
                         session!.user.email
                       }
                       className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                      Modify <br />
-                      Selected Post
+                      Set Post <br />
+                      Content
                     </Link>
                   ) : (
                     <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                      Modify <br />
-                      Selected Post
+                      Set Post <br />
+                      Content
                     </p>
                   )}
                 </button>

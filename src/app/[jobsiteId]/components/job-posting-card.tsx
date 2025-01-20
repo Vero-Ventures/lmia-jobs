@@ -32,7 +32,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             {jobPosting.hiringOrganization}
           </CardDescription>
           <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
-            Opened: {new Date(jobPosting.datePosted).toDateString()}
+            Opened: {new Date(jobPosting.createdAt).toDateString()}
           </div>
         </div>
 

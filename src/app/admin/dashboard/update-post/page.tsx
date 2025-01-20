@@ -20,7 +20,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { handleJobPost, getJobPost } from "@/actions/handle-job-posts";
+import { updateJobPost, getJobPost } from "@/actions/handle-job-posts";
 
 export default function Page({
   searchParams,
@@ -42,17 +42,17 @@ export default function Page({
 
   const [formValues, setFormValues] = useState({
     jobTitle: "",
-    hiringOrganization: "",
-    employmentType: "",
-    addressRegion: "",
-    addressLocality: "",
-    streetAddress: "",
-    compTimeUnit: "",
-    minCompValue: "",
-    maxCompValue: "",
-    workHours: "",
+    organizationName: "",
+    region: "",
+    city: "",
+    address: "",
     startTime: new Date().toISOString().split("T")[0],
     vacancies: "",
+    employmentType: "",
+    workHours: "",
+    paymentType: "",
+    minPayValue: "",
+    maxPayValue: "",
     description: "",
     language: "",
     postAsylum: false,
@@ -100,24 +100,22 @@ export default function Page({
         if (result) {
           setFormValues({
             jobTitle: jobPosting!.jobTitle,
-            hiringOrganization: jobPosting!.hiringOrganization,
-            employmentType: jobPosting!.employmentType,
-            addressRegion: jobPosting!.addressRegion,
-            addressLocality: jobPosting!.addressLocality,
-            streetAddress: jobPosting!.streetAddress
-              ? jobPosting!.streetAddress!
-              : "",
-            compTimeUnit: jobPosting!.compTimeUnit,
-            minCompValue: String(jobPosting!.minCompValue),
-            maxCompValue: jobPosting!.maxCompValue
-              ? String(jobPosting!.maxCompValue!)
-              : "",
-            workHours: jobPosting!.workHours
-              ? String(jobPosting!.workHours!)
-              : "",
+            organizationName: jobPosting!.organizationName,
+            region: jobPosting!.region,
+            city: jobPosting!.city,
+            address: jobPosting!.address ? jobPosting!.address! : "",
             startTime: jobPosting!.startTime,
             vacancies: jobPosting!.vacancies
               ? String(jobPosting!.vacancies!)
+              : "",
+            employmentType: jobPosting!.employmentType,
+            workHours: jobPosting!.workHours
+              ? String(jobPosting!.workHours!)
+              : "",
+            paymentType: jobPosting!.paymentType,
+            minPayValue: String(jobPosting!.maxPayValue),
+            maxPayValue: jobPosting!.maxPayValue
+              ? String(jobPosting!.maxPayValue!)
               : "",
             description: jobPosting!.description,
             language: jobPosting!.language ? jobPosting!.language! : "",
@@ -153,7 +151,7 @@ export default function Page({
       userEmail = email;
     }
 
-    const result = await handleJobPost(
+    const result = await updateJobPost(
       formValues,
       postToNoBoards,
       existingPostId,
@@ -206,7 +204,7 @@ export default function Page({
               className="border-2 border-gray-500 md:text-base"
               type="text"
               name="hiringOrganization"
-              value={formValues.hiringOrganization}
+              value={formValues.organizationName}
               onChange={handleValueChange}
               required
             />
@@ -215,14 +213,12 @@ export default function Page({
           <div className="mt-4 flex flex-col sm:flex-row sm:justify-evenly lg:px-8">
             <div className="mx-auto mt-2 flex flex-row md:mx-0">
               <label className="p-2 font-semibold mb:mr-1 mb:mt-2.5 mb:block mb:text-lg">
-                Province
+                Region
               </label>
               <div className="flex flex-col">
                 <Select
-                  value={formValues.addressRegion}
-                  onValueChange={(value) =>
-                    handleValueChange(value, "addressRegion")
-                  }
+                  value={formValues.region}
+                  onValueChange={(value) => handleValueChange(value, "region")}
                   required>
                   <SelectTrigger className="ml-4 min-w-32 border-2 border-gray-500 text-base font-semibold mb:ml-2 mb:mt-3 mb:min-w-48 mb:text-lg sm:min-w-32 md:min-w-40">
                     <SelectValue placeholder="Select" />
@@ -242,7 +238,7 @@ export default function Page({
                 <Input
                   className="mx-auto h-1 w-0 p-0 opacity-0"
                   required
-                  value={formValues.addressRegion}
+                  value={formValues.region}
                   onChange={handleValueChange}
                 />
               </div>
@@ -256,7 +252,7 @@ export default function Page({
                 className="w-full border-2 border-gray-500 sm:mt-3 md:text-base"
                 type="text"
                 name="addressLocality"
-                value={formValues.addressLocality}
+                value={formValues.city}
                 onChange={handleValueChange}
                 required
               />
@@ -271,7 +267,7 @@ export default function Page({
               className="border-2 border-gray-500 md:text-base"
               type="text"
               name="streetAddress"
-              value={formValues.streetAddress}
+              value={formValues.address}
               onChange={handleValueChange}
             />
           </div>
@@ -364,9 +360,9 @@ export default function Page({
               </label>
               <div className="flex flex-col">
                 <Select
-                  value={formValues.compTimeUnit}
+                  value={formValues.paymentType}
                   onValueChange={(value) =>
-                    handleValueChange(value, "compTimeUnit")
+                    handleValueChange(value, "paymentType")
                   }
                   required>
                   <SelectTrigger className="mx-auto w-40 border-2 border-gray-500 text-base mb:w-48 mb:text-lg mb:font-semibold sm:mx-auto sm:w-40 md:w-48">
@@ -388,7 +384,7 @@ export default function Page({
                 <Input
                   className="mx-auto h-1 w-0 p-0 opacity-0"
                   required
-                  value={formValues.compTimeUnit}
+                  value={formValues.paymentType}
                   onChange={handleValueChange}
                 />
               </div>
@@ -403,7 +399,7 @@ export default function Page({
                   className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
                   name="minCompValue"
-                  value={formValues.minCompValue}
+                  value={formValues.minPayValue}
                   onChange={handleValueChange}
                   placeholder=""
                   required
@@ -419,7 +415,7 @@ export default function Page({
                   className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
                   name="maxCompValue"
-                  value={formValues.maxCompValue}
+                  value={formValues.maxPayValue}
                   onChange={handleValueChange}
                   placeholder=""
                 />
