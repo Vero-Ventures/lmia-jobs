@@ -1,16 +1,14 @@
 "use server";
 
 import { db } from "@/db/index";
-import { user, userStripe } from "@/db/schema";
+import { user, stripeCustomer } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
 
 const stripe = new Stripe(process.env.DEV_STRIPE_PRIVATE_KEY!);
 
-export async function createStripeUser(
-  userEmail: string
-): Promise<{ result: string } | { error: string }> {
+export async function createStripeUser(userEmail: string): Promise<boolean> {
   try {
     const currentUser = await db
       .select()
@@ -19,13 +17,14 @@ export async function createStripeUser(
       .then((res) => res[0]);
 
     if (!currentUser) {
-      return { error: "User Not Found." };
+      console.error("User Not Found.");
+      return false;
     }
 
     const stripeUser = await db
       .select()
-      .from(userStripe)
-      .where(eq(userStripe.userId, userEmail))
+      .from(stripeCustomer)
+      .where(eq(stripeCustomer.userId, currentUser.id))
       .then((res) => res[0]);
 
     if (!stripeUser) {
@@ -34,18 +33,21 @@ export async function createStripeUser(
       });
 
       await db
-        .insert(userStripe)
+        .insert(stripeCustomer)
         .values({ userId: currentUser.id, stripeId: customer.id });
 
-      return { result: "created" };
+      return true;
     } else {
-      return { result: "existing" };
+      console.error("Existing Stripe User");
+      return false;
     }
   } catch (error) {
     if (error instanceof Error) {
-      return { error: error.message };
+      console.error(error.message);
+      return false;
     } else {
-      return { error: "Unexpected Error." };
+      console.error("Unexpected Error.");
+      return false;
     }
   }
 }
