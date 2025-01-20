@@ -29,7 +29,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             {jobPosting.jobTitle}
           </CardTitle>
           <CardDescription className="text-gray-500 dark:text-gray-400">
-            {jobPosting.hiringOrganization}
+            {jobPosting.organizationName}
           </CardDescription>
           <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
             Opened: {new Date(jobPosting.createdAt).toDateString()}
@@ -49,18 +49,16 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-2">
               <MapPinIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
-                {jobPosting.streetAddress && `${jobPosting.streetAddress}, `}
-                {jobPosting.addressLocality}, {jobPosting.addressRegion}
+                {jobPosting.address && `${jobPosting.address}, `}
+                {jobPosting.city}, {jobPosting.region}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <CircleDollarSignIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
-                ${jobPosting.minCompValue}{" "}
-                {jobPosting.maxCompValue
-                  ? `to $${jobPosting.maxCompValue}`
-                  : ""}{" "}
-                {jobPosting.compTimeUnit}
+                ${jobPosting.minPayValue}{" "}
+                {jobPosting.minPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
+                {jobPosting.paymentType}
               </span>
             </div>
           </div>

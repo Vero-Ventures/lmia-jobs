@@ -26,7 +26,6 @@ export default function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    create?: boolean;
     postId?: string;
     email?: string;
   }>;
@@ -88,11 +87,11 @@ export default function Page({
 
   useEffect(() => {
     const getPostData = async () => {
-      const { postId, email, create } = await searchParams;
+      const { postId, email } = await searchParams;
 
-      if ((!email || !postId) && !create) {
+      if (!email || !postId) {
         redirect("/admin/dashboard");
-      } else if (email && postId) {
+      } else {
         setLoadingPostData(true);
 
         const [result, jobPosting] = await getJobPost(postId, email);
@@ -141,21 +140,17 @@ export default function Page({
     setShowPostingError(false);
     setShowNoBoardsSelected(false);
 
-    const { postId, email, create } = await searchParams;
+    const { postId, email } = await searchParams;
 
-    let existingPostId = null;
-    let userEmail = null;
-
-    if (!create && postId && email) {
-      existingPostId = postId;
-      userEmail = email;
+    if (!postId || !email) {
+      redirect("/admin/dashboard");
     }
 
     const result = await updateJobPost(
       formValues,
       postToNoBoards,
-      existingPostId,
-      userEmail
+      postId,
+      email
     );
 
     if (result === "no boards") {

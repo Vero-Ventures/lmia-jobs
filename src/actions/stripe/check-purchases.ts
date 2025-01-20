@@ -9,7 +9,7 @@ import { createNewPost } from "@/actions/handle-job-posts";
 
 const stripe = new Stripe(process.env.DEV_STRIPE_PRIVATE_KEY!);
 
-export async function checkUserPurchases(userEmail: string): Promise<boolean> {
+export async function checkUserPurchases(userEmail: string): Promise<string> {
   try {
     const currentUser = await db
       .select()
@@ -19,7 +19,7 @@ export async function checkUserPurchases(userEmail: string): Promise<boolean> {
 
     if (!currentUser) {
       console.error("User Not Found.");
-      return false;
+      return "error";
     }
 
     const stripeUser = await db
@@ -30,7 +30,7 @@ export async function checkUserPurchases(userEmail: string): Promise<boolean> {
 
     if (!stripeUser) {
       console.error("Stripe User Not Found");
-      return false;
+      return "error";
     } else {
       const customerPurchases = await stripe.charges.list({
         customer: stripeUser.stripeId,
@@ -51,24 +51,28 @@ export async function checkUserPurchases(userEmail: string): Promise<boolean> {
             customerPurchases.data[0].payment_intent as string
           );
 
-          createNewPost(
+          const result = await createNewPost(
             customerPost.id,
             Number(paymentIntent.metadata.boards),
             Number(paymentIntent.metadata.time),
             currentUser.email
           );
+
+          if (result === "refresh") {
+            return result;
+          }
         }
       }
 
-      return true;
+      return "success";
     }
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
-      return false;
+      return "error";
     } else {
       console.error("Unexpected Error.");
-      return false;
+      return "error";
     }
   }
 }

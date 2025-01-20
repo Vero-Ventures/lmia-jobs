@@ -31,7 +31,10 @@ export default async function Page({
     redirect("/admin");
   } else {
     await createStripeUser(session.user.email);
-    await checkUserPurchases(session.user.email);
+    const result = await checkUserPurchases(session.user.email);
+    if (result === "refresh") {
+      redirect("/admin/dashboard");
+    }
   }
 
   const { query, postId } = await searchParams;

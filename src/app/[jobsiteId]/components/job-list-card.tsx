@@ -31,19 +31,19 @@ export function JobListCard({
         <CardTitle className="titleCase overflow-clip text-xl font-bold">
           {jobPosting.jobTitle}
         </CardTitle>
-        <CardDescription>{jobPosting.hiringOrganization}</CardDescription>
+        <CardDescription>{jobPosting.organizationName}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
           <div className="overflow-clip text-gray-500 dark:text-gray-400">
-            {jobPosting.addressLocality}, {jobPosting.addressRegion}
+            {jobPosting.city}, {jobPosting.region}
           </div>
         </div>
         <div className="flex justify-between">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            ${`${jobPosting.minCompValue}`}{" "}
-            {jobPosting.maxCompValue ? `to $${jobPosting.maxCompValue}` : ""}{" "}
-            {jobPosting.compTimeUnit}
+            ${`${jobPosting.minPayValue}`}{" "}
+            {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
+            {jobPosting.paymentType}
           </p>
         </div>
       </CardContent>

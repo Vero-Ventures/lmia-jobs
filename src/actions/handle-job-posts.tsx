@@ -42,12 +42,12 @@ export async function createNewPost(
 
     const values = {
       stripeChargeId: chargeId,
-      jobTitle: "New Post - " + new Date().toISOString().split("Z")[0],
+      jobTitle: "New Post - " + new Date().toISOString().split("T")[0],
       organizationName: "Organization Name",
       region: "Region",
       city: "City",
       address: null,
-      startTime: new Date().toISOString().split("Z")[0],
+      startTime: new Date().toISOString().split("T")[0],
       vacancies: null,
       employmentType: "Full Time",
       workHours: null,
@@ -62,11 +62,25 @@ export async function createNewPost(
       postNewcomers: false,
       postYouth: false,
       email: userEmail,
-      expiresAt: expireryDate.toISOString().split("Z")[0],
+      expiresAt: expireryDate.toISOString().split("T")[0],
       maxBoards: numBoards,
     };
 
-    await db.insert(jobPostings).values(values);
+    const existingPost = await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(
+          eq(jobPostings.email, userEmail),
+          eq(jobPostings.stripeChargeId, chargeId)
+        )
+      )
+      .then((res) => res[0]);
+
+    if (!existingPost) {
+      await db.insert(jobPostings).values(values);
+      return "refresh";
+    }
 
     return "success";
   } catch (error) {

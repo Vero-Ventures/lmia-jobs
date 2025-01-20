@@ -11,7 +11,7 @@ function Footer() {
           <h3 className="text-xl font-semibold">Company</h3>
           <Link href="/admin/about-us">About Us</Link>
           <Link href="/admin/contact-us">Contact Us</Link>
-          <Link href="/pricing">Pricing</Link>
+          <Link href="/admin/pricing">Pricing</Link>
         </div>
         <div className="grid justify-center gap-1 text-center">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>

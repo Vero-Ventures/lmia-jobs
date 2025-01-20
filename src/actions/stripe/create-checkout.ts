@@ -47,13 +47,13 @@ export async function createStripeCheckout(
             price_data: {
               currency: "cad",
               product_data: {
-                name: "Post on " + postBoards + " for " + postTime + " weeks.",
+                name: "Post on up to " + postBoards + " boards for " + postTime + " months.",
                 description:
                   "Create an Opportunties job board posting to appear on up to " +
                   postBoards +
                   " Opportunities job boards for the next " +
                   postTime +
-                  " weeks.",
+                  " months.",
                 metadata: {
                   boards: postBoards,
                   time: postTime,
