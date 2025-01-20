@@ -8,7 +8,7 @@ import { Stripe } from "stripe";
 
 const stripe = new Stripe(process.env.DEV_STRIPE_PRIVATE_KEY!);
 
-export async function createStripePurchase(
+export async function createStripeCheckout(
   userEmail: string,
   postBoards: number,
   postTime: number
@@ -36,6 +36,12 @@ export async function createStripePurchase(
         ui_mode: "hosted",
         customer: stripeUser.stripeId,
         mode: "payment",
+        payment_intent_data: {
+          metadata: {
+            boards: postBoards.toString(),
+            time: postTime.toString(),
+          },
+        },
         line_items: [
           {
             price_data: {
@@ -48,6 +54,10 @@ export async function createStripePurchase(
                   " Opportunities job boards for the next " +
                   postTime +
                   " weeks.",
+                metadata: {
+                  boards: postBoards,
+                  time: postTime,
+                },
               },
               unit_amount: postBoards * postTime * 1000,
             },

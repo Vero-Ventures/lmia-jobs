@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import HidePost from "@/app/admin/dashboard/hide-post/hide-post";
 import { createStripeUser } from "@/actions/stripe/create-user";
+import { checkUserPurchases } from "@/actions/stripe/check-purchases";
 
 export default async function Page({
   searchParams,
@@ -30,6 +31,7 @@ export default async function Page({
     redirect("/admin");
   } else {
     await createStripeUser(session.user.email);
+    await checkUserPurchases(session.user.email);
   }
 
   const { query, postId } = await searchParams;
@@ -42,7 +44,7 @@ export default async function Page({
   return (
     <div>
       <Navbar links={SessionLinks} />
-      <div className="flex min-h-[90dvh] flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
+      <div className="flex min-h-[90dvh] flex-col justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-white">
         <main className="flex flex-col px-4 pb-4 md:flex-row md:items-center">
           <div className="mx-2 my-4 max-h-[90dvh] w-full overflow-y-scroll rounded-xl border-2 bg-white p-2 mb:p-6 md:w-3/5 lg:mx-6 xl:w-2/3">
             <header className="border-b p-4">

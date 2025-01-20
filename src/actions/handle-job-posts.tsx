@@ -29,11 +29,57 @@ export type JobPostForm = {
   postYouth: boolean;
 };
 
+export async function createNewPost(
+  chargeId: string,
+  numBoards: number,
+  numTime: number,
+  userEmail: string
+): Promise<string> {
+  try {
+    const expireryDate = new Date();
+
+    expireryDate.setMonth(new Date().getMonth() + numTime);
+
+    const values = {
+      stripeChargeId: chargeId,
+      jobTitle: "New Post - " + new Date().toISOString().split("Z")[0],
+      organizationName: "Organization Name",
+      region: "Region",
+      city: "City",
+      address: null,
+      startTime: new Date().toISOString().split("Z")[0],
+      vacancies: null,
+      employmentType: "Full Time",
+      workHours: null,
+      paymentType: "Salary",
+      minPayValue: 0,
+      maxPayValue: null,
+      description: "Description",
+      language: "English",
+      postAsylum: false,
+      postDisabled: false,
+      postIndigenous: false,
+      postNewcomers: false,
+      postYouth: false,
+      email: userEmail,
+      expiresAt: expireryDate.toISOString().split("Z")[0],
+      maxBoards: numBoards,
+    };
+
+    await db.insert(jobPostings).values(values);
+
+    return "success";
+  } catch (error) {
+    console.error(error);
+    return "error";
+  }
+}
+
 export async function updateJobPost(
   formData: JobPostForm,
   noBoards: boolean,
-  postId: string | null,
-  userEmail: string | null
+  postId: string,
+  userEmail: string
 ): Promise<string> {
   try {
     if (
@@ -75,21 +121,18 @@ export async function updateJobPost(
         language: formData.language === "" ? null : formData.language,
         email: session.user.email,
         expiresAt: new Date().toISOString().split("T")[0],
+        hidden: false,
       };
 
-      if (postId && userEmail) {
-        await db
-          .update(jobPostings)
-          .set(postData)
-          .where(
-            and(
-              eq(jobPostings.id, Number(postId)),
-              eq(jobPostings.email, userEmail)
-            )
-          );
-      } else {
-        await db.insert(jobPostings).values(postData);
-      }
+      await db
+        .update(jobPostings)
+        .set(postData)
+        .where(
+          and(
+            eq(jobPostings.id, Number(postId)),
+            eq(jobPostings.email, userEmail)
+          )
+        );
 
       return "success";
     }

@@ -38,7 +38,6 @@ export async function createStripeUser(userEmail: string): Promise<boolean> {
 
       return true;
     } else {
-      console.error("Existing Stripe User");
       return false;
     }
   } catch (error) {

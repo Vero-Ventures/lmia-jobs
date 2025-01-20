@@ -64,6 +64,20 @@
       "when": 1737406291211,
       "tag": "0008_left_talkback",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1737408854592,
+      "tag": "0009_stale_justin_hammer",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1737410718654,
+      "tag": "0010_nasty_onslaught",
+      "breakpoints": true
     }
   ]
 }

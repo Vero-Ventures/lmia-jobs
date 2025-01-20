@@ -3,6 +3,7 @@ import { jobPostings } from "@/db/schema";
 
 const data = [
   {
+    stripeChargeId: "123",
     jobTitle: "Project Manager",
     organizationName: "Maple Project Management",
     region: "BC",
@@ -28,6 +29,7 @@ const data = [
     expiresAt: "2025-12-31",
   },
   {
+    stripeChargeId: "456",
     jobTitle: "Software Engineer",
     organizationName: "Northern Tech Solutions",
     region: "ON",
@@ -53,6 +55,7 @@ const data = [
     expiresAt: "2025-12-31",
   },
   {
+    stripeChargeId: "ABC",
     jobTitle: "Customer Support Representative",
     organizationName: "West Coast Call Center",
     region: "AB",
@@ -78,6 +81,7 @@ const data = [
     expiresAt: "2025-12-31",
   },
   {
+    stripeChargeId: "DEF",
     jobTitle: "Graphic Designer",
     organizationName: "Creative Studios Inc.",
     region: "QC",
@@ -108,6 +112,7 @@ const data = [
   await Promise.all(
     data.map((jp) =>
       db.insert(jobPostings).values({
+        stripeChargeId: jp.stripeChargeId,
         jobTitle: jp.jobTitle,
         organizationName: jp.organizationName,
         region: jp.region,
