@@ -16,34 +16,29 @@ function Footer() {
         <div className="grid justify-center gap-1 text-center">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
           <Link
-            href="https://lmia-jobs.vercel.app/indigenous"
-            target="_blank"
+            href="https://asylumopportunities.ca/asylum-job-board"
+            className="ml-1 pb-1.5 text-base">
+            Asylum Refugees
+          </Link>
+          <Link
+            href="https://accessibleopportunities.ca/disability-job-board"
+            className="ml-1 pb-1.5 text-base">
+            Disabled Workers
+          </Link>
+          <Link
+            href="https://indigenousopportunities.ca/indigenous-job-board"
             className="ml-1 pb-1.5 text-base">
             Indigenous People
           </Link>
           <Link
-            href="https://lmia-jobs.vercel.app/newcomers"
-            target="_blank"
+            href="https://immigrantopportunities.ca/newcomers-job-board"
             className="ml-1 pb-1.5 text-base">
             Canadian Newcomers
           </Link>
           <Link
-            href="https://lmia-jobs.vercel.app/disabled"
-            target="_blank"
-            className="ml-1 pb-1.5 text-base">
-            Persons with Disabilities
-          </Link>
-          <Link
-            href="https://lmia-jobs.vercel.app/youth"
-            target="_blank"
-            className="ml-1 pb-1.5 text-base">
-            Vulnerable Youth
-          </Link>
-          <Link
-            href="https://lmia-jobs.vercel.app/asylum"
-            target="_blank"
+            href="https://youthopportunities.ca/youth-job-board"
             className="ml-1 text-base">
-            Asylum-Refugees
+            Vulnerable Youth
           </Link>
         </div>
         <div className="grid content-start justify-center gap-y-4 text-center text-base">
@@ -68,35 +63,31 @@ function Footer() {
         </div>
         <div className="mx-auto grid w-fit justify-center gap-1 text-base">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
+
           <Link
-            href="https://lmia-jobs.vercel.app/indigenous"
-            target="_blank"
+            href="https://asylumopportunities.ca/asylum-job-board"
             className="ml-1 pb-1.5">
+            Asylum Refugees
+          </Link>
+          <Link
+            href="https://accessibleopportunities.ca/disability-job-board"
+            className="ml-1 pb-1.5 pt-1">
+            Disabled Workers
+          </Link>
+          <Link
+            href="https://indigenousopportunities.ca/indigenous-job-board"
+            className="ml-1 pb-1.5 pt-1">
             Indigenous People
           </Link>
           <Link
-            href="https://lmia-jobs.vercel.app/newcomers"
-            target="_blank"
+            href="https://immigrantopportunities.ca/newcomers-job-board"
             className="ml-1 pb-1.5 pt-1">
-            Newcomers
+            Canadian Newcomers
           </Link>
           <Link
-            href="https://lmia-jobs.vercel.app/disabled"
-            target="_blank"
-            className="ml-1 pb-1.5 pt-1">
-            Persons with Disabilities
-          </Link>
-          <Link
-            href="https://lmia-jobs.vercel.app/youth"
-            target="_blank"
-            className="ml-1 pb-1.5 pt-1">
-            Vulnerable Youth
-          </Link>
-          <Link
-            href="https://lmia-jobs.vercel.app/asylum"
-            target="_blank"
+            href="https://youthopportunities.ca/youth-job-board"
             className="ml-1 pt-1">
-            Asylum-Refugees
+            Vulnerable Youth
           </Link>
         </div>
       </div>
