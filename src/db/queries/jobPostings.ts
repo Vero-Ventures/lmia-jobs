@@ -29,7 +29,7 @@ export async function selectAllJobPostings({
         .from(jobPostings)
         .where(
           and(
-            eq(jobPostings.addressRegion, location),
+            eq(jobPostings.region, location),
             eq(jobPostings.employmentType, jobType)
           )
         );
@@ -37,7 +37,7 @@ export async function selectAllJobPostings({
       postings = await db
         .select()
         .from(jobPostings)
-        .where(eq(jobPostings.addressRegion, location));
+        .where(eq(jobPostings.region, location));
     } else if (jobType) {
       postings = await db
         .select()
