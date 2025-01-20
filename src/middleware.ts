@@ -16,7 +16,7 @@ export function middleware(req: NextRequest) {
   const targetPath = validRoutes[domainName];
   const route = req.nextUrl.pathname;
 
-  if (targetPath && route === '/') {
+  if (targetPath && route === "/") {
     const url = new URL(validRoutes[domainName], req.nextUrl.origin);
     return NextResponse.redirect(url);
   }
