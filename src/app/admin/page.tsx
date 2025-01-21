@@ -18,31 +18,15 @@ export default function Component() {
   return (
     <div>
       <Navbar links={BaseLinks} />
-      <div className="flex min-h-dvh flex-col">
-        <main className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center px-4 text-center">
-          <div className="mb-8 flex items-center space-x-2">
-            <span className="text-5xl font-bold tracking-tighter mb:text-6xl">
-              Opportunities Dashboard
-            </span>
-          </div>
-          <h1 className="mb-4 mt-6 text-xl font-bold tracking-tight mb:text-3xl">
-            Easily Create And Manage Job Postings Across Multiple Boards
-          </h1>
-          <div className="mt-8 flex w-full flex-col gap-8 sm:flex-row">
-            <Button
-              asChild
-              className="mt-4 w-full flex-1 py-8 text-2xl font-bold">
-              <Link href={"/admin/sign-up"}>Join Now</Link>
-            </Button>
-            <Button
-              asChild
-              className="mt-4 w-full flex-1 py-8 text-2xl font-bold">
-              <Link href={"/admin/sign-in"}>Log In</Link>
-            </Button>
-          </div>
-        </main>
-        <Footer />
-      </div>
+      <main className="mx-auto min-h-dvh max-w-4xl px-4 text-center">
+        <h1 className="mb-4 pt-24 text-2xl font-bold leading-10 tracking-tight mb:text-5xl">
+          Effortlessly Create and Manage Job Postings Across Multiple Job Boards
+        </h1>
+        <Button asChild className="mt-4 py-8 text-2xl font-bold">
+          <Link href={"/admin/sign-up"}>Get Started For Free</Link>
+        </Button>
+      </main>
+      <Footer />
     </div>
   );
 }
