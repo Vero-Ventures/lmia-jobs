@@ -133,8 +133,6 @@ export async function updateJobPost(
             ? null
             : Math.ceil(Number(formData.maxPayValue)),
         language: formData.language === "" ? null : formData.language,
-        email: session.user.email,
-        expiresAt: new Date().toISOString().split("T")[0],
         hidden: false,
       };
 
@@ -180,11 +178,14 @@ export async function getJobPost(
   }
 }
 
-export async function changePostVisibility(postId: string): Promise<string> {
+export async function changePostVisibility(
+  postId: string,
+  hidePost: boolean
+): Promise<string> {
   try {
     await db
       .update(jobPostings)
-      .set({ hidden: !jobPostings.hidden })
+      .set({ hidden: hidePost })
       .where(eq(jobPostings.id, Number(postId)));
     return "success";
   } catch (error) {

@@ -18,15 +18,17 @@ export default function HidePost({
 
   const checkPostVisibility = async () => {
     const [result, jobPost] = await getJobPost(postId, userEmail);
-    if (result && !jobPost) {
+    if (result && !jobPost!.hidden) {
       setShowConfirmHide(true);
-    } else if (result && jobPost) {
+      setShowConfirmUnHide(false);
+    } else if (result && jobPost!.hidden) {
+      setShowConfirmHide(false);
       setShowConfirmUnHide(true);
     }
   };
 
   const changeVisibility = async () => {
-    const hideResult = await changePostVisibility(postId);
+    const hideResult = await changePostVisibility(postId, showConfirmHide);
     if (hideResult === "error") {
       console.error("Error");
     } else {
@@ -45,18 +47,21 @@ export default function HidePost({
             Are You Sure?
           </p>
           <p className="px-2 text-center text-lg text-gray-800 mb:pt-4 mb:text-xl">
-            Hiding the post will prevent it from showing across all job boards.
+            Setting the post as hidden will prevent it from being shown across
+            all job boards.
           </p>
-          <Button
-            className="mx-auto w-3/5 py-6 text-base mb:text-lg"
-            onClick={() => setShowConfirmHide(false)}>
-            Cancel
-          </Button>
-          <Button
-            className="mx-auto w-3/5 py-6 text-base mb:text-lg"
-            onClick={() => changeVisibility()}>
-            Confirm
-          </Button>
+          <div className="flex flex-col sm:flex-row">
+            <Button
+              className="mx-auto w-4/5 py-6 text-base mb:!mt-4 mb:text-lg sm:w-2/5"
+              onClick={() => setShowConfirmHide(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="mx-auto !mt-6 w-4/5 py-6 text-base mb:text-lg sm:!mt-4 sm:w-2/5"
+              onClick={() => changeVisibility()}>
+              Confirm
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -67,18 +72,21 @@ export default function HidePost({
             Are You Sure?
           </p>
           <p className="px-2 text-center text-lg text-gray-800 mb:pt-4 mb:text-xl">
-            This will set the post to be visible across all job boards.
+            Setting the post as visible will cause it to be shown across all job
+            boards.
           </p>
-          <Button
-            className="mx-auto w-3/5 py-6 text-base mb:text-lg"
-            onClick={() => setShowConfirmUnHide(false)}>
-            Cancel
-          </Button>
-          <Button
-            className="mx-auto w-3/5 py-6 text-base mb:text-lg"
-            onClick={() => changeVisibility()}>
-            Confirm
-          </Button>
+          <div className="flex flex-col sm:flex-row">
+            <Button
+              className="mx-auto w-4/5 py-6 text-base mb:!mt-4 mb:text-lg sm:w-2/5"
+              onClick={() => setShowConfirmUnHide(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="mx-auto !mt-6 w-4/5 py-6 text-base mb:text-lg sm:!mt-4 sm:w-2/5"
+              onClick={() => changeVisibility()}>
+              Confirm
+            </Button>
+          </div>
         </div>
       </div>
 
