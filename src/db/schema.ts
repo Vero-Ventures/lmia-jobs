@@ -48,7 +48,7 @@ export const account = pgTable("account", {
   scope: text("scope"),
 });
 
-export const subscription = pgTable("subscription", {
+export const stripeCustomer = pgTable("stripeCustomer", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   userId: text("user_id")
     .unique()
@@ -81,30 +81,32 @@ export const verification = pgTable("verification", {
 
 export const jobPostings = pgTable("job_postings", {
   id: serial("id").primaryKey(),
+  stripeChargeId: text("stripe_charge_id").notNull(),
   jobTitle: text("job_title").notNull(),
-  hiringOrganization: text("hiring_organization").notNull(),
-  datePosted: date("date_posted").notNull(),
-  employmentType: text("employment_type").notNull(),
-  addressRegion: text("address_region").notNull(),
-  addressLocality: text("address_locality").notNull(),
-  streetAddress: text("street_address"),
-  compTimeUnit: text("comp_time_unit").notNull(),
-  minCompValue: integer("min_comp_value").notNull(),
-  maxCompValue: integer("max_comp_value"),
-  workHours: integer("work_hours"),
+  organizationName: text("organization_name").notNull(),
+  region: text("region").notNull(),
+  city: text("city").notNull(),
+  address: text("address"),
   startTime: date("start_time").notNull(),
   vacancies: integer("vacancies"),
+  employmentType: text("employment_type").notNull(),
+  workHours: integer("work_hours"),
+  paymentType: text("payment_type").notNull(),
+  minPayValue: integer("min_pay_value").notNull(),
+  maxPayValue: integer("max_pay_value"),
   description: text("description").notNull(),
-  email: text("email").notNull(),
   language: text("language"),
+  maxBoards: integer("max_boards").notNull().default(0),
+  postAsylum: boolean("post_asylum").notNull(),
+  postDisabled: boolean("post_disabled").notNull(),
+  postIndigenous: boolean("post_indigenous").notNull(),
+  postNewcomers: boolean("post_newcomers").notNull(),
+  postYouth: boolean("post_youth").notNull(),
+  email: text("email").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
-  validThrough: text("valid_through").notNull(),
-  postAsylum: boolean("post_asylum").notNull().default(true),
-  postDisabled: boolean("post_disabled").notNull().default(true),
-  postIndigenous: boolean("post_indigenous").notNull().default(true),
-  postNewcomers: boolean("post_newcomers").notNull().default(true),
-  postYouth: boolean("post_youth").notNull().default(true),
+  expiresAt: date("expires_at").notNull(),
+  hidden: boolean("hidden").notNull().default(true),
 });

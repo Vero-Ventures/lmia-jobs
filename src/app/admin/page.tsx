@@ -1,3 +1,7 @@
+"use client";
+
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -5,6 +9,12 @@ import Link from "next/link";
 import { BaseLinks } from "@/app/admin/dashboard/lib/constants";
 
 export default function Component() {
+  const { data: session, isPending } = authClient.useSession();
+
+  if (session && !isPending) {
+    redirect("/admin/dashboard");
+  }
+
   return (
     <div>
       <Navbar links={BaseLinks} />

@@ -28,14 +28,14 @@ export default async function Page({
 }: {
   params: Promise<{ jobsiteId: string }>;
   searchParams: Promise<{
-    query?: string;
+    jobTitle?: string;
     jobType?: string;
     location?: string;
     jobPostingId?: string;
   }>;
 }) {
   const { jobsiteId } = await params;
-  const { jobType, location, query } = await searchParams;
+  const { jobType, location, jobTitle } = await searchParams;
 
   const jobSite = JOB_SITES.find((jobSite) => jobSite.id === jobsiteId);
 
@@ -44,10 +44,10 @@ export default async function Page({
   }
 
   const jobPostings = await selectAllJobPostings({
+    jobBoard: jobSite.id,
+    jobTitle: jobTitle === undefined ? "" : jobTitle,
     location: location === "All" ? "" : location,
     jobType: jobType === "All" ? "" : jobType,
-    query: query === undefined ? "" : query,
-    jobBoard: jobSite.id,
   });
 
   return (
@@ -58,7 +58,7 @@ export default async function Page({
       <main className="flex-1">
         <div className="container mx-auto space-y-4 pt-4 text-primary">
           <Form action={`/${jobSite.id}`} className="flex gap-2">
-            <Input name="query" placeholder="Search Jobs..." />
+            <Input name="jobTitle" placeholder="Search Jobs..." />
             <Input
               type="hidden"
               value={jobType}

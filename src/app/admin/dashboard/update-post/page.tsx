@@ -20,13 +20,12 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { handleJobPost, getJobPost } from "@/actions/handle-job-posts";
+import { updateJobPost, getJobPost } from "@/actions/handle-job-posts";
 
 export default function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    create?: boolean;
     postId?: string;
     email?: string;
   }>;
@@ -42,17 +41,17 @@ export default function Page({
 
   const [formValues, setFormValues] = useState({
     jobTitle: "",
-    hiringOrganization: "",
-    employmentType: "",
-    addressRegion: "",
-    addressLocality: "",
-    streetAddress: "",
-    compTimeUnit: "",
-    minCompValue: "",
-    maxCompValue: "",
-    workHours: "",
+    organizationName: "",
+    region: "",
+    city: "",
+    address: "",
     startTime: new Date().toISOString().split("T")[0],
     vacancies: "",
+    employmentType: "",
+    workHours: "",
+    paymentType: "",
+    minPayValue: "",
+    maxPayValue: "",
     description: "",
     language: "",
     postAsylum: false,
@@ -68,6 +67,8 @@ export default function Page({
   const [showPostingError, setShowPostingError] = useState(false);
   const [showPostingSuccess, setShowPostingSuccess] = useState(false);
 
+  const [maxBoards, setMaxBoards] = useState(0);
+
   const handleValueChange = (
     e:
       | React.ChangeEvent<
@@ -78,8 +79,28 @@ export default function Page({
       | undefined,
     fieldName: string | null = null
   ) => {
-    if (typeof e === "string" || typeof e === "boolean") {
+    if (typeof e === "string") {
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
+    } else if (typeof e === "string" || typeof e === "boolean") {
+      let boards = 0;
+
+      const jobBoards = [
+        formValues.postAsylum,
+        formValues.postDisabled,
+        formValues.postIndigenous,
+        formValues.postNewcomers,
+        formValues.postYouth,
+      ];
+
+      for (const board of jobBoards) {
+        if (board) {
+          boards += 1;
+        }
+      }
+
+      if ((boards < maxBoards && e) || !e) {
+        setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
+      }
     } else if (e) {
       const { name, value } = e.target;
       setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
@@ -88,45 +109,45 @@ export default function Page({
 
   useEffect(() => {
     const getPostData = async () => {
-      const { postId, email, create } = await searchParams;
+      const { postId, email } = await searchParams;
 
-      if ((!email || !postId) && !create) {
+      if (!email || !postId) {
         redirect("/admin/dashboard");
-      } else if (email && postId) {
+      } else {
         setLoadingPostData(true);
 
         const [result, jobPosting] = await getJobPost(postId, email);
 
-        if (result) {
+        if (result && jobPosting) {
           setFormValues({
-            jobTitle: jobPosting!.jobTitle,
-            hiringOrganization: jobPosting!.hiringOrganization,
-            employmentType: jobPosting!.employmentType,
-            addressRegion: jobPosting!.addressRegion,
-            addressLocality: jobPosting!.addressLocality,
-            streetAddress: jobPosting!.streetAddress
-              ? jobPosting!.streetAddress!
+            jobTitle: jobPosting.jobTitle,
+            organizationName: jobPosting.organizationName,
+            region: jobPosting.region,
+            city: jobPosting.city,
+            address: jobPosting.address ? jobPosting.address! : "",
+            startTime: jobPosting.startTime,
+            vacancies: jobPosting.vacancies
+              ? String(jobPosting.vacancies!)
               : "",
-            compTimeUnit: jobPosting!.compTimeUnit,
-            minCompValue: String(jobPosting!.minCompValue),
-            maxCompValue: jobPosting!.maxCompValue
-              ? String(jobPosting!.maxCompValue!)
+            employmentType: jobPosting.employmentType,
+            workHours: jobPosting.workHours
+              ? String(jobPosting.workHours!)
               : "",
-            workHours: jobPosting!.workHours
-              ? String(jobPosting!.workHours!)
+            paymentType: jobPosting.paymentType,
+            minPayValue: String(jobPosting.maxPayValue),
+            maxPayValue: jobPosting.maxPayValue
+              ? String(jobPosting.maxPayValue!)
               : "",
-            startTime: jobPosting!.startTime,
-            vacancies: jobPosting!.vacancies
-              ? String(jobPosting!.vacancies!)
-              : "",
-            description: jobPosting!.description,
-            language: jobPosting!.language ? jobPosting!.language! : "",
-            postAsylum: jobPosting!.postAsylum,
-            postDisabled: jobPosting!.postDisabled,
-            postIndigenous: jobPosting!.postIndigenous,
-            postNewcomers: jobPosting!.postNewcomers,
-            postYouth: jobPosting!.postYouth,
+            description: jobPosting.description,
+            language: jobPosting.language ? jobPosting!.language! : "",
+            postAsylum: jobPosting.postAsylum,
+            postDisabled: jobPosting.postDisabled,
+            postIndigenous: jobPosting.postIndigenous,
+            postNewcomers: jobPosting.postNewcomers,
+            postYouth: jobPosting.postYouth,
           });
+
+          setMaxBoards(jobPosting.maxBoards);
         } else {
           redirect("/admin/dashboard");
         }
@@ -138,26 +159,22 @@ export default function Page({
     getPostData();
   }, [session, searchParams]);
 
-  const submitForm = async () => {
+  const submitPostForm = async () => {
     setSubmittingPost(true);
     setShowPostingError(false);
     setShowNoBoardsSelected(false);
 
-    const { postId, email, create } = await searchParams;
+    const { postId, email } = await searchParams;
 
-    let existingPostId = null;
-    let userEmail = null;
-
-    if (!create && postId && email) {
-      existingPostId = postId;
-      userEmail = email;
+    if (!postId || !email) {
+      redirect("/admin/dashboard");
     }
 
-    const result = await handleJobPost(
+    const result = await updateJobPost(
       formValues,
       postToNoBoards,
-      existingPostId,
-      userEmail
+      postId,
+      email
     );
 
     if (result === "no boards") {
@@ -181,7 +198,7 @@ export default function Page({
       <Navbar links={SessionLinks} />
       <div
         className={`m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 bg-white p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
-        <Form className="flex flex-col" action={submitForm}>
+        <Form className="flex flex-col" action={submitPostForm}>
           <Button className="w-10 self-end justify-self-end bg-white">
             <XCircle className="min-h-8 min-w-8 bg-white text-black" />
           </Button>
@@ -205,8 +222,8 @@ export default function Page({
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
-              name="hiringOrganization"
-              value={formValues.hiringOrganization}
+              name="organizationName"
+              value={formValues.organizationName}
               onChange={handleValueChange}
               required
             />
@@ -215,14 +232,12 @@ export default function Page({
           <div className="mt-4 flex flex-col sm:flex-row sm:justify-evenly lg:px-8">
             <div className="mx-auto mt-2 flex flex-row md:mx-0">
               <label className="p-2 font-semibold mb:mr-1 mb:mt-2.5 mb:block mb:text-lg">
-                Province
+                Region
               </label>
               <div className="flex flex-col">
                 <Select
-                  value={formValues.addressRegion}
-                  onValueChange={(value) =>
-                    handleValueChange(value, "addressRegion")
-                  }
+                  value={formValues.region}
+                  onValueChange={(value) => handleValueChange(value, "region")}
                   required>
                   <SelectTrigger className="ml-4 min-w-32 border-2 border-gray-500 text-base font-semibold mb:ml-2 mb:mt-3 mb:min-w-48 mb:text-lg sm:min-w-32 md:min-w-40">
                     <SelectValue placeholder="Select" />
@@ -242,7 +257,7 @@ export default function Page({
                 <Input
                   className="mx-auto h-1 w-0 p-0 opacity-0"
                   required
-                  value={formValues.addressRegion}
+                  value={formValues.region}
                   onChange={handleValueChange}
                 />
               </div>
@@ -255,8 +270,8 @@ export default function Page({
               <Input
                 className="w-full border-2 border-gray-500 sm:mt-3 md:text-base"
                 type="text"
-                name="addressLocality"
-                value={formValues.addressLocality}
+                name="city"
+                value={formValues.city}
                 onChange={handleValueChange}
                 required
               />
@@ -270,8 +285,8 @@ export default function Page({
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
-              name="streetAddress"
-              value={formValues.streetAddress}
+              name="address"
+              value={formValues.address}
               onChange={handleValueChange}
             />
           </div>
@@ -364,9 +379,9 @@ export default function Page({
               </label>
               <div className="flex flex-col">
                 <Select
-                  value={formValues.compTimeUnit}
+                  value={formValues.paymentType}
                   onValueChange={(value) =>
-                    handleValueChange(value, "compTimeUnit")
+                    handleValueChange(value, "paymentType")
                   }
                   required>
                   <SelectTrigger className="mx-auto w-40 border-2 border-gray-500 text-base mb:w-48 mb:text-lg mb:font-semibold sm:mx-auto sm:w-40 md:w-48">
@@ -388,7 +403,7 @@ export default function Page({
                 <Input
                   className="mx-auto h-1 w-0 p-0 opacity-0"
                   required
-                  value={formValues.compTimeUnit}
+                  value={formValues.paymentType}
                   onChange={handleValueChange}
                 />
               </div>
@@ -402,8 +417,8 @@ export default function Page({
                 <Input
                   className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
-                  name="minCompValue"
-                  value={formValues.minCompValue}
+                  name="minPayValue"
+                  value={formValues.minPayValue}
                   onChange={handleValueChange}
                   placeholder=""
                   required
@@ -418,8 +433,8 @@ export default function Page({
                 <Input
                   className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
-                  name="maxCompValue"
-                  value={formValues.maxCompValue}
+                  name="maxPayValue"
+                  value={formValues.maxPayValue}
                   onChange={handleValueChange}
                   placeholder=""
                 />
@@ -462,24 +477,16 @@ export default function Page({
             </Select>
           </div>
 
-          <div className="mt-2 flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-evenly md:p-0">
-            <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Asylum Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Asylum"
-                onCheckedChange={() =>
-                  handleValueChange(!formValues.postAsylum, "postAsylum")
-                }
-                checked={formValues.postAsylum}
-              />
-            </div>
+          <div className="mb-2 mt-6 flex flex-col md:mt-10">
+            <label className="text-center text-xl font-semibold mb:text-2xl">
+              Max Boards: {maxBoards}
+            </label>
+          </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Disablility Board
+          <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
+            <div className="mt-2 flex flex-row md:flex-col">
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Accessible Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -491,9 +498,23 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Indigenous Board
+            <div className="mt-2 flex flex-row md:flex-col">
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Asylum Job Board
+              </label>
+              <Checkbox
+                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                name="Asylum"
+                onCheckedChange={() =>
+                  handleValueChange(!formValues.postAsylum, "postAsylum")
+                }
+                checked={formValues.postAsylum}
+              />
+            </div>
+
+            <div className="mt-2 flex flex-row md:flex-col">
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Indigenous Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -508,9 +529,9 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Newcomers Board
+            <div className="mt-2 flex flex-row md:flex-col">
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Newcomers Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -522,9 +543,9 @@ export default function Page({
               />
             </div>
 
-            <div className="mt-4 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-48 md:w-24">
-                Youth Board
+            <div className="mt-2 flex flex-row md:flex-col">
+              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                Youth Job Board
               </label>
               <Checkbox
                 className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
@@ -554,7 +575,7 @@ export default function Page({
 
           <div className={showPostingSuccess ? "mx-auto mt-6 w-fit" : "hidden"}>
             <p className="text-center text-xl font-semibold text-blue-600">
-              Post Created <br /> Successfully
+              Post Updated <br /> Successfully
             </p>
           </div>
 

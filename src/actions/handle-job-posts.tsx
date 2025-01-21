@@ -7,19 +7,19 @@ import { jobPostings } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import type { JobPosting } from "@/app/lib/types";
 
-type jobPostForm = {
+export type JobPostForm = {
   jobTitle: string;
-  hiringOrganization: string;
+  organizationName: string;
+  region: string;
+  city: string;
+  address: string | null;
+  startTime: string;
+  vacancies: string | null;
   employmentType: string;
-  addressRegion: string;
-  addressLocality: string;
-  streetAddress: string | null;
-  compTimeUnit: string;
-  minCompValue: string | number;
-  maxCompValue: string | number | null;
-  workHours: string | number | null;
-  startTime: string | Date;
-  vacancies: string | number | null;
+  workHours: string | null;
+  paymentType: string;
+  minPayValue: string;
+  maxPayValue: string | null;
   description: string;
   language: string;
   postAsylum: boolean;
@@ -29,11 +29,71 @@ type jobPostForm = {
   postYouth: boolean;
 };
 
-export async function handleJobPost(
-  formData: jobPostForm,
+export async function createNewPost(
+  chargeId: string,
+  numBoards: number,
+  numTime: number,
+  userEmail: string
+): Promise<string> {
+  try {
+    const expireryDate = new Date();
+
+    expireryDate.setMonth(new Date().getMonth() + numTime);
+
+    const values = {
+      stripeChargeId: chargeId,
+      jobTitle: "New Post - " + new Date().toISOString().split("T")[0],
+      organizationName: "Organization Name",
+      region: "Region",
+      city: "City",
+      address: null,
+      startTime: new Date().toISOString().split("T")[0],
+      vacancies: null,
+      employmentType: "Full Time",
+      workHours: null,
+      paymentType: "Salary",
+      minPayValue: 0,
+      maxPayValue: null,
+      description: "Description",
+      language: "English",
+      postAsylum: false,
+      postDisabled: false,
+      postIndigenous: false,
+      postNewcomers: false,
+      postYouth: false,
+      email: userEmail,
+      expiresAt: expireryDate.toISOString().split("T")[0],
+      maxBoards: numBoards,
+    };
+
+    const existingPost = await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(
+          eq(jobPostings.email, userEmail),
+          eq(jobPostings.stripeChargeId, chargeId)
+        )
+      )
+      .then((res) => res[0]);
+
+    if (!existingPost) {
+      await db.insert(jobPostings).values(values);
+      return "refresh";
+    }
+
+    return "success";
+  } catch (error) {
+    console.error(error);
+    return "error";
+  }
+}
+
+export async function updateJobPost(
+  formData: JobPostForm,
   noBoards: boolean,
-  postId: string | null,
-  userEmail: string | null
+  postId: string,
+  userEmail: string
 ): Promise<string> {
   try {
     if (
@@ -47,10 +107,6 @@ export async function handleJobPost(
       return "no boards";
     }
 
-    formData.startTime = new Date(formData.startTime);
-
-    const datePosted = new Date().toISOString();
-
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -61,41 +117,34 @@ export async function handleJobPost(
     } else {
       const postData = {
         ...formData,
-        streetAddress:
-          formData.streetAddress === "" ? null : formData.streetAddress,
-        language: formData.language === "" ? null : formData.language,
-        maxCompValue:
-          formData.maxCompValue === ""
-            ? null
-            : Math.ceil(Number(formData.maxCompValue)),
-        workHours:
-          formData.workHours === ""
-            ? null
-            : Math.ceil(Number(formData.workHours)),
+        address: formData.address === "" ? null : formData.address,
+        startTime: formData.startTime,
         vacancies:
           formData.vacancies === ""
             ? null
             : Math.ceil(Number(formData.vacancies)),
-        minCompValue: Math.ceil(Number(formData.minCompValue)),
-        startTime: formData.startTime.toISOString().split("T")[0],
-        email: session.user.email,
-        datePosted: datePosted,
-        validThrough: new Date().toISOString().split("T")[0],
+        workHours:
+          formData.workHours === ""
+            ? null
+            : Math.ceil(Number(formData.workHours)),
+        minPayValue: Math.ceil(Number(formData.minPayValue)),
+        maxPayValue:
+          formData.maxPayValue === ""
+            ? null
+            : Math.ceil(Number(formData.maxPayValue)),
+        language: formData.language === "" ? null : formData.language,
+        hidden: false,
       };
 
-      if (postId && userEmail) {
-        await db
-          .update(jobPostings)
-          .set(postData)
-          .where(
-            and(
-              eq(jobPostings.id, Number(postId)),
-              eq(jobPostings.email, userEmail)
-            )
-          );
-      } else {
-        await db.insert(jobPostings).values(postData);
-      }
+      await db
+        .update(jobPostings)
+        .set(postData)
+        .where(
+          and(
+            eq(jobPostings.id, Number(postId)),
+            eq(jobPostings.email, userEmail)
+          )
+        );
 
       return "success";
     }
@@ -129,9 +178,15 @@ export async function getJobPost(
   }
 }
 
-export async function deleteJobPost(postId: string): Promise<string> {
+export async function changePostVisibility(
+  postId: string,
+  hidePost: boolean
+): Promise<string> {
   try {
-    await db.delete(jobPostings).where(eq(jobPostings.id, Number(postId)));
+    await db
+      .update(jobPostings)
+      .set({ hidden: hidePost })
+      .where(eq(jobPostings.id, Number(postId)));
     return "success";
   } catch (error) {
     console.error(error);

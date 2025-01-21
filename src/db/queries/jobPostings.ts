@@ -1,61 +1,59 @@
-import { and, eq } from "drizzle-orm";
 import { db } from "..";
-import { jobPostings } from "../schema";
+import { jobPostings } from "@/db/schema";
 import type { JobPosting } from "@/app/lib/types";
 
 export async function selectAllJobPostings({
+  jobBoard,
+  email,
+  jobTitle,
   location,
   jobType,
-  query,
-  email,
-  jobBoard,
 }: {
+  jobBoard?: string;
+  email?: string;
+  jobTitle?: string;
   jobType?: string;
   location?: string;
-  query?: string;
-  email?: string;
-  jobBoard?: string;
 }) {
-  let postings;
-  if (email) {
-    postings = await db
-      .select()
-      .from(jobPostings)
-      .where(eq(jobPostings.email, email));
-  } else {
-    if (location && jobType) {
-      postings = await db
-        .select()
-        .from(jobPostings)
-        .where(
-          and(
-            eq(jobPostings.addressRegion, location),
-            eq(jobPostings.employmentType, jobType)
-          )
-        );
-    } else if (location) {
-      postings = await db
-        .select()
-        .from(jobPostings)
-        .where(eq(jobPostings.addressRegion, location));
-    } else if (jobType) {
-      postings = await db
-        .select()
-        .from(jobPostings)
-        .where(eq(jobPostings.employmentType, jobType));
-    } else {
-      postings = await db.select().from(jobPostings);
-    }
-  }
+  let postings = await db.select().from(jobPostings);
 
-  if (query) {
-    postings = postings!.filter((posting) =>
-      posting.jobTitle.toLowerCase().includes(query.toLowerCase())
+  if (email) {
+    postings = postings!.filter(
+      (posting: { email: string }) => posting.email === email
+    );
+  } else {
+    if (location) {
+      postings = postings!.filter(
+        (posting: { region: string }) => posting.region === location
+      );
+    }
+    if (jobType) {
+      postings = postings!.filter(
+        (posting: { employmentType: string }) =>
+          posting.employmentType === jobType
+      );
+    }
+    if (jobBoard) {
+      postings = filterPostingsByBoard(postings, jobBoard);
+    }
+
+    postings = postings!.filter(
+      (posting: { hidden: boolean }) => !posting.hidden
+    );
+
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    postings = postings!.filter(
+      (posting: { expiresAt: string }) =>
+        new Date(posting.expiresAt) > currentDate
     );
   }
 
-  if (jobBoard) {
-    postings = filterPostingsByBoard(postings, jobBoard);
+  if (jobTitle) {
+    postings = postings!.filter((posting) =>
+      posting.jobTitle.toLowerCase().includes(jobTitle.toLowerCase())
+    );
   }
 
   return postings;
@@ -67,7 +65,7 @@ function filterPostingsByBoard(postings: JobPosting[], jobBoard: string) {
       (posting: { postAsylum: boolean }) => posting.postAsylum
     );
   }
-  if (jobBoard === "disability-job-board") {
+  if (jobBoard === "accessible-job-board") {
     postings = postings!.filter(
       (posting: { postDisabled: boolean }) => posting.postDisabled
     );

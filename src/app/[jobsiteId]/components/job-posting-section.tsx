@@ -16,6 +16,9 @@ export default function JobPostingSection({
     jobPostings[0]
   );
 
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,7 +39,10 @@ export default function JobPostingSection({
         </div>
       ) : jobPostings.length > 0 ? (
         <div className="flex gap-4">
-          <div className="w-5/12 space-y-8 sm:w-4/12">
+          <div className="mt-2 flex w-5/12 flex-col space-y-8 sm:w-4/12">
+            <h1 className="absolute -translate-y-2 translate-x-2 text-xl font-semibold">
+              Results: {jobPostings.length}
+            </h1>
             {jobPostings.map((jobPosting) => {
               return (
                 <JobListCard

@@ -11,14 +11,15 @@ import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import DeletePost from "@/app/admin/dashboard/delete-post/delete-handler";
-import { createStripeUser } from "@/actions/stripe";
+import HidePost from "@/app/admin/dashboard/hide-post/hide-post";
+import { createStripeUser } from "@/actions/stripe/create-user";
+import { checkUserPurchases } from "@/actions/stripe/check-purchases";
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    query?: string;
+    jobTitle?: string;
     postId?: string;
   }>;
 }) {
@@ -30,19 +31,23 @@ export default async function Page({
     redirect("/admin");
   } else {
     await createStripeUser(session.user.email);
+    const result = await checkUserPurchases(session.user.email);
+    if (result === "refresh") {
+      redirect("/admin/dashboard");
+    }
   }
 
-  const { query, postId } = await searchParams;
+  const { jobTitle, postId } = await searchParams;
 
   const jobPostings = await selectAllJobPostings({
-    query: query === undefined ? "" : query,
     email: session!.user.email,
+    jobTitle: jobTitle === undefined ? "" : jobTitle,
   });
 
   return (
     <div>
       <Navbar links={SessionLinks} />
-      <div className="flex min-h-[90dvh] flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
+      <div className="flex min-h-[90dvh] flex-col justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-white">
         <main className="flex flex-col px-4 pb-4 md:flex-row md:items-center">
           <div className="mx-2 my-4 max-h-[90dvh] w-full overflow-y-scroll rounded-xl border-2 bg-white p-2 mb:p-6 md:w-3/5 lg:mx-6 xl:w-2/3">
             <header className="border-b p-4">
@@ -51,9 +56,9 @@ export default async function Page({
             <div className="container mx-auto space-y-4 pt-4 text-primary">
               <Form action={`/admin/dashboard`} className="flex gap-2">
                 <Input
-                  name="query"
+                  name="jobTitle"
                   placeholder="Search Jobs..."
-                  defaultValue={query}
+                  defaultValue={jobTitle}
                 />
                 <Button>Search</Button>
               </Form>
@@ -72,8 +77,8 @@ export default async function Page({
               <div className="flex">
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
                   <Link
-                    href={"/admin/dashboard/handle-post?create=true"}
-                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
+                    href={"/admin/pricing"}
+                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-900 lg:text-2xl">
                     Create A<br />
                     New Post
                   </Link>
@@ -84,25 +89,28 @@ export default async function Page({
                   {postId ? (
                     <Link
                       href={
-                        "/admin/dashboard/handle-post?postId=" +
+                        "/admin/dashboard/update-post?postId=" +
                         postId +
                         "&email=" +
                         session!.user.email
                       }
-                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                      Modify <br />
-                      Selected Post
+                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
+                      Set Post <br />
+                      Content
                     </Link>
                   ) : (
-                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-700 lg:text-2xl">
-                      Modify <br />
-                      Selected Post
+                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-600 lg:text-2xl">
+                      Set Post <br />
+                      Content
                     </p>
                   )}
                 </button>
               </div>
               <div className="flex">
-                <DeletePost postId={postId === undefined ? "" : postId} />
+                <HidePost
+                  postId={postId === undefined ? "" : postId}
+                  userEmail={session!.user.email}
+                />
               </div>
             </div>
             <a
