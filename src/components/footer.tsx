@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <footer className="w-full bg-gray-900 p-6 text-gray-50 md:py-6">
+    <footer className="w-full bg-primary p-6 text-primary-foreground md:py-6">
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm sm:grid">
         <div className="grid content-start justify-center gap-y-3 text-center text-base">
           <h3 className="text-xl font-semibold">Company</h3>
@@ -90,6 +90,14 @@ function Footer() {
           </Link>
         </div>
       </div>
+      <p className="mt-8 text-center">
+        © {new Date().getFullYear()} LMIA Jobs - Developed by{" "}
+        <a
+          href="https://www.veroventures.com/"
+          className="text-blue-600 hover:text-blue-700">
+          Vero Ventures
+        </a>
+      </p>
     </footer>
   );
 }
