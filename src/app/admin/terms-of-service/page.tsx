@@ -20,9 +20,11 @@ export default async function Page() {
     h2: (props: string[]) => (
       <p className="mb-2 mt-6 text-xl font-semibold" {...props} />
     ),
-    h3: (props: string[]) => <p className="text-center text-lg font-semibold" {...props} />,
+    h3: (props: string[]) => (
+      <p className="text-center text-lg font-semibold" {...props} />
+    ),
     p: (props: string[]) => <p className="leading-8" {...props} />,
-    hr: (props: string[]) => <hr className="mt-4 mb-2" {...props} />,
+    hr: (props: string[]) => <hr className="mb-2 mt-4" {...props} />,
   };
 
   return (
