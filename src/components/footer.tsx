@@ -9,7 +9,6 @@ function Footer() {
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm sm:grid">
         <div className="grid content-start justify-center gap-y-3 text-center text-base">
           <h3 className="text-xl font-semibold">Company</h3>
-          <Link href="/admin/about-us">About Us</Link>
           <Link href="/admin/contact-us">Contact Us</Link>
           <Link href="/admin/pricing">Pricing</Link>
         </div>
@@ -51,7 +50,6 @@ function Footer() {
         <div className="mx-auto flex w-fit flex-col items-start justify-center gap-4">
           <div className="grid content-start justify-center gap-y-4 text-base">
             <h3 className="text-xl font-semibold">Company</h3>
-            <Link href="/admin/about-us">About Us</Link>
             <Link href="/admin/contact-us">Contact Us</Link>
             <Link href="/admin/pricing">Pricing</Link>
           </div>
