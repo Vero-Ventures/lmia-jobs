@@ -20,6 +20,9 @@ export function JobListCard({
   handleChangeSelectedJobPosting: (jobPosting: JobPosting) => void;
   isSelected: boolean;
 }) {
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
   return (
     <Card
       onClick={() => handleChangeSelectedJobPosting(jobPosting)}
@@ -28,8 +31,9 @@ export function JobListCard({
         isSelected && "border-2 border-primary"
       )}>
       <CardHeader>
-        <CardTitle className="titleCase overflow-clip text-xl font-bold">
-          {jobPosting.jobTitle}
+        <CardTitle
+          className={`titleCase overflow-clip text-xl font-bold ${jobPosting.hidden ? "italic text-gray-600" : ""}`}>
+          {jobPosting.jobTitle} {jobPosting.hidden ? "- Hidden" : ""}
         </CardTitle>
         <CardDescription>{jobPosting.organizationName}</CardDescription>
       </CardHeader>
@@ -54,6 +58,9 @@ export function JobListCard({
           </div>
           <div className="mt-2 text-xs text-gray-400">
             Closes: {new Date(jobPosting.expiresAt).toDateString()}
+          </div>
+          <div className="mt-2 text-center font-semibold text-red-500">
+            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
           </div>
         </div>
       </CardFooter>

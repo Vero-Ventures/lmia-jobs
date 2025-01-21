@@ -16,6 +16,9 @@ export default function JobPostingSection({
     jobPostings[0]
   );
 
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();

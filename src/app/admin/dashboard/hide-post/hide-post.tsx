@@ -34,7 +34,7 @@ export default function HidePost({
     } else {
       setShowConfirmHide(false);
       setShowConfirmUnHide(false);
-      router.push("/admin/dashboard");
+      router.refresh();
     }
   };
 
