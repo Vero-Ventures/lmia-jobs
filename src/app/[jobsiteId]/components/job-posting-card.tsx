@@ -28,14 +28,16 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
           <CardTitle className={`titleCase text-2xl font-bold dark:text-white`}>
             {jobPosting.jobTitle}
           </CardTitle>
-          <CardDescription className="text-gray-500 dark:text-gray-400">
+          <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
             {jobPosting.organizationName}
           </CardDescription>
-          <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
-            Opened: {new Date(jobPosting.createdAt).toDateString()}
-          </div>
-          <div className="mt-1 text-right text-sm text-gray-500 dark:text-gray-400 lg:mt-0">
-            Closes: {new Date(jobPosting.expiresAt).toDateString()}
+          <div className="ml-auto flex w-fit flex-col">
+            <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
+              Opened: {new Date(jobPosting.createdAt).toDateString()}
+            </div>
+            <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
+              Closes: {new Date(jobPosting.expiresAt).toDateString()}
+            </div>
           </div>
         </div>
 

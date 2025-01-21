@@ -1,6 +1,6 @@
 export const JOB_SITES = [
   {
-    id: "disability-job-board",
+    id: "accessible-job-board",
     title: "Accessible Opportunities Job Board",
   },
   {

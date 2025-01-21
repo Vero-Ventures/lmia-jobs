@@ -24,7 +24,7 @@ export function JobListCard({
     <Card
       onClick={() => handleChangeSelectedJobPosting(jobPosting)}
       className={cn(
-        "cursor-pointer space-y-3 transition-colors",
+        "mt-2 cursor-pointer space-y-3 transition-colors",
         isSelected && "border-2 border-primary"
       )}>
       <CardHeader>
@@ -48,11 +48,13 @@ export function JobListCard({
         </div>
       </CardContent>
       <CardFooter>
-        <div className="text-xs text-gray-400">
-          Opened: {new Date(jobPosting.createdAt).toDateString()}
-        </div>
-        <div className="text-xs text-gray-400">
-          Closes: {new Date(jobPosting.expiresAt).toDateString()}
+        <div className="flex flex-col">
+          <div className="text-xs text-gray-400">
+            Opened: {new Date(jobPosting.createdAt).toDateString()}
+          </div>
+          <div className="mt-2 text-xs text-gray-400">
+            Closes: {new Date(jobPosting.expiresAt).toDateString()}
+          </div>
         </div>
       </CardFooter>
     </Card>

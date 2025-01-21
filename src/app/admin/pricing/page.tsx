@@ -60,6 +60,8 @@ export default function Page() {
                 onChange={(e) => {
                   if (Number(e.target.value) > 5) {
                     setPostBoards(5);
+                  } else if (Number(e.target.value) < 1) {
+                    setPostBoards(1);
                   } else {
                     setPostBoards(Number(e.target.value));
                   }
@@ -76,6 +78,8 @@ export default function Page() {
                 onChange={(e) => {
                   if (Number(e.target.value) > 12) {
                     setPostTime(12);
+                  } else if (Number(e.target.value) < 1) {
+                    setPostTime(1);
                   } else {
                     setPostTime(Number(e.target.value));
                   }

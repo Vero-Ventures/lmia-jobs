@@ -134,6 +134,7 @@ const data = [
         postYouth: jp.postYouth,
         email: jp.email,
         expiresAt: jp.expiresAt,
+        hidden: false,
       })
     )
   );

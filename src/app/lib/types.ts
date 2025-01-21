@@ -1,5 +1,6 @@
 export type JobPosting = {
   id: number;
+  stripeChargeId: string;
   jobTitle: string;
   organizationName: string;
   region: string;

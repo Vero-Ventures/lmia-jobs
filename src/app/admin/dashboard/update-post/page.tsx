@@ -575,7 +575,7 @@ export default function Page({
 
           <div className={showPostingSuccess ? "mx-auto mt-6 w-fit" : "hidden"}>
             <p className="text-center text-xl font-semibold text-blue-600">
-              Post Created <br /> Successfully
+              Post Updated <br /> Successfully
             </p>
           </div>
 

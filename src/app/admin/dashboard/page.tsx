@@ -19,7 +19,7 @@ export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    query?: string;
+    jobTitle?: string;
     postId?: string;
   }>;
 }) {
@@ -37,11 +37,11 @@ export default async function Page({
     }
   }
 
-  const { query, postId } = await searchParams;
+  const { jobTitle, postId } = await searchParams;
 
   const jobPostings = await selectAllJobPostings({
-    query: query === undefined ? "" : query,
     email: session!.user.email,
+    jobTitle: jobTitle === undefined ? "" : jobTitle,
   });
 
   return (
@@ -56,9 +56,9 @@ export default async function Page({
             <div className="container mx-auto space-y-4 pt-4 text-primary">
               <Form action={`/admin/dashboard`} className="flex gap-2">
                 <Input
-                  name="query"
+                  name="jobTitle"
                   placeholder="Search Jobs..."
-                  defaultValue={query}
+                  defaultValue={jobTitle}
                 />
                 <Button>Search</Button>
               </Form>
