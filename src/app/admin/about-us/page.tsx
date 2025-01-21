@@ -15,9 +15,9 @@ export default async function Page() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
+    <div className="flex min-h-dvh flex-col">
       <Navbar links={session ? SessionLinks : BaseLinks} />
-      <div className="mx-auto my-6 w-3/4 flex-grow rounded-lg border-4 border-gray-400 border-opacity-60 bg-white p-4 mb:p-8 sm:my-8 lg:w-2/3">
+      <div className="rounded-lgp-4 mx-auto my-6 w-3/4 flex-grow mb:p-8 sm:my-8 lg:w-2/3">
         <AboutUs components={components} />
       </div>
       <Footer />
