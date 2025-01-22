@@ -39,7 +39,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-gradient-to-br from-blue-50 via-blue-100 to-white">
+    <div className="flex min-h-dvh flex-col">
       <Navbar links={session ? SessionLinks : BaseLinks} />
       <div className="flex flex-grow flex-col justify-center md:flex-row md:justify-evenly md:px-6 md:py-8 lg:mx-auto lg:w-[1024px] xl:w-[1280px]">
         <div className="mx-auto mt-8 w-4/5 rounded-lg bg-white p-4 md:mx-0 md:mt-0 md:w-1/2 lg:w-1/2">
