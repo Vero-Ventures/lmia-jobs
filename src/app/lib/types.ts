@@ -1,5 +1,5 @@
 export type JobPosting = {
-  id: number;
+  id: string;
   jobTitle: string;
   organizationName: string;
   region: string;

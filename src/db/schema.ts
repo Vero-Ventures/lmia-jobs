@@ -80,7 +80,7 @@ export const verification = pgTable("verification", {
 });
 
 export const jobPostings = pgTable("job_postings", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
   jobTitle: text("job_title").notNull(),
   organizationName: text("organization_name").notNull(),
   region: text("region").notNull(),
@@ -105,6 +105,6 @@ export const jobPostings = pgTable("job_postings", {
   updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
-  paymentConfirmed: boolean("paymentConfirmed").notNull().default(true),
+  paymentConfirmed: boolean("paymentConfirmed").notNull(),
   expiresAt: date("expires_at").notNull(),
 });

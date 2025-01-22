@@ -108,7 +108,7 @@ const data = [
   },
 ];
 
-(async function () {
+export async function seed() {
   await Promise.all(
     data.map((jp) =>
       db.insert(jobPostings).values({
@@ -138,4 +138,4 @@ const data = [
     )
   );
   return "success";
-})().catch((err) => console.log(err.message));
+}

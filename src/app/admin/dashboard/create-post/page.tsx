@@ -25,12 +25,12 @@ import {
   getJobPost,
   createJobPost,
 } from "@/actions/handle-job-posts";
+import { createStripeCheckout } from "@/actions/stripe/create-checkout";
 
 export default function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    email?: string;
     postId?: string;
   }>;
 }) {
@@ -41,6 +41,7 @@ export default function Page({
   }
 
   const [loadingPostData, setLoadingPostData] = useState(true);
+  const [postUpdate, setPostUpdate] = useState(false);
   const [submittingPost, setSubmittingPost] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -65,12 +66,23 @@ export default function Page({
     postYouth: false,
   });
 
-  const [postTime, setPostTime] = useState(0);
+  const [postTime, setPostTime] = useState(1);
 
+  const updatePostTime = (newPostTime: number) => {
+    if (newPostTime < 0) {
+      setPostTime(1);
+    } else if (newPostTime > 12) {
+      setPostTime(12);
+    } else {
+      setPostTime(newPostTime);
+    }
+  };
   const [showNoBoardsSelected, setShowNoBoardsSelected] = useState(false);
 
   const [showPostingError, setShowPostingError] = useState(false);
   const [showPostingSuccess, setShowPostingSuccess] = useState(false);
+
+  const [selectedBoards, setSelectedBoards] = useState(0);
 
   const handleValueChange = (
     e:
@@ -83,6 +95,11 @@ export default function Page({
     fieldName: string | null = null
   ) => {
     if (typeof e === "string" || typeof e === "boolean") {
+      if (typeof e === "boolean") {
+        setShowNoBoardsSelected(false);
+        setSelectedBoards(selectedBoards + (e ? 1 : -1));
+      }
+
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
     } else if (e) {
       const { name, value } = e.target;
@@ -92,14 +109,16 @@ export default function Page({
 
   useEffect(() => {
     const getPostData = async () => {
-      const { postId, email } = await searchParams;
+      const { postId } = await searchParams;
 
-      if (!email) {
-        redirect("/admin/dashboard");
-      } else if (postId) {
+      if (postId) {
         setLoadingPostData(true);
+        setPostUpdate(true)
 
-        const [result, jobPosting] = await getJobPost(postId, email);
+        const [result, jobPosting] = await getJobPost(
+          postId,
+          session!.user.email
+        );
 
         if (result && jobPosting) {
           setFormValues({
@@ -134,6 +153,11 @@ export default function Page({
         }
       }
 
+      console.log(formValues.postAsylum)
+      console.log(formValues.postAsylum)
+      console.log(formValues.postAsylum)
+      console.log(formValues.postAsylum)
+      console.log(formValues.postAsylum)
       setLoadingPostData(false);
     };
 
@@ -145,36 +169,60 @@ export default function Page({
     setShowPostingError(false);
     setShowNoBoardsSelected(false);
 
-    const { postId, email } = await searchParams;
-
-    if (!postId || !email) {
-      redirect("/admin/dashboard");
-    }
-
-    setPostTime(6);
+    const { postId } = await searchParams;
 
     let result;
 
-    if (postId) {
-      result = await updateJobPost(formValues, postId, email);
-    } else {
-      result = await createJobPost(formValues, postTime, email);
-    }
+    if (!postId) {
+      if (selectedBoards === 0) {
+        setShowNoBoardsSelected(true);
+        setSubmittingPost(false);
+        return;
+      }
 
-    if (result === "no boards") {
-      setShowNoBoardsSelected(true);
+      const [creationResult, numBoards, newPostId] = await createJobPost(
+        formValues,
+        postTime,
+        session!.user.email
+      );
+
+      if (creationResult === "created") {
+        const checkoutResult = await createStripeCheckout(
+          session!.user.email,
+          numBoards,
+          postTime,
+          newPostId!
+        );
+
+        if (checkoutResult.result) {
+          redirect(checkoutResult.url);
+        } else {
+          result = "error";
+        }
+      } else {
+        result = creationResult;
+      }
+    } else {
+      const updateResult = await updateJobPost(
+        formValues,
+        postId,
+        session!.user.email
+      );
+
+      if (updateResult === "updated") {
+        setShowPostingSuccess(true);
+        setTimeout(() => {
+          redirect("/admin/dashboard");
+        }, 750);
+      } else {
+        result = updateResult;
+      }
     }
 
     if (result === "error") {
       setShowPostingError(true);
     }
 
-    if (result === "success") {
-      setShowPostingSuccess(true);
-      setTimeout(() => {
-        redirect("/admin/dashboard");
-      }, 750);
-    }
     setSubmittingPost(false);
   };
 
@@ -462,80 +510,111 @@ export default function Page({
             </Select>
           </div>
 
-          <div className="flex flex-col"></div>
+          <div className={`mt-4 flex flex-col ${postUpdate ? 'hidden': ''}`}>
+            <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
+              <div className="mt-2 flex flex-row md:flex-col">
+                <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                  Accessible Job Board
+                </label>
+                <Checkbox
+                  className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                  name="Disabled"
+                  onCheckedChange={() =>
+                    handleValueChange(!formValues.postDisabled, "postDisabled")
+                  }
+                  checked={formValues.postDisabled}
+                />
+              </div>
 
-          <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
-            <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
-                Accessible Job Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Disabled"
-                onCheckedChange={() =>
-                  handleValueChange(!formValues.postDisabled, "postDisabled")
-                }
-                checked={formValues.postDisabled}
-              />
+              <div className="mt-2 flex flex-row md:flex-col">
+                <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                  Asylum Job Board
+                </label>
+                <Checkbox
+                  className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                  name="Asylum"
+                  onCheckedChange={() =>
+                    handleValueChange(!formValues.postAsylum, "postAsylum")
+                  }
+                  checked={formValues.postAsylum}
+                />
+              </div>
+
+              <div className="mt-2 flex flex-row md:flex-col">
+                <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                  Indigenous Job Board
+                </label>
+                <Checkbox
+                  className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                  name="Indigenous"
+                  onCheckedChange={() =>
+                    handleValueChange(
+                      !formValues.postIndigenous,
+                      "postIndigenous"
+                    )
+                  }
+                  checked={formValues.postIndigenous}
+                />
+              </div>
+
+              <div className="mt-2 flex flex-row md:flex-col">
+                <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                  Newcomers Job Board
+                </label>
+                <Checkbox
+                  className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                  name="Newcomers"
+                  onCheckedChange={() =>
+                    handleValueChange(
+                      !formValues.postNewcomers,
+                      "postNewcomers"
+                    )
+                  }
+                  checked={formValues.postNewcomers}
+                />
+              </div>
+
+              <div className="mt-2 flex flex-row md:flex-col">
+                <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+                  Youth Job Board
+                </label>
+                <Checkbox
+                  className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
+                  name="Youth"
+                  onCheckedChange={() =>
+                    handleValueChange(!formValues.postYouth, "postYouth")
+                  }
+                  checked={formValues.postYouth}
+                />
+              </div>
             </div>
+            <div className="mt-4 flex flex-col md:flex-row md:justify-evenly">
+              <div className="flex flex-col">
+                <label className="mt-1 p-2 text-center font-semibold mb:text-lg">
+                  Months Posted
+                </label>
+                <Input
+                  className="mx-auto w-48 border-2 border-gray-500 text-center text-lg font-semibold mb:text-lg sm:font-semibold md:w-48 md:text-lg"
+                  type="number"
+                  name="workHours"
+                  value={postTime}
+                  onChange={(e) => updatePostTime(Number(e.target.value))}
+                  placeholder=""
+                />
+              </div>
 
-            <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
-                Asylum Job Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Asylum"
-                onCheckedChange={() =>
-                  handleValueChange(!formValues.postAsylum, "postAsylum")
-                }
-                checked={formValues.postAsylum}
-              />
-            </div>
-
-            <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
-                Indigenous Job Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Indigenous"
-                onCheckedChange={() =>
-                  handleValueChange(
-                    !formValues.postIndigenous,
-                    "postIndigenous"
-                  )
-                }
-                checked={formValues.postIndigenous}
-              />
-            </div>
-
-            <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
-                Newcomers Job Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Newcomers"
-                onCheckedChange={() =>
-                  handleValueChange(!formValues.postNewcomers, "postNewcomers")
-                }
-                checked={formValues.postNewcomers}
-              />
-            </div>
-
-            <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
-                Youth Job Board
-              </label>
-              <Checkbox
-                className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
-                name="Youth"
-                onCheckedChange={() =>
-                  handleValueChange(!formValues.postYouth, "postYouth")
-                }
-                checked={formValues.postYouth}
-              />
+              <div className="flex flex-col">
+                <label className="mt-4 p-2 text-center text-lg font-semibold mb:text-xl md:mt-0 md:text-2xl">
+                  Total Price
+                </label>
+                <Input
+                  className="mx-auto mb-2 w-48 border-2 border-gray-500 text-center text-xl font-semibold italic text-gray-600 mb:text-xl sm:font-semibold md:mb-0 md:w-64 md:text-xl"
+                  type="text"
+                  name="workHours"
+                  value={"$" + selectedBoards * postTime * 5 + ".00"}
+                  readOnly
+                />
+              </div>
             </div>
           </div>
 

@@ -15,7 +15,8 @@ const stripe = new Stripe(
 export async function createStripeCheckout(
   userEmail: string,
   postBoards: number,
-  postTime: number
+  postTime: number,
+  postId: string
 ): Promise<{ result: boolean; url: string }> {
   try {
     const currentUser = await db
@@ -44,6 +45,7 @@ export async function createStripeCheckout(
           metadata: {
             boards: postBoards.toString(),
             time: postTime.toString(),
+            postId: postId,
           },
         },
         line_items: [
@@ -66,6 +68,7 @@ export async function createStripeCheckout(
                 metadata: {
                   boards: postBoards,
                   time: postTime,
+                  postId: postId,
                 },
               },
               unit_amount: postBoards * postTime * 500,
@@ -78,7 +81,6 @@ export async function createStripeCheckout(
       });
 
       if (checkoutSession.url) {
-        console.log(checkoutSession);
         return { result: true, url: checkoutSession.url };
       } else {
         console.error("Stripe Session Creation Failed.");
