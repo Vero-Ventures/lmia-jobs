@@ -51,7 +51,7 @@ export default async function Page({
           <div className="flex justify-between gap-4">
             <h1 className="text-xl font-bold text-primary">Your Postings</h1>
             <Button asChild>
-              <Link href={"/admin/pricing"}>Create Post</Link>
+              <Link href={"/admin/dashboard/create-post"}>Create Post</Link>
             </Button>
           </div>
           <div className="container mx-auto space-y-4 pt-4 text-primary">
