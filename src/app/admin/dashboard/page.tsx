@@ -11,9 +11,7 @@ import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-// import HidePost from "@/app/admin/dashboard/hide-post/hide-post";
 import { createStripeUser } from "@/actions/stripe/create-user";
-import { checkUserPurchases } from "@/actions/stripe/check-purchases";
 
 export default async function Page({
   searchParams,
@@ -31,10 +29,6 @@ export default async function Page({
     redirect("/admin");
   } else {
     await createStripeUser(session.user.email);
-    const result = await checkUserPurchases(session.user.email);
-    if (result === "refresh") {
-      redirect("/admin/dashboard");
-    }
   }
 
   const { jobTitle } = await searchParams;
@@ -98,12 +92,6 @@ export default async function Page({
                   </p>
                 )}
               </button>
-            </div>
-            <div className="flex">
-              <HidePost
-                postId={postId === undefined ? "" : postId}
-                userEmail={session!.user.email}
-              />
             </div>
           </div>
         </div> */}
