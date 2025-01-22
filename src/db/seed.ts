@@ -3,7 +3,6 @@ import { jobPostings } from "@/db/schema";
 
 const data = [
   {
-    stripeChargeId: "123",
     jobTitle: "Project Manager",
     organizationName: "Maple Project Management",
     region: "BC",
@@ -26,10 +25,10 @@ const data = [
     email: "careers@maplepm.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
   {
-    stripeChargeId: "456",
     jobTitle: "Software Engineer",
     organizationName: "Northern Tech Solutions",
     region: "ON",
@@ -52,10 +51,10 @@ const data = [
     email: "jobs@northerntech.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
   {
-    stripeChargeId: "ABC",
     jobTitle: "Customer Support Representative",
     organizationName: "West Coast Call Center",
     region: "AB",
@@ -78,10 +77,10 @@ const data = [
     email: "support@westcoastcall.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
   {
-    stripeChargeId: "DEF",
     jobTitle: "Graphic Designer",
     organizationName: "Creative Studios Inc.",
     region: "QC",
@@ -104,6 +103,7 @@ const data = [
     email: "design@creativestudios.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
 ];
@@ -112,7 +112,6 @@ const data = [
   await Promise.all(
     data.map((jp) =>
       db.insert(jobPostings).values({
-        stripeChargeId: jp.stripeChargeId,
         jobTitle: jp.jobTitle,
         organizationName: jp.organizationName,
         region: jp.region,
@@ -134,7 +133,7 @@ const data = [
         postYouth: jp.postYouth,
         email: jp.email,
         expiresAt: jp.expiresAt,
-        hidden: false,
+        paymentConfirmed: jp.paymentConfirmed,
       })
     )
   );

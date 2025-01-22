@@ -81,7 +81,6 @@ export const verification = pgTable("verification", {
 
 export const jobPostings = pgTable("job_postings", {
   id: serial("id").primaryKey(),
-  stripeChargeId: text("stripe_charge_id").notNull(),
   jobTitle: text("job_title").notNull(),
   organizationName: text("organization_name").notNull(),
   region: text("region").notNull(),
@@ -96,7 +95,6 @@ export const jobPostings = pgTable("job_postings", {
   maxPayValue: integer("max_pay_value"),
   description: text("description").notNull(),
   language: text("language"),
-  maxBoards: integer("max_boards").notNull().default(0),
   postAsylum: boolean("post_asylum").notNull(),
   postDisabled: boolean("post_disabled").notNull(),
   postIndigenous: boolean("post_indigenous").notNull(),
@@ -107,6 +105,6 @@ export const jobPostings = pgTable("job_postings", {
   updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
+  paymentConfirmed: boolean("paymentConfirmed").notNull().default(true),
   expiresAt: date("expires_at").notNull(),
-  hidden: boolean("hidden").notNull().default(true),
 });

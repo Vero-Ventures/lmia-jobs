@@ -29,19 +29,27 @@ export type JobPostForm = {
   postYouth: boolean;
 };
 
-export async function createNewPost(
-  chargeId: string,
-  numBoards: number,
-  numTime: number,
+export async function createJobPost(
+  formData: JobPostForm,
+  postTime: number,
   userEmail: string
 ): Promise<string> {
   try {
+    if (
+      !formData.postAsylum &&
+      !formData.postDisabled &&
+      !formData.postIndigenous &&
+      !formData.postNewcomers &&
+      !formData.postYouth
+    ) {
+      return "no boards";
+    }
+
     const expireryDate = new Date();
 
-    expireryDate.setMonth(new Date().getMonth() + numTime);
+    expireryDate.setMonth(new Date().getMonth() + postTime);
 
     const values = {
-      stripeChargeId: chargeId,
       jobTitle: "New Post - " + new Date().toISOString().split("T")[0],
       organizationName: "Organization Name",
       region: "Region",
@@ -63,24 +71,9 @@ export async function createNewPost(
       postYouth: false,
       email: userEmail,
       expiresAt: expireryDate.toISOString().split("T")[0],
-      maxBoards: numBoards,
     };
 
-    const existingPost = await db
-      .select()
-      .from(jobPostings)
-      .where(
-        and(
-          eq(jobPostings.email, userEmail),
-          eq(jobPostings.stripeChargeId, chargeId)
-        )
-      )
-      .then((res) => res[0]);
-
-    if (!existingPost) {
-      await db.insert(jobPostings).values(values);
-      return "refresh";
-    }
+    await db.insert(jobPostings).values(values);
 
     return "success";
   } catch (error) {
@@ -91,22 +84,10 @@ export async function createNewPost(
 
 export async function updateJobPost(
   formData: JobPostForm,
-  noBoards: boolean,
   postId: string,
   userEmail: string
 ): Promise<string> {
   try {
-    if (
-      !formData.postAsylum &&
-      !formData.postDisabled &&
-      !formData.postIndigenous &&
-      !formData.postNewcomers &&
-      !formData.postYouth &&
-      !noBoards
-    ) {
-      return "no boards";
-    }
-
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -133,7 +114,6 @@ export async function updateJobPost(
             ? null
             : Math.ceil(Number(formData.maxPayValue)),
         language: formData.language === "" ? null : formData.language,
-        hidden: false,
       };
 
       await db
@@ -175,21 +155,5 @@ export async function getJobPost(
   } catch (error) {
     console.error(error);
     return [false, null];
-  }
-}
-
-export async function changePostVisibility(
-  postId: string,
-  hidePost: boolean
-): Promise<string> {
-  try {
-    await db
-      .update(jobPostings)
-      .set({ hidden: hidePost })
-      .where(eq(jobPostings.id, Number(postId)));
-    return "success";
-  } catch (error) {
-    console.error(error);
-    return "error";
   }
 }

@@ -20,14 +20,18 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { updateJobPost, getJobPost } from "@/actions/handle-job-posts";
+import {
+  updateJobPost,
+  getJobPost,
+  createJobPost,
+} from "@/actions/handle-job-posts";
 
 export default function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    postId?: string;
     email?: string;
+    postId?: string;
   }>;
 }) {
   const { data: session, isPending } = authClient.useSession();
@@ -61,13 +65,12 @@ export default function Page({
     postYouth: false,
   });
 
+  const [postTime, setPostTime] = useState(0);
+
   const [showNoBoardsSelected, setShowNoBoardsSelected] = useState(false);
-  const [postToNoBoards, setPostToNoBoards] = useState(false);
 
   const [showPostingError, setShowPostingError] = useState(false);
   const [showPostingSuccess, setShowPostingSuccess] = useState(false);
-
-  const [maxBoards, setMaxBoards] = useState(0);
 
   const handleValueChange = (
     e:
@@ -79,28 +82,8 @@ export default function Page({
       | undefined,
     fieldName: string | null = null
   ) => {
-    if (typeof e === "string") {
+    if (typeof e === "string" || typeof e === "boolean") {
       setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
-    } else if (typeof e === "string" || typeof e === "boolean") {
-      let boards = 0;
-
-      const jobBoards = [
-        formValues.postAsylum,
-        formValues.postDisabled,
-        formValues.postIndigenous,
-        formValues.postNewcomers,
-        formValues.postYouth,
-      ];
-
-      for (const board of jobBoards) {
-        if (board) {
-          boards += 1;
-        }
-      }
-
-      if ((boards < maxBoards && e) || !e) {
-        setFormValues((prevValues) => ({ ...prevValues, [fieldName!]: e }));
-      }
     } else if (e) {
       const { name, value } = e.target;
       setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
@@ -111,9 +94,9 @@ export default function Page({
     const getPostData = async () => {
       const { postId, email } = await searchParams;
 
-      if (!email || !postId) {
+      if (!email) {
         redirect("/admin/dashboard");
-      } else {
+      } else if (postId) {
         setLoadingPostData(true);
 
         const [result, jobPosting] = await getJobPost(postId, email);
@@ -146,8 +129,6 @@ export default function Page({
             postNewcomers: jobPosting.postNewcomers,
             postYouth: jobPosting.postYouth,
           });
-
-          setMaxBoards(jobPosting.maxBoards);
         } else {
           redirect("/admin/dashboard");
         }
@@ -157,7 +138,7 @@ export default function Page({
     };
 
     getPostData();
-  }, [session, searchParams]);
+  }, [session]);
 
   const submitPostForm = async () => {
     setSubmittingPost(true);
@@ -170,20 +151,24 @@ export default function Page({
       redirect("/admin/dashboard");
     }
 
-    const result = await updateJobPost(
-      formValues,
-      postToNoBoards,
-      postId,
-      email
-    );
+    setPostTime(6);
+
+    let result;
+
+    if (postId) {
+      result = await updateJobPost(formValues, postId, email);
+    } else {
+      result = await createJobPost(formValues, postTime, email);
+    }
 
     if (result === "no boards") {
       setShowNoBoardsSelected(true);
-      setPostToNoBoards(true);
     }
+
     if (result === "error") {
       setShowPostingError(true);
     }
+
     if (result === "success") {
       setShowPostingSuccess(true);
       setTimeout(() => {
@@ -477,11 +462,7 @@ export default function Page({
             </Select>
           </div>
 
-          <div className="mb-2 mt-6 flex flex-col md:mt-10">
-            <label className="text-center text-xl font-semibold mb:text-2xl">
-              Max Boards: {maxBoards}
-            </label>
-          </div>
+          <div className="flex flex-col"></div>
 
           <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
             <div className="mt-2 flex flex-row md:flex-col">
@@ -561,8 +542,7 @@ export default function Page({
           <div
             className={showNoBoardsSelected ? "mx-auto mt-6 w-fit" : "hidden"}>
             <p className="text-center text-lg font-semibold text-red-500">
-              No Job Boards Are Selected <br />
-              Are You Sure?
+              No Job Boards Are Selected
             </p>
           </div>
 

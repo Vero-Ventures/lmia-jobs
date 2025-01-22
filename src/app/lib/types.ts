@@ -1,6 +1,5 @@
 export type JobPosting = {
   id: number;
-  stripeChargeId: string;
   jobTitle: string;
   organizationName: string;
   region: string;
@@ -15,7 +14,6 @@ export type JobPosting = {
   maxPayValue: number | null;
   description: string;
   language: string | null;
-  maxBoards: number;
   postAsylum: boolean;
   postDisabled: boolean;
   postIndigenous: boolean;
@@ -25,5 +23,5 @@ export type JobPosting = {
   createdAt: Date;
   updatedAt: Date;
   expiresAt: string;
-  hidden: boolean;
+  paymentConfirmed: boolean;
 };
