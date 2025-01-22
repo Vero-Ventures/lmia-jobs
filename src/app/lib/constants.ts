@@ -30,7 +30,9 @@ export const JOB_TYPES = [
     label: "Part Time",
     value: "Part Time",
   },
-];
+] as const;
+
+export const jobTypeLabels = ["Full Time", "Part Time"] as const;
 
 export const PROVINCES = [
   {
