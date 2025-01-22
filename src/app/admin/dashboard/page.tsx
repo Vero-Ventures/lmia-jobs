@@ -67,39 +67,6 @@ export default async function Page({
           <Separator className="mt-4" />
           <JobPostingSection jobPostings={jobPostings} />
         </div>
-        {/* <div className="mx-auto flex min-h-fit w-full flex-col justify-evenly justify-items-center p-2 md:w-2/5 lg:p-6 xl:w-1/3">
-          <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-x-4 rounded-xl border-2 border-green-200 bg-gradient-to-r from-green-50 via-green-100 to-green-50 p-4 sm:grid-cols-4 sm:grid-rows-1 md:h-1/2 md:grid-cols-2 md:grid-rows-2">
-            <div className="mb-2 mt-4 max-h-48 content-center">
-              <h1 className="mx-auto my-4 w-max text-xl font-semibold lg:text-3xl">
-                Manage <br />
-                Postings
-              </h1>
-            </div>
-            <div className="flex"></div>
-            <div className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
-              <button disabled={postId ? false : true}>
-                {postId ? (
-                  <Link
-                    href={
-                      "/admin/dashboard/update-post?postId=" +
-                      postId +
-                      "&email=" +
-                      session!.user.email
-                    }
-                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
-                    Set Post <br />
-                    Content
-                  </Link>
-                ) : (
-                  <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-600 lg:text-2xl">
-                    Set Post <br />
-                    Content
-                  </p>
-                )}
-              </button>
-            </div>
-          </div>
-        </div> */}
       </main>
       <Footer />
     </div>

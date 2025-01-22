@@ -81,6 +81,7 @@ export const verification = pgTable("verification", {
 
 export const jobPostings = pgTable("job_postings", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
+  email: text("email").notNull(),
   jobTitle: text("job_title").notNull(),
   organizationName: text("organization_name").notNull(),
   region: text("region").notNull(),
@@ -100,7 +101,7 @@ export const jobPostings = pgTable("job_postings", {
   postIndigenous: boolean("post_indigenous").notNull(),
   postNewcomers: boolean("post_newcomers").notNull(),
   postYouth: boolean("post_youth").notNull(),
-  email: text("email").notNull(),
+  hidden: boolean("hidden").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()

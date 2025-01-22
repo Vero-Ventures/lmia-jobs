@@ -161,3 +161,19 @@ export async function getJobPost(
     return [false, null];
   }
 }
+
+export async function editPostVisibility(
+  postId: string,
+  hidden: boolean
+): Promise<string> {
+  try {
+    await db
+      .update(jobPostings)
+      .set({ hidden })
+      .where(eq(jobPostings.id, postId));
+    return "success";
+  } catch (error) {
+    console.error(error);
+    return "error";
+  }
+}

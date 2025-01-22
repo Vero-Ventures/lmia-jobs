@@ -1,5 +1,6 @@
 export type JobPosting = {
   id: string;
+  email: string;
   jobTitle: string;
   organizationName: string;
   region: string;
@@ -19,7 +20,7 @@ export type JobPosting = {
   postIndigenous: boolean;
   postNewcomers: boolean;
   postYouth: boolean;
-  email: string;
+  hidden: boolean;
   createdAt: Date;
   updatedAt: Date;
   expiresAt: string;
