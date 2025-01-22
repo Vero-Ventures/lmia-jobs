@@ -9,7 +9,7 @@ function Navbar({ links }) {
   const router = useRouter();
   return (
     <header className="flex h-16 flex-col items-center bg-white px-4 sm:h-14 sm:flex-row lg:px-6">
-      <Link className="flex items-center justify-center" href="/admin">
+      <Link className="flex items-center justify-center" href="/admin/dashboard">
         <BriefcaseIcon className="h-6 w-6" />
         <span className="ml-2 font-semibold">LMIA Opportunities</span>
       </Link>
