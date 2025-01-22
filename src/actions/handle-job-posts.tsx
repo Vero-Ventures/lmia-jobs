@@ -76,6 +76,7 @@ export async function createJobPost(
       email: userEmail,
       expiresAt: expireryDate.toISOString().split("T")[0],
       paymentConfirmed: false,
+      hidden: true,
     };
 
     const result = await db
