@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { FilterIcon } from "lucide-react";
-import { JOB_SITES } from "../lib/constants";
+import { JOB_SITES } from "@/app/lib/constants";
 
 export async function generateMetadata({
   params,
