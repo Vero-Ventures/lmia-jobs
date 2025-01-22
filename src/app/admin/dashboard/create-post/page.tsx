@@ -113,7 +113,7 @@ export default function Page({
 
       if (postId) {
         setLoadingPostData(true);
-        setPostUpdate(true)
+        setPostUpdate(true);
 
         const [result, jobPosting] = await getJobPost(
           postId,
@@ -153,11 +153,11 @@ export default function Page({
         }
       }
 
-      console.log(formValues.postAsylum)
-      console.log(formValues.postAsylum)
-      console.log(formValues.postAsylum)
-      console.log(formValues.postAsylum)
-      console.log(formValues.postAsylum)
+      console.log(formValues.postAsylum);
+      console.log(formValues.postAsylum);
+      console.log(formValues.postAsylum);
+      console.log(formValues.postAsylum);
+      console.log(formValues.postAsylum);
       setLoadingPostData(false);
     };
 
@@ -510,7 +510,7 @@ export default function Page({
             </Select>
           </div>
 
-          <div className={`mt-4 flex flex-col ${postUpdate ? 'hidden': ''}`}>
+          <div className={`mt-4 flex flex-col ${postUpdate ? "hidden" : ""}`}>
             <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
               <div className="mt-2 flex flex-row md:flex-col">
                 <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
