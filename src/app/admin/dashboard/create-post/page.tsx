@@ -153,11 +153,6 @@ export default function Page({
         }
       }
 
-      console.log(formValues.postAsylum);
-      console.log(formValues.postAsylum);
-      console.log(formValues.postAsylum);
-      console.log(formValues.postAsylum);
-      console.log(formValues.postAsylum);
       setLoadingPostData(false);
     };
 

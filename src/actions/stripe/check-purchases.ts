@@ -58,7 +58,7 @@ export async function checkUserPurchases(userEmail: string): Promise<string> {
         if (purchasePost && !purchasePost.paymentConfirmed) {
           await db
             .update(jobPostings)
-            .set({ paymentConfirmed: true })
+            .set({ paymentConfirmed: true, hidden: false })
             .where(eq(jobPostings.id, purchasePost!.id));
 
           result = "refresh";
