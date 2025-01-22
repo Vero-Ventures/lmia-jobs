@@ -178,14 +178,14 @@ export async function getJobPost(
   }
 }
 
-export async function changePostVisibility(
-  postId: string,
-  hidePost: boolean
+export async function editPostVisibility(
+  postId: number,
+  hidden: boolean
 ): Promise<string> {
   try {
     await db
       .update(jobPostings)
-      .set({ hidden: hidePost })
+      .set({ hidden })
       .where(eq(jobPostings.id, Number(postId)));
     return "success";
   } catch (error) {
