@@ -3,35 +3,35 @@ import type { Browser, BrowserContext, Page } from "playwright-core";
 
 import chromium from "@sparticuz/chromium";
 
-import UserAgent from "user-agents";
+// import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-import { scrapeGovJobBank } from "../site-scrapers/job-bank";
+// import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
 
 export const runScraper = async () => {
+  let browser: Browser | undefined;
   try {
-    const [browser, _context, page] = await createChromiunm();
+    const [newBrowser, _context, page] = await createChromiunm();
+
+    browser = newBrowser;
 
     const pageHandler = new BrowserHandler(page);
 
-    await runSiteScrapers(pageHandler);
-    
-    try {
-    } catch (error) {
-      console.error("Start Scraper Error: " + error);
-      throw error;
-    } finally {
-      await browser.close();
-    }
+    await pageHandler.visitPage("https://www.facetofacegames.com/");
   } catch (error) {
     console.error("Create Scraper Error: " + error);
+  } finally {
+    if (browser) {
+      browser.close();
+    }
   }
 };
 
 async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
-  const executablePath = await chromium.executablePath();
+  const executablePath =
+    "C:\\Users\\coppe\\AppData\\Local\\Chromium\\Application\\chrome.exe";
 
-  const userAgent = new UserAgent();
-  const randomUserAgent = userAgent.random();
+  // const userAgent = new UserAgent();
+  // const randomUserAgent = userAgent.random();
 
   try {
     const browser = await playwright.launch({
@@ -45,7 +45,8 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
     });
 
     const context = await browser.newContext({
-      userAgent: randomUserAgent.toString(),
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       viewport: { width: 1920, height: 1080 },
       javaScriptEnabled: true,
       bypassCSP: true,
@@ -60,6 +61,6 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
   }
 }
 
-async function runSiteScrapers(handler: BrowserHandler) {
-  scrapeGovJobBank(handler);
-}
+// async function runSiteScrapers(handler: BrowserHandler) {
+//   scrapeGovJobBank(handler);
+// }

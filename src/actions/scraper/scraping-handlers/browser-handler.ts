@@ -3,16 +3,13 @@ import type { Page } from "playwright-core";
 export class BrowserHandler {
   constructor(private page: Page) {}
 
-  async visitPage(url: string, waitTime = 10000): Promise<void> {
+  async visitPage(url: string): Promise<void> {
     try {
-      await this.page.goto(url);
+      await this.page.goto(url, { timeout: 30000 });
 
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, waitTime);
-      });
+      console.log("complete");
     } catch (error) {
+      console.log("error");
       throw error;
     }
   }

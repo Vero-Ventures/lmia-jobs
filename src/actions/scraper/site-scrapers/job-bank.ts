@@ -12,7 +12,7 @@ export async function scrapeGovJobBank(browserHandler: BrowserHandler) {
     pageNum += 1;
 
     // Test Limit
-    if (pageNum > 10) {
+    if (pageNum > 1) {
       scrape = false;
     }
   }
