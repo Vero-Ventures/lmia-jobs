@@ -140,7 +140,7 @@ export function JobPostingCard({
             <div className="flex items-center gap-2">
               <CalendarIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
-                {`${jobPosting.startTime ? "Start By: " + jobPosting.startTime : "N/A"}`}
+                {`${jobPosting.startDate ? "Start By: " + jobPosting.startDate : "N/A"}`}
               </span>
             </div>
             <div className="flex items-center gap-2">

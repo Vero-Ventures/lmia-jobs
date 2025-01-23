@@ -87,7 +87,7 @@ export const jobPostings = pgTable("job_postings", {
   region: text("region").notNull(),
   city: text("city").notNull(),
   address: text("address"),
-  startTime: date("start_time").notNull(),
+  startDate: date("start_date").notNull(),
   vacancies: integer("vacancies"),
   employmentType: text("employment_type").notNull(),
   workHours: integer("work_hours"),

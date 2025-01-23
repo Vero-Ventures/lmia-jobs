@@ -6,7 +6,7 @@ export type JobPosting = {
   region: string;
   city: string;
   address: string | null;
-  startTime: string;
+  startDate: string;
   vacancies: number | null;
   employmentType: string;
   workHours: number | null;

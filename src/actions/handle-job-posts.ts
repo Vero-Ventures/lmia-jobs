@@ -13,7 +13,7 @@ export type JobPostForm = {
   region: string;
   city: string;
   address: string | null;
-  startTime: string;
+  startDate: string;
   vacancies: string | null;
   employmentType: string;
   workHours: string | null;
@@ -58,7 +58,7 @@ export async function createJobPost(
     const postData = {
       ...formData,
       address: formData.address === "" ? null : formData.address,
-      startTime: formData.startTime,
+      startDate: formData.startDate,
       vacancies:
         formData.vacancies === ""
           ? null
@@ -109,7 +109,7 @@ export async function updateJobPost(
       const postData = {
         ...formData,
         address: formData.address === "" ? null : formData.address,
-        startTime: formData.startTime,
+        startDate: formData.startDate,
         vacancies:
           formData.vacancies === ""
             ? null
