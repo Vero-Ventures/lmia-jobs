@@ -1,11 +1,9 @@
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-import { CONFIG } from "../helpers/config";
+import { CONFIG } from "@/actions/scraper/helpers/config";
 
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
 ): Promise<string[]> {
-  browserHandler.visitPage(CONFIG.urls.govSearchPage + "1");
-
   let pageNum = 1;
   let scrape = true;
 
@@ -16,7 +14,7 @@ export async function scrapeGovJobBank(
     pageNum += 1;
 
     // Test Limit
-    if (pageNum > 1) {
+    if (pageNum >= 1) {
       scrape = false;
     }
   }
@@ -30,6 +28,8 @@ async function scrapePosts(
 ): Promise<string[]> {
   try {
     const pagePostIds: string[] = [];
+
+    console.log(CONFIG.urls.govSearchPage + String(pageNum))
 
     browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 

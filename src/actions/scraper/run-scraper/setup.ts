@@ -6,9 +6,12 @@ import chromium from "@sparticuz/chromium";
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
+import { CONFIG } from "@/actions/scraper/helpers/config";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
+
+  console.log(CONFIG.urls.govSearchPage + String(1))
 
   let result = ["error"];
   try {
