@@ -17,6 +17,8 @@ export const runScraper = async () => {
     const pageHandler = new BrowserHandler(page);
 
     await pageHandler.visitPage("https://www.facetofacegames.com/");
+
+    console.log('Completed Successfully')
   } catch (error) {
     console.error("Create Scraper Error: " + error);
   } finally {
