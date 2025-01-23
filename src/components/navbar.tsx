@@ -4,6 +4,7 @@ import { BriefcaseIcon } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "./ui/button";
+import { SignOut } from "./sign-out";
 
 const links = [
   { text: "Home", url: "/admin" },
@@ -35,9 +36,7 @@ export default async function Navbar() {
             <Button asChild variant="link">
               <Link href="/admin/dashboard/account">Account</Link>
             </Button>
-            <Button asChild variant="secondary">
-              <Link href="/admin/log-out">Log Out</Link>
-            </Button>
+            <SignOut />
           </>
         ) : (
           <>
