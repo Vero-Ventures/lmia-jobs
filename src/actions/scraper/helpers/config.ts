@@ -6,7 +6,7 @@ export const CONFIG = {
   inputs: {},
   selectors: {
     govJobBank: {
-      jobPosting: "article .action-buttons",
+      jobPosting: "article",
     },
   },
 } as const;
