@@ -5,7 +5,7 @@ import chromium from "@sparticuz/chromium";
 
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-// import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
+import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
@@ -16,7 +16,7 @@ export const runScraper = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    await pageHandler.visitPage("https://www.facetofacegames.com/");
+    await runSiteScrapers(pageHandler);
 
     console.log("Completed Successfully");
   } catch (error) {
@@ -61,6 +61,6 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
   }
 }
 
-// async function runSiteScrapers(handler: BrowserHandler) {
-//   scrapeGovJobBank(handler);
-// }
+async function runSiteScrapers(handler: BrowserHandler) {
+  scrapeGovJobBank(handler);
+}

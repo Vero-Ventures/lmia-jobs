@@ -2,6 +2,8 @@ import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser
 import { CONFIG } from "../helpers/config";
 
 export async function scrapeGovJobBank(browserHandler: BrowserHandler) {
+  browserHandler.visitPage(CONFIG.urls.govSearchPage);
+
   let pageNum = 1;
   let scrape = true;
 
@@ -16,6 +18,8 @@ export async function scrapeGovJobBank(browserHandler: BrowserHandler) {
       scrape = false;
     }
   }
+
+  console.log(postIds);
 }
 
 async function scrapePosts(
