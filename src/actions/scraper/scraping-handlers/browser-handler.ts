@@ -97,7 +97,6 @@ export class BrowserHandler {
   async getElement(selector: string) {
     try {
       const element = this.page.locator(selector);
-      await element.waitFor({ state: "visible", timeout: 10000 });
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
