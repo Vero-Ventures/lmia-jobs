@@ -1,8 +1,8 @@
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-// import { CONFIG } from "../helpers/config";
+import { CONFIG } from "../helpers/config";
 
 export async function scrapeGovJobBank(browserHandler: BrowserHandler) {
-  browserHandler.visitPage('https://www.facetofacegames.com/');
+  browserHandler.visitPage(CONFIG.urls.govSearchPage + "1");
 
   // let pageNum = 1;
   // let scrape = true;
