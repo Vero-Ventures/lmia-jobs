@@ -18,13 +18,10 @@ export const runScraper = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    await runSiteScrapers(pageHandler);
-
-    console.log("Completed Successfully");
-    result = true;
+    result = await runSiteScrapers(pageHandler);
   } catch (error) {
     console.error("Create Scraper Error: " + error);
-    result = false;
+    result = "error";
   } finally {
     if (browser) {
       browser.close();
