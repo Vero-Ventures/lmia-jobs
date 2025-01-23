@@ -29,7 +29,7 @@ async function scrapePosts(
   try {
     const pagePostIds: string[] = [];
 
-    browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
+    await browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
     const posts = await browserHandler.getElement(
       CONFIG.selectors.govJobBank.jobPosting
