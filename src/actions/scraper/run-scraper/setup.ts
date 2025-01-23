@@ -27,8 +27,8 @@ export const runScraper = async () => {
 };
 
 async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
-  const executablePath =
-    "C:\\Users\\coppe\\AppData\\Local\\Chromium\\Application\\chrome.exe";
+  const executablePath = await chromium.executablePath();
+  // "C:\\Users\\coppe\\AppData\\Local\\Chromium\\Application\\chrome.exe";
 
   // const userAgent = new UserAgent();
   // const randomUserAgent = userAgent.random();
