@@ -25,8 +25,8 @@ export const userMailing = pgTable("user_mailing", {
     .references(() => user.id, { onDelete: "cascade" }),
   tempPassword: text("temp_password"),
   newlyCreated: boolean("newly_created").notNull().default(true),
-  optedOut: boolean("opted_out").notNull().default(false),
   activated: boolean("activated").notNull().default(false),
+  optedOut: boolean("opted_out").notNull().default(false),
   ignore: boolean("ignore").notNull().default(false),
 });
 
