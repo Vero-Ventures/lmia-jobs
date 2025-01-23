@@ -91,18 +91,20 @@ export const PROVINCES = [
 
 export const paymentType = ["Hourly", "Salary"] as const;
 
-export const provinceLabels = [
-  "Alberta",
-  "British Columbia",
-  "Manitoba",
-  "New Brunswick",
-  "Newfoundland and Labrador",
-  "Nova Scotia",
-  "Ontario",
-  "Prince Edward Island",
-  "Quebec",
-  "Saskatchewan",
-  "Northwest Territories",
-  "Nunavut",
-  "Yukon",
+export const provinceValues = [
+  "AB",
+  "BC",
+  "MB",
+  "NB",
+  "NL",
+  "NS",
+  "ON",
+  "PE",
+  "QC",
+  "SK",
+  "NT",
+  "NU",
+  "YT",
 ] as const;
+
+export const languages = ["English", "French", "Other"] as const;
