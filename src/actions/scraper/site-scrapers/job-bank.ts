@@ -10,6 +10,7 @@ export async function scrapeGovJobBank(
   let postIds: string[] = [];
 
   while (scrape) {
+    console.log("runs check");
     postIds = await scrapePosts(browserHandler, pageNum);
     pageNum += 1;
 
@@ -37,6 +38,7 @@ async function scrapePosts(
       CONFIG.selectors.govJobBank.jobPosting
     );
 
+    console.log(posts);
     console.log("read posts");
     for (const post of await posts.all()) {
       const fullId = await post.getAttribute("id");
@@ -44,6 +46,7 @@ async function scrapePosts(
     }
 
     console.log("return posts");
+    console.log(pagePostIds);
     return pagePostIds;
   } catch (error) {
     console.error("Error getting job post Ids: " + error);
