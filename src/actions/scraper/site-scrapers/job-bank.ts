@@ -29,8 +29,6 @@ async function scrapePosts(
   try {
     const pagePostIds: string[] = [];
 
-    console.log(CONFIG.urls.govSearchPage + String(pageNum))
-
     browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
     const posts = await browserHandler.getElement(

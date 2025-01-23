@@ -6,6 +6,7 @@ export class BrowserHandler {
   async visitPage(url: string): Promise<void> {
     try {
       await this.page.goto(url, { timeout: 30000 });
+      await this.page.waitForLoadState("load");
     } catch (error) {
       console.log("error");
       throw error;
