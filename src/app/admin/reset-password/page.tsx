@@ -12,8 +12,8 @@ export default async function ResetPasswordPage({
     unauthorized();
   }
   return (
-    <div className="h-dvh content-center px-8">
+    <main className="h-dvh content-center px-8">
       <ResetPassword />
-    </div>
+    </main>
   );
 }

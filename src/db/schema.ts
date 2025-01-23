@@ -25,8 +25,8 @@ export const userMailing = pgTable("user_mailing", {
     .references(() => user.id, { onDelete: "cascade" }),
   tempPassword: text("temp_password"),
   newlyCreated: boolean("newly_created").notNull().default(true),
-  optedOut: boolean("opted_out").notNull().default(false),
   activated: boolean("activated").notNull().default(false),
+  optedOut: boolean("opted_out").notNull().default(false),
   ignore: boolean("ignore").notNull().default(false),
 });
 
@@ -87,7 +87,7 @@ export const jobPostings = pgTable("job_postings", {
   region: text("region").notNull(),
   city: text("city").notNull(),
   address: text("address"),
-  startTime: date("start_time").notNull(),
+  startDate: date("start_date").notNull(),
   vacancies: integer("vacancies"),
   employmentType: text("employment_type").notNull(),
   workHours: integer("work_hours"),

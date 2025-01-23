@@ -1,10 +1,6 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
-import { BaseLinks, SessionLinks } from "@/app/admin/dashboard/lib/constants";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -17,14 +13,11 @@ import {
 import { Label } from "@/components/ui/label";
 
 export default function Page() {
-  const { data: session } = authClient.useSession();
-
   const [postBoards, setPostBoards] = useState(3);
   const [postTime, setPostTime] = useState(4);
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <Navbar links={session ? SessionLinks : BaseLinks} />
+    <main className="flex min-h-dvh flex-col">
       <div className="mx-auto max-w-xl space-y-4 py-10">
         <Card>
           <CardHeader>
@@ -81,7 +74,6 @@ export default function Page() {
           </CardFooter>
         </Card>
       </div>
-      <Footer />
-    </div>
+    </main>
   );
 }

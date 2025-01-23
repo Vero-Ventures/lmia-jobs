@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/index";
-import { user, stripeCustomer } from "@/db/schema";
+import { user, userMailing, stripeCustomer } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
@@ -39,6 +39,15 @@ export async function createStripeUser(userEmail: string): Promise<boolean> {
       await db
         .insert(stripeCustomer)
         .values({ userId: currentUser.id, stripeId: customer.id });
+
+      const scrapedUser = await db
+        .select()
+        .from(userMailing)
+        .where(eq(userMailing.userId, currentUser.id));
+
+      if (scrapedUser[0]) {
+        await db.update(userMailing).set({ activated: true });
+      }
 
       return true;
     } else {
