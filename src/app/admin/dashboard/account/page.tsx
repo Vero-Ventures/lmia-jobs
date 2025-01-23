@@ -3,9 +3,6 @@
 import { useSession, signOut } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { useState } from "react";
-import Navbar from "@/components/navbar";
-import { SessionLinks } from "@/app/admin/dashboard/lib/constants";
-import Footer from "@/components/footer";
 import { updateEmail, updatePassword } from "@/actions/handle-account";
 
 import { Button } from "@/components/ui/button";
@@ -80,8 +77,7 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <Navbar links={SessionLinks} />
+    <main>
       <div className="space-y-4 p-20">
         <div className="flex justify-center">
           <Button asChild size="lg">
@@ -253,7 +249,6 @@ export default function Page() {
           </CardFooter>
         </Card>
       </div>
-      <Footer />
-    </div>
+    </main>
   );
 }
