@@ -50,7 +50,7 @@ export default function Page({
     region: "",
     city: "",
     address: "",
-    startTime: new Date().toISOString().split("T")[0],
+    startDate: new Date().toISOString().split("T")[0],
     vacancies: "",
     employmentType: "",
     workHours: "",
@@ -127,7 +127,7 @@ export default function Page({
             region: jobPosting.region,
             city: jobPosting.city,
             address: jobPosting.address ? jobPosting.address! : "",
-            startTime: jobPosting.startTime,
+            startDate: jobPosting.startDate,
             vacancies: jobPosting.vacancies
               ? String(jobPosting.vacancies!)
               : "",
@@ -327,8 +327,8 @@ export default function Page({
               <Input
                 className="mx-auto w-max border-2 border-gray-500 text-center mb:text-lg mb:font-semibold sm:text-xl md:min-w-48 md:text-xl"
                 type="date"
-                name="startTime"
-                value={formValues.startTime}
+                name="startDate"
+                value={formValues.startDate}
                 onChange={handleValueChange}
               />
             </div>
