@@ -31,14 +31,14 @@ async function scrapePosts(
 
     browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
-    // const posts = await browserHandler.getElement(
-    //   CONFIG.selectors.govJobBank.jobPosting
-    // );
+    const posts = await browserHandler.getElement(
+      CONFIG.selectors.govJobBank.jobPosting
+    );
 
-    // for (const post of await posts.all()) {
-    //   const fullId = await post.getAttribute("Id");
-    //   pagePostIds.push(fullId!.split("-")[1]);
-    // }
+    for (const post of await posts.all()) {
+      const fullId = await post.getAttribute("Id");
+      pagePostIds.push(fullId!.split("-")[1]);
+    }
 
     return pagePostIds;
   } catch (error) {

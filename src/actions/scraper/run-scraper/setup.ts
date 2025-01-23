@@ -9,6 +9,8 @@ import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
+
+  let result;
   try {
     const [newBrowser, _context, page] = await createChromiunm();
 
@@ -19,12 +21,15 @@ export const runScraper = async () => {
     await runSiteScrapers(pageHandler);
 
     console.log("Completed Successfully");
+    result = true;
   } catch (error) {
     console.error("Create Scraper Error: " + error);
+    result = false;
   } finally {
     if (browser) {
       browser.close();
     }
+    return result;
   }
 };
 
