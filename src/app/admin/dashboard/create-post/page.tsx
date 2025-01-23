@@ -3,9 +3,6 @@
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import Navbar from "@/components/navbar";
-import { SessionLinks } from "@/app/admin/dashboard/lib/constants";
-import Footer from "@/components/footer";
 import { XCircle } from "lucide-react";
 import { PROVINCES } from "@/app/lib/constants";
 import Form from "next/form";
@@ -223,7 +220,6 @@ export default function Page({
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-white">
-      <Navbar links={SessionLinks} />
       <div
         className={`m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 bg-white p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
         <Form className="flex flex-col" action={submitPostForm}>
@@ -649,7 +645,6 @@ export default function Page({
           </div>
         </Form>
       </div>
-      <Footer />
     </div>
   );
 }

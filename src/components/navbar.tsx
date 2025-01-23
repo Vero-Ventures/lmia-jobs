@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 const links = [
   { text: "Home", url: "/admin" },
   { text: "Pricing", url: "/admin/pricing" },
-  { text: "About", url: "/admin/about-us" },
+  { text: "Contact", url: "/admin/contact-us" },
 ];
 
 export default async function Navbar() {
@@ -35,16 +35,16 @@ export default async function Navbar() {
             <Button asChild variant="link">
               <Link href="/admin/dashboard/account">Account</Link>
             </Button>
-            <Button asChild variant="link">
+            <Button asChild variant="secondary">
               <Link href="/admin/log-out">Log Out</Link>
             </Button>
           </>
         ) : (
           <>
-            <Button asChild variant="link">
+            <Button asChild variant="secondary">
               <Link href="/admin/sign-up">Sign Up</Link>
             </Button>
-            <Button asChild variant="link">
+            <Button asChild>
               <Link href="/admin/sign-in">Log In</Link>
             </Button>
           </>
