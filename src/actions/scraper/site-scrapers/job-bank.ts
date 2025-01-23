@@ -29,17 +29,21 @@ async function scrapePosts(
   try {
     const pagePostIds: string[] = [];
 
+    console.log("visit");
     await browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
+    console.log("get element");
     const posts = await browserHandler.getElement(
       CONFIG.selectors.govJobBank.jobPosting
     );
 
+    console.log("read posts");
     for (const post of await posts.all()) {
-      const fullId = await post.getAttribute("Id");
+      const fullId = await post.getAttribute("id");
       pagePostIds.push(fullId!.split("-")[1]);
     }
 
+    console.log("return posts");
     return pagePostIds;
   } catch (error) {
     console.error("Error getting job post Ids: " + error);
