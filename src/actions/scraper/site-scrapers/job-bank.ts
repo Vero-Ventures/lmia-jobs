@@ -36,7 +36,7 @@ async function scrapePosts(
     );
 
     console.log(posts);
-    console.log(posts.all())
+    console.log(await posts.all())
     console.log("read posts");
     for (const post of await posts.all()) {
       const fullId = await post.getAttribute("id");
