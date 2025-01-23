@@ -5,7 +5,6 @@ import { user, stripeCustomer, jobPostings } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
-import { createNewPost } from "@/actions/handle-job-posts";
 
 const stripe = new Stripe(
   process.env.STRIPE_CONFIG! === "production"
@@ -45,30 +44,32 @@ export async function checkUserPurchases(userEmail: string): Promise<string> {
         .from(jobPostings)
         .where(eq(jobPostings.email, currentUser.email));
 
-      for (const customerPost of customerPurchases.data) {
-        const existingPost = customerPosts.find(
-          (post) => post.stripeChargeId === customerPost.id
+      let result = "success";
+
+      for (const purchase of customerPurchases.data) {
+        const paymentIntent = await stripe.paymentIntents.retrieve(
+          purchase.payment_intent as string
         );
 
-        if (!existingPost) {
-          const paymentIntent = await stripe.paymentIntents.retrieve(
-            customerPurchases.data[0].payment_intent as string
-          );
+        const purchasePost = customerPosts.find(
+          (post) => post.id === paymentIntent.metadata.postId
+        );
 
-          const result = await createNewPost(
-            customerPost.id,
-            Number(paymentIntent.metadata.boards),
-            Number(paymentIntent.metadata.time),
-            currentUser.email
-          );
+        if (purchasePost && !purchasePost.paymentConfirmed) {
+          await db
+            .update(jobPostings)
+            .set({ paymentConfirmed: true, hidden: false })
+            .where(eq(jobPostings.id, purchasePost!.id));
 
-          if (result === "refresh") {
-            return result;
-          }
+          result = "refresh";
         }
       }
 
-      return "success";
+      await db
+        .delete(jobPostings)
+        .where(eq(jobPostings.paymentConfirmed, false));
+
+      return result;
     }
   } catch (error) {
     if (error instanceof Error) {

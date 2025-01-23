@@ -3,13 +3,12 @@ import { jobPostings } from "@/db/schema";
 
 const data = [
   {
-    stripeChargeId: "123",
     jobTitle: "Project Manager",
     organizationName: "Maple Project Management",
     region: "BC",
     city: "Vancouver",
     address: "200 Granville Street",
-    startTime: "2025-02-15",
+    startDate: "2025-02-15",
     vacancies: null,
     employmentType: "Full Time",
     workHours: null,
@@ -26,16 +25,16 @@ const data = [
     email: "careers@maplepm.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
   {
-    stripeChargeId: "456",
     jobTitle: "Software Engineer",
     organizationName: "Northern Tech Solutions",
     region: "ON",
     city: "Toronto",
     address: "100 Bay Street",
-    startTime: "2025-01-20",
+    startDate: "2025-01-20",
     vacancies: 5,
     employmentType: "Full Time",
     workHours: 40,
@@ -52,16 +51,16 @@ const data = [
     email: "jobs@northerntech.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
   {
-    stripeChargeId: "ABC",
     jobTitle: "Customer Support Representative",
     organizationName: "West Coast Call Center",
     region: "AB",
     city: "Calgary",
     address: "400 Centre Street",
-    startTime: "2025-02-10",
+    startDate: "2025-02-10",
     vacancies: 10,
     employmentType: "Part Time",
     workHours: 24,
@@ -78,16 +77,16 @@ const data = [
     email: "support@westcoastcall.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
   {
-    stripeChargeId: "DEF",
     jobTitle: "Graphic Designer",
     organizationName: "Creative Studios Inc.",
     region: "QC",
     city: "Montreal",
     address: "300 Saint Laurent Blvd",
-    startTime: "2025-01-25",
+    startDate: "2025-01-25",
     vacancies: null,
     employmentType: "Part Time",
     workHours: null,
@@ -104,21 +103,21 @@ const data = [
     email: "design@creativestudios.ca",
     createdAt: "2025-01-01T01:00:00Z",
     updatedAt: "2025-01-01T01:00:00Z",
+    paymentConfirmed: true,
     expiresAt: "2025-12-31",
   },
 ];
 
-(async function () {
+export async function seed() {
   await Promise.all(
     data.map((jp) =>
       db.insert(jobPostings).values({
-        stripeChargeId: jp.stripeChargeId,
         jobTitle: jp.jobTitle,
         organizationName: jp.organizationName,
         region: jp.region,
         city: jp.city,
         address: jp.address,
-        startTime: jp.startTime,
+        startDate: jp.startDate,
         vacancies: jp.vacancies,
         employmentType: jp.employmentType,
         workHours: jp.workHours,
@@ -134,9 +133,9 @@ const data = [
         postYouth: jp.postYouth,
         email: jp.email,
         expiresAt: jp.expiresAt,
-        hidden: false,
+        paymentConfirmed: jp.paymentConfirmed,
       })
     )
   );
   return "success";
-})().catch((err) => console.log(err.message));
+}

@@ -38,7 +38,7 @@ export async function selectAllJobPostings({
     }
 
     postings = postings!.filter(
-      (posting: { hidden: boolean }) => !posting.hidden
+      (posting: { paymentConfirmed: boolean }) => posting.paymentConfirmed
     );
 
     const currentDate = new Date();

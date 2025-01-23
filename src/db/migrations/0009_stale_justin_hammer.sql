@@ -1,1 +1,0 @@
-ALTER TABLE "job_postings" ALTER COLUMN "hidden" SET DEFAULT true;

@@ -1,6 +1,6 @@
 {
-  "id": "fa5356ef-4966-4a0d-8832-8edbcf195677",
-  "prevId": "1ab8c2f9-35ca-45c3-abd7-07b4a6c25df5",
+  "id": "cf2d3ada-a2b3-4545-8b65-9cc328329610",
+  "prevId": "d37253cb-a289-41df-818f-2f831bf1f018",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -111,8 +111,15 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "job_title": {
@@ -121,68 +128,32 @@
           "primaryKey": false,
           "notNull": true
         },
-        "hiring_organization": {
-          "name": "hiring_organization",
+        "organization_name": {
+          "name": "organization_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "date_posted": {
-          "name": "date_posted",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "employment_type": {
-          "name": "employment_type",
+        "region": {
+          "name": "region",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "address_region": {
-          "name": "address_region",
+        "city": {
+          "name": "city",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "address_locality": {
-          "name": "address_locality",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "street_address": {
-          "name": "street_address",
+        "address": {
+          "name": "address",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "comp_time_unit": {
-          "name": "comp_time_unit",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "min_comp_value": {
-          "name": "min_comp_value",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "max_comp_value": {
-          "name": "max_comp_value",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "work_hours": {
-          "name": "work_hours",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "start_time": {
-          "name": "start_time",
+        "start_date": {
+          "name": "start_date",
           "type": "date",
           "primaryKey": false,
           "notNull": true
@@ -193,14 +164,38 @@
           "primaryKey": false,
           "notNull": false
         },
-        "description": {
-          "name": "description",
+        "employment_type": {
+          "name": "employment_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "email": {
-          "name": "email",
+        "work_hours": {
+          "name": "work_hours",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payment_type": {
+          "name": "payment_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "min_pay_value": {
+          "name": "min_pay_value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "max_pay_value": {
+          "name": "max_pay_value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -210,6 +205,43 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "post_asylum": {
+          "name": "post_asylum",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "post_disabled": {
+          "name": "post_disabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "post_indigenous": {
+          "name": "post_indigenous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "post_newcomers": {
+          "name": "post_newcomers",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "post_youth": {
+          "name": "post_youth",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -224,46 +256,17 @@
           "primaryKey": false,
           "notNull": true
         },
-        "valid_through": {
-          "name": "valid_through",
-          "type": "text",
+        "paymentConfirmed": {
+          "name": "paymentConfirmed",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "post_asylum": {
-          "name": "post_asylum",
-          "type": "boolean",
+        "expires_at": {
+          "name": "expires_at",
+          "type": "date",
           "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "post_disabled": {
-          "name": "post_disabled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "post_indigenous": {
-          "name": "post_indigenous",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "post_newcomers": {
-          "name": "post_newcomers",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "post_youth": {
-          "name": "post_youth",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
+          "notNull": true
         }
       },
       "indexes": {},
@@ -345,6 +348,59 @@
           "name": "session_token_unique",
           "nullsNotDistinct": false,
           "columns": ["token"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.stripeCustomer": {
+      "name": "stripeCustomer",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stripe_id": {
+          "name": "stripe_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "stripeCustomer_user_id_user_id_fk": {
+          "name": "stripeCustomer_user_id_user_id_fk",
+          "tableFrom": "stripeCustomer",
+          "tableTo": "user",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "stripeCustomer_user_id_unique": {
+          "name": "stripeCustomer_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["user_id"]
+        },
+        "stripeCustomer_stripe_id_unique": {
+          "name": "stripeCustomer_stripe_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["stripe_id"]
         }
       },
       "policies": {},
@@ -435,15 +491,15 @@
           "notNull": true,
           "default": true
         },
-        "opted_out": {
-          "name": "opted_out",
+        "activated": {
+          "name": "activated",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
           "default": false
         },
-        "activated": {
-          "name": "activated",
+        "opted_out": {
+          "name": "opted_out",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
