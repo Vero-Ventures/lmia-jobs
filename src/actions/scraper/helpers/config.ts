@@ -1,27 +1,12 @@
 export const CONFIG = {
-  urls: {},
+  urls: {
+    govSearchPage:
+      "https://www.jobbank.gc.ca/jobsearch/jobsearch?fet=%C2%AC1&fglo=1&sort=M&page=",
+  },
   inputs: {},
   selectors: {
-    id: {
-      format: "#ElementId",
-    },
-    tags: {
-      containerAndChildTag: "container div",
-      containerDirectChild: "container > div",
-    },
-    class: {
-      class: ".ClassName",
-      containerAndChildWithClass: "container .childClass",
-      containerAndChildWithTagAndClass: "container div.childClass",
-      containerWithClassAndChildWithTagAndClass:
-        "container.containerClass div.childClass",
-    },
-    attribute: {
-      attribute: "[attribute=value]",
-      containerAndChildWithAttribute: "container [attribute=value]",
-      containerWithAttributeAndChildTag: "container[attribute=value] div",
-      containerWithAttributeAndChildTagWithAttribute:
-        "container[attribute=value] div[attribute=value]",
+    govJobBank: {
+      jobPosting: "article .action-buttons",
     },
   },
 } as const;

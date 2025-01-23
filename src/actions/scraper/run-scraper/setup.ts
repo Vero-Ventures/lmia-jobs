@@ -4,11 +4,17 @@ import type { Browser, BrowserContext, Page } from "playwright-core";
 import chromium from "@sparticuz/chromium";
 
 import UserAgent from "user-agents";
+import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
+import { scrapeGovJobBank } from "../site-scrapers/job-bank";
 
 export const runScraper = async () => {
   try {
-    const [browser] = await createChromiunm();
+    const [browser, _context, page] = await createChromiunm();
 
+    const pageHandler = new BrowserHandler(page);
+
+    await runSiteScrapers(pageHandler);
+    
     try {
     } catch (error) {
       console.error("Start Scraper Error: " + error);
@@ -52,4 +58,8 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
     console.error("Browser Launch Failed:", error);
     throw error;
   }
+}
+
+async function runSiteScrapers(handler: BrowserHandler) {
+  scrapeGovJobBank(handler);
 }

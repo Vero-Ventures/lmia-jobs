@@ -1,6 +1,6 @@
 import type { Page } from "playwright-core";
 
-export class BrowserInteract {
+export class BrowserHandler {
   constructor(private page: Page) {}
 
   async visitPage(url: string, waitTime = 10000): Promise<void> {
@@ -98,24 +98,15 @@ export class BrowserInteract {
     }
   }
 
-  async readText(selector: string, timeout: number = 10000) {
+  async getElement(selector: string) {
     try {
-      const element = await this.page.waitForSelector(selector, {
-        state: "visible", // Or Attached
-        timeout,
-      });
+      const element = this.page.locator(selector);
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
 
-      const text = await element.textContent();
-
-      if (text === null) {
-        throw new Error(`Element ${selector} has no text content`);
-      }
-
-      return text;
+      return element;
     } catch (error) {
       throw error;
     }

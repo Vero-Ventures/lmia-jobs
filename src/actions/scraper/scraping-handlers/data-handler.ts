@@ -18,7 +18,7 @@ export class DataHandler {
       await fs.writeFile(this.usersTempFile, "", { flag: "w" });
       await fs.writeFile(this.postsTempFile, "", { flag: "w" });
     } catch (error) {
-      console.error(`Error creating temp files at ${"/tmp"}:`, error);
+      console.error(`Error creating temp files at ${"/tmp"}: `, error);
     }
   }
 
@@ -37,7 +37,7 @@ export class DataHandler {
 
       return false;
     } catch (error) {
-      console.error(`Error reading the users file:`, error);
+      console.error(`Error reading the users file: `, error);
       return false;
     }
   }
@@ -57,7 +57,7 @@ export class DataHandler {
 
       return false;
     } catch (error) {
-      console.error(`Error reading the posts file:`, error);
+      console.error(`Error reading the posts file: `, error);
       return false;
     }
   }
@@ -71,7 +71,7 @@ export class DataHandler {
         await fs.appendFile(this.postsTempFile, newUserLine);
       }
     } catch (error) {
-      console.error(`Error writing post to temp file:`, error);
+      console.error(`Error writing post to temp file: `, error);
     }
   }
 
@@ -84,7 +84,7 @@ export class DataHandler {
         await fs.appendFile(this.postsTempFile, newUserLine);
       }
     } catch (error) {
-      console.error(`Error writing post to temp file:`, error);
+      console.error(`Error writing post to temp file: `, error);
     }
   }
 
@@ -109,7 +109,7 @@ export class DataHandler {
 
       return users;
     } catch (error) {
-      console.error(`Error reading the users file:`, error);
+      console.error(`Error reading the users file: `, error);
       return [];
     }
   }
@@ -126,21 +126,21 @@ export class DataHandler {
         const lineData = line.split(",");
 
         const newPost = {
-          email: lineData[0],
-          jobTitle: lineData[1],
-          organizationName: lineData[2],
-          region: lineData[3],
-          city: lineData[4],
-          address: lineData[5],
-          startDate: lineData[6],
-          employmentType: lineData[7],
-          paymentType: lineData[8],
-          workHours: Number(lineData[9]),
-          minPayValue: Number(lineData[10]),
-          maxPayValue: Number(lineData[11]),
-          description: lineData[12],
-          language: lineData[13],
-          vacancies: Number(lineData[14]),
+          email: lineData[1],
+          jobTitle: lineData[2],
+          organizationName: lineData[3],
+          region: lineData[4],
+          city: lineData[5],
+          address: lineData[6],
+          startDate: lineData[7],
+          employmentType: lineData[8],
+          paymentType: lineData[9],
+          workHours: Number(lineData[10]),
+          minPayValue: Number(lineData[11]),
+          maxPayValue: Number(lineData[12]),
+          description: lineData[13],
+          language: lineData[14],
+          vacancies: Number(lineData[15]),
         };
 
         posts.push(newPost);
@@ -148,7 +148,7 @@ export class DataHandler {
 
       return posts;
     } catch (error) {
-      console.error(`Error reading the job posts file:`, error);
+      console.error(`Error reading the job posts file: `, error);
       return [];
     }
   }
@@ -184,7 +184,7 @@ export class DataHandler {
         });
       }
     } catch (error) {
-      console.error(`Error writing users to the database:`, error);
+      console.error(`Error writing users to the database: `, error);
     }
   }
 
@@ -209,7 +209,7 @@ export class DataHandler {
 
       await db.insert(jobPostings).values(databasePost).returning();
     } catch (error) {
-      console.error(`Error writing users to the database:`, error);
+      console.error(`Error writing users to the database: `, error);
     }
   }
 
