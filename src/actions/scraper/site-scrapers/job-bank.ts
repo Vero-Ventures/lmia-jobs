@@ -35,16 +35,11 @@ async function scrapePosts(
       CONFIG.selectors.govJobBank.jobPosting
     );
 
-    console.log(posts);
-    console.log(await posts.all())
-    console.log("read posts");
     for (const post of await posts.all()) {
       const fullId = await post.getAttribute("id");
       pagePostIds.push(fullId!.split("-")[1]);
     }
 
-    console.log("return posts");
-    console.log(pagePostIds);
     return pagePostIds;
   } catch (error) {
     console.error("Error getting job post Ids: " + error);
