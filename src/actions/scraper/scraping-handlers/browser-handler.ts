@@ -23,7 +23,7 @@ export class BrowserHandler {
         timeout,
       });
 
-      console.log(element.textContent())
+      console.log(await element.textContent())
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
