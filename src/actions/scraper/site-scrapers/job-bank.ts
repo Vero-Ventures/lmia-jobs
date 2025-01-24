@@ -10,10 +10,9 @@ export async function scrapeGovJobBank(
   const postIds: string[] = [];
 
   while (scrape) {
-    postIds.concat(await scrapePosts(browserHandler, pageNum));
+    const newPostIds = await scrapePosts(browserHandler, pageNum);
+    postIds.push(...newPostIds);
     pageNum += 1;
-
-    console.log("Complete Page Scrape");
 
     if (pageNum >= 10) {
       scrape = false;
