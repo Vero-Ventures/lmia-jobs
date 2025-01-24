@@ -24,13 +24,9 @@ export async function scrapeGovJobBank(
 
   const { postEmails, badPostIds } = await visitPages(browserHandler, postIds);
 
-  console.log("Filter Posts");
-
   const goodPosts = postIds!.filter(
     (postId: string) => !badPostIds.includes(postId)
   );
-
-  console.log("Return Result");
 
   return { postIds: goodPosts, postEmails: postEmails };
 }
@@ -80,7 +76,6 @@ async function visitPages(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
       );
       try {
-        console.log("Open Email");
         await browserHandler.waitAndClickInput(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
@@ -93,25 +88,19 @@ async function visitPages(
 
         console.log(await browserHandler.printPage());
 
-        console.log("Get Email Tag From Page");
-        const emailTag = await browserHandler.waitAndGetElement(
-          CONFIG.selectors.govJobBank.info.postEmailTag
-        );
-
-        console.log(await browserHandler.printPage());
-
-        console.log("Get Email From Email Tag");
-        const email = emailTag.locator(
+        const email = await browserHandler.waitAndGetElement(
           CONFIG.selectors.govJobBank.info.postEmail
         );
-        console.log("Email Inner HTML: " + (await email.innerHTML()));
-        console.log("Email Text: " + (await email.textContent()));
 
-        console.log("Get Email From Text");
+        const emailLink = await email.getAttribute("href");
+        console.log("Email Link: " + emailLink);
+
         const emailText = await email.getAttribute("href");
         console.log("Email Link: " + emailText);
-        console.log("Email: " + emailText!.split(":")[1]);
-        emails.push(emailText!.split(":")[1]);
+
+        if (emailText) {
+          emails.push(emailText);
+        }
       } catch (error) {
         console.error("Error: " + error);
         console.error("Post With ID: " + post + " Is Invalid");

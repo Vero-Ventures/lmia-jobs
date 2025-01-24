@@ -1,5 +1,4 @@
 import type { Page } from "playwright-core";
-
 export class BrowserHandler {
   constructor(public page: Page) {}
 
@@ -114,14 +113,18 @@ export class BrowserHandler {
 
   async waitAndGetElement(selector: string, waitTimeout: number = 10000) {
     try {
+      await this.page.waitForSelector(selector, {
+        state: "attached",
+        timeout: waitTimeout,
+      });
+
       const element = this.page.locator(selector);
-      await element.first().waitFor({ state: "attached", timeout: waitTimeout });
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
 
-      return element.first();
+      return element;
     } catch (error) {
       throw error;
     }
