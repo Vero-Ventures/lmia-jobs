@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
-import { eq, and, ilike, inArray } from "drizzle-orm";
+import { eq, and, ilike, inArray, gt } from "drizzle-orm";
 
 export async function selectAllJobPostings({
   jobBoard,
@@ -25,7 +25,10 @@ export async function selectAllJobPostings({
         and(
           eq(jobPostings.paymentConfirmed, true),
           eq(jobPostings.userId, userId),
-          ilike(jobPostings.jobTitle,  "%" + (jobTitle !== undefined ? jobTitle : ""))
+          ilike(
+            jobPostings.jobTitle,
+            "%" + (jobTitle !== undefined ? jobTitle : "")
+          )
         )
       );
   } else {
@@ -49,16 +52,21 @@ export async function selectAllJobPostings({
           inArray(jobPostings.postIndigenous, filterIndigenous),
           inArray(jobPostings.postNewcomers, filterNewcomers),
           inArray(jobPostings.postYouth, filterYouth),
-          ilike(jobPostings.region, "%" + (location !== undefined ? location : "")),
-          ilike(jobPostings.employmentType, "%" + (jobType !== undefined ? jobType : "")),
-          ilike(jobPostings.jobTitle, "%" + (jobTitle !== undefined ? jobTitle : ""))
+          ilike(
+            jobPostings.region,
+            "%" + (location !== undefined ? location : "")
+          ),
+          ilike(
+            jobPostings.employmentType,
+            "%" + (jobType !== undefined ? jobType : "")
+          ),
+          ilike(
+            jobPostings.jobTitle,
+            "%" + (jobTitle !== undefined ? jobTitle : "")
+          ),
+          gt(jobPostings.expiresAt, currentDate)
         )
       );
-
-    postings = postings!.filter(
-      (posting: { expiresAt: string }) =>
-        new Date(posting.expiresAt) > currentDate
-    );
   }
 
   return postings;
