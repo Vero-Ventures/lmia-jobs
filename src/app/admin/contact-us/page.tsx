@@ -97,7 +97,7 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto max-w-xl py-20">
+    <main className="mx-auto min-h-dvh max-w-xl py-20">
       <h1 className="mb-6 text-center text-4xl font-bold">Contact Us</h1>
       <Form {...form}>
         <form
@@ -175,6 +175,6 @@ export default function Page() {
           </Button>
         </form>
       </Form>
-    </div>
+    </main>
   );
 }
