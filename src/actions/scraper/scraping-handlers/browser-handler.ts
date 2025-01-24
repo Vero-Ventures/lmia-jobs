@@ -23,12 +23,12 @@ export class BrowserHandler {
         timeout,
       });
 
-      console.log(element)
+      console.log(element.textContent())
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
-      await element.click({ force: true });
+      await element.dispatchEvent('click');
     } catch (error) {
       throw error;
     }
