@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { SignOut } from "./sign-out";
 
 const links = [
-  { text: "Home", url: "/admin" },
+  { text: "Home", url: "/admin/dashboard" },
   { text: "Pricing", url: "/admin/pricing" },
   { text: "Contact", url: "/admin/contact-us" },
 ];
