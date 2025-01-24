@@ -87,10 +87,17 @@ async function visitPages(
         );
 
         console.log("Get Email From Page");
-        const email = await browserHandler.waitAndGetElement(
+        const emailTag = await browserHandler.waitAndGetElement(
+          CONFIG.selectors.govJobBank.info.postEmailTag
+        );
+
+        console.log("Email Tag: " + emailTag);
+
+        const email = emailTag.locator(
           CONFIG.selectors.govJobBank.info.postEmail
         );
 
+        console.log("Email: " + emailTag);
         console.log("Get Email From Text");
         const fullId = await email.getAttribute("href");
         emails.push(fullId!.split(":")[1]);
