@@ -116,7 +116,7 @@ export class BrowserHandler {
     try {
       const element = this.page.locator(selector);
 
-      await element.waitFor({ state: "visible", timeout: waitTimeout });
+      await element.waitFor({ state: "attached", timeout: waitTimeout });
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
