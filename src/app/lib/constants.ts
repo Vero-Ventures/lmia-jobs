@@ -108,3 +108,5 @@ export const provinceValues = [
 ] as const;
 
 export const languages = ["English", "French", "Other"] as const;
+
+export const PRICE_PER_MONTH = 5;

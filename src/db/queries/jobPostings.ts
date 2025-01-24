@@ -31,6 +31,8 @@ export async function selectAllJobPostings({
           )
         )
       );
+
+    console.log(postings);
   } else {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
@@ -83,5 +85,3 @@ export async function selectUserJobPostings({userId, jobTitle}: {userId: string;
         )
       );
 }
-
-
