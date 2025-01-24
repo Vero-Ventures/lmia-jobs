@@ -23,6 +23,6 @@ export type JobPosting = {
   hidden: boolean;
   createdAt: Date;
   updatedAt: Date;
-  expiresAt: string;
+  expiresAt: Date;
   paymentConfirmed: boolean;
 };

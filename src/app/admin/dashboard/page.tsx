@@ -33,7 +33,7 @@ export default async function Page({
   });
 
   return (
-    <main className="px-4 pb-4">
+    <main className="min-h-dvh px-4 pb-4">
       <div className="container mx-auto my-4 w-full overflow-y-auto rounded-xl p-2">
         <div className="flex justify-between gap-4">
           <h1 className="text-xl font-bold text-primary">Your Postings</h1>
