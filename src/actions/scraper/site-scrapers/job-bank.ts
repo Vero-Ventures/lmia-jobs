@@ -85,6 +85,12 @@ async function visitPages(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
 
+        await new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 5000);
+        });
+
         console.log(await browserHandler.printPage());
 
         console.log("Get Email Tag From Page");
