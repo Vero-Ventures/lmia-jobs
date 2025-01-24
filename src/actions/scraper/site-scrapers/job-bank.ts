@@ -17,7 +17,7 @@ export async function scrapeGovJobBank(
     postIds.push(...newPostIds);
     pageNum += 1;
 
-    if (pageNum > 1) {
+    if (pageNum > 0) {
       scrape = false;
     }
   }
@@ -71,20 +71,29 @@ async function visitPages(
     console.log("Getting Emails");
 
     for (const post of postIds) {
+      console.log(
+        "Go To Page: " +
+          CONFIG.urls.searchResult +
+          String(post) +
+          "?source=searchresults"
+      );
+
       await browserHandler.visitPage(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
       );
+      console.log("Got To Page");
       try {
-        console.log("Got An Email");
-
+        console.log("Open Email");
         await browserHandler.waitAndClickInput(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
 
+        console.log("Get Email From Page");
         const email = await browserHandler.waitAndGetElement(
           CONFIG.selectors.govJobBank.info.postEmail
         );
 
+        console.log("Get Email From Text");
         const fullId = await email.getAttribute("href");
         emails.push(fullId!.split(":")[1]);
       } catch {
