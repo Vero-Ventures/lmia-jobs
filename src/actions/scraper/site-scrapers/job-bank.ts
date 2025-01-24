@@ -86,6 +86,8 @@ async function visitPages(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
 
+        browserHandler.printPage()
+
         console.log("Get Email From Page");
         const emailTag = await browserHandler.waitAndGetElement(
           CONFIG.selectors.govJobBank.info.postEmailTag
