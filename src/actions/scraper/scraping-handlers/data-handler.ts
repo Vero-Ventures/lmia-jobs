@@ -139,6 +139,8 @@ export class DataHandler {
 
       const lines = data.split("\n");
 
+      console.log(lines);
+
       for (const line of lines) {
         const lineData = line.split(",");
 

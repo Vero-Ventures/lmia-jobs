@@ -19,7 +19,7 @@ export async function scrapeGovJobBank(
     postIds.push(...newPostIds);
     pageNum += 1;
 
-    if (pageNum >= 10) {
+    if (pageNum >= 2) {
       scrape = false;
     }
 
