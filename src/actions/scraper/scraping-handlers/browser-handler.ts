@@ -4,7 +4,7 @@ export class BrowserHandler {
   constructor(public page: Page) {}
 
   async printPage(): Promise<void> {
-    console.log(await this.page.content())
+    console.log(await this.page.content());
   }
 
   async visitPage(url: string): Promise<void> {

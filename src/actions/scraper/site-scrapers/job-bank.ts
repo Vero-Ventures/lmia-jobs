@@ -68,8 +68,6 @@ async function visitPages(
     const emails: string[] = [];
     const badPosts: string[] = [];
 
-    console.log("Getting Emails");
-
     for (const post of postIds) {
       console.log(
         "Go To Page: " +
@@ -83,14 +81,10 @@ async function visitPages(
       );
       console.log("Got To Page");
       try {
-        browserHandler.printPage()
-
         console.log("Open Email");
         await browserHandler.waitAndClickInput(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
-
-        browserHandler.printPage()
 
         console.log("Get Email From Page");
         const email = await browserHandler.waitAndGetElement(
@@ -100,7 +94,8 @@ async function visitPages(
         console.log("Get Email From Text");
         const fullId = await email.getAttribute("href");
         emails.push(fullId!.split(":")[1]);
-      } catch {
+      } catch (error) {
+        console.error(error);
         console.error("Post With ID: " + post + " Is Invalid");
         badPosts.push(post);
       }
