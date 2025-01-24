@@ -114,7 +114,7 @@ export class BrowserHandler {
   async waitAndGetElement(selector: string, waitTimeout: number = 10000) {
     try {
       await this.page.waitForSelector(selector, {
-        state: "visible",
+        state: "attached",
         timeout: waitTimeout,
       });
 
