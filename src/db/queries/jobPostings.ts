@@ -1,89 +1,73 @@
-import { db } from "..";
+import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
-import type { JobPosting } from "@/app/lib/types";
+import { eq, and, ilike, inArray, gt } from "drizzle-orm";
 
 export async function selectAllJobPostings({
   jobBoard,
-  email,
+  userId,
   jobTitle,
   location,
   jobType,
 }: {
   jobBoard?: string;
-  email?: string;
+  userId?: string;
   jobTitle?: string;
   jobType?: string;
   location?: string;
 }) {
-  let postings = await db.select().from(jobPostings);
+  let postings;
 
-  if (email) {
-    postings = postings!.filter(
-      (posting: { email: string }) => posting.email === email
-    );
+  if (userId) {
+    postings = await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(
+          eq(jobPostings.paymentConfirmed, true),
+          eq(jobPostings.userId, userId),
+          ilike(
+            jobPostings.jobTitle,
+            "%" + (jobTitle !== undefined ? jobTitle : "")
+          )
+        )
+      );
   } else {
-    if (location) {
-      postings = postings!.filter(
-        (posting: { region: string }) => posting.region === location
-      );
-    }
-    if (jobType) {
-      postings = postings!.filter(
-        (posting: { employmentType: string }) =>
-          posting.employmentType === jobType
-      );
-    }
-    if (jobBoard) {
-      postings = filterPostingsByBoard(postings, jobBoard);
-    }
-
-    postings = postings!.filter(
-      (posting: { paymentConfirmed: boolean }) => posting.paymentConfirmed
-    );
-
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 
-    postings = postings!.filter(
-      (posting: { expiresAt: string }) =>
-        new Date(posting.expiresAt) > currentDate
-    );
+    const filterAccessible = [true, jobBoard === "accessible-job-board"];
+    const filterAsylum = [true, jobBoard === "asylum-job-board"];
+    const filterIndigenous = [true, jobBoard === "indigenous-job-board"];
+    const filterNewcomers = [true, jobBoard === "newcomers-job-board"];
+    const filterYouth = [true, jobBoard === "youth-job-board"];
+
+    postings = await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(
+          eq(jobPostings.paymentConfirmed, true),
+          inArray(jobPostings.postDisabled, filterAccessible),
+          inArray(jobPostings.postAsylum, filterAsylum),
+          inArray(jobPostings.postIndigenous, filterIndigenous),
+          inArray(jobPostings.postNewcomers, filterNewcomers),
+          inArray(jobPostings.postYouth, filterYouth),
+          ilike(
+            jobPostings.region,
+            "%" + (location !== undefined ? location : "")
+          ),
+          ilike(
+            jobPostings.employmentType,
+            "%" + (jobType !== undefined ? jobType : "")
+          ),
+          ilike(
+            jobPostings.jobTitle,
+            "%" + (jobTitle !== undefined ? jobTitle : "")
+          ),
+          gt(jobPostings.expiresAt, currentDate)
+        )
+      );
   }
 
-  if (jobTitle) {
-    postings = postings!.filter((posting) =>
-      posting.jobTitle.toLowerCase().includes(jobTitle.toLowerCase())
-    );
-  }
-
-  return postings;
-}
-
-function filterPostingsByBoard(postings: JobPosting[], jobBoard: string) {
-  if (jobBoard === "asylum-job-board") {
-    postings = postings!.filter(
-      (posting: { postAsylum: boolean }) => posting.postAsylum
-    );
-  }
-  if (jobBoard === "accessible-job-board") {
-    postings = postings!.filter(
-      (posting: { postDisabled: boolean }) => posting.postDisabled
-    );
-  }
-  if (jobBoard === "indigenous-job-board") {
-    postings = postings!.filter(
-      (posting: { postIndigenous: boolean }) => posting.postIndigenous
-    );
-  }
-  if (jobBoard === "newcomers-job-board") {
-    postings = postings!.filter(
-      (posting: { postNewcomers: boolean }) => posting.postNewcomers
-    );
-  }
-  if (jobBoard === "youth-job-board") {
-    postings = postings!.filter(
-      (posting: { postYouth: boolean }) => posting.postYouth
-    );
-  }
   return postings;
 }

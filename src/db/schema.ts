@@ -81,6 +81,7 @@ export const verification = pgTable("verification", {
 
 export const jobPostings = pgTable("job_postings", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
   email: text("email").notNull(),
   jobTitle: text("job_title").notNull(),
   organizationName: text("organization_name").notNull(),
@@ -107,5 +108,5 @@ export const jobPostings = pgTable("job_postings", {
     .notNull()
     .$onUpdate(() => new Date()),
   paymentConfirmed: boolean("paymentConfirmed").notNull(),
-  expiresAt: date("expires_at").notNull(),
+  expiresAt: date("expires_at", { mode: "date" }).notNull(),
 });
