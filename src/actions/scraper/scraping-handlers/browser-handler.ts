@@ -19,7 +19,7 @@ export class BrowserHandler {
   async waitAndClickInput(selector: string, timeout = 10000): Promise<void> {
     try {
       const element = await this.page.waitForSelector(selector, {
-        state: "visible", // Or Attached
+        state: "attached",
         timeout,
       });
       if (!element) {
@@ -38,7 +38,7 @@ export class BrowserHandler {
   ): Promise<void> {
     try {
       const element = await this.page.waitForSelector(selector, {
-        state: "visible", // Or Attached
+        state: "attached", // Or Attached
         timeout,
       });
 
@@ -66,7 +66,7 @@ export class BrowserHandler {
   ): Promise<void> {
     try {
       const element = await this.page.waitForSelector(selector, {
-        state: "visible",
+        state: "attached",
         timeout: findTimeout,
       });
 
