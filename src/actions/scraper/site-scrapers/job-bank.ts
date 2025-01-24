@@ -80,14 +80,9 @@ async function visitPages(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
 
-        await new Promise<void>((resolve) => {
-          setTimeout(() => {
-            resolve();
-          }, 5000);
-        });
-
         const email = await browserHandler.waitAndGetElement(
-          CONFIG.selectors.govJobBank.info.postEmail
+          CONFIG.selectors.govJobBank.info.postEmail,
+          5000
         );
 
         const emailLink = await email.getAttribute("href");
