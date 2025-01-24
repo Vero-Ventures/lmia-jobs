@@ -95,7 +95,7 @@ async function visitPages(
         const fullId = await email.getAttribute("href");
         emails.push(fullId!.split(":")[1]);
       } catch (error) {
-        console.error(error);
+        console.error("Error: " + error);
         console.error("Post With ID: " + post + " Is Invalid");
         badPosts.push(post);
       }
