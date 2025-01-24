@@ -49,6 +49,8 @@ async function scrapePosts(
         CONFIG.selectors.govJobBank.info.postedToBank
       );
 
+      console.log(await postedToBank.innerText())
+
       if ((await postedToBank.innerText()) === "Posted on Job Bank") {
         console.log("Posted To Bank");
         const fullId = await post.getAttribute("id");
