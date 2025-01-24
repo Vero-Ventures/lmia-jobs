@@ -91,7 +91,9 @@ export function JobPostingCard({
         <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
           {jobPosting.organizationName}
         </CardDescription>
-        {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
+        <div>
+          {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
+        </div>
         <div className="ml-auto flex w-fit flex-col">
           <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
             Opened: {new Date(jobPosting.createdAt).toDateString()}

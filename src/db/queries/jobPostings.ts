@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
 import { eq, and, ilike, inArray, gt } from "drizzle-orm";
-import { checkUserPurchases } from "@/actions/stripe/check-purchases";
 
 export async function selectAllJobPostings({
   jobBoard,
@@ -19,8 +18,6 @@ export async function selectAllJobPostings({
   let postings;
 
   if (userId) {
-    await checkUserPurchases(userId);
-
     postings = await db
       .select()
       .from(jobPostings)
@@ -75,4 +72,11 @@ export async function selectAllJobPostings({
   }
 
   return postings;
+}
+
+export async function selectUserJobPostings({ userId }: { userId: string }) {
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(and(eq(jobPostings.userId, userId)));
 }

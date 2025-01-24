@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Form from "next/form";
 import Link from "next/link";
-import { selectAllJobPostings } from "@/db/queries/jobPostings";
+import { selectUserJobPostings } from "@/db/queries/jobPostings";
 import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,14 +27,14 @@ export default async function Page({
 
   const { jobTitle } = await searchParams;
 
-  const jobPostings = await selectAllJobPostings({
+  const jobPostings = await selectUserJobPostings({
     userId: data.user.id,
     jobTitle: jobTitle === undefined ? "" : jobTitle,
   });
 
   return (
-    <main className="min-h-dvh px-4 pb-4">
-      <div className="container mx-auto my-4 w-full overflow-y-auto rounded-xl p-2">
+    <main className="flex-1 px-4 pb-4">
+      <div className="container mx-auto my-4 w-full rounded-xl p-2">
         <div className="flex justify-between gap-4">
           <h1 className="text-xl font-bold text-primary">Your Postings</h1>
           <Button asChild>
@@ -53,7 +53,7 @@ export default async function Page({
         </div>
       </div>
       <Separator className="mt-4" />
-      <JobPostingSection jobPostings={jobPostings} />
+      <JobPostingSection isAdmin={!!data} jobPostings={jobPostings} />
     </main>
   );
 }
