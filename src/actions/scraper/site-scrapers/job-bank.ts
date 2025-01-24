@@ -79,7 +79,6 @@ async function visitPages(
       await browserHandler.visitPage(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
       );
-      console.log("Got To Page");
       try {
         console.log("Open Email");
         await browserHandler.waitAndClickInput(
@@ -91,12 +90,14 @@ async function visitPages(
           CONFIG.selectors.govJobBank.info.postEmailTag
         );
 
-        console.log(await browserHandler.printPage())
+        console.log(await browserHandler.printPage());
 
         console.log("Get Email From Email Tag");
-        const email =  emailTag.nth(0);
-        console.log("Email Inner HTML: " + await email.evaluate(el => el.innerHTML))
-        console.log("Email Text: " + await email.evaluate(el => el.textContent))
+        const email = emailTag.locator(
+          CONFIG.selectors.govJobBank.info.postEmail
+        );
+        console.log("Email Inner HTML: " + (await email.innerHTML()));
+        console.log("Email Text: " + (await email.textContent()));
 
         console.log("Get Email From Text");
         const emailText = await email.getAttribute("href");

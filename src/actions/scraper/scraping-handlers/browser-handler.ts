@@ -115,16 +115,13 @@ export class BrowserHandler {
   async waitAndGetElement(selector: string, waitTimeout: number = 10000) {
     try {
       const element = this.page.locator(selector);
-
-      await element.waitFor({ state: "attached", timeout: waitTimeout });
+      await element.first().waitFor({ state: "visible", timeout: waitTimeout });
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
 
-      console.log("Tag: " + (await element.count()));
-
-      return element;
+      return element.first();
     } catch (error) {
       throw error;
     }
