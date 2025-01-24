@@ -29,6 +29,7 @@ export default async function Page({
 
   const jobPostings = await selectUserJobPostings({
     userId: data.user.id,
+    jobTitle: jobTitle,
   });
 
   return (

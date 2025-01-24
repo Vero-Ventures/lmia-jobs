@@ -72,13 +72,14 @@ export async function selectAllJobPostings({
   return postings;
 }
 
-export async function selectUserJobPostings({userId}: {userId: string}) {
+export async function selectUserJobPostings({userId, jobTitle}: {userId: string; jobTitle?: string}) {
  return await db
       .select()
       .from(jobPostings)
       .where(
         and(
           eq(jobPostings.userId, userId),
+          eq(jobPostings.jobTitle, jobTitle ?? ""),
         )
       );
 }
