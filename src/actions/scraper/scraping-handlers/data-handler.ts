@@ -1,80 +1,8 @@
-import path from "path";
-import { promises as fs } from "fs";
 import { db } from "@/db";
 import { user, userMailing, jobPostings } from "@/db/schema";
 import type { UserData, JobPostData } from "@/actions/scraper/helpers/types";
 
 export class DataHandler {
-  private usersTempFile: string;
-  private postsTempFile: string;
-
-  constructor() {
-    this.usersTempFile = path.join("/tmp", "users_temp.txt");
-    this.postsTempFile = path.join("/tmp", "posts_temp.txt");
-  }
-
-  async createTempFiles() {
-    try {
-      await fs.writeFile(this.usersTempFile, "", { flag: "w" });
-      await fs.writeFile(this.postsTempFile, "", { flag: "w" });
-    } catch (error) {
-      console.error(`Error creating temp files at ${"/tmp"}: `, error);
-    }
-  }
-
-  async checkForExistingUserEmail(userEmail: string) {
-    try {
-      const data = await fs.readFile(this.usersTempFile, "utf-8");
-
-      const lines = data.split("\n");
-
-      for (const line of lines) {
-        if (line === userEmail) {
-          return true;
-        }
-      }
-
-      return false;
-    } catch (error) {
-      console.error(`Error reading the users file: `, error);
-      return false;
-    }
-  }
-
-  async tempStoreUserEmail(userEmail: string) {
-    try {
-      const newUser = await this.checkForExistingUserEmail(userEmail);
-      if (newUser) {
-        await fs.appendFile(this.usersTempFile, `${userEmail}\n`);
-      }
-    } catch (error) {
-      console.error(`Error writing post to temp file: `, error);
-    }
-  }
-
-  async readLocallyStoredUsers(): Promise<UserData[]> {
-    try {
-      const users: UserData[] = [];
-
-      const data = await fs.readFile(this.usersTempFile, "utf-8");
-
-      const lines = data.split("\n");
-
-      for (const line of lines) {
-        const lineData = line.split(",");
-
-        users.push({
-          email: lineData[0],
-        });
-      }
-
-      return users;
-    } catch (error) {
-      console.error(`Error reading the users file: `, error);
-      return [];
-    }
-  }
-
   async saveUsersToDatabase(users: UserData[]) {
     try {
       const dataBaseUsers = [];
@@ -118,62 +46,6 @@ export class DataHandler {
       }
     } catch (error) {
       console.error(`Error writing users to the database: `, error);
-    }
-  }
-
-  async tempStorePost(postId: string, postDetails: string[]) {
-    try {
-      const newUserLine = `${postId}, ${postDetails.join(", ")}\n`;
-
-      await fs.appendFile(this.postsTempFile, newUserLine);
-    } catch (error) {
-      console.error(`Error writing post to temp file: `, error);
-    }
-  }
-
-  async readLocallyStoredPosts(): Promise<{ id: string; test: string }[]> {
-    try {
-      const posts: { id: string; test: string }[] = [];
-
-      const data = await fs.readFile(this.postsTempFile, "utf-8");
-
-      const lines = data.split("\n");
-
-      console.log(lines);
-
-      for (const line of lines) {
-        const lineData = line.split(",");
-
-        const newPost = {
-          id: lineData[0],
-          test: lineData[1],
-        };
-
-        // const newPost = {
-        //   email: lineData[1],
-        //   jobTitle: lineData[2],
-        //   organizationName: lineData[3],
-        //   region: lineData[4],
-        //   city: lineData[5],
-        //   address: lineData[6],
-        //   startDate: lineData[7],
-        //   employmentType: lineData[8],
-        //   paymentType: lineData[9],
-        //   workHours: Number(lineData[10]),
-        //   minPayValue: Number(lineData[11]),
-        //   maxPayValue: Number(lineData[12]),
-        //   description: lineData[13],
-        //   language: lineData[14],
-        //   vacancies: Number(lineData[15]),
-        // };
-
-        posts.push(newPost);
-      }
-
-      return posts;
-    } catch (error) {
-      console.error(`Error reading the job posts file: `, error);
-      return [];
     }
   }
 

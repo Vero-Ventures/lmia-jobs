@@ -1,16 +1,14 @@
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
-import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
+// import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
 
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
-): Promise<string[]> {
+): Promise<{ postIds: string[]; postEmails: string[] }> {
   let pageNum = 1;
   let scrape = true;
 
-  const dataHandler = new DataHandler();
-
-  dataHandler.createTempFiles();
+  // const dataHandler = new DataHandler();
 
   const postIds: string[] = [];
 
@@ -19,19 +17,22 @@ export async function scrapeGovJobBank(
     postIds.push(...newPostIds);
     pageNum += 1;
 
-    if (pageNum > 2) {
+    if (pageNum > 1) {
       scrape = false;
-    }
-
-    for (const postId of postIds) {
-      await dataHandler.tempStorePost(postId, ["test"]);
     }
   }
 
-  console.log("Read From Temp File");
-  console.log(await dataHandler.readLocallyStoredPosts());
+  const { postEmails, badPostIds } = await visitPages(browserHandler, postIds);
 
-  return postIds;
+  console.log("Filter Posts");
+
+  const goodPosts = postIds!.filter(
+    (postId: string) => !badPostIds.includes(postId)
+  );
+
+  console.log("Return Result");
+
+  return { postIds: goodPosts, postEmails: postEmails };
 }
 
 async function scrapePosts(
@@ -44,7 +45,7 @@ async function scrapePosts(
     await browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
     const posts = await browserHandler.getElement(
-      CONFIG.selectors.govJobBank.jobPosting
+      CONFIG.selectors.govJobBank.info.jobPosting
     );
 
     for (const post of await posts.all()) {
@@ -56,5 +57,45 @@ async function scrapePosts(
   } catch (error) {
     console.error("Error getting job post Ids: " + error);
     return [];
+  }
+}
+
+async function visitPages(
+  browserHandler: BrowserHandler,
+  postIds: string[]
+): Promise<{ postEmails: string[]; badPostIds: string[] }> {
+  try {
+    const emails: string[] = [];
+    const badPosts: string[] = [];
+
+    console.log("Getting Emails");
+
+    for (const post of postIds) {
+      await browserHandler.visitPage(
+        CONFIG.urls.searchResult + String(post) + "?source=searchresults"
+      );
+      try {
+        console.log("Got An Email");
+
+        await browserHandler.waitAndClickInput(
+          CONFIG.selectors.govJobBank.inputs.howToApply
+        );
+
+        const email = await browserHandler.waitAndGetElement(
+          CONFIG.selectors.govJobBank.info.postEmail
+        );
+
+        const fullId = await email.getAttribute("href");
+        emails.push(fullId!.split(":")[1]);
+      } catch {
+        console.error("Post With ID: " + post + " Is Invalid");
+        badPosts.push(post);
+      }
+    }
+
+    return { postEmails: emails, badPostIds: badPosts };
+  } catch (error) {
+    console.error("Error getting gettig post page emails: " + error);
+    return { postEmails: [], badPostIds: [] };
   }
 }

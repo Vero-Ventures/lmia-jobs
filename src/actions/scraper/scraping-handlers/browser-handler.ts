@@ -27,7 +27,7 @@ export class BrowserHandler {
     }
   }
 
-  async waitAndClickLunk(
+  async waitAndClickLink(
     selector: string,
     timeout = 5000,
     waitTime = 10000
@@ -95,6 +95,25 @@ export class BrowserHandler {
 
   async getElement(selector: string) {
     try {
+      const element = this.page.locator(selector);
+
+      if (!element) {
+        throw new Error(`Element not found: ${selector}`);
+      }
+
+      return element;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async waitAndGetElement(selector: string, waitTimeout: number = 10000) {
+    try {
+      await this.page.waitForSelector(selector, {
+        state: "visible",
+        timeout: waitTimeout,
+      });
+
       const element = this.page.locator(selector);
 
       if (!element) {
