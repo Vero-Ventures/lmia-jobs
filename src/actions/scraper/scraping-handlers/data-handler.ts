@@ -13,7 +13,7 @@ export class DataHandler {
     this.postsTempFile = path.join("/tmp", "posts_temp.txt");
   }
 
-  async createTempFile() {
+  async createTempFiles() {
     try {
       await fs.writeFile(this.usersTempFile, "", { flag: "w" });
       await fs.writeFile(this.postsTempFile, "", { flag: "w" });
@@ -77,7 +77,7 @@ export class DataHandler {
 
   async tempStorePost(postId: string, postDetails: string[]) {
     try {
-      const newUser = await this.checkForExistingUser(postId);
+      const newUser = await this.checkForExistingPost(postId);
       if (newUser) {
         const newUserLine = `${postId}, ${postDetails.join(", ")}\n`;
 
@@ -114,9 +114,9 @@ export class DataHandler {
     }
   }
 
-  async readLocallyStoredPosts(): Promise<JobPostData[]> {
+  async readLocallyStoredPosts(): Promise<{ id: string; test: string }[]> {
     try {
-      const posts: JobPostData[] = [];
+      const posts: { id: string; test: string }[] = [];
 
       const data = await fs.readFile(this.usersTempFile, "utf-8");
 
@@ -126,22 +126,27 @@ export class DataHandler {
         const lineData = line.split(",");
 
         const newPost = {
-          email: lineData[1],
-          jobTitle: lineData[2],
-          organizationName: lineData[3],
-          region: lineData[4],
-          city: lineData[5],
-          address: lineData[6],
-          startDate: lineData[7],
-          employmentType: lineData[8],
-          paymentType: lineData[9],
-          workHours: Number(lineData[10]),
-          minPayValue: Number(lineData[11]),
-          maxPayValue: Number(lineData[12]),
-          description: lineData[13],
-          language: lineData[14],
-          vacancies: Number(lineData[15]),
+          id: lineData[0],
+          test: lineData[1],
         };
+
+        // const newPost = {
+        //   email: lineData[1],
+        //   jobTitle: lineData[2],
+        //   organizationName: lineData[3],
+        //   region: lineData[4],
+        //   city: lineData[5],
+        //   address: lineData[6],
+        //   startDate: lineData[7],
+        //   employmentType: lineData[8],
+        //   paymentType: lineData[9],
+        //   workHours: Number(lineData[10]),
+        //   minPayValue: Number(lineData[11]),
+        //   maxPayValue: Number(lineData[12]),
+        //   description: lineData[13],
+        //   language: lineData[14],
+        //   vacancies: Number(lineData[15]),
+        // };
 
         posts.push(newPost);
       }

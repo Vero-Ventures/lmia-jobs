@@ -1,11 +1,16 @@
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
+import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
 
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
 ): Promise<string[]> {
   let pageNum = 1;
   let scrape = true;
+
+  const dataHandler = new DataHandler();
+
+  dataHandler.createTempFiles();
 
   const postIds: string[] = [];
 
@@ -17,7 +22,14 @@ export async function scrapeGovJobBank(
     if (pageNum >= 10) {
       scrape = false;
     }
+
+    for (const postId of postIds) {
+      await dataHandler.tempStorePost(postId, ["test"]);
+    }
   }
+
+  console.log("Read From Temp File");
+  console.log(await dataHandler.readLocallyStoredPosts());
 
   return postIds;
 }
