@@ -91,6 +91,8 @@ async function visitPages(
           CONFIG.selectors.govJobBank.info.postEmailTag
         );
 
+        console.log(await browserHandler.printPage())
+
         console.log("Get Email From Email Tag");
         const email =  emailTag.nth(0);
         console.log("Email Inner HTML: " + await email.evaluate(el => el.innerHTML))
