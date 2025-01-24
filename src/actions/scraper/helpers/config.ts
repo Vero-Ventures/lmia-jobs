@@ -9,7 +9,7 @@ export const CONFIG = {
     govJobBank: {
       info: {
         jobPosting: "article",
-        postEmailTag: "h4#htaemail >> following-sibling::p",
+        postEmailTag: `xpath=//h4[@id="htaemail"]/following-sibling::p`,
         postEmail: "a",
       },
       inputs: { howToApply: "#applynowbutton" },
