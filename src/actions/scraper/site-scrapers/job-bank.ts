@@ -86,8 +86,6 @@ async function visitPages(
           }, 5000);
         });
 
-        console.log(await browserHandler.printPage());
-
         const email = await browserHandler.waitAndGetElement(
           CONFIG.selectors.govJobBank.info.postEmail
         );
@@ -95,8 +93,8 @@ async function visitPages(
         const emailLink = await email.getAttribute("href");
         console.log("Email Link: " + emailLink);
 
-        const emailText = await email.getAttribute("href");
-        console.log("Email Link: " + emailText);
+        const emailText = await email.innerText();
+        console.log("Email Text: " + emailText);
 
         if (emailText) {
           emails.push(emailText);
