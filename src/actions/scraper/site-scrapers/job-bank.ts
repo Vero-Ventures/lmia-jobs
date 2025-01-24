@@ -51,7 +51,7 @@ async function scrapePosts(
 
       console.log(await postedToBank.innerText())
 
-      if ((await postedToBank.innerText()) === "Posted on Job Bank") {
+      if ((await postedToBank.innerText()).includes("Posted on Job Bank")) {
         console.log("Posted To Bank");
         const fullId = await post.getAttribute("id");
         pagePostIds.push(fullId!.split("-")[1]);
