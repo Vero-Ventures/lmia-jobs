@@ -22,15 +22,14 @@ export class DataHandler {
     }
   }
 
-  async checkForExistingUser(userEmail: string) {
+  async checkForExistingUserEmail(userEmail: string) {
     try {
       const data = await fs.readFile(this.usersTempFile, "utf-8");
 
       const lines = data.split("\n");
 
       for (const line of lines) {
-        const email = line.split(",")[0];
-        if (email === userEmail) {
+        if (line === userEmail) {
           return true;
         }
       }
@@ -42,46 +41,11 @@ export class DataHandler {
     }
   }
 
-  async checkForExistingPost(postId: string) {
+  async tempStoreUserEmail(userEmail: string) {
     try {
-      const data = await fs.readFile(this.usersTempFile, "utf-8");
-
-      const lines = data.split("\n");
-
-      for (const line of lines) {
-        const Id = line.split(",")[0];
-        if (Id === postId) {
-          return true;
-        }
-      }
-
-      return false;
-    } catch (error) {
-      console.error(`Error reading the posts file: `, error);
-      return false;
-    }
-  }
-
-  async tempStoreUser(userId: string, userDetails: string[]) {
-    try {
-      const newUser = await this.checkForExistingUser(userId);
+      const newUser = await this.checkForExistingUserEmail(userEmail);
       if (newUser) {
-        const newUserLine = `${userId}, ${userDetails.join(", ")}\n`;
-
-        await fs.appendFile(this.postsTempFile, newUserLine);
-      }
-    } catch (error) {
-      console.error(`Error writing post to temp file: `, error);
-    }
-  }
-
-  async tempStorePost(postId: string, postDetails: string[]) {
-    try {
-      const newUser = await this.checkForExistingPost(postId);
-      if (newUser) {
-        const newUserLine = `${postId}, ${postDetails.join(", ")}\n`;
-
-        await fs.appendFile(this.postsTempFile, newUserLine);
+        await fs.appendFile(this.usersTempFile, `${userEmail}\n`);
       }
     } catch (error) {
       console.error(`Error writing post to temp file: `, error);
@@ -99,12 +63,9 @@ export class DataHandler {
       for (const line of lines) {
         const lineData = line.split(",");
 
-        const newUser = {
+        users.push({
           email: lineData[0],
-          posts: Number(lineData[1]),
-        };
-
-        users.push(newUser);
+        });
       }
 
       return users;
@@ -114,11 +75,67 @@ export class DataHandler {
     }
   }
 
+  async saveUsersToDatabase(users: UserData[]) {
+    try {
+      const dataBaseUsers = [];
+
+      for (const user of users) {
+        const createDate = new Date();
+
+        const newID =
+          this.generateRandomChars(8) +
+          "-" +
+          this.generateRandomChars(4) +
+          "-" +
+          this.generateRandomChars(4) +
+          "-" +
+          this.generateRandomChars(4) +
+          "-" +
+          this.generateRandomChars(12);
+
+        const newUser = {
+          id: newID,
+          name: user.email,
+          email: user.email,
+          emailVerified: false,
+          createdAt: createDate,
+          updatedAt: createDate,
+        };
+
+        dataBaseUsers.push(newUser);
+      }
+
+      const createdUsers = await db
+        .insert(user)
+        .values(dataBaseUsers)
+        .returning();
+
+      for (const createdUser of createdUsers) {
+        await db.insert(userMailing).values({
+          userId: createdUser.id,
+          tempPassword: this.generateRandomChars(8),
+        });
+      }
+    } catch (error) {
+      console.error(`Error writing users to the database: `, error);
+    }
+  }
+
+  async tempStorePost(postId: string, postDetails: string[]) {
+    try {
+      const newUserLine = `${postId}, ${postDetails.join(", ")}\n`;
+
+      await fs.appendFile(this.postsTempFile, newUserLine);
+    } catch (error) {
+      console.error(`Error writing post to temp file: `, error);
+    }
+  }
+
   async readLocallyStoredPosts(): Promise<{ id: string; test: string }[]> {
     try {
       const posts: { id: string; test: string }[] = [];
 
-      const data = await fs.readFile(this.usersTempFile, "utf-8");
+      const data = await fs.readFile(this.postsTempFile, "utf-8");
 
       const lines = data.split("\n");
 
@@ -155,41 +172,6 @@ export class DataHandler {
     } catch (error) {
       console.error(`Error reading the job posts file: `, error);
       return [];
-    }
-  }
-
-  async saveUsersToDatabase(users: UserData[]) {
-    try {
-      const dataBaseUsers = [];
-
-      for (const user of users) {
-        const createDate = new Date();
-
-        const newUser = {
-          id: this.generateRandomChars(32),
-          name: user.email,
-          email: user.email,
-          emailVerified: false,
-          createdAt: createDate,
-          updatedAt: createDate,
-        };
-
-        dataBaseUsers.push(newUser);
-      }
-
-      const createdUsers = await db
-        .insert(user)
-        .values(dataBaseUsers)
-        .returning();
-
-      for (const createdUser of createdUsers) {
-        await db.insert(userMailing).values({
-          userId: createdUser.id,
-          tempPassword: this.generateRandomChars(8),
-        });
-      }
-    } catch (error) {
-      console.error(`Error writing users to the database: `, error);
     }
   }
 
