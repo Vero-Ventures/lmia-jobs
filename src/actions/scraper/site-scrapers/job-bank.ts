@@ -97,10 +97,10 @@ async function visitPages(
           CONFIG.selectors.govJobBank.info.postEmail
         );
 
-        console.log("Email: " + emailTag.innerHTML());
+        console.log("Email: " + await emailTag.innerHTML());
         console.log("Get Email From Text");
         const emailText = await email.getAttribute("href");
-        console.log(emailText!.split(":")[1]);
+        console.log("Email: " + emailText!.split(":")[1]);
         emails.push(emailText!.split(":")[1]);
       } catch (error) {
         console.error("Error: " + error);

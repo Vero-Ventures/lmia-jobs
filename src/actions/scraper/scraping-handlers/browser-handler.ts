@@ -22,11 +22,11 @@ export class BrowserHandler {
         state: "attached",
         timeout,
       });
-      
+
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
-      await element.dispatchEvent('click');
+      await element.dispatchEvent("click");
     } catch (error) {
       throw error;
     }
@@ -124,6 +124,10 @@ export class BrowserHandler {
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
+
+      console.log("Tag: " + (await element.textContent()));
+      
+      console.log("Tag: " + (await element.innerHTML()));
 
       return element;
     } catch (error) {
