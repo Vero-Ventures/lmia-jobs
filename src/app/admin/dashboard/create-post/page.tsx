@@ -180,7 +180,7 @@ export default function Page({
 
       if (creationResult === "created") {
         const checkoutResult = await createStripeCheckout(
-          session!.user.email,
+          session!.user.id,
           numBoards,
           postTime,
           newPostId!

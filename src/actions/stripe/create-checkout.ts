@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/index";
-import { user, stripeCustomer } from "@/db/schema";
+import { stripeCustomer } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
@@ -16,32 +16,23 @@ const success_url =
   process.env.STRIPE_CONFIG! === "production"
     ? "https://manageopportunities.ca/admin/payment-confirmed"
     : "http://localhost:3000/admin/payment-confirmed";
+
 const cancel_url =
   process.env.STRIPE_CONFIG! === "production"
     ? "https://manageopportunities.ca/admin/dashboard"
     : "http://localhost:3000/admin/dashboard";
+
 export async function createStripeCheckout(
-  userEmail: string,
+  userId: string,
   postBoards: number,
   postTime: number,
   postId: string
 ): Promise<{ result: boolean; url: string }> {
   try {
-    const currentUser = await db
-      .select()
-      .from(user)
-      .where(eq(user.email, userEmail))
-      .then((res) => res[0]);
-
-    if (!currentUser) {
-      console.error("User Not Found.");
-      return { result: false, url: "" };
-    }
-
     const stripeUser = await db
       .select()
       .from(stripeCustomer)
-      .where(eq(stripeCustomer.userId, currentUser.id))
+      .where(eq(stripeCustomer.userId, userId))
       .then((res) => res[0]);
 
     if (stripeUser) {
