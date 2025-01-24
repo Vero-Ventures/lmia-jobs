@@ -89,7 +89,7 @@ export const PROVINCES = [
   },
 ] as const;
 
-export const paymentType = ["Hourly", "Salary"] as const;
+export const paymentTypes = ["Hourly", "Salary"] as const;
 
 export const provinceValues = [
   "AB",
