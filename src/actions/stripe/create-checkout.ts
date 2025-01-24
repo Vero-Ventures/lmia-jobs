@@ -12,6 +12,14 @@ const stripe = new Stripe(
     : process.env.DEVELOPER_STRIPE_PRIVATE_KEY!
 );
 
+const success_url =
+  process.env.STRIPE_CONFIG! === "production"
+    ? "https://manageopportunities.ca/admin/payment-confirmed"
+    : "http://localhost:3000/admin/payment-confirmed";
+const cancel_url =
+  process.env.STRIPE_CONFIG! === "production"
+    ? "https://manageopportunities.ca/admin/dashboard"
+    : "http://localhost:3000/admin/dashboard";
 export async function createStripeCheckout(
   userEmail: string,
   postBoards: number,
@@ -76,8 +84,8 @@ export async function createStripeCheckout(
             quantity: 1,
           },
         ],
-        cancel_url: "https://manageopportunities.ca/admin/purchase",
-        success_url: "https://manageopportunities.ca/admin/dashboard",
+        success_url: success_url,
+        cancel_url: cancel_url,
       });
 
       if (checkoutSession.url) {
