@@ -27,6 +27,7 @@ import {
   jobTypeLabels,
   languages,
   paymentTypes,
+  PRICE_PER_MONTH,
   PROVINCES,
   provinceValues,
 } from "@/app/lib/constants";
@@ -114,7 +115,16 @@ export function CreatePostForm() {
     },
   });
 
-  function onSubmit(values: CreatePost) {
+  const selectedJobBoards = [
+    form.watch("postAsylum"),
+    form.watch("postDisabled"),
+    form.watch("postIndigenous"),
+    form.watch("postNewcomers"),
+    form.watch("postYouth"),
+  ].filter(Boolean).length;
+  const monthsToPost = form.watch("monthsToPost");
+
+  async function onSubmit(values: CreatePost) {
     console.log(values);
   }
 
@@ -548,7 +558,9 @@ export function CreatePostForm() {
               />
               <div className="space-y-2 sm:text-right">
                 <h2 className="text-2xl font-bold">Total Price</h2>
-                <p className="text-xl font-semibold">$100.00</p>
+                <p className="text-xl font-semibold">
+                  ${selectedJobBoards * monthsToPost * PRICE_PER_MONTH}
+                </p>
               </div>
             </div>
 
