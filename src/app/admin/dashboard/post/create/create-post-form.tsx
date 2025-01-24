@@ -34,8 +34,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { createJobPost } from "./actions";
 
 const createPostSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
   jobTitle: z.string().trim().min(1, {
     message: "Job title must be at least 1 character.",
   }),
@@ -86,24 +88,25 @@ const createPostSchema = z.object({
     .number()
     .min(1, { message: "Months posted must be greater than 0" }),
 });
-type CreatePost = z.infer<typeof createPostSchema>;
+export type CreatePost = z.infer<typeof createPostSchema>;
 
 export function CreatePostForm() {
   const form = useForm<CreatePost>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
+      email: "",
       jobTitle: "",
       organizationName: "",
       province: "AB",
       city: "",
       address: "",
       startDate: new Date().toISOString().split("T")[0],
-      vacancies: 0,
+      vacancies: undefined,
       employmentType: "Full Time",
-      workHours: 1,
+      workHours: undefined,
       paymentType: "Hourly",
       minPayValue: 0,
-      maxPayValue: 1,
+      maxPayValue: undefined,
       description: "",
       language: "English",
       postAsylum: false,
@@ -126,6 +129,8 @@ export function CreatePostForm() {
 
   async function onSubmit(values: CreatePost) {
     console.log(values);
+    await createJobPost(values);
+    form.reset();
   }
 
   return (
@@ -310,6 +315,23 @@ export function CreatePostForm() {
                       <FormControl>
                         <Input
                           placeholder="Enter a organization name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contact Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter a contact email"
                           {...field}
                         />
                       </FormControl>
