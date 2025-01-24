@@ -22,6 +22,9 @@ export class BrowserHandler {
         state: "attached",
         timeout,
       });
+
+      console.log(element)
+
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }

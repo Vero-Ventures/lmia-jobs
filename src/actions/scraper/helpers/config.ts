@@ -12,7 +12,7 @@ export const CONFIG = {
         postEmailTag: `p span#tp_applyByEmailAddress`,
         postEmail: "a",
       },
-      inputs: { howToApply: "#applynowbutton" },
+      inputs: { howToApply: "button#applynowbutton" },
     },
   },
 } as const;
