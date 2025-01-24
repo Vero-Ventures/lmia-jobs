@@ -42,6 +42,7 @@ export default function Page({
   const [submittingPost, setSubmittingPost] = useState(false);
 
   const [formValues, setFormValues] = useState({
+    email: "",
     jobTitle: "",
     organizationName: "",
     region: "",
@@ -112,13 +113,11 @@ export default function Page({
         setLoadingPostData(true);
         setPostUpdate(true);
 
-        const [result, jobPosting] = await getJobPost(
-          postId,
-          session!.user.email
-        );
+        const [result, jobPosting] = await getJobPost(postId, session!.user.id);
 
         if (result && jobPosting) {
           setFormValues({
+            email: jobPosting.email,
             jobTitle: jobPosting.jobTitle,
             organizationName: jobPosting.organizationName,
             region: jobPosting.region,
@@ -174,8 +173,8 @@ export default function Page({
 
       const [creationResult, numBoards, newPostId] = await createJobPost(
         formValues,
-        postTime,
-        session!.user.email
+        session!.user.id,
+        postTime
       );
 
       if (creationResult === "created") {
@@ -198,7 +197,7 @@ export default function Page({
       const updateResult = await updateJobPost(
         formValues,
         postId,
-        session!.user.email
+        session!.user.id
       );
 
       if (updateResult === "updated") {
@@ -226,6 +225,20 @@ export default function Page({
           <Button className="w-10 self-end justify-self-end bg-white">
             <XCircle className="min-h-8 min-w-8 bg-white text-black" />
           </Button>
+
+          <div className="md:mx-auto md:w-4/5">
+            <label className="p-2 font-semibold mb:text-lg">
+              Contact Email
+            </label>
+            <Input
+              className="border-2 border-gray-500 md:text-base"
+              type="text"
+              name="email"
+              value={formValues.email}
+              onChange={handleValueChange}
+              required
+            />
+          </div>
 
           <div className="md:mx-auto md:w-4/5">
             <label className="p-2 font-semibold mb:text-lg">Job Title</label>

@@ -39,7 +39,7 @@ export default function Page() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleEmailUpdate = async () => {
-    const updateEmailResult = await updateEmail(session!.user.email, newEmail);
+    const updateEmailResult = await updateEmail(session!.user.id, newEmail);
 
     if (updateEmailResult === "success") {
       let countdown = 5;

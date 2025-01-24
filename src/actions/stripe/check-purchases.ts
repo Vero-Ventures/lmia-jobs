@@ -42,7 +42,7 @@ export async function checkUserPurchases(userEmail: string): Promise<string> {
       const customerPosts = await db
         .select()
         .from(jobPostings)
-        .where(eq(jobPostings.email, currentUser.email));
+        .where(eq(jobPostings.userId, currentUser.id));
 
       let result = "success";
 

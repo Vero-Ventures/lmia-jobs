@@ -2,18 +2,18 @@
 
 import { authClient, resetPassword } from "@/lib/auth-client";
 import { db } from "@/db";
-import { jobPostings, user } from "@/db/schema";
+import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function updateEmail(
-  userEmail: string,
+  userId: string,
   newEmail: string
 ): Promise<string> {
   try {
     const currentUser = await db
       .select()
       .from(user)
-      .where(eq(user.email, userEmail))
+      .where(eq(user.id, userId))
       .then((res) => res[0]);
 
     if (currentUser) {
@@ -39,14 +39,9 @@ export async function updateEmail(
         return failedUpdate;
       } else {
         await db
-          .update(jobPostings)
-          .set({ email: newEmail })
-          .where(eq(jobPostings.email, userEmail));
-
-        await db
           .update(user)
           .set({ email: newEmail, emailVerified: false })
-          .where(eq(user.email, newEmail));
+          .where(eq(user.id, userId));
       }
     }
 
