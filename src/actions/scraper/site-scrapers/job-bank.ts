@@ -13,8 +13,7 @@ export async function scrapeGovJobBank(
     postIds = await scrapePosts(browserHandler, pageNum);
     pageNum += 1;
 
-    // Test Limit
-    if (pageNum >= 1) {
+    if (pageNum >= 10) {
       scrape = false;
     }
   }
