@@ -9,6 +9,7 @@ export const CONFIG = {
     govJobBank: {
       info: {
         jobPosting: "article",
+        postedToBank: "span.postedonJB",
         postEmail: `p a[href^="mailto:"]`,
       },
       inputs: { howToApply: "button#applynowbutton" },

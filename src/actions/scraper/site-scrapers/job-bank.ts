@@ -45,8 +45,15 @@ async function scrapePosts(
     );
 
     for (const post of await posts.all()) {
-      const fullId = await post.getAttribute("id");
-      pagePostIds.push(fullId!.split("-")[1]);
+      const postedToBank = post.locator(
+        CONFIG.selectors.govJobBank.info.postedToBank
+      );
+
+      if ((await postedToBank.innerText()) === "Posted on Job Bank") {
+        console.log("Posted To Bank");
+        const fullId = await post.getAttribute("id");
+        pagePostIds.push(fullId!.split("-")[1]);
+      }
     }
 
     return pagePostIds;
