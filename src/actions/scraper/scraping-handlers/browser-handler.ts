@@ -25,7 +25,7 @@ export class BrowserHandler {
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
-      await element.click();
+      await element.click({ force: true });
     } catch (error) {
       throw error;
     }
