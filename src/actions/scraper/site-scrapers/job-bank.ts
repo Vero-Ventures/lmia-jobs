@@ -92,7 +92,9 @@ async function visitPages(
         );
 
         console.log("Get Email From Email Tag");
-        const email = emailTag.nth(0);
+        const email =  emailTag.nth(0);
+        console.log("Email Inner HTML: " + await email.evaluate(el => el.innerHTML))
+        console.log("Email Text: " + await email.evaluate(el => el.textContent))
 
         console.log("Get Email From Text");
         const emailText = await email.getAttribute("href");
