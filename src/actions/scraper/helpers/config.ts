@@ -7,7 +7,7 @@ export const CONFIG = {
 
   selectors: {
     govJobBank: {
-      info: { jobPosting: "article", postEmail: "p#htaemail + a" },
+      info: { jobPosting: "article", postEmail: "h4#htaemail + a" },
       inputs: { howToApply: "#applynowbutton" },
     },
   },
