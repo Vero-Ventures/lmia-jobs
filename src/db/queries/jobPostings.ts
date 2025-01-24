@@ -4,74 +4,56 @@ import { eq, and, ilike, inArray, gt } from "drizzle-orm";
 
 export async function selectAllJobPostings({
   jobBoard,
-  userId,
   jobTitle,
   location,
   jobType,
 }: {
   jobBoard?: string;
-  userId?: string;
   jobTitle?: string;
   jobType?: string;
   location?: string;
 }) {
-  let postings;
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
 
-  if (userId) {
-    postings = await db
-      .select()
-      .from(jobPostings)
-      .where(
-        and(
-          eq(jobPostings.paymentConfirmed, true),
-          eq(jobPostings.userId, userId),
-          ilike(
-            jobPostings.jobTitle,
-            "%" + (jobTitle !== undefined ? jobTitle : "")
-          )
-        )
-      );
-
-    console.log(postings);
-  } else {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-
-    const filterAccessible = [true, jobBoard === "accessible-job-board"];
-    const filterAsylum = [true, jobBoard === "asylum-job-board"];
-    const filterIndigenous = [true, jobBoard === "indigenous-job-board"];
-    const filterNewcomers = [true, jobBoard === "newcomers-job-board"];
-    const filterYouth = [true, jobBoard === "youth-job-board"];
-
-    postings = await db
-      .select()
-      .from(jobPostings)
-      .where(
-        and(
-          eq(jobPostings.paymentConfirmed, true),
-          inArray(jobPostings.postDisabled, filterAccessible),
-          inArray(jobPostings.postAsylum, filterAsylum),
-          inArray(jobPostings.postIndigenous, filterIndigenous),
-          inArray(jobPostings.postNewcomers, filterNewcomers),
-          inArray(jobPostings.postYouth, filterYouth),
-          ilike(
-            jobPostings.region,
-            "%" + (location !== undefined ? location : "")
-          ),
-          ilike(
-            jobPostings.employmentType,
-            "%" + (jobType !== undefined ? jobType : "")
-          ),
-          ilike(
-            jobPostings.jobTitle,
-            "%" + (jobTitle !== undefined ? jobTitle : "")
-          ),
-          gt(jobPostings.expiresAt, currentDate)
-        )
-      );
-  }
-
-  return postings;
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(
+      and(
+        eq(jobPostings.paymentConfirmed, true),
+        inArray(jobPostings.postDisabled, [
+          true,
+          jobBoard === "accessible-job-board",
+        ]),
+        inArray(jobPostings.postAsylum, [
+          true,
+          jobBoard === "asylum-job-board",
+        ]),
+        inArray(jobPostings.postIndigenous, [
+          true,
+          jobBoard === "indigenous-job-board",
+        ]),
+        inArray(jobPostings.postNewcomers, [
+          true,
+          jobBoard === "newcomers-job-board",
+        ]),
+        inArray(jobPostings.postYouth, [true, jobBoard === "youth-job-board"]),
+        ilike(
+          jobPostings.region,
+          "%" + (location !== undefined ? location : "")
+        ),
+        ilike(
+          jobPostings.employmentType,
+          "%" + (jobType !== undefined ? jobType : "")
+        ),
+        ilike(
+          jobPostings.jobTitle,
+          "%" + (jobTitle !== undefined ? jobTitle : "")
+        ),
+        gt(jobPostings.expiresAt, currentDate)
+      )
+    );
 }
 
 export async function selectUserJobPostings({
