@@ -28,7 +28,7 @@ export default async function Page({
   const { jobTitle } = await searchParams;
 
   const jobPostings = await selectAllJobPostings({
-    userId: data!.user.id,
+    userId: data.user.id,
     jobTitle: jobTitle === undefined ? "" : jobTitle,
   });
 

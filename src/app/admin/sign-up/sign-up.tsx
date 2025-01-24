@@ -16,6 +16,7 @@ import { signUp } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { createStripeUser } from "@/actions/stripe/create-user";
 
 export function SignUp() {
   const [email, setEmail] = useState("");
@@ -146,6 +147,7 @@ export function SignUp() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
+                    await createStripeUser(email);
                     setShowVerifyEmail(true);
                   },
                 }

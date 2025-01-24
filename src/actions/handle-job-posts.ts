@@ -77,7 +77,6 @@ export async function createJobPost(
       language: formData.language === "" ? null : formData.language,
       expiresAt: expireryDate,
       paymentConfirmed: false,
-      hidden: true,
     };
 
     const result = await db
@@ -164,12 +163,12 @@ export async function getJobPost(
 
 export async function editPostVisibility(
   postId: string,
-  hidden: boolean
+  hidePost: boolean
 ): Promise<string> {
   try {
     await db
       .update(jobPostings)
-      .set({ hidden })
+      .set({ hidden: hidePost })
       .where(eq(jobPostings.id, postId));
     return "success";
   } catch (error) {

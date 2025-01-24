@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
 import { eq, and, ilike, inArray, gt } from "drizzle-orm";
+import { checkUserPurchases } from "@/actions/stripe/check-purchases";
 
 export async function selectAllJobPostings({
   jobBoard,
@@ -18,6 +19,8 @@ export async function selectAllJobPostings({
   let postings;
 
   if (userId) {
+    await checkUserPurchases(userId);
+
     postings = await db
       .select()
       .from(jobPostings)
@@ -31,6 +34,8 @@ export async function selectAllJobPostings({
           )
         )
       );
+
+    console.log(postings);
   } else {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
