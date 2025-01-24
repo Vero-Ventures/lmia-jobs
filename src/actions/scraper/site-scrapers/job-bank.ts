@@ -91,16 +91,17 @@ async function visitPages(
           CONFIG.selectors.govJobBank.info.postEmailTag
         );
 
-        console.log(await emailTag.innerHTML())
+        console.log("Email Tag: " + (await emailTag.innerHTML()));
         console.log("Get Email From Email Tag");
         const email = emailTag.locator(
           CONFIG.selectors.govJobBank.info.postEmail
         );
 
-        console.log("Email: " + emailTag);
+        console.log("Email: " + emailTag.innerHTML());
         console.log("Get Email From Text");
-        const fullId = await email.getAttribute("href");
-        emails.push(fullId!.split(":")[1]);
+        const emailText = await email.getAttribute("href");
+        console.log(emailText!.split(":")[1]);
+        emails.push(emailText!.split(":")[1]);
       } catch (error) {
         console.error("Error: " + error);
         console.error("Post With ID: " + post + " Is Invalid");
