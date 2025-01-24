@@ -91,8 +91,6 @@ async function visitPages(
           CONFIG.selectors.govJobBank.info.postEmailTag
         );
 
-        console.log("Email Tag: " + emailTag);
-
         const email = emailTag.locator(
           CONFIG.selectors.govJobBank.info.postEmail
         );
