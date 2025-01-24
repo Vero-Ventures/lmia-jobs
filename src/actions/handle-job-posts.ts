@@ -75,7 +75,7 @@ export async function createJobPost(
           ? null
           : Math.ceil(Number(formData.maxPayValue)),
       language: formData.language === "" ? null : formData.language,
-      expiresAt: expireryDate.toISOString().split("T")[0],
+      expiresAt: expireryDate,
       paymentConfirmed: false,
       hidden: true,
     };
