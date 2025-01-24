@@ -65,13 +65,6 @@ async function visitPages(
     const badPosts: string[] = [];
 
     for (const post of postIds) {
-      console.log(
-        "Go To Page: " +
-          CONFIG.urls.searchResult +
-          String(post) +
-          "?source=searchresults"
-      );
-
       await browserHandler.visitPage(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
       );
@@ -85,11 +78,7 @@ async function visitPages(
           5000
         );
 
-        const emailLink = await email.getAttribute("href");
-        console.log("Email Link: " + emailLink);
-
         const emailText = await email.innerText();
-        console.log("Email Text: " + emailText);
 
         if (emailText) {
           emails.push(emailText);
