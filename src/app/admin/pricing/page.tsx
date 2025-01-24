@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -10,11 +6,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import PricingInputs from "./pricing-inputs";
 
-export default function Page() {
-  const [postBoards, setPostBoards] = useState(3);
-  const [postTime, setPostTime] = useState(4);
+interface PageProps {
+  searchParams: Promise<{
+    boards?: string;
+    duration?: string;
+  }>;
+}
+
+export default async function Page({ searchParams }: PageProps) {
+  const search = await searchParams;
+  const postBoards = search.boards ? Number(search.boards) : 3;
+  const postDuration = search.duration ? Number(search.duration) : 4;
+
+  const totalCost = postDuration * postBoards * 5.0;
 
   return (
     <main className="flex min-h-dvh flex-col">
@@ -33,43 +39,15 @@ export default function Page() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Number Of Job Boards</Label>
-              <Input
-                type="number"
-                value={postBoards}
-                onChange={(e) => {
-                  if (Number(e.target.value) > 5) {
-                    setPostBoards(5);
-                  } else if (Number(e.target.value) < 1) {
-                    setPostBoards(1);
-                  } else {
-                    setPostBoards(Number(e.target.value));
-                  }
-                }}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Months Posted</Label>
-              <Input
-                type="number"
-                value={postTime}
-                onChange={(e) => {
-                  if (Number(e.target.value) > 12) {
-                    setPostTime(12);
-                  } else if (Number(e.target.value) < 1) {
-                    setPostTime(1);
-                  } else {
-                    setPostTime(Number(e.target.value));
-                  }
-                }}
-              />
-            </div>
+            <PricingInputs
+              postBoards={postBoards}
+              postDuration={postDuration}
+            />
           </CardContent>
           <CardFooter>
             <div className="space-y-2">
               <h3 className="font-bold">Total Cost</h3>
-              <p>{"$" + postTime * postBoards * 5.0 + ".00"}</p>
+              <p>{"$" + totalCost + ".00"}</p>
             </div>
           </CardFooter>
         </Card>
