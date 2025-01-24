@@ -122,9 +122,7 @@ export class BrowserHandler {
         throw new Error(`Element not found: ${selector}`);
       }
 
-      console.log("Tag: " + (await element.textContent()));
-
-      console.log("Tag: " + (await element.innerHTML()));
+      console.log("Tag: " + (await element.count()));
 
       return element;
     } catch (error) {
