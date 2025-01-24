@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/db/index";
-import { user, stripeCustomer, jobPostings } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { stripeCustomer, jobPostings } from "@/db/schema";
+import { eq, inArray, notInArray } from "drizzle-orm";
 
 import { Stripe } from "stripe";
 
@@ -12,72 +12,50 @@ const stripe = new Stripe(
     : process.env.DEVELOPER_STRIPE_PRIVATE_KEY!
 );
 
-export async function checkUserPurchases(userEmail: string): Promise<string> {
+export async function checkUserPurchases(userId: string): Promise<boolean> {
   try {
-    const currentUser = await db
-      .select()
-      .from(user)
-      .where(eq(user.email, userEmail))
-      .then((res) => res[0]);
-
-    if (!currentUser) {
-      console.error("User Not Found.");
-      return "error";
-    }
-
     const stripeUser = await db
       .select()
       .from(stripeCustomer)
-      .where(eq(stripeCustomer.userId, currentUser.id))
+      .where(eq(stripeCustomer.userId, userId))
       .then((res) => res[0]);
 
     if (!stripeUser) {
       console.error("Stripe User Not Found");
-      return "error";
+      return false;
     } else {
       const customerPurchases = await stripe.charges.list({
         customer: stripeUser.stripeId,
       });
 
-      const customerPosts = await db
-        .select()
-        .from(jobPostings)
-        .where(eq(jobPostings.userId, currentUser.id));
-
-      let result = "success";
+      const validPurchases: string[] = [];
 
       for (const purchase of customerPurchases.data) {
         const paymentIntent = await stripe.paymentIntents.retrieve(
           purchase.payment_intent as string
         );
 
-        const purchasePost = customerPosts.find(
-          (post) => post.id === paymentIntent.metadata.postId
-        );
-
-        if (purchasePost && !purchasePost.paymentConfirmed) {
-          await db
-            .update(jobPostings)
-            .set({ paymentConfirmed: true, hidden: false })
-            .where(eq(jobPostings.id, purchasePost!.id));
-
-          result = "refresh";
-        }
+        validPurchases.push(paymentIntent.metadata.postId);
       }
 
       await db
-        .delete(jobPostings)
-        .where(eq(jobPostings.paymentConfirmed, false));
+        .update(jobPostings)
+        .set({ paymentConfirmed: true })
+        .where(inArray(jobPostings.id, validPurchases));
 
-      return result;
+      await db
+        .delete(jobPostings)
+        .where(notInArray(jobPostings.id, validPurchases));
+
+      return true;
     }
   } catch (error) {
     if (error instanceof Error) {
-      console.error(error.message);
-      return "error";
+      console.error("Error Checking Purchase: " + error.message);
+      return false;
     } else {
-      console.error("Unexpected Error.");
-      return "error";
+      console.error("Unexpected Error Checking Purchases.");
+      return false;
     }
   }
 }

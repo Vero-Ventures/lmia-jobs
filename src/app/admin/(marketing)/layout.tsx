@@ -1,7 +1,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 
-export default async function AdminLayout({
+export default async function AdminMarketingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

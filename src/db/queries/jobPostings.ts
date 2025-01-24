@@ -31,6 +31,8 @@ export async function selectAllJobPostings({
           )
         )
       );
+
+    console.log(postings);
   } else {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
@@ -70,4 +72,11 @@ export async function selectAllJobPostings({
   }
 
   return postings;
+}
+
+export async function selectUserJobPostings({ userId }: { userId: string }) {
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(and(eq(jobPostings.userId, userId)));
 }

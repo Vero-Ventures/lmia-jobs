@@ -49,7 +49,7 @@ export default function JobPostingSection({
               );
             })}
           </div>
-          <div className="sticky top-0 mx-1 max-h-dvh w-7/12 flex-1 overflow-hidden py-4 sm:w-8/12">
+          <div className="sticky top-2 mx-1 max-h-dvh w-7/12 flex-1 overflow-auto py-4 sm:w-8/12">
             {isAdmin ? (
               <JobPostingCard isAdmin jobPosting={selectedJobPosting} />
             ) : (

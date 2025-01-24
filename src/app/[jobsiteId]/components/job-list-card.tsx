@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { JobPosting } from "@/app/lib/types";
+import { Badge } from "@/components/ui/badge";
 
 export function JobListCard({
   jobPosting,
@@ -31,11 +32,13 @@ export function JobListCard({
         isSelected && "border-2 border-primary"
       )}>
       <CardHeader>
-        <CardTitle
-          className={`titleCase overflow-clip text-xl font-bold ${jobPosting.hidden ? "italic text-gray-600" : ""}`}>
-          {jobPosting.jobTitle} {jobPosting.hidden ? "- Hidden" : ""}
+        <CardTitle className={`titleCase overflow-clip text-xl font-bold`}>
+          {jobPosting.jobTitle}
         </CardTitle>
         <CardDescription>{jobPosting.organizationName}</CardDescription>
+        <div>
+          {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
