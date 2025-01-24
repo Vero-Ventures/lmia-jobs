@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Form from "next/form";
 import Link from "next/link";
-import { selectAllJobPostings } from "@/db/queries/jobPostings";
+import { selectUserJobPostings } from "@/db/queries/jobPostings";
 import JobPostingSection from "@/app/[jobsiteId]/components/job-posting-section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,9 +27,8 @@ export default async function Page({
 
   const { jobTitle } = await searchParams;
 
-  const jobPostings = await selectAllJobPostings({
-    userId: data!.user.id,
-    jobTitle: jobTitle === undefined ? "" : jobTitle,
+  const jobPostings = await selectUserJobPostings({
+    userId: data.user.id,
   });
 
   return (
@@ -53,7 +52,7 @@ export default async function Page({
         </div>
       </div>
       <Separator className="mt-4" />
-      <JobPostingSection jobPostings={jobPostings} />
+      <JobPostingSection isAdmin={!!data} jobPostings={jobPostings} />
     </main>
   );
 }

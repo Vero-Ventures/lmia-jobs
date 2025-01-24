@@ -71,3 +71,16 @@ export async function selectAllJobPostings({
 
   return postings;
 }
+
+export async function selectUserJobPostings({userId}: {userId: string}) {
+ return await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(
+          eq(jobPostings.userId, userId),
+        )
+      );
+}
+
+
