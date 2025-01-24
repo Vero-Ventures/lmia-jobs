@@ -3,6 +3,10 @@ import type { Page } from "playwright-core";
 export class BrowserHandler {
   constructor(public page: Page) {}
 
+  async printPage(): Promise<void> {
+    console.log(this.page.content())
+  }
+
   async visitPage(url: string): Promise<void> {
     try {
       await this.page.goto(url, { timeout: 30000 });

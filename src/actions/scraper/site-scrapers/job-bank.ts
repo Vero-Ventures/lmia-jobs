@@ -83,10 +83,14 @@ async function visitPages(
       );
       console.log("Got To Page");
       try {
+        browserHandler.printPage()
+
         console.log("Open Email");
         await browserHandler.waitAndClickInput(
           CONFIG.selectors.govJobBank.inputs.howToApply
         );
+
+        browserHandler.printPage()
 
         console.log("Get Email From Page");
         const email = await browserHandler.waitAndGetElement(
