@@ -8,10 +8,10 @@ export async function selectAllJobPostings({
   location,
   jobType,
 }: {
-  jobBoard?: string;
-  jobTitle?: string;
-  jobType?: string;
-  location?: string;
+  jobBoard: string;
+  jobTitle: string;
+  jobType: string;
+  location: string;
 }) {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
@@ -39,18 +39,9 @@ export async function selectAllJobPostings({
           jobBoard === "newcomers-job-board",
         ]),
         inArray(jobPostings.postYouth, [true, jobBoard === "youth-job-board"]),
-        ilike(
-          jobPostings.region,
-          "%" + (location !== undefined ? location : "")
-        ),
-        ilike(
-          jobPostings.employmentType,
-          "%" + (jobType !== undefined ? jobType : "")
-        ),
-        ilike(
-          jobPostings.jobTitle,
-          "%" + (jobTitle !== undefined ? jobTitle : "")
-        ),
+        ilike(jobPostings.region, "%" + location),
+        ilike(jobPostings.employmentType, "%" + jobType),
+        ilike(jobPostings.jobTitle, "%" + jobTitle),
         gt(jobPostings.expiresAt, currentDate)
       )
     );
@@ -91,5 +82,13 @@ export async function selectUserSingleJobPosting({
     .select()
     .from(jobPostings)
     .where(and(eq(jobPostings.userId, userId), eq(jobPostings.id, id)))
+    .then((res) => res[0]);
+}
+
+export async function selectSingleJobPosting(id: string) {
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(eq(jobPostings.id, id))
     .then((res) => res[0]);
 }
