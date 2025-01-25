@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,10 +16,8 @@ import {
   ClockIcon,
   MailIcon,
   MapPinIcon,
-  Pencil,
   User2Icon,
 } from "lucide-react";
-import Link from "next/link";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -40,14 +37,6 @@ export default async function SinglePostPage({ params }: PageProps) {
               className={`titleCase text-2xl font-bold dark:text-white`}>
               {jobPosting.jobTitle}
             </CardTitle>
-            <div className="flex gap-2">
-              <Button asChild>
-                <Link href={`/admin/dashboard/update-post/${jobPosting.id}`}>
-                  <Pencil />
-                  <span>Edit</span>
-                </Link>
-              </Button>
-            </div>
           </div>
           <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
             {jobPosting.organizationName}
