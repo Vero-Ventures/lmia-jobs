@@ -45,7 +45,7 @@ export default async function SinglePostPage({ params }: PageProps) {
     userId: data.user.id,
   });
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto py-8">
       <Card className="h-fit overflow-y-auto">
         <CardHeader>
           <div className="flex justify-between">
