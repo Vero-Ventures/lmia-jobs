@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import type { JobPosting } from "@/app/lib/types";
+import { revalidatePath } from "next/cache";
 
 export type JobPostForm = {
   email: string;
@@ -170,6 +171,7 @@ export async function editPostVisibility(
       .update(jobPostings)
       .set({ hidden: hidePost })
       .where(eq(jobPostings.id, postId));
+    revalidatePath(`/dashboard/posts/${jobPostings.id}`);
     return "success";
   } catch (error) {
     console.error(error);
