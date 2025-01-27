@@ -187,7 +187,7 @@ async function getJobDetails(
       vacancies: otherDetails.vacancies,
     };
 
-    console.log("Post Details: " + data);
+    console.log("Post Details: " + JSON.stringify(data));
 
     return data;
   } catch (error) {
