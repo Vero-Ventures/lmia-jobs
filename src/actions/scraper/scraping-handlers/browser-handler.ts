@@ -31,20 +31,41 @@ export class BrowserHandler {
     }
   }
 
-  async waitAndClickLink(
+  async waitAndGetElement(selector: string, waitTimeout: number = 10000) {
+    try {
+      await this.page.waitForSelector(selector, {
+        state: "attached",
+        timeout: waitTimeout,
+      });
+
+      const element = this.page.locator(selector);
+
+      if (!element) {
+        throw new Error(`Element not found: ${selector}`);
+      }
+
+      return element;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async clickLinkAndWait(
     selector: string,
-    timeout = 5000,
-    waitTime = 10000
+    selectTimeout = 10000,
+    waitTime = 2000
   ): Promise<void> {
     try {
       const element = await this.page.waitForSelector(selector, {
-        state: "attached", // Or Attached
-        timeout,
+        state: "attached",
+        timeout: selectTimeout,
       });
 
       if (!element) {
         throw new Error(`Element not found: ${selector}`);
       }
+
+      await element.click();
 
       await new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -52,22 +73,21 @@ export class BrowserHandler {
         }, waitTime);
       });
 
-      await element.click();
+      await this.page.waitForLoadState("load");
     } catch (error) {
       throw error;
     }
   }
 
-  async waitAndFill(
+  async clickAndFill(
     selector: string,
     text: string,
-    findTimeout: number = 10000,
-    fillTimeout: number = 5000
+    selectTimeout: number = 10000
   ): Promise<void> {
     try {
       const element = await this.page.waitForSelector(selector, {
         state: "attached",
-        timeout: findTimeout,
+        timeout: selectTimeout,
       });
 
       if (!element) {
@@ -75,7 +95,6 @@ export class BrowserHandler {
       }
 
       await element.click();
-      await this.page.waitForTimeout(fillTimeout);
       await this.page.fill(selector, text);
     } catch (error) {
       throw error;
@@ -92,39 +111,6 @@ export class BrowserHandler {
       await this.page.keyboard.press("Control+A");
       await this.page.keyboard.press("Backspace");
       await this.page.fill(selector, text);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getElement(selector: string) {
-    try {
-      const element = this.page.locator(selector);
-
-      if (!element) {
-        throw new Error(`Element not found: ${selector}`);
-      }
-
-      return element;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async waitAndGetElement(selector: string, waitTimeout: number = 10000) {
-    try {
-      await this.page.waitForSelector(selector, {
-        state: "attached",
-        timeout: waitTimeout,
-      });
-
-      const element = this.page.locator(selector);
-
-      if (!element) {
-        throw new Error(`Element not found: ${selector}`);
-      }
-
-      return element;
     } catch (error) {
       throw error;
     }
