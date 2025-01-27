@@ -285,7 +285,8 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getAddress = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.location.locationAddress
+      CONFIG.selectors.govJobBank.jobDetails.location.locationAddress,
+      2500
     );
     address = (await getAddress.allInnerTexts()).pop();
   } catch (error) {
@@ -351,7 +352,8 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getMaxPay = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.payment.paymentMaximum
+      CONFIG.selectors.govJobBank.jobDetails.payment.paymentMaximum,
+      2500
     );
     maxPay = (await getMaxPay.allInnerTexts()).pop();
   } catch (error) {
@@ -409,7 +411,11 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
     const employmentTypeValue = (await getEmploymentType.allInnerTexts()).pop();
 
     if (employmentTypeValue) {
-      employmentType = employmentTypeValue;
+      if (employmentTypeValue.includes("Part time")) {
+        employmentType = "Part Time";
+      } else {
+        employmentType = "Full Time"
+      }
     }
   } catch (error) {
     console.error("Employment Type Not Found: " + error);
@@ -417,7 +423,8 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const startDateContainer = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.other.startDateContainer
+      CONFIG.selectors.govJobBank.jobDetails.other.startDateContainer,
+      2500
     );
 
     startDate = (await startDateContainer.allInnerTexts()).pop()?.split(":")[1];
