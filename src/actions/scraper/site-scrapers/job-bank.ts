@@ -168,15 +168,23 @@ async function getJobDetails(
       address: locationDetails.address,
       city: locationDetails.city,
       region: locationDetails.region,
-      minPayValue: paymentDetails.minPay,
-      maxPayValue: paymentDetails.maxPay,
+      minPayValue:
+        paymentDetails.minPay !== "null" ? Number(paymentDetails.minPay) : 0,
+      maxPayValue:
+        paymentDetails.maxPay !== "null" && paymentDetails.maxPay !== undefined
+          ? Number(paymentDetails.maxPay)
+          : 0,
       paymentType: paymentDetails.paymentType,
-      workHours: paymentDetails.workHours,
+      workHours:
+        paymentDetails.workHours !== "null"
+          ? Number(paymentDetails.workHours)
+          : 0,
       employmentType: otherDetails.employmentType,
       startDate: otherDetails.startDate
         ? otherDetails.startDate
         : headerInfo.postedDate,
-      vacancies: otherDetails.vacancies,
+      vacancies:
+        otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
       language: "null",
       description: "null",
     };
