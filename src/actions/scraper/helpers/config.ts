@@ -35,7 +35,33 @@ export const CONFIG = {
           vacanciesContainer: `li:has(span#tp_vacancyNumber)`,
           language: `p[property="qualification"]`,
         },
-        description: {},
+        description: {
+          education: `ul[property="educationRequirements qualification"] li span`,
+          experience: `p[property="experienceRequirements qualification"] span`,
+          credentials: {
+            container: `div[property="skills"]`,
+            headers: `h4`,
+            items: `ul li`,
+          },
+          skills: {
+            container: `div[property="experienceRequirements"]`,
+            headers: `h4`,
+            tasks: `ul li`,
+          },
+          onSite: `p span.description`,
+          workSetting: `div:has(h4:text-is("Work site environment")) li`,
+          tasks: `div[property="responsibilities"] h4:text-is("Tasks") + ul`,
+          supervision: `div[property="responsibilities"] h4:text-is("Supervision") + ul`,
+          additionalInformation: {
+            conditionsAndRequirements: ``,
+            personalAbilities: ``,
+          },
+          benefits: {
+            health: ``,
+            financial: ``,
+            other: ``,
+          },
+        },
       },
 
       inputs: { howToApply: "button#applynowbutton" },

@@ -55,7 +55,7 @@ async function scrapePosts(
 
     // Testing Limit
     const allPosts = await posts.all();
-    const testPosts = [allPosts[0], allPosts[1], allPosts[2]];
+    const testPosts = [allPosts[0]];
 
     for (const post of testPosts) {
       const postedToBank = post.locator(
@@ -159,6 +159,8 @@ async function getJobDetails(
     const paymentDetails = await getJobPayDetails(browserHandler);
 
     const otherDetails = await getOtherJobDetails(browserHandler);
+
+    await getDescription(browserHandler);
 
     const data = {
       postId,
@@ -471,12 +473,23 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
   };
 }
 
-// async function getDescription(browserHandler: BrowserHandler): Promise<{
-//   description: string;
-// }> {
-//   let description = "null";
+async function getDescription(browserHandler: BrowserHandler): Promise<string> {
+  const description = "null";
 
-//   return {
-//     description,
-//   };
-// }
+  const education = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.education
+  );
+  console.log("Education: " + (await education.innerText()));
+
+  const experience = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.experience
+  );
+  console.log("Experience: " + (await experience.innerText()));
+
+  const onSite = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.onSite
+  );
+  console.log("On Site: " + (await onSite.innerText()));
+
+  return description;
+}
