@@ -5,7 +5,10 @@ import chromium from "@sparticuz/chromium";
 
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
+import {
+  getDescription,
+  scrapeGovJobBank,
+} from "@/actions/scraper/site-scrapers/job-bank";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
@@ -29,6 +32,33 @@ export const runScraper = async () => {
       browser.close();
     }
     return result;
+  }
+};
+
+export const desciptionTest = async () => {
+  let browser: Browser | undefined;
+  try {
+    const [newBrowser, _context, page] = await createChromiunm();
+
+    browser = newBrowser;
+
+    const pageHandler = new BrowserHandler(page);
+
+    const postUrl = "43236886";
+
+    await pageHandler.visitPage(
+      "https://www.jobbank.gc.ca/jobsearch/jobposting/" +
+        postUrl +
+        "?source=searchresults"
+    );
+
+    getDescription(pageHandler);
+  } catch (error) {
+    console.error("Create Scraper Error: " + error);
+  } finally {
+    if (browser) {
+      browser.close();
+    }
   }
 };
 

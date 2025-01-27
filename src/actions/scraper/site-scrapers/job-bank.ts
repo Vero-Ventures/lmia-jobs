@@ -473,23 +473,44 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
   };
 }
 
-async function getDescription(browserHandler: BrowserHandler): Promise<string> {
+export async function getDescription(
+  browserHandler: BrowserHandler
+): Promise<string> {
   const description = "null";
 
-  const education = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.education
+  const enviroment = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
-  console.log("Education: " + (await education.innerText()));
+  console.log("Enviroment: " + (await enviroment.innerText()));
 
-  const experience = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.experience
+  const credentials = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.credentials.container
   );
-  console.log("Experience: " + (await experience.innerText()));
 
-  const onSite = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.onSite
+  const credentialsHeader = credentials.locator(
+    CONFIG.selectors.govJobBank.jobDetails.description.credentials.headers
   );
-  console.log("On Site: " + (await onSite.innerText()));
+
+  const credentialsHeaders = await credentialsHeader.allInnerTexts();
+
+  for (const credHeader of credentialsHeaders) {
+    console.log("Credentials Header: " + credHeader);
+  }
+
+  const credentialsBodies = credentials.locator(
+    CONFIG.selectors.govJobBank.jobDetails.description.credentials.items
+  );
+
+  const numCredentialBodies = await credentialsBodies.count();
+
+  for (let i = 0; i < numCredentialBodies; i++) {
+    const list = credentialsBodies.nth(i);
+    console.log("New List");
+    for (let i = 0; i < (await list.count()); i++) {
+      const listItem = list.nth(i);
+      console.log("Credential Body: " + (await listItem.innerText()));
+    }
+  }
 
   return description;
 }
