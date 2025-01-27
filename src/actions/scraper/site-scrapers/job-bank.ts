@@ -149,19 +149,19 @@ async function getJobDetails(
   postId: string
 ): Promise<{
   postId: string;
-  postedDate: string | undefined;
-  jobTitle: string | undefined;
-  organizationName: string | undefined;
+  postedDate: string;
+  jobTitle: string;
+  organizationName: string;
   address: string | undefined;
-  city: string | undefined;
-  region: string | undefined;
-  minPayValue: string | undefined;
+  city: string;
+  region: string;
+  minPayValue: string;
   maxPayValue: string | undefined;
-  paymentType: string | undefined;
-  workHours: string | undefined;
-  employmentType: string | undefined;
+  paymentType: string;
+  workHours: string;
+  employmentType: string;
   startDate: string | undefined;
-  vacancies: string | undefined;
+  vacancies: string;
 } | null> {
   try {
     const headerInfo = await getJobHeaderDetails(browserHandler);
@@ -189,8 +189,6 @@ async function getJobDetails(
       vacancies: otherDetails.vacancies,
     };
 
-    console.log("Post Details: " + JSON.stringify(data));
-
     return data;
   } catch (error) {
     console.error("Error: " + error);
@@ -199,19 +197,23 @@ async function getJobDetails(
 }
 
 async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
-  jobTitle: string | undefined;
-  organizationName: string | undefined;
-  postedDate: string | undefined;
+  jobTitle: string;
+  organizationName: string;
+  postedDate: string;
 }> {
-  let jobTitle = undefined;
-  let organizationName = undefined;
-  let postedDate = undefined;
+  let jobTitle = "null";
+  let organizationName = "null";
+  let postedDate = "null";
 
   try {
     const getJobTitle = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.header.jobTitle
     );
-    jobTitle = (await getJobTitle.allInnerTexts()).pop();
+    const jobTitleValue = (await getJobTitle.allInnerTexts()).pop();
+
+    if (jobTitleValue) {
+      jobTitle = jobTitleValue;
+    }
   } catch (error) {
     console.error("Job Title Not Found: " + error);
   }
@@ -220,14 +222,26 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     const getOrganizationName = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.header.organizationNameText
     );
-    organizationName = (await getOrganizationName.allInnerTexts()).pop();
+    const organizationNameValue = (
+      await getOrganizationName.allInnerTexts()
+    ).pop();
+
+    if (organizationNameValue) {
+      organizationName = organizationNameValue;
+    }
   } catch (error) {
     console.error("Organization Name Text Not Found: " + error);
     try {
       const getOrganizationLink = await browserHandler.waitAndGetElement(
         CONFIG.selectors.govJobBank.jobDetails.header.organizationNameLink
       );
-      organizationName = (await getOrganizationLink.allInnerTexts()).pop();
+      const organizationNameValue = (
+        await getOrganizationLink.allInnerTexts()
+      ).pop();
+
+      if (organizationNameValue) {
+        organizationName = organizationNameValue;
+      }
     } catch (error) {
       console.error("Organization Name Link Not Found: " + error);
     }
@@ -237,7 +251,18 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     const getPostedDate = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.header.postedDate
     );
-    postedDate = (await getPostedDate.allInnerTexts()).pop();
+    const postedDateValue = (await getPostedDate.allInnerTexts()).pop();
+
+    if (postedDateValue) {
+      const dateString = postedDateValue.replace("Posted on ", "").trim();
+      const date = new Date(dateString);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      postedDate = `${year}-${month}-${day}`;
+    }
   } catch (error) {
     console.error("Posted Date Not Found: " + error);
   }
@@ -251,12 +276,12 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
 
 async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
   address: string | undefined;
-  city: string | undefined;
-  region: string | undefined;
+  city: string;
+  region: string;
 }> {
   let address = undefined;
-  let city = undefined;
-  let region = undefined;
+  let city = "null";
+  let region = "null";
 
   try {
     const getAddress = await browserHandler.waitAndGetElement(
@@ -271,7 +296,11 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
     const getCity = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.location.locationCity
     );
-    city = (await getCity.allInnerTexts()).pop();
+    const cityValue = (await getCity.allInnerTexts()).pop();
+
+    if (cityValue) {
+      city = cityValue;
+    }
   } catch (error) {
     console.error("City Not Found: " + error);
   }
@@ -280,7 +309,11 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
     const getRegion = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.location.locationRegion
     );
-    region = (await getRegion.allInnerTexts()).pop();
+    const regionValue = (await getRegion.allInnerTexts()).pop();
+
+    if (regionValue) {
+      region = regionValue;
+    }
   } catch (error) {
     console.error("Region Not Found: " + error);
   }
@@ -293,21 +326,25 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
 }
 
 async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
-  minPay: string | undefined;
+  minPay: string;
   maxPay: string | undefined;
-  paymentType: string | undefined;
-  workHours: string | undefined;
+  paymentType: string;
+  workHours: string;
 }> {
-  let minPay = undefined;
+  let minPay = "null";
   let maxPay = undefined;
-  let paymentType = undefined;
-  let workHours = undefined;
+  let paymentType = "null";
+  let workHours = "null";
 
   try {
     const getMinPay = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.payment.paymentMinimum
     );
-    minPay = (await getMinPay.allInnerTexts()).pop();
+    const minPayValue = (await getMinPay.allInnerTexts()).pop();
+
+    if (minPayValue) {
+      minPay = minPayValue;
+    }
   } catch (error) {
     console.error("Minimum Pay Not Found: " + error);
   }
@@ -337,7 +374,13 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
     const getWorkHours = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.payment.workHours
     );
-    workHours = (await getWorkHours.allInnerTexts()).pop();
+    const workHoursValue = (await getWorkHours.allInnerTexts()).pop();
+
+    if (workHoursValue) {
+      const workHoursNum = workHoursValue.split("hours")[0].trim();
+
+      workHours = workHoursNum;
+    }
   } catch (error) {
     console.error("Work Hours Not Found: " + error);
   }
@@ -351,19 +394,23 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 }
 
 async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
-  employmentType: string | undefined;
+  employmentType: string;
   startDate: string | undefined;
-  vacancies: string | undefined;
+  vacancies: string;
 }> {
-  let employmentType = undefined;
+  let employmentType = "null";
   let startDate = undefined;
-  let vacancies = undefined;
+  let vacancies = "null";
 
   try {
     const getEmploymentType = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.other.employmentType
     );
-    employmentType = (await getEmploymentType.allInnerTexts()).pop();
+    const employmentTypeValue = (await getEmploymentType.allInnerTexts()).pop();
+
+    if (employmentTypeValue) {
+      employmentType = employmentTypeValue;
+    }
   } catch (error) {
     console.error("Employment Type Not Found: " + error);
   }
@@ -383,7 +430,12 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       CONFIG.selectors.govJobBank.jobDetails.other.vacanciesContainer
     );
 
-    vacancies = (await vacanciesContainer.allInnerTexts()).pop();
+    const vacanciesValue = (await vacanciesContainer.allInnerTexts()).pop();
+
+    if (vacanciesValue) {
+      const vacanciesNum = vacanciesValue.split("\n")[1].split(" ")[0];
+      vacancies = vacanciesNum ? vacanciesNum : "null";
+    }
   } catch (error) {
     console.error("Vacancies Type Not Found: " + error);
   }
