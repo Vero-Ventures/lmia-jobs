@@ -36,58 +36,71 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { createJobPost } from "./actions";
 
-const createPostSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  jobTitle: z.string().trim().min(1, {
-    message: "Job title must be at least 1 character.",
-  }),
-  organizationName: z.string().trim().min(1, {
-    message: "Organization Name must be at least 1 character.",
-  }),
-  province: z.enum(provinceValues, {
-    message: "Please select a province.",
-  }),
-  city: z.string().trim().min(1, {
-    message: "City must be at least 1 character.",
-  }),
-  address: z.string().trim().optional(),
-  startDate: z.string().date(),
-  vacancies: z.coerce
-    .number()
-    .min(0, { message: "Available Position must be greater than or equal 0" })
-    .optional(),
-  employmentType: z.enum(jobTypeLabels, {
-    message: "Please select an employment type.",
-  }),
-  workHours: z.coerce
-    .number()
-    .min(0.0, { message: "Weekly hours must be greater than 0" })
-    .optional(),
-  paymentType: z.enum(paymentTypes, {
-    message: "Please select a payment type.",
-  }),
-  minPayValue: z.coerce
-    .number()
-    .min(0, { message: "Minimum pay must be greater than or equal to $0.00" }),
-  maxPayValue: z.coerce
-    .number()
-    .min(1, { message: "Maximum pay must at least $1" })
-    .optional(),
-  description: z.string().trim().min(1, {
-    message: "Description must be at least 1 character.",
-  }),
-  language: z.enum(languages, {
-    message: "Please select a language.",
-  }),
-  postAsylum: z.boolean(),
-  postDisabled: z.boolean(),
-  postIndigenous: z.boolean(),
-  postNewcomers: z.boolean(),
-  postYouth: z.boolean(),
-  monthsToPost: z.coerce
-    .number()
-    .min(1, { message: "Months posted must be greater than 0" }),
-});
+const createPostSchema = z
+  .object({
+    email: z.string().email({ message: "Invalid email address" }),
+    jobTitle: z.string().trim().min(1, {
+      message: "Job title must be at least 1 character.",
+    }),
+    organizationName: z.string().trim().min(1, {
+      message: "Organization Name must be at least 1 character.",
+    }),
+    province: z.enum(provinceValues, {
+      message: "Please select a province.",
+    }),
+    city: z.string().trim().min(1, {
+      message: "City must be at least 1 character.",
+    }),
+    address: z.string().trim().optional(),
+    startDate: z.string().date(),
+    vacancies: z.coerce
+      .number()
+      .min(0, { message: "Available Position must be greater than or equal 0" })
+      .optional(),
+    employmentType: z.enum(jobTypeLabels, {
+      message: "Please select an employment type.",
+    }),
+    workHours: z.coerce
+      .number()
+      .min(0, { message: "Weekly hours must be greater than 0" })
+      .optional(),
+    paymentType: z.enum(paymentTypes, {
+      message: "Please select a payment type.",
+    }),
+    minPayValue: z.coerce.number().min(0, {
+      message: "Minimum pay must be greater than or equal to $0.00",
+    }),
+    maxPayValue: z.coerce
+      .number()
+      .min(0, { message: "Maximum pay must at least $1" })
+      .optional(),
+    description: z.string().trim().min(1, {
+      message: "Description must be at least 1 character.",
+    }),
+    language: z.enum(languages, {
+      message: "Please select a language.",
+    }),
+    postAsylum: z.boolean(),
+    postDisabled: z.boolean(),
+    postIndigenous: z.boolean(),
+    postNewcomers: z.boolean(),
+    postYouth: z.boolean(),
+    monthsToPost: z.coerce
+      .number()
+      .min(1, { message: "Months posted must be greater than 0" }),
+  })
+  .refine(
+    (postData) => {
+      return (
+        postData.maxPayValue === 0 ||
+        (postData.maxPayValue && postData.maxPayValue >= postData.minPayValue)
+      );
+    },
+    {
+      message: "Maximum pay must be greater than or equal to minimum pay",
+      path: ["maxPayValue"], // Pointing out which field is invalid
+    }
+  );
 export type CreatePost = z.infer<typeof createPostSchema>;
 
 export function CreatePostForm() {
@@ -101,12 +114,12 @@ export function CreatePostForm() {
       city: "",
       address: "",
       startDate: new Date().toISOString().split("T")[0],
-      vacancies: undefined,
+      vacancies: 0,
       employmentType: "Full Time",
-      workHours: undefined,
+      workHours: 0,
       paymentType: "Hourly",
       minPayValue: 0,
-      maxPayValue: undefined,
+      maxPayValue: 0,
       description: "",
       language: "English",
       postAsylum: false,
@@ -128,7 +141,6 @@ export function CreatePostForm() {
   const monthsToPost = form.watch("monthsToPost");
 
   async function onSubmit(values: CreatePost) {
-    console.log(values);
     await createJobPost(values);
     form.reset();
   }
@@ -224,7 +236,7 @@ export function CreatePostForm() {
                       <FormControl>
                         <Input
                           type="number"
-                          min={1}
+                          min={0}
                           placeholder="Enter weekly hours"
                           {...field}
                         />
@@ -464,7 +476,7 @@ export function CreatePostForm() {
                       <FormControl>
                         <Input
                           type="number"
-                          min={1}
+                          min={form.watch("minPayValue") || 0}
                           placeholder="Enter a maximum pay"
                           {...field}
                         />
