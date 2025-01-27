@@ -414,7 +414,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       if (employmentTypeValue.includes("Part time")) {
         employmentType = "Part Time";
       } else {
-        employmentType = "Full Time"
+        employmentType = "Full Time";
       }
     }
   } catch (error) {
