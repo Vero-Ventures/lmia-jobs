@@ -23,7 +23,7 @@ export async function scrapeGovJobBank(
     pageNum += 1;
 
     // Testing Limit
-    if (pageNum > 2) {
+    if (pageNum > 0) {
       scrape = false;
     }
   }
@@ -55,18 +55,7 @@ async function scrapePosts(
 
     // Testing Limit
     const allPosts = await posts.all();
-    const testPosts = [
-      allPosts[0],
-      allPosts[1],
-      allPosts[2],
-      allPosts[3],
-      allPosts[4],
-      allPosts[5],
-      allPosts[6],
-      allPosts[7],
-      allPosts[8],
-      allPosts[9],
-    ];
+    const testPosts = [allPosts[0], allPosts[1], allPosts[2]];
 
     for (const post of testPosts) {
       const postedToBank = post.locator(
@@ -410,14 +399,16 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
   employmentType: string;
   startDate: string | undefined;
   vacancies: string;
+  language: string;
 }> {
   let employmentType = "null";
   let startDate = undefined;
   let vacancies = "null";
+  let language = "null";
 
   try {
     const getEmploymentType = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.other.employmentType
+      CONFIG.selectors.govJobBank.jobDetails.details.employmentType
     );
     const employmentTypeValue = (await getEmploymentType.allInnerTexts()).pop();
 
@@ -434,7 +425,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const startDateContainer = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.other.startDateContainer,
+      CONFIG.selectors.govJobBank.jobDetails.details.startDateContainer,
       2500
     );
 
@@ -445,7 +436,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const vacanciesContainer = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.other.vacanciesContainer
+      CONFIG.selectors.govJobBank.jobDetails.details.vacanciesContainer
     );
 
     const vacanciesValue = (await vacanciesContainer.allInnerTexts()).pop();
@@ -458,9 +449,34 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
     console.error("Vacancies Type Not Found: " + error);
   }
 
+  try {
+    const getLanguage = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.details.language
+    );
+
+    const languageValue = (await getLanguage.allInnerTexts()).pop();
+
+    if (languageValue) {
+      language = languageValue;
+    }
+  } catch (error) {
+    console.error("Language Type Not Found: " + error);
+  }
+
   return {
     employmentType,
     startDate,
     vacancies,
+    language,
   };
 }
+
+// async function getDescription(browserHandler: BrowserHandler): Promise<{
+//   description: string;
+// }> {
+//   let description = "null";
+
+//   return {
+//     description,
+//   };
+// }

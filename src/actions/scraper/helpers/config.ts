@@ -29,11 +29,13 @@ export const CONFIG = {
           paymentType: `span[property="unitText"]`,
           workHours: `span[property="workHours"]`,
         },
-        other: {
+        details: {
           employmentType: `span[property="employmentType"] span`,
           startDateContainer: `li:has(span#tp_startDate)`,
           vacanciesContainer: `li:has(span#tp_vacancyNumber)`,
+          language: `p[property="qualification"]`,
         },
+        description: {},
       },
 
       inputs: { howToApply: "button#applynowbutton" },
