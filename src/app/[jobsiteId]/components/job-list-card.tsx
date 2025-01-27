@@ -28,11 +28,11 @@ export function JobListCard({
       onClick={() => handleChangeSelectedJobPosting(jobPosting)}
       className={cn(
         "mt-2 cursor-pointer space-y-3 transition-colors",
-        isSelected && "border-2 border-primary"
+        isSelected && "border-primary border-2"
       )}>
       <CardHeader>
         <CardTitle
-          className={`titleCase overflow-clip text-xl font-bold ${jobPosting.hidden ? "italic text-gray-600" : ""}`}>
+          className={`titleCase overflow-clip text-xl font-bold ${jobPosting.hidden ? "text-gray-600 italic" : ""}`}>
           {jobPosting.jobTitle} {jobPosting.hidden ? "- Hidden" : ""}
         </CardTitle>
         <CardDescription>{jobPosting.organizationName}</CardDescription>

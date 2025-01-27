@@ -43,7 +43,7 @@ export default function Page() {
   const components = {
     h1: (props: string[]) => (
       <p
-        className="mb-4 mt-2 text-center text-xl font-bold mb:text-2xl sm:text-3xl"
+        className="mb:text-2xl mt-2 mb-4 text-center text-xl font-bold sm:text-3xl"
         {...props}
       />
     ),
@@ -117,7 +117,7 @@ export default function Page() {
         <div className="mt-8 flex flex-col items-center md:ml-6 md:w-2/5 md:justify-center">
           <div className="relative mx-auto my-6 w-fit rounded-lg border-4 border-gray-300 bg-gray-100 p-6 shadow-lg transition-all duration-500 hover:scale-105 hover:shadow-2xl sm:px-6">
             <Form className="flex flex-col" action={submitPurchaseForm}>
-              <label className="mt-2 font-semibold mb:text-lg sm:text-xl">
+              <label className="mb:text-lg mt-2 font-semibold sm:text-xl">
                 Number Of Job Boards
               </label>
               <Input
@@ -135,7 +135,7 @@ export default function Page() {
                 }}
               />
 
-              <label className="mt-6 font-semibold mb:text-lg sm:text-xl">
+              <label className="mb:text-lg mt-6 font-semibold sm:text-xl">
                 Months Posted
               </label>
               <Input

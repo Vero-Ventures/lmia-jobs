@@ -53,10 +53,10 @@ export default async function Page({
   return (
     <div className={cn("flex min-h-dvh flex-col", jobsiteId)}>
       <header className="border-b p-4">
-        <h1 className="text-xl font-bold text-primary">{jobSite.title}</h1>
+        <h1 className="text-primary text-xl font-bold">{jobSite.title}</h1>
       </header>
       <main className="flex-1">
-        <div className="container mx-auto space-y-4 pt-4 text-primary">
+        <div className="text-primary container mx-auto space-y-4 pt-4">
           <Form action={`/${jobSite.id}`} className="flex gap-2">
             <Input name="jobTitle" placeholder="Search Jobs..." />
             <Input

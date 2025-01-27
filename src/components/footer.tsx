@@ -68,17 +68,17 @@ function Footer() {
           </Link>
           <Link
             href="https://asylumopportunities.ca/asylum-job-board"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pt-1 pb-1.5">
             Asylum Opportunities
           </Link>
           <Link
             href="https://immigrantopportunities.ca/newcomers-job-board"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pt-1 pb-1.5">
             Immigrant Opportunities
           </Link>
           <Link
             href="https://indigenousopportunities.ca/indigenous-job-board"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pt-1 pb-1.5">
             Indigenous Opportunities
           </Link>
           <Link

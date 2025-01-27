@@ -49,11 +49,11 @@ export default async function Page({
       <Navbar links={SessionLinks} />
       <div className="flex min-h-[90dvh] flex-col justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-white">
         <main className="flex flex-col px-4 pb-4 md:flex-row md:items-center">
-          <div className="mx-2 my-4 max-h-[90dvh] w-full overflow-y-scroll rounded-xl border-2 bg-white p-2 mb:p-6 md:w-3/5 lg:mx-6 xl:w-2/3">
+          <div className="mb:p-6 mx-2 my-4 max-h-[90dvh] w-full overflow-y-scroll rounded-xl border-2 bg-white p-2 md:w-3/5 lg:mx-6 xl:w-2/3">
             <header className="border-b p-4">
-              <h1 className="text-xl font-bold text-primary">Your Postings</h1>
+              <h1 className="text-primary text-xl font-bold">Your Postings</h1>
             </header>
-            <div className="container mx-auto space-y-4 pt-4 text-primary">
+            <div className="text-primary container mx-auto space-y-4 pt-4">
               <Form action={`/admin/dashboard`} className="flex gap-2">
                 <Input
                   name="jobTitle"
@@ -68,7 +68,7 @@ export default async function Page({
           </div>
           <div className="mx-auto flex min-h-fit w-full flex-col justify-evenly justify-items-center p-2 md:w-2/5 lg:p-6 xl:w-1/3">
             <div className="mt-4 grid grid-cols-2 grid-rows-2 gap-x-4 rounded-xl border-2 border-green-200 bg-gradient-to-r from-green-50 via-green-100 to-green-50 p-4 sm:grid-cols-4 sm:grid-rows-1 md:h-1/2 md:grid-cols-2 md:grid-rows-2">
-              <div className="mb-2 mt-4 max-h-48 content-center">
+              <div className="mt-4 mb-2 max-h-48 content-center">
                 <h1 className="mx-auto my-4 w-max text-xl font-semibold lg:text-3xl">
                   Manage <br />
                   Postings
@@ -78,7 +78,7 @@ export default async function Page({
                 <button className="mx-auto mt-2 flex max-h-40 min-h-36 w-full max-w-56 flex-col items-center justify-center rounded-xl border-4 border-green-200">
                   <Link
                     href={"/admin/pricing"}
-                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-900 lg:text-2xl">
+                    className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold text-gray-900 italic lg:text-2xl">
                     Create A<br />
                     New Post
                   </Link>
@@ -94,12 +94,12 @@ export default async function Page({
                         "&email=" +
                         session!.user.email
                       }
-                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-800 lg:text-2xl">
+                      className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold text-gray-800 italic lg:text-2xl">
                       Set Post <br />
                       Content
                     </Link>
                   ) : (
-                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold italic text-gray-600 lg:text-2xl">
+                    <p className="mx-auto my-4 w-max max-w-fit px-2 text-center text-lg font-semibold text-gray-600 italic lg:text-2xl">
                       Set Post <br />
                       Content
                     </p>

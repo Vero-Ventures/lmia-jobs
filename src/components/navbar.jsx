@@ -13,7 +13,7 @@ function Navbar({ links }) {
         <BriefcaseIcon className="h-6 w-6" />
         <span className="ml-2 font-semibold">LMIA Opportunities</span>
       </Link>
-      <nav className="flex items-center justify-center gap-4 py-2 sm:ml-auto sm:mt-0 sm:gap-6">
+      <nav className="flex items-center justify-center gap-4 py-2 sm:mt-0 sm:ml-auto sm:gap-6">
         {links.map((link, index) =>
           link.text === "Log Out" ? (
             <button

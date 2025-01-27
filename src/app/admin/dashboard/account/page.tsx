@@ -71,9 +71,9 @@ export default function Page() {
       <Navbar links={SessionLinks} />
       <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-white p-6">
         <div className="mx-auto flex max-w-3xl flex-col rounded-lg border-4 border-gray-400 bg-gray-50">
-          <div className="mx-auto mt-8 w-5/6 rounded-lg border-4 border-gray-300 bg-white p-4 mb:w-3/4 sm:w-2/3">
+          <div className="mb:w-3/4 mx-auto mt-8 w-5/6 rounded-lg border-4 border-gray-300 bg-white p-4 sm:w-2/3">
             <h1 className="mb-4 text-center text-xl font-bold">Reset Email</h1>
-            <div className="mx-2 mt-6 mb:mx-auto mb:w-5/6">
+            <div className="mb:mx-auto mb:w-5/6 mx-2 mt-6">
               <label className="text-base font-semibold">New Email</label>
               <Input
                 className="mt-2"
@@ -100,7 +100,7 @@ export default function Page() {
             )}
 
             {updateLogOutTimer >= 0 && (
-              <div className="mb-8 mt-8 flex flex-col text-center">
+              <div className="mt-8 mb-8 flex flex-col text-center">
                 <h1 className="block text-lg font-semibold text-gray-800">
                   Email Update Successful
                 </h1>
@@ -143,11 +143,11 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="mx-auto mt-8 w-5/6 rounded-lg border-4 border-gray-300 bg-white p-4 mb:w-3/4 sm:w-2/3">
+          <div className="mb:w-3/4 mx-auto mt-8 w-5/6 rounded-lg border-4 border-gray-300 bg-white p-4 sm:w-2/3">
             <h1 className="mb-4 text-center text-xl font-bold">
               Reset Password
             </h1>
-            <div className="mx-2 mt-6 mb:mx-auto mb:w-5/6">
+            <div className="mb:mx-auto mb:w-5/6 mx-2 mt-6">
               <label className="text-base font-semibold">New Password</label>
               <Input
                 className="mt-2"
@@ -157,7 +157,7 @@ export default function Page() {
               />
             </div>
 
-            <div className="mx-2 mt-4 mb:mx-auto mb:w-5/6">
+            <div className="mb:mx-auto mb:w-5/6 mx-2 mt-4">
               <label className="text-base font-semibold">
                 Confirm Password
               </label>
@@ -195,7 +195,7 @@ export default function Page() {
               )}
             </div>
 
-            <div className="mx-auto my-6 w-fit text-center text-lg font-semibold italic text-gray-400">
+            <div className="mx-auto my-6 w-fit text-center text-lg font-semibold text-gray-400 italic">
               {passwordUpdateSuccess && (
                 <p className="mb-2">
                   Your password has been <br />
@@ -214,7 +214,7 @@ export default function Page() {
           </div>
 
           <Link
-            className="mx-auto mb-8 mt-8 w-5/6 mb:w-3/4 sm:w-2/3"
+            className="mb:w-3/4 mx-auto mt-8 mb-8 w-5/6 sm:w-2/3"
             href={"https://billing.stripe.com/p/login/7sI2bz5KPgXadXOeUU"}>
             <div className="rounded-lg border-4 border-gray-300 bg-white p-4">
               <p className="text-center text-3xl font-bold text-gray-800">

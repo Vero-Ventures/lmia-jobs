@@ -41,23 +41,23 @@ export default function HidePost({
   return (
     <div className="w-full">
       <div
-        className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${showConfirmHide ? "" : "hidden"}`}>
-        <div className="mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 mb:w-[416px] sm:w-[448px]">
-          <p className="mt-2 text-center text-2xl font-bold text-gray-800 mb:text-3xl">
+        className={`bg-opacity-50 fixed top-0 left-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 ${showConfirmHide ? "" : "hidden"}`}>
+        <div className="mb:w-[416px] mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 sm:w-[448px]">
+          <p className="mb:text-3xl mt-2 text-center text-2xl font-bold text-gray-800">
             Are You Sure?
           </p>
-          <p className="px-2 text-center text-lg text-gray-800 mb:pt-4 mb:text-xl">
+          <p className="mb:pt-4 mb:text-xl px-2 text-center text-lg text-gray-800">
             Setting the post as hidden will prevent it from being shown across
             all job boards.
           </p>
           <div className="flex flex-col sm:flex-row">
             <Button
-              className="mx-auto w-4/5 py-6 text-base mb:!mt-4 mb:text-lg sm:w-2/5"
+              className="mb:!mt-4 mb:text-lg mx-auto w-4/5 py-6 text-base sm:w-2/5"
               onClick={() => setShowConfirmHide(false)}>
               Cancel
             </Button>
             <Button
-              className="mx-auto !mt-6 w-4/5 py-6 text-base mb:text-lg sm:!mt-4 sm:w-2/5"
+              className="mb:text-lg mx-auto !mt-6 w-4/5 py-6 text-base sm:!mt-4 sm:w-2/5"
               onClick={() => changeVisibility()}>
               Confirm
             </Button>
@@ -66,23 +66,23 @@ export default function HidePost({
       </div>
 
       <div
-        className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${showConfirmUnHide ? "" : "hidden"}`}>
-        <div className="mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 mb:w-[416px] sm:w-[448px]">
-          <p className="mt-2 text-center text-2xl font-bold text-gray-800 mb:text-3xl">
+        className={`bg-opacity-50 fixed top-0 left-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 ${showConfirmUnHide ? "" : "hidden"}`}>
+        <div className="mb:w-[416px] mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 sm:w-[448px]">
+          <p className="mb:text-3xl mt-2 text-center text-2xl font-bold text-gray-800">
             Are You Sure?
           </p>
-          <p className="px-2 text-center text-lg text-gray-800 mb:pt-4 mb:text-xl">
+          <p className="mb:pt-4 mb:text-xl px-2 text-center text-lg text-gray-800">
             Setting the post as visible will cause it to be shown across all job
             boards.
           </p>
           <div className="flex flex-col sm:flex-row">
             <Button
-              className="mx-auto w-4/5 py-6 text-base mb:!mt-4 mb:text-lg sm:w-2/5"
+              className="mb:!mt-4 mb:text-lg mx-auto w-4/5 py-6 text-base sm:w-2/5"
               onClick={() => setShowConfirmUnHide(false)}>
               Cancel
             </Button>
             <Button
-              className="mx-auto !mt-6 w-4/5 py-6 text-base mb:text-lg sm:!mt-4 sm:w-2/5"
+              className="mb:text-lg mx-auto !mt-6 w-4/5 py-6 text-base sm:!mt-4 sm:w-2/5"
               onClick={() => changeVisibility()}>
               Confirm
             </Button>

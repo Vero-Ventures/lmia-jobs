@@ -28,7 +28,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
       <CardHeader className="space-y-4">
         <div>
           <CardTitle
-            className={`titleCase text-2xl font-bold dark:text-white ${jobPosting.hidden ? "italic text-gray-600" : ""}`}>
+            className={`titleCase text-2xl font-bold dark:text-white ${jobPosting.hidden ? "text-gray-600 italic" : ""}`}>
             {jobPosting.jobTitle} {jobPosting.hidden ? "- Hidden" : ""}
           </CardTitle>
           <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
@@ -111,8 +111,8 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
         <CardFooter>
           <div className="flex flex-col gap-2">
             <div className="flex">
-              <MailIcon className="mr-2 mt-0.5" />
-              <h5 className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
+              <MailIcon className="mt-0.5 mr-2" />
+              <h5 className={`mt-0.5 mr-4 text-base font-bold dark:text-white`}>
                 Apply by email
               </h5>
               <div className="flex items-center gap-3 text-sm">
@@ -124,7 +124,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
               </div>
             </div>
             <div>
-              <p className="mt-2 italic text-gray-600">{jobPosting.language}</p>
+              <p className="mt-2 text-gray-600 italic">{jobPosting.language}</p>
             </div>
           </div>
         </CardFooter>

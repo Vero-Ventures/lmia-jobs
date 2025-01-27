@@ -197,14 +197,14 @@ export default function Page({
     <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-white">
       <Navbar links={SessionLinks} />
       <div
-        className={`m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 bg-white p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
+        className={`mb:w-5/6 mb:pt-4 m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 bg-white p-2 px-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
         <Form className="flex flex-col" action={submitPostForm}>
           <Button className="w-10 self-end justify-self-end bg-white">
             <XCircle className="min-h-8 min-w-8 bg-white text-black" />
           </Button>
 
           <div className="md:mx-auto md:w-4/5">
-            <label className="p-2 font-semibold mb:text-lg">Job Title</label>
+            <label className="mb:text-lg p-2 font-semibold">Job Title</label>
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
@@ -216,7 +216,7 @@ export default function Page({
           </div>
 
           <div className="mt-4 md:mx-auto md:w-4/5">
-            <label className="p-2 font-semibold mb:text-lg">
+            <label className="mb:text-lg p-2 font-semibold">
               Organization Name
             </label>
             <Input
@@ -231,7 +231,7 @@ export default function Page({
 
           <div className="mt-4 flex flex-col sm:flex-row sm:justify-evenly lg:px-8">
             <div className="mx-auto mt-2 flex flex-row md:mx-0">
-              <label className="p-2 font-semibold mb:mr-1 mb:mt-2.5 mb:block mb:text-lg">
+              <label className="mb:mr-1 mb:mt-2.5 mb:block mb:text-lg p-2 font-semibold">
                 Region
               </label>
               <div className="flex flex-col">
@@ -239,7 +239,7 @@ export default function Page({
                   value={formValues.region}
                   onValueChange={(value) => handleValueChange(value, "region")}
                   required>
-                  <SelectTrigger className="ml-4 min-w-32 border-2 border-gray-500 text-base font-semibold mb:ml-2 mb:mt-3 mb:min-w-48 mb:text-lg sm:min-w-32 md:min-w-40">
+                  <SelectTrigger className="mb:ml-2 mb:mt-3 mb:min-w-48 mb:text-lg ml-4 min-w-32 border-2 border-gray-500 text-base font-semibold sm:min-w-32 md:min-w-40">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -263,8 +263,8 @@ export default function Page({
               </div>
             </div>
 
-            <div className="flex flex-col sm:ml-2 sm:mt-2 sm:flex-row">
-              <label className="mt-2 p-2 font-semibold mb:mr-1 mb:text-lg sm:mt-3">
+            <div className="flex flex-col sm:mt-2 sm:ml-2 sm:flex-row">
+              <label className="mb:mr-1 mb:text-lg mt-2 p-2 font-semibold sm:mt-3">
                 City
               </label>
               <Input
@@ -279,7 +279,7 @@ export default function Page({
           </div>
 
           <div className="mt-4 flex flex-col md:mx-auto md:w-4/5">
-            <label className="p-1 font-semibold mb:text-lg">
+            <label className="mb:text-lg p-1 font-semibold">
               Address <span className="text-sm italic"> (Optional)</span>
             </label>
             <Input
@@ -293,11 +293,11 @@ export default function Page({
 
           <div className="mt-4 flex flex-col md:mt-8 md:flex-row md:justify-evenly">
             <div className="flex flex-col">
-              <label className="p-2 text-center font-semibold mb:text-lg md:mx-auto md:w-32">
+              <label className="mb:text-lg p-2 text-center font-semibold md:mx-auto md:w-32">
                 Hiring Date <span className="text-sm italic"> (Optional)</span>
               </label>
               <Input
-                className="mx-auto w-max border-2 border-gray-500 text-center mb:text-lg mb:font-semibold sm:text-xl md:min-w-48 md:text-xl"
+                className="mb:text-lg mb:font-semibold mx-auto w-max border-2 border-gray-500 text-center sm:text-xl md:min-w-48 md:text-xl"
                 type="date"
                 name="startTime"
                 value={formValues.startTime}
@@ -306,12 +306,12 @@ export default function Page({
             </div>
 
             <div className="mt-6 flex flex-col md:mt-0">
-              <label className="p-2 text-center font-semibold mb:text-lg md:mx-auto md:w-44">
+              <label className="mb:text-lg p-2 text-center font-semibold md:mx-auto md:w-44">
                 Avalible Positions{" "}
                 <span className="text-sm italic"> (Optional)</span>
               </label>
               <Input
-                className="mx-auto w-32 border-2 border-gray-500 text-center mb:text-lg md:min-w-32 md:text-lg"
+                className="mb:text-lg mx-auto w-32 border-2 border-gray-500 text-center md:min-w-32 md:text-lg"
                 type="number"
                 name="vacancies"
                 value={formValues.vacancies}
@@ -320,9 +320,9 @@ export default function Page({
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col mb:-translate-x-2 mb:flex-row mb:justify-evenly sm:translate-x-0">
-            <div className="flex flex-col mb:flex-row">
-              <label className="p-2 font-semibold mb:mr-2 mb:mt-3 mb:w-28 mb:text-center md:mr-2 md:mt-6 md:w-fit md:max-w-40 md:px-0 md:text-lg">
+          <div className="mb:-translate-x-2 mb:flex-row mb:justify-evenly mt-4 flex flex-col sm:translate-x-0">
+            <div className="mb:flex-row flex flex-col">
+              <label className="mb:mr-2 mb:mt-3 mb:w-28 mb:text-center p-2 font-semibold md:mt-6 md:mr-2 md:w-fit md:max-w-40 md:px-0 md:text-lg">
                 Employment Type
               </label>
               <div className="flex flex-col">
@@ -332,7 +332,7 @@ export default function Page({
                     handleValueChange(value, "employmentType")
                   }
                   required>
-                  <SelectTrigger className="border-2 border-gray-500 text-base mb:mt-7 mb:max-w-32 sm:min-w-36 sm:text-lg sm:font-semibold md:ml-2 md:max-w-28 lg:min-w-48">
+                  <SelectTrigger className="mb:mt-7 mb:max-w-32 border-2 border-gray-500 text-base sm:min-w-36 sm:text-lg sm:font-semibold md:ml-2 md:max-w-28 lg:min-w-48">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -357,12 +357,12 @@ export default function Page({
               </div>
             </div>
 
-            <div className="flex flex-col mb:flex-row">
-              <label className="mt-4 p-2 font-semibold mb:mr-2 mb:mt-2.5 mb:w-20 mb:text-center md:mr-2 md:mt-3 md:min-w-36 md:text-lg">
+            <div className="mb:flex-row flex flex-col">
+              <label className="mb:mr-2 mb:mt-2.5 mb:w-20 mb:text-center mt-4 p-2 font-semibold md:mt-3 md:mr-2 md:min-w-36 md:text-lg">
                 Weekly Hours <span className="text-sm italic"> (Optional)</span>
               </label>
               <Input
-                className="border-2 border-gray-500 mb:mt-7 mb:w-16 md:w-20 md:text-lg lg:w-32"
+                className="mb:mt-7 mb:w-16 border-2 border-gray-500 md:w-20 md:text-lg lg:w-32"
                 type="number"
                 name="workHours"
                 value={formValues.workHours}
@@ -373,7 +373,7 @@ export default function Page({
           </div>
 
           <div className="mt-4 flex flex-col sm:flex-row sm:justify-evenly">
-            <div className="mx-auto flex w-fit flex-col text-center mb:text-lg sm:mt-5 md:mx-0 md:mt-7">
+            <div className="mb:text-lg mx-auto flex w-fit flex-col text-center sm:mt-5 md:mx-0 md:mt-7">
               <label className="p-2 font-semibold sm:text-center">
                 Payment Type
               </label>
@@ -384,7 +384,7 @@ export default function Page({
                     handleValueChange(value, "paymentType")
                   }
                   required>
-                  <SelectTrigger className="mx-auto w-40 border-2 border-gray-500 text-base mb:w-48 mb:text-lg mb:font-semibold sm:mx-auto sm:w-40 md:w-48">
+                  <SelectTrigger className="mb:w-48 mb:text-lg mb:font-semibold mx-auto w-40 border-2 border-gray-500 text-base sm:mx-auto sm:w-40 md:w-48">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -409,13 +409,13 @@ export default function Page({
               </div>
             </div>
 
-            <div className="flex flex-col mb:flex-row mb:justify-evenly">
-              <div className="flex flex-col mb:flex-row sm:mx-2 sm:flex-col md:ml-6 md:mr-4 lg:mr-12">
-                <label className="mt-4 p-2 font-semibold mb:min-w-20 mb:max-w-24 mb:text-center sm:mx-auto sm:mt-0 sm:text-center md:text-lg">
+            <div className="mb:flex-row mb:justify-evenly flex flex-col">
+              <div className="mb:flex-row flex flex-col sm:mx-2 sm:flex-col md:mr-4 md:ml-6 lg:mr-12">
+                <label className="mb:min-w-20 mb:max-w-24 mb:text-center mt-4 p-2 font-semibold sm:mx-auto sm:mt-0 sm:text-center md:text-lg">
                   Min Pay Range
                 </label>
                 <Input
-                  className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
+                  className="mb:mt-7 mb:w-24 border-2 border-gray-500 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
                   name="minPayValue"
                   value={formValues.minPayValue}
@@ -425,13 +425,13 @@ export default function Page({
                 />
               </div>
 
-              <div className="flex flex-col mb:flex-row sm:mx-2 sm:flex-col">
-                <label className="mt-4 p-2 font-semibold mb:max-w-36 mb:text-center sm:mx-auto sm:mt-0 sm:w-36 md:text-lg">
+              <div className="mb:flex-row flex flex-col sm:mx-2 sm:flex-col">
+                <label className="mb:max-w-36 mb:text-center mt-4 p-2 font-semibold sm:mx-auto sm:mt-0 sm:w-36 md:text-lg">
                   Max Pay Range{" "}
                   <span className="text-sm italic"> (Optional)</span>
                 </label>
                 <Input
-                  className="border-2 border-gray-500 mb:mt-7 mb:w-24 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
+                  className="mb:mt-7 mb:w-24 border-2 border-gray-500 sm:mx-auto sm:mt-0 sm:w-full sm:max-w-44 md:text-lg"
                   type="number"
                   name="maxPayValue"
                   value={formValues.maxPayValue}
@@ -443,7 +443,7 @@ export default function Page({
           </div>
 
           <div className="mt-2 flex w-full flex-col lg:mx-auto lg:w-11/12">
-            <label className="p-2 font-semibold mb:text-lg">Description</label>
+            <label className="mb:text-lg p-2 font-semibold">Description</label>
             <textarea
               className="h-24 w-full rounded-md border-2 border-gray-500 p-2 sm:h-40 sm:p-4 lg:h-52"
               name="description"
@@ -453,14 +453,14 @@ export default function Page({
           </div>
 
           <div className="mt-2 flex flex-col">
-            <label className="p-2 text-center font-semibold mb:text-lg">
+            <label className="mb:text-lg p-2 text-center font-semibold">
               Language
             </label>
             <Select
               value={formValues.language}
               onValueChange={(value) => handleValueChange(value, "language")}
               required>
-              <SelectTrigger className="mx-auto w-48 border-2 border-gray-500 text-base mb:text-lg mb:font-semibold sm:text-lg sm:font-semibold md:w-64">
+              <SelectTrigger className="mb:text-lg mb:font-semibold mx-auto w-48 border-2 border-gray-500 text-base sm:text-lg sm:font-semibold md:w-64">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -477,15 +477,15 @@ export default function Page({
             </Select>
           </div>
 
-          <div className="mb-2 mt-6 flex flex-col md:mt-10">
-            <label className="text-center text-xl font-semibold mb:text-2xl">
+          <div className="mt-6 mb-2 flex flex-col md:mt-10">
+            <label className="mb:text-2xl text-center text-xl font-semibold">
               Max Boards: {maxBoards}
             </label>
           </div>
 
           <div className="flex flex-col text-center sm:mx-auto sm:w-fit sm:pr-12 md:w-full md:flex-row md:justify-between md:p-0 lg:justify-evenly">
             <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+              <label className="mb:text-lg mt-2 w-2/3 font-semibold sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Accessible Job Board
               </label>
               <Checkbox
@@ -499,7 +499,7 @@ export default function Page({
             </div>
 
             <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+              <label className="mb:text-lg mt-2 w-2/3 font-semibold sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Asylum Job Board
               </label>
               <Checkbox
@@ -513,7 +513,7 @@ export default function Page({
             </div>
 
             <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+              <label className="mb:text-lg mt-2 w-2/3 font-semibold sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Indigenous Job Board
               </label>
               <Checkbox
@@ -530,7 +530,7 @@ export default function Page({
             </div>
 
             <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+              <label className="mb:text-lg mt-2 w-2/3 font-semibold sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Newcomers Job Board
               </label>
               <Checkbox
@@ -544,7 +544,7 @@ export default function Page({
             </div>
 
             <div className="mt-2 flex flex-row md:flex-col">
-              <label className="mt-2 w-2/3 font-semibold mb:text-lg sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
+              <label className="mb:text-lg mt-2 w-2/3 font-semibold sm:w-52 md:mb-2 md:w-24 md:text-base lg:text-lg">
                 Youth Job Board
               </label>
               <Checkbox
@@ -579,16 +579,16 @@ export default function Page({
             </p>
           </div>
 
-          <div className="mt-4 flex flex-row justify-evenly py-2 mb:mt-6 md:mt-8">
+          <div className="mb:mt-6 mt-4 flex flex-row justify-evenly py-2 md:mt-8">
             <Button
               type="button"
-              className="w-2/5 mb:py-6 mb:text-lg sm:w-1/3 md:text-xl"
+              className="mb:py-6 mb:text-lg w-2/5 sm:w-1/3 md:text-xl"
               disabled={submittingPost}>
               <Link href="/admin/dashboard">Cancel</Link>
             </Button>
             <Button
               type="submit"
-              className="w-2/5 mb:py-6 mb:text-lg sm:w-1/3 md:text-xl"
+              className="mb:py-6 mb:text-lg w-2/5 sm:w-1/3 md:text-xl"
               disabled={submittingPost}>
               Submit
             </Button>

@@ -37,23 +37,23 @@ export function SignUp() {
       </CardHeader>
       <CardContent>
         <div
-          className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-50 ${showVerifyEmail ? "" : "hidden"}`}>
-          <div className="mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 mb:w-[416px] sm:w-[448px]">
-            <p className="mt-2 text-center text-2xl font-bold text-gray-800 mb:text-3xl">
+          className={`bg-opacity-50 fixed top-0 left-0 z-10 flex h-full w-full items-center justify-center bg-gray-900 ${showVerifyEmail ? "" : "hidden"}`}>
+          <div className="mb:w-[416px] mx-4 flex w-96 flex-col space-y-4 rounded-lg border bg-white p-6 sm:w-[448px]">
+            <p className="mb:text-3xl mt-2 text-center text-2xl font-bold text-gray-800">
               Verify Your Email
             </p>
-            <p className="px-2 text-center text-lg text-gray-800 mb:pt-4 mb:text-xl">
+            <p className="mb:pt-4 mb:text-xl px-2 text-center text-lg text-gray-800">
               A verification email has been sent to your inbox. Click the{" "}
               <span className="font-bold">Verify Email</span> button to activate
               your account be redirected to the sign-in page.
             </p>
-            <p className="px-2 text-center text-lg italic text-gray-800 mb:pb-4 mb:text-xl">
+            <p className="mb:pb-4 mb:text-xl px-2 text-center text-lg text-gray-800 italic">
               If you do not see the email, please check your spam or junk
               folder.
             </p>
             <Button
               type="submit"
-              className="mx-auto w-3/5 py-6 text-base mb:text-lg"
+              className="mb:text-lg mx-auto w-3/5 py-6 text-base"
               onClick={() => router.replace("/admin/sign-in")}>
               Go To Sign In
             </Button>
@@ -88,7 +88,7 @@ export function SignUp() {
               <Button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2 top-2 h-6 w-6">
+                className="absolute top-2 right-2 h-6 w-6">
                 {showPassword ? <EyeOff /> : <Eye />}
               </Button>
             </div>
@@ -108,7 +108,7 @@ export function SignUp() {
               <Button
                 type="button"
                 onClick={() => setShowConfirmedPassword((prev) => !prev)}
-                className="absolute right-2 top-2 h-6 w-6">
+                className="absolute top-2 right-2 h-6 w-6">
                 {showConfirmedPassword ? <EyeOff /> : <Eye />}
               </Button>
             </div>

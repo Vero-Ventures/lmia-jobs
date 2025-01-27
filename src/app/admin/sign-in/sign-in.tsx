@@ -71,7 +71,7 @@ export default function SignIn() {
               <Button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2 top-2 h-6 w-6">
+                className="absolute top-2 right-2 h-6 w-6">
                 {showPassword ? <EyeOff /> : <Eye />}
               </Button>
             </div>
