@@ -4,17 +4,21 @@ import { CONFIG } from "@/actions/scraper/helpers/config";
 
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
-): Promise<{ postIds: string[]; postEmails: string[] }> {
+): Promise<{
+  postIds: string[];
+  postEmails: { postId: string; email: string }[];
+  postDetails: any[];
+}> {
   let pageNum = 1;
   let scrape = true;
 
   // const dataHandler = new DataHandler();
 
-  const postIds: string[] = [];
+  const newPosts: string[] = [];
 
   while (scrape) {
     const newPostIds = await scrapePosts(browserHandler, pageNum);
-    postIds.push(...newPostIds);
+    newPosts.push(...newPostIds);
     pageNum += 1;
 
     // Testing Limit
@@ -23,13 +27,16 @@ export async function scrapeGovJobBank(
     }
   }
 
-  const { postEmails, badPostIds } = await visitPages(browserHandler, postIds);
+  const { postEmails, badPostIds, postDetails } = await visitPages(
+    browserHandler,
+    newPosts
+  );
 
-  const goodPosts = postIds!.filter(
+  const postIds = newPosts!.filter(
     (postId: string) => !badPostIds.includes(postId)
   );
 
-  return { postIds: goodPosts, postEmails: postEmails };
+  return { postIds, postEmails, postDetails };
 }
 
 async function scrapePosts(
@@ -70,9 +77,13 @@ async function scrapePosts(
 async function visitPages(
   browserHandler: BrowserHandler,
   postIds: string[]
-): Promise<{ postEmails: string[]; badPostIds: string[]; postDetails: any[] }> {
+): Promise<{
+  postEmails: { postId: string; email: string }[];
+  postDetails: any[];
+  badPostIds: string[];
+}> {
   try {
-    const postEmails: string[] = [];
+    const postEmails: { postId: string; email: string }[] = [];
     const postDetails: any[] = [];
     const badPostIds: string[] = [];
 
@@ -87,10 +98,10 @@ async function visitPages(
         console.error("Post With ID: " + post + " Has Invalid Email");
         badPostIds.push(post);
       } else {
-        postEmails.push(email);
+        postEmails.push({ postId: post, email });
       }
 
-      const details = await getJobDetails(browserHandler);
+      const details = await getJobDetails(browserHandler, post);
 
       if (!details) {
         console.error("Post With ID: " + post + " Has Invalid Details");
@@ -133,7 +144,11 @@ async function getEmail(
   }
 }
 
-async function getJobDetails(browserHandler: BrowserHandler): Promise<{
+async function getJobDetails(
+  browserHandler: BrowserHandler,
+  postId: string
+): Promise<{
+  postId: string;
   jobTitle: string | undefined;
   organizationName: string | undefined;
   address: string | undefined;
@@ -157,6 +172,7 @@ async function getJobDetails(browserHandler: BrowserHandler): Promise<{
     const otherDetails = await getOtherJobDetails(browserHandler);
 
     const data = {
+      postId,
       jobTitle: headerInfo.jobTitle,
       organizationName: headerInfo.organizationName,
       address: locationDetails.address,
@@ -170,6 +186,8 @@ async function getJobDetails(browserHandler: BrowserHandler): Promise<{
       startDate: otherDetails.startDate,
       vacancies: otherDetails.vacancies,
     };
+
+    console.log("Post Details: " + data);
 
     return data;
   } catch (error) {
