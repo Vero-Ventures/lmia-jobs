@@ -185,7 +185,7 @@ async function getJobDetails(
         : headerInfo.postedDate,
       vacancies:
         otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
-      language: "null",
+      language: otherDetails.language,
       description: "null",
     };
 
