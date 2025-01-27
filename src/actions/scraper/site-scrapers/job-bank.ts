@@ -1,5 +1,6 @@
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
+import type { JobPostData } from "@/actions/scraper/helpers/types";
 // import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
 
 export async function scrapeGovJobBank(
@@ -7,7 +8,7 @@ export async function scrapeGovJobBank(
 ): Promise<{
   postIds: string[];
   postEmails: { postId: string; email: string }[];
-  postDetails: any[];
+  postDetails: JobPostData[];
 }> {
   let pageNum = 1;
   let scrape = true;
@@ -79,12 +80,12 @@ async function visitPages(
   postIds: string[]
 ): Promise<{
   postEmails: { postId: string; email: string }[];
-  postDetails: any[];
+  postDetails: JobPostData[];
   badPostIds: string[];
 }> {
   try {
     const postEmails: { postId: string; email: string }[] = [];
-    const postDetails: any[] = [];
+    const postDetails: JobPostData[] = [];
     const badPostIds: string[] = [];
 
     for (const post of postIds) {
@@ -97,11 +98,12 @@ async function visitPages(
       if (!email) {
         console.error("Post With ID: " + post + " Has Invalid Email");
         badPostIds.push(post);
+        continue;
       } else {
         postEmails.push({ postId: post, email });
       }
 
-      const details = await getJobDetails(browserHandler, post);
+      const details = await getJobDetails(browserHandler, post, email);
 
       if (!details) {
         console.error("Post With ID: " + post + " Has Invalid Details");
@@ -146,23 +148,9 @@ async function getEmail(
 
 async function getJobDetails(
   browserHandler: BrowserHandler,
-  postId: string
-): Promise<{
-  postId: string;
-  postedDate: string;
-  jobTitle: string;
-  organizationName: string;
-  address: string | undefined;
-  city: string;
-  region: string;
-  minPayValue: string;
-  maxPayValue: string | undefined;
-  paymentType: string;
-  workHours: string;
-  employmentType: string;
-  startDate: string | undefined;
-  vacancies: string;
-} | null> {
+  postId: string,
+  postEmail: string
+): Promise<JobPostData | null> {
   try {
     const headerInfo = await getJobHeaderDetails(browserHandler);
 
@@ -174,7 +162,7 @@ async function getJobDetails(
 
     const data = {
       postId,
-      postedDate: headerInfo.postedDate,
+      email: postEmail,
       jobTitle: headerInfo.jobTitle,
       organizationName: headerInfo.organizationName,
       address: locationDetails.address,
@@ -185,8 +173,12 @@ async function getJobDetails(
       paymentType: paymentDetails.paymentType,
       workHours: paymentDetails.workHours,
       employmentType: otherDetails.employmentType,
-      startDate: otherDetails.startDate,
+      startDate: otherDetails.startDate
+        ? otherDetails.startDate
+        : headerInfo.postedDate,
       vacancies: otherDetails.vacancies,
+      language: "null",
+      description: "null",
     };
 
     return data;

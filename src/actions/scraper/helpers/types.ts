@@ -3,19 +3,20 @@ export type UserData = {
 };
 
 export type JobPostData = {
+  postId: string;
   email: string;
   jobTitle: string;
   organizationName: string;
-  region: string;
+  address: string | undefined;
   city: string;
-  address: string;
-  startDate: string;
-  employmentType: string;
+  region: string;
+  minPayValue: string;
+  maxPayValue: string | undefined;
   paymentType: string;
-  workHours: number;
-  minPayValue: number;
-  maxPayValue: number;
-  description: string;
+  workHours: string;
+  employmentType: string;
+  startDate: string;
+  vacancies: string;
   language: string;
-  vacancies: number;
+  description: string;
 };

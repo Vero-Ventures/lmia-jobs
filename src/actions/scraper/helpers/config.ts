@@ -1,7 +1,7 @@
 export const CONFIG = {
   urls: {
     govSearchPage:
-      "https://www.jobbank.gc.ca/jobsearch/jobsearch?fet=%C2%AC1&fglo=1&sort=M&fter=S&page=",
+      "https://www.jobbank.gc.ca/jobsearch/jobsearch?fet=%C2%AC1&fglo=1&sort=M&page=",
     searchResult: "https://www.jobbank.gc.ca/jobsearch/jobposting/",
   },
 
