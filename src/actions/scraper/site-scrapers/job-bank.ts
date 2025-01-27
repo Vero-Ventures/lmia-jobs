@@ -23,7 +23,7 @@ export async function scrapeGovJobBank(
     pageNum += 1;
 
     // Testing Limit
-    if (pageNum > 0) {
+    if (pageNum > 2) {
       scrape = false;
     }
   }
@@ -55,7 +55,18 @@ async function scrapePosts(
 
     // Testing Limit
     const allPosts = await posts.all();
-    const testPosts = [allPosts[0], allPosts[1], allPosts[2]];
+    const testPosts = [
+      allPosts[0],
+      allPosts[1],
+      allPosts[2],
+      allPosts[3],
+      allPosts[4],
+      allPosts[5],
+      allPosts[6],
+      allPosts[7],
+      allPosts[8],
+      allPosts[9],
+    ];
 
     for (const post of testPosts) {
       const postedToBank = post.locator(
