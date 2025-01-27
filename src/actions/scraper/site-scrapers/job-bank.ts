@@ -383,7 +383,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       CONFIG.selectors.govJobBank.jobDetails.other.vacanciesContainer
     );
 
-    vacancies = (await vacanciesContainer.allInnerTexts()).pop()?.split(" ")[0];
+    vacancies = (await vacanciesContainer.allInnerTexts()).pop();
   } catch (error) {
     console.error("Vacancies Type Not Found: " + error);
   }

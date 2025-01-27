@@ -14,20 +14,20 @@ export const CONFIG = {
         jobDetailsList: "ul.job-posting-brief",
         header: {
           jobTitle: `h1[property="name"] span[property="title"]`,
-          postedDate: `p[property="date-business"] span[property="datePosted"]`,
+          postedDate: `span[property="datePosted"]`,
           organizationNameLink: `span[property="name"] a`,
           organizationNameText: `span[property="name"] strong`,
         },
         location: {
-          locationAddress: `span[property="address"] span[property="streetAddress"]`,
-          locationCity: `span[property="address"] span[property="addressLocality"]`,
-          locationRegion: `span[property="address"] span[property="addressRegion"]`,
+          locationAddress: `span[property="streetAddress"]`,
+          locationCity: `span[property="addressLocality"]`,
+          locationRegion: `span[property="addressRegion"]`,
         },
         payment: {
-          paymentMinimum: `span[property="value"] span[property="minValue"]`,
-          paymentMaximum: `span[property="value"] span[property="maxValue"]`,
-          paymentType: `span[property="value"] span[property="unitText"]`,
-          workHours: `span[property="baseSalary"] span[property="workHours"]`,
+          paymentMinimum: `span[property="minValue"]`,
+          paymentMaximum: `span[property="maxValue"]`,
+          paymentType: `span[property="unitText"]`,
+          workHours: `span[property="workHours"]`,
         },
         other: {
           employmentType: `span[property="employmentType"] span`,
