@@ -149,6 +149,7 @@ async function getJobDetails(
   postId: string
 ): Promise<{
   postId: string;
+  postedDate: string | undefined;
   jobTitle: string | undefined;
   organizationName: string | undefined;
   address: string | undefined;
@@ -173,6 +174,7 @@ async function getJobDetails(
 
     const data = {
       postId,
+      postedDate: headerInfo.postedDate,
       jobTitle: headerInfo.jobTitle,
       organizationName: headerInfo.organizationName,
       address: locationDetails.address,
@@ -371,11 +373,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       CONFIG.selectors.govJobBank.jobDetails.other.startDateContainer
     );
 
-    startDateContainer.evaluate((element) => {
-      const text = element.textContent || "";
-      const match = text.match(/Start date:\s*([\d-]+)/);
-      startDate = match ? match[1] : undefined;
-    });
+    startDate = (await startDateContainer.allInnerTexts()).pop()?.split(":")[1];
   } catch (error) {
     console.error("Start Date Not Found: " + error);
   }
@@ -385,11 +383,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       CONFIG.selectors.govJobBank.jobDetails.other.vacanciesContainer
     );
 
-    vacanciesContainer.evaluate((element) => {
-      const text = element.textContent || "";
-      const match = text.match(/^(\d+) vacancies$/);
-      vacancies = match ? match[1] : undefined;
-    });
+    vacancies = (await vacanciesContainer.allInnerTexts()).pop()?.split(" ")[0];
   } catch (error) {
     console.error("Vacancies Type Not Found: " + error);
   }

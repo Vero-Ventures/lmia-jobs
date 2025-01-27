@@ -15,7 +15,7 @@ export const CONFIG = {
         header: {
           jobTitle: `h1[property="name"] span[property="title"]`,
           postedDate: `p[property="date-business"] span[property="datePosted"]`,
-          organizationNameLink: `span[property="name"] a[property="addressRegion"]`,
+          organizationNameLink: `span[property="name"] a`,
           organizationNameText: `span[property="name"] strong`,
         },
         location: {
@@ -27,7 +27,7 @@ export const CONFIG = {
           paymentMinimum: `span[property="value"] span[property="minValue"]`,
           paymentMaximum: `span[property="value"] span[property="maxValue"]`,
           paymentType: `span[property="value"] span[property="unitText"]`,
-          workHours: `span[property="value"] span[property="workHours"]`,
+          workHours: `span[property="baseSalary"] span[property="workHours"]`,
         },
         other: {
           employmentType: `span[property="employmentType"] span`,
