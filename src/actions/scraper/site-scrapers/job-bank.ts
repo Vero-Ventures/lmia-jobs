@@ -171,9 +171,9 @@ async function getJobDetails(
       minPayValue:
         paymentDetails.minPay !== "null" ? Number(paymentDetails.minPay) : 0,
       maxPayValue:
-        paymentDetails.maxPay !== "null" && paymentDetails.maxPay !== undefined
+        paymentDetails.maxPay !== undefined
           ? Number(paymentDetails.maxPay)
-          : 0,
+          : undefined,
       paymentType: paymentDetails.paymentType,
       workHours:
         paymentDetails.workHours !== "null"
