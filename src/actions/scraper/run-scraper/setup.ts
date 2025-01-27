@@ -10,7 +10,10 @@ import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank";
 export const runScraper = async () => {
   let browser: Browser | undefined;
 
-  let result = { postIds: ["error"], postEmails: ["error"] };
+  let result = {
+    postIds: ["error"],
+    postEmails: [{ email: "error", postId: "error" }],
+  };
   try {
     const [newBrowser, _context, page] = await createChromiunm();
 
@@ -62,8 +65,9 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
   }
 }
 
-async function runSiteScrapers(
-  handler: BrowserHandler
-): Promise<{ postIds: string[]; postEmails: string[] }> {
+async function runSiteScrapers(handler: BrowserHandler): Promise<{
+  postIds: string[];
+  postEmails: { email: string; postId: string }[];
+}> {
   return await scrapeGovJobBank(handler);
 }
