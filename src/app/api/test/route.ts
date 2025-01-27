@@ -6,9 +6,9 @@ import {
 export async function GET() {
   await desciptionTest();
 
-  // if (result.postEmails[0].email !== "error" && result.postIds[0] !== "error") {
-  //   return new Response(JSON.stringify(result), { status: 200 });
-  // } else {
-  //   return new Response("Error", { status: 400 });
-  // }
+  return new Response("success", { status: 200 });
+
+  // const result = await runScraper()
+
+  // return new Response(JSON.stringify(result), { status: 200 });
 }
