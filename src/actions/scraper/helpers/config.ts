@@ -39,6 +39,7 @@ export const CONFIG = {
           education: `ul[property="educationRequirements qualification"] li span`,
           experience: `p[property="experienceRequirements qualification"] span`,
           onSite: `p span.description`,
+          onSiteImg: `span.fa-icon-desc fa-icon fas fa-building`,
 
           enviroment: `div:has(h4:has-text("Work site environment")) ul li`,
           setting: `div:has(h4:has-text("Work setting")) ul li`,

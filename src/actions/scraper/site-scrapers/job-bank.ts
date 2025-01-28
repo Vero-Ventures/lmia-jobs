@@ -476,12 +476,10 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43236893"
+  const post = "43236893";
 
   await browserHandler.visitPage(
-    CONFIG.urls.searchResult +
-      String(post) +
-      "?source=searchresults"
+    CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
   const getEducation = await browserHandler.waitAndGetElement(
@@ -505,12 +503,18 @@ export async function getDescription(
   const getOnSite = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.onSite
   );
-  const onSiteValue = (await getOnSite.allInnerTexts()).pop();
+
+  const filteredToOnSite = getOnSite.filter({
+    has: browserHandler.page.locator(
+      CONFIG.selectors.govJobBank.jobDetails.description.onSiteImg
+    ),
+  });
+
+  const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
 
   if (onSiteValue) {
     console.log(onSiteValue);
   }
-
 
   const description = "null";
 
