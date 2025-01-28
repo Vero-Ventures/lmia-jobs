@@ -529,9 +529,11 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
   if (getEnviromentLists) {
     for (const listItem of await getEnviromentLists.allInnerTexts()) {
       if (listItem === "Work setting") {
+        console.log("Break");
         break;
       } else if (listItem !== "Work site environment") {
         console.log("Enviroment List Item: " + listItem);
+        console.log("Next");
       }
     }
   }
@@ -545,8 +547,10 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
     for (const listItem of await getEnviromentLists.allInnerTexts()) {
       if (listItem === "Work setting") {
         settingValue = true;
+        console.log('Work Setting')
       } else if (settingValue) {
         console.log("Setting List Item: " + listItem);
+        console.log("Next");
       }
     }
   }
