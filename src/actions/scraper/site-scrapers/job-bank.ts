@@ -476,7 +476,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43236893";
+  const post = "43244767";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
