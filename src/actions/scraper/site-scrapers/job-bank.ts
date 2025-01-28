@@ -480,6 +480,7 @@ export async function getDescription(
     `https://www.jobbank.gc.ca/jobsearch/jobposting/43236893?source=searchresults`
   );
 
+
   const getJobTitle = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.header.jobTitle
   );
