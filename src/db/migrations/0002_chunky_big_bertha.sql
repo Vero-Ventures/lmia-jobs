@@ -1,0 +1,1 @@
+ALTER TABLE "job_postings" RENAME COLUMN "start_time" TO "start_date";

@@ -8,6 +8,9 @@ import {
   CalendarIcon,
   User2Icon,
   MailIcon,
+  Pencil,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   Card,
@@ -19,31 +22,87 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { JobPosting } from "@/app/lib/types";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { editPostVisibility } from "@/actions/handle-job-posts";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
+export function JobPostingCard({
+  jobPosting,
+  isAdmin,
+}: {
+  jobPosting: JobPosting;
+  isAdmin?: boolean;
+}) {
+  const router = useRouter();
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
   return (
     <Card className="h-fit overflow-y-auto">
-      <CardHeader className="space-y-4">
-        <div>
-          <CardTitle
-            className={`titleCase text-2xl font-bold dark:text-white ${jobPosting.hidden ? "italic text-gray-600" : ""}`}>
-            {jobPosting.jobTitle} {jobPosting.hidden ? "- Hidden" : ""}
+      <CardHeader>
+        <div className="flex justify-between">
+          <CardTitle className={`titleCase text-2xl font-bold dark:text-white`}>
+            {jobPosting.jobTitle}
           </CardTitle>
-          <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
-            {jobPosting.organizationName}
-          </CardDescription>
-          <div className="ml-auto flex w-fit flex-col">
-            <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
-              Opened: {new Date(jobPosting.createdAt).toDateString()}
+          {isAdmin && (
+            <div className="flex gap-2">
+              <Button asChild>
+                <Link href={`/dashboard/update-post/${jobPosting.id}`}>
+                  <Pencil />
+                  <span>Edit</span>
+                </Link>
+              </Button>
+              {jobPosting.hidden ? (
+                <Button
+                  onClick={async () => {
+                    toast.promise(editPostVisibility(jobPosting.id, false), {
+                      loading: "Loading...",
+                      success: () => {
+                        return "Your post will now be shown";
+                      },
+                      error: "Unable to change post visibility",
+                    });
+                    router.refresh();
+                  }}>
+                  <Eye />
+                  <span>Show</span>
+                </Button>
+              ) : (
+                <Button
+                  onClick={async () => {
+                    toast.promise(editPostVisibility(jobPosting.id, true), {
+                      loading: "Loading...",
+                      success: () => {
+                        return "Your post is hidden";
+                      },
+                      error: "Unable to change post visibility",
+                    });
+                    router.refresh();
+                  }}>
+                  <EyeOff />
+                  <span>Hide</span>
+                </Button>
+              )}
             </div>
-            <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
-              Closes: {new Date(jobPosting.expiresAt).toDateString()}
-            </div>
-            <div className="mt-2 text-center font-semibold text-red-500">
-              {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
-            </div>
+          )}
+        </div>
+        <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
+          {jobPosting.organizationName}
+        </CardDescription>
+        <div>
+          {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
+        </div>
+        <div className="ml-auto flex w-fit flex-col">
+          <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
+            Opened: {new Date(jobPosting.createdAt).toDateString()}
+          </div>
+          <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
+            Closes: {new Date(jobPosting.expiresAt).toDateString()}
+          </div>
+          <div className="mt-2 text-center font-semibold text-red-500">
+            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
           </div>
         </div>
 
@@ -83,7 +142,7 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
             <div className="flex items-center gap-2">
               <CalendarIcon className="size-6 text-gray-500 dark:text-gray-400" />
               <span className="text-gray-500 dark:text-gray-400">
-                {`${jobPosting.startTime ? "Start By: " + jobPosting.startTime : "N/A"}`}
+                {`${jobPosting.startDate ? "Start By: " + jobPosting.startDate : "N/A"}`}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -99,14 +158,26 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
       </CardHeader>
       <Separator />
       <div className="pt-4">
-        <CardContent>
-          <h5 className={`text-base font-bold dark:text-white`}>
-            Job Description
-          </h5>
-          <p
-            className="mt-4 text-gray-500 dark:text-gray-400"
-            dangerouslySetInnerHTML={{ __html: jobPosting.description }}
-          />
+        <CardContent className="space-y-4">
+          {jobPosting.language && (
+            <div className="space-y-2">
+              <h5 className={`text-base font-bold dark:text-white`}>
+                Languages
+              </h5>
+              <p className="text-gray-500 dark:text-gray-400">
+                {jobPosting.language}
+              </p>
+            </div>
+          )}
+          <div className="space-y-2">
+            <h5 className={`text-base font-bold dark:text-white`}>
+              Job Description
+            </h5>
+            <p
+              className="text-gray-500 dark:text-gray-400"
+              dangerouslySetInnerHTML={{ __html: jobPosting.description }}
+            />
+          </div>
         </CardContent>
         <CardFooter>
           <div className="flex flex-col gap-2">
@@ -122,9 +193,6 @@ export function JobPostingCard({ jobPosting }: { jobPosting: JobPosting }) {
                   {jobPosting.email}
                 </a>
               </div>
-            </div>
-            <div>
-              <p className="mt-2 italic text-gray-600">{jobPosting.language}</p>
             </div>
           </div>
         </CardFooter>

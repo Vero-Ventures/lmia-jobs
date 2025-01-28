@@ -10,5 +10,5 @@
 # typescript
 next-env.d.ts
 
-# database
-/src/db
+# migrations
+/src/db/migrations

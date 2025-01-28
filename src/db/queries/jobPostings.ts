@@ -1,89 +1,96 @@
-import { db } from "..";
+import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
-import type { JobPosting } from "@/app/lib/types";
+import { eq, and, gt, type SQL, ilike } from "drizzle-orm";
+import type { PgColumn } from "drizzle-orm/pg-core";
 
 export async function selectAllJobPostings({
   jobBoard,
-  email,
   jobTitle,
   location,
   jobType,
 }: {
-  jobBoard?: string;
-  email?: string;
-  jobTitle?: string;
-  jobType?: string;
-  location?: string;
+  jobBoard: string;
+  jobTitle: string;
+  jobType: string;
+  location: string;
 }) {
-  let postings = await db.select().from(jobPostings);
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
 
-  if (email) {
-    postings = postings!.filter(
-      (posting: { email: string }) => posting.email === email
-    );
-  } else {
-    if (location) {
-      postings = postings!.filter(
-        (posting: { region: string }) => posting.region === location
-      );
-    }
-    if (jobType) {
-      postings = postings!.filter(
-        (posting: { employmentType: string }) =>
-          posting.employmentType === jobType
-      );
-    }
-    if (jobBoard) {
-      postings = filterPostingsByBoard(postings, jobBoard);
-    }
+  const jobBoardMap: Record<string, PgColumn> = {
+    indigenous: jobPostings.postIndigenous,
+    newcomers: jobPostings.postNewcomers,
+    accessible: jobPostings.postDisabled,
+    youth: jobPostings.postYouth,
+    asylum: jobPostings.postAsylum,
+  };
 
-    postings = postings!.filter(
-      (posting: { hidden: boolean }) => !posting.hidden
-    );
+  const filters: SQL[] = [
+    eq(jobPostings.paymentConfirmed, true),
+    gt(jobPostings.expiresAt, currentDate),
+    eq(jobBoardMap[jobBoard], true),
+  ];
 
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
+  if (jobType !== "All") {
+    filters.push(eq(jobPostings.employmentType, jobType));
+  }
 
-    postings = postings!.filter(
-      (posting: { expiresAt: string }) =>
-        new Date(posting.expiresAt) > currentDate
-    );
+  if (location !== "All") {
+    filters.push(eq(jobPostings.region, location));
   }
 
   if (jobTitle) {
-    postings = postings!.filter((posting) =>
-      posting.jobTitle.toLowerCase().includes(jobTitle.toLowerCase())
-    );
+    filters.push(ilike(jobPostings.jobTitle, "%" + jobTitle));
   }
 
-  return postings;
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(and(...filters));
 }
 
-function filterPostingsByBoard(postings: JobPosting[], jobBoard: string) {
-  if (jobBoard === "asylum-job-board") {
-    postings = postings!.filter(
-      (posting: { postAsylum: boolean }) => posting.postAsylum
-    );
+export async function selectUserJobPostings({
+  userId,
+  jobTitle,
+}: {
+  userId: string;
+  jobTitle?: string;
+}) {
+  if (jobTitle) {
+    return await db
+      .select()
+      .from(jobPostings)
+      .where(
+        and(
+          eq(jobPostings.userId, userId),
+          eq(jobPostings.jobTitle, jobTitle ?? "")
+        )
+      );
   }
-  if (jobBoard === "accessible-job-board") {
-    postings = postings!.filter(
-      (posting: { postDisabled: boolean }) => posting.postDisabled
-    );
-  }
-  if (jobBoard === "indigenous-job-board") {
-    postings = postings!.filter(
-      (posting: { postIndigenous: boolean }) => posting.postIndigenous
-    );
-  }
-  if (jobBoard === "newcomers-job-board") {
-    postings = postings!.filter(
-      (posting: { postNewcomers: boolean }) => posting.postNewcomers
-    );
-  }
-  if (jobBoard === "youth-job-board") {
-    postings = postings!.filter(
-      (posting: { postYouth: boolean }) => posting.postYouth
-    );
-  }
-  return postings;
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(eq(jobPostings.userId, userId));
+}
+
+export async function selectUserSingleJobPosting({
+  userId,
+  id,
+}: {
+  userId: string;
+  id: string;
+}) {
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(and(eq(jobPostings.userId, userId), eq(jobPostings.id, id)))
+    .then((res) => res[0]);
+}
+
+export async function selectSingleJobPosting(id: string) {
+  return await db
+    .select()
+    .from(jobPostings)
+    .where(eq(jobPostings.id, id))
+    .then((res) => res[0]);
 }

@@ -1,1 +1,0 @@
-ALTER TABLE "job_postings" ALTER COLUMN "start_time" SET NOT NULL;

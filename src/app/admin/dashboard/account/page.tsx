@@ -1,21 +1,29 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
+import { useSession, signOut } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { useState } from "react";
-import Navbar from "@/components/navbar";
-import { SessionLinks } from "@/app/admin/dashboard/lib/constants";
-import Footer from "@/components/footer";
 import { updateEmail, updatePassword } from "@/actions/handle-account";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Eye, EyeOff } from "lucide-react";
+
 export default function Page() {
-  const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending } = useSession();
 
   if (!session && !isPending) {
-    redirect("/admin");
+    redirect("/sign-in");
   }
 
   const [newEmail, setNewEmail] = useState("");
@@ -27,9 +35,11 @@ export default function Page() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordUpdateError, setPasswordUpdateError] = useState("");
   const [passwordUpdateSuccess, setPasswordUpdateSuccess] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleEmailUpdate = async () => {
-    const updateEmailResult = await updateEmail(session!.user.email, newEmail);
+    const updateEmailResult = await updateEmail(session!.user.id, newEmail);
 
     if (updateEmailResult === "success") {
       let countdown = 5;
@@ -41,10 +51,10 @@ export default function Page() {
         }
       }, 1000);
 
-      await authClient.signOut({
+      await signOut({
         fetchOptions: {
           onSuccess: () => {
-            redirect("/admin");
+            redirect("/");
           },
         },
       });
@@ -67,108 +77,136 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <Navbar links={SessionLinks} />
-      <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-white p-6">
-        <div className="mx-auto flex max-w-3xl flex-col rounded-lg border-4 border-gray-400 bg-gray-50">
-          <div className="mx-auto mt-8 w-5/6 rounded-lg border-4 border-gray-300 bg-white p-4 mb:w-3/4 sm:w-2/3">
-            <h1 className="mb-4 text-center text-xl font-bold">Reset Email</h1>
-            <div className="mx-2 mt-6 mb:mx-auto mb:w-5/6">
-              <label className="text-base font-semibold">New Email</label>
-              <Input
-                className="mt-2"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                type="text"
-              />
+    <main>
+      <div className="space-y-4 p-20">
+        <div className="flex justify-center">
+          <Button asChild size="lg">
+            <Link
+              href={"https://billing.stripe.com/p/login/7sI2bz5KPgXadXOeUU"}>
+              Manage Subsciption
+            </Link>
+          </Button>
+        </div>
+        <Card className="mx-auto max-w-xl">
+          <CardHeader>
+            <CardTitle className="text-lg md:text-xl">Reset Email</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Label>New Email</Label>
+            <Input
+              className="mt-2"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              type="text"
+            />
+          </CardContent>
+          {confirmEmailUpdate && (
+            <div className="my-6 flex flex-col text-center text-base">
+              <h1 className="block text-xl font-semibold text-gray-800">
+                Warning:
+              </h1>
+              <h1 className="mt-2">
+                Resetting your email will result in you being logged out on
+                completion.
+              </h1>
+              <h1 className="mt-2">
+                You will be required to verify the new email address before
+                logging in again.
+              </h1>
             </div>
+          )}
 
-            {confirmEmailUpdate && (
-              <div className="my-6 flex flex-col text-center text-base">
-                <h1 className="block text-xl font-semibold text-gray-800">
-                  Warning:
-                </h1>
-                <h1 className="mt-2">
-                  Resetting your email will result in you being logged out on
-                  completion.
-                </h1>
-                <h1 className="mt-2">
-                  You will be required to verify the new email address before
-                  logging in again.
-                </h1>
-              </div>
+          {updateLogOutTimer >= 0 && (
+            <div className="mb-8 mt-8 flex flex-col text-center">
+              <h1 className="block text-lg font-semibold text-gray-800">
+                Email Update Successful
+              </h1>
+              <h1 className="mt-2 text-lg italic">
+                Logging Out In: {updateLogOutTimer}
+              </h1>
+            </div>
+          )}
+
+          <div className="mx-auto my-6 w-fit text-center text-lg font-semibold text-red-400">
+            {emailUpdateError === "existing email" && (
+              <p>
+                Email already assosiated <br />
+                with an existing account.
+              </p>
             )}
-
-            {updateLogOutTimer >= 0 && (
-              <div className="mb-8 mt-8 flex flex-col text-center">
-                <h1 className="block text-lg font-semibold text-gray-800">
-                  Email Update Successful
-                </h1>
-                <h1 className="mt-2 text-lg italic">
-                  Logging Out In: {updateLogOutTimer}
-                </h1>
-              </div>
+            {emailUpdateError === "error" && (
+              <p>
+                An error occurred <br />
+                while updating your email. <br />
+                Please try again.
+              </p>
             )}
-
-            <div className="mx-auto my-6 w-fit text-center text-lg font-semibold text-red-400">
-              {emailUpdateError === "existing email" && (
-                <p>
-                  Email already assosiated <br />
-                  with an existing account.
-                </p>
-              )}
-              {emailUpdateError === "error" && (
-                <p>
-                  An error occurred <br />
-                  while updating your email. <br />
-                  Please try again.
-                </p>
-              )}
-            </div>
-
-            <div className="mx-auto mt-4 w-fit">
-              {confirmEmailUpdate ? (
-                <Button
-                  className="px-8 text-lg"
-                  onClick={() => handleEmailUpdate()}>
-                  Confirm
-                </Button>
-              ) : (
-                <Button
-                  className="px-8 text-lg"
-                  onClick={() => setConfirmEmailUpdate(true)}>
-                  Update
-                </Button>
-              )}
-            </div>
           </div>
 
-          <div className="mx-auto mt-8 w-5/6 rounded-lg border-4 border-gray-300 bg-white p-4 mb:w-3/4 sm:w-2/3">
-            <h1 className="mb-4 text-center text-xl font-bold">
-              Reset Password
-            </h1>
-            <div className="mx-2 mt-6 mb:mx-auto mb:w-5/6">
-              <label className="text-base font-semibold">New Password</label>
-              <Input
-                className="mt-2"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                type="text"
-              />
+          <CardFooter>
+            {confirmEmailUpdate ? (
+              <Button className="w-full" onClick={handleEmailUpdate}>
+                Confirm
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                onClick={() => setConfirmEmailUpdate(true)}>
+                Update
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+        <Card className="mx-auto max-w-xl">
+          <CardHeader>
+            <CardTitle className="text-lg md:text-xl">Reset Password</CardTitle>
+            <CardDescription className="text-xs md:text-sm">
+              Enter your new password.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Input
+                    className="pr-14"
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    autoComplete="new-password"
+                    placeholder="Password"
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-2 top-2 h-6 w-6">
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </Button>
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Confirm Password</Label>
+                <div className="relative">
+                  <Input
+                    className="pr-14"
+                    id="password_confirmation"
+                    type={showConfirmedPassword ? "text" : "password"}
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    autoComplete="new-password"
+                    placeholder="Confirm Password"
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => setShowConfirmedPassword((prev) => !prev)}
+                    className="absolute right-2 top-2 h-6 w-6">
+                    {showConfirmedPassword ? <EyeOff /> : <Eye />}
+                  </Button>
+                </div>
+              </div>
             </div>
-
-            <div className="mx-2 mt-4 mb:mx-auto mb:w-5/6">
-              <label className="text-base font-semibold">
-                Confirm Password
-              </label>
-              <Input
-                className="mt-2"
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                type="text"
-              />
-            </div>
-
             <div className="mx-auto my-6 w-fit text-center text-lg font-semibold text-red-400">
               {passwordUpdateError === "not matching" && (
                 <p>Your passwords must match.</p>
@@ -203,28 +241,14 @@ export default function Page() {
                 </p>
               )}
             </div>
-
-            <div className="mx-auto mt-4 w-fit">
-              <Button
-                className="px-8 text-lg"
-                onClick={() => handlePasswordUpdate()}>
-                Confirm
-              </Button>
-            </div>
-          </div>
-
-          <Link
-            className="mx-auto mb-8 mt-8 w-5/6 mb:w-3/4 sm:w-2/3"
-            href={"https://billing.stripe.com/p/login/7sI2bz5KPgXadXOeUU"}>
-            <div className="rounded-lg border-4 border-gray-300 bg-white p-4">
-              <p className="text-center text-3xl font-bold text-gray-800">
-                Manage Subsciption
-              </p>
-            </div>
-          </Link>
-        </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" onClick={handlePasswordUpdate}>
+              Confirm
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
-      <Footer />
-    </div>
+    </main>
   );
 }

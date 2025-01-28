@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db";
+import { nextCookies } from "better-auth/next-js";
 
 import { Resend } from "resend";
 import ResetPassword from "@/components/emails/reset-password";
@@ -43,4 +44,5 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
   },
+  plugins: [nextCookies()],
 });

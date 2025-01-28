@@ -22,13 +22,9 @@ export default function FilterSelect({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  let paramString = filterType;
+  const paramString = filterType;
 
-  let selections = PROVINCES;
-  if (filterType === "job type") {
-    selections = JOB_TYPES;
-    paramString = "jobType";
-  }
+  const selections = filterType === "jobType" ? JOB_TYPES : PROVINCES;
 
   const createQueryString = useCallback(
     (name: string, value: string) => {

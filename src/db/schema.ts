@@ -25,8 +25,8 @@ export const userMailing = pgTable("user_mailing", {
     .references(() => user.id, { onDelete: "cascade" }),
   tempPassword: text("temp_password"),
   newlyCreated: boolean("newly_created").notNull().default(true),
-  optedOut: boolean("opted_out").notNull().default(false),
   activated: boolean("activated").notNull().default(false),
+  optedOut: boolean("opted_out").notNull().default(false),
   ignore: boolean("ignore").notNull().default(false),
 });
 
@@ -80,14 +80,15 @@ export const verification = pgTable("verification", {
 });
 
 export const jobPostings = pgTable("job_postings", {
-  id: serial("id").primaryKey(),
-  stripeChargeId: text("stripe_charge_id").notNull(),
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
   jobTitle: text("job_title").notNull(),
   organizationName: text("organization_name").notNull(),
   region: text("region").notNull(),
   city: text("city").notNull(),
   address: text("address"),
-  startTime: date("start_time").notNull(),
+  startDate: date("start_date").notNull(),
   vacancies: integer("vacancies"),
   employmentType: text("employment_type").notNull(),
   workHours: integer("work_hours"),
@@ -96,17 +97,16 @@ export const jobPostings = pgTable("job_postings", {
   maxPayValue: integer("max_pay_value"),
   description: text("description").notNull(),
   language: text("language"),
-  maxBoards: integer("max_boards").notNull().default(0),
   postAsylum: boolean("post_asylum").notNull(),
   postDisabled: boolean("post_disabled").notNull(),
   postIndigenous: boolean("post_indigenous").notNull(),
   postNewcomers: boolean("post_newcomers").notNull(),
   postYouth: boolean("post_youth").notNull(),
-  email: text("email").notNull(),
+  hidden: boolean("hidden").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
-  expiresAt: date("expires_at").notNull(),
-  hidden: boolean("hidden").notNull().default(true),
+  paymentConfirmed: boolean("paymentConfirmed").notNull(),
+  expiresAt: date("expires_at", { mode: "date" }).notNull(),
 });
