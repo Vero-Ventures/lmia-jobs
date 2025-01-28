@@ -47,7 +47,7 @@ export const CONFIG = {
           tasksAndSupervision: `div[property="responsibilities"]`,
           specializedSkills: `div[property="experienceRequirements"]`,
           // 3 Values: ConditionsAndCapability, PersonalSuitability, Other.
-          additionalInformation: ``,
+          additionalInformation: `div[property="skills"]:has(> h3:has-text("Additional information"))`,
         },
       },
 

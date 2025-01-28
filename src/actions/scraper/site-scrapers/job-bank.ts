@@ -469,7 +469,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43135610";
+  const post = "43246447";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -487,7 +487,7 @@ export async function getDescription(
 
   console.log(JSON.stringify(await getSkills(browserHandler)));
 
-  // console.log(JSON.stringify(await getAdditionalInformation(browserHandler)));
+  console.log(JSON.stringify(await getAdditionalInformation(browserHandler)));
 
   const description = "null";
   return description;
@@ -768,5 +768,42 @@ export async function getSkills(browserHandler: BrowserHandler): Promise<{
 
   return {
     skills: skillsListValues.length > 0 ? skillsListValues : null,
+  };
+}
+
+export async function getAdditionalInformation(
+  browserHandler: BrowserHandler
+): Promise<{
+  conditionsAndCapability: string[] | null;
+  personalSuitability: string[] | null;
+  other: { title: string; attributes: string[] }[] | null;
+}> {
+  const conditionsList: string[] = [];
+  const suitabilityList: string[] = [];
+  const otherList: { title: string; attributes: string[] }[] = [];
+
+  try {
+    const getAdditionalInformation = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.tasksAndSupervision
+    );
+
+    const infoInnerHtml = await getAdditionalInformation.innerHTML();
+
+    const infoCleanedHtml = infoInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (infoCleanedHtml) {
+      for (const listItem of infoCleanedHtml) {
+        console.log("Item: " + listItem);
+      }
+    }
+  } catch {}
+
+  return {
+    conditionsAndCapability: conditionsList.length > 0 ? conditionsList : null,
+    personalSuitability: suitabilityList.length > 0 ? suitabilityList : null,
+    other: otherList.length > 0 ? otherList : null,
   };
 }
