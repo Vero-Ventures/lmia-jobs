@@ -2,12 +2,11 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import type { CreatePost } from "./create-post-form";
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import type { EditPost } from "../[id]/edit/edit-post-form";
+import type { CreatePost, EditPost } from "@/app/lib/job-postings/schema";
 
 export async function createJobPost(formData: CreatePost) {
   try {
