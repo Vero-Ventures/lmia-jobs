@@ -482,23 +482,33 @@ export async function getDescription(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  // await getOverviewDescription(browserHandler);
+  await getOverviewDescription(browserHandler);
 
   // await getEnviromentDescription(browserHandler);
 
-  await getCredentialsAndSkills(browserHandler);
+  // await getCredentialsAndSkills(browserHandler);
 
   const description = "null";
   return description;
 }
 
-export async function getOverviewDescription(browserHandler: BrowserHandler) {
+export async function getOverviewDescription(
+  browserHandler: BrowserHandler
+): Promise<{
+  education: string | null;
+  experience: string | null;
+  onSite: string | null;
+}> {
+  let education = null;
+  let experience = null;
+  let onSite = null;
+
   const getEducation = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.education
   );
   const educationValue = (await getEducation.allInnerTexts()).pop();
   if (educationValue) {
-    console.log(educationValue);
+    education = educationValue;
   }
 
   const getExperience = await browserHandler.waitAndGetElement(
@@ -506,7 +516,7 @@ export async function getOverviewDescription(browserHandler: BrowserHandler) {
   );
   const experienceValue = (await getExperience.allInnerTexts()).pop();
   if (experienceValue) {
-    console.log(experienceValue);
+    experience = experienceValue;
   }
 
   const getOnSite = await browserHandler.waitAndGetElement(
@@ -519,8 +529,18 @@ export async function getOverviewDescription(browserHandler: BrowserHandler) {
   });
   const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
   if (onSiteValue) {
-    console.log(onSiteValue);
+    onSite = onSiteValue;
   }
+
+  console.log(education);
+  console.log(experience);
+  console.log(onSite);
+
+  return {
+    education,
+    experience,
+    onSite,
+  };
 }
 
 export async function getEnviromentDescription(browserHandler: BrowserHandler) {
