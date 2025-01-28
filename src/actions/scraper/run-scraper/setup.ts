@@ -1,14 +1,10 @@
 import { chromium as playwright } from "playwright-core";
 import type { Browser, BrowserContext, Page } from "playwright-core";
-
 import chromium from "@sparticuz/chromium";
-
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-import {
-  getDescription,
-  scrapeGovJobBank,
-} from "@/actions/scraper/site-scrapers/job-bank";
+import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank/handler";
+import { getDescription } from "@/actions/scraper/site-scrapers/job-bank/get-description";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
