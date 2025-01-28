@@ -315,7 +315,7 @@ async function getAdditionalInformation(
 
   try {
     const getAdditionalInformation = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.tasksAndSupervision
+      CONFIG.selectors.govJobBank.jobDetails.description.additionalInformation
     );
 
     const infoInnerHtml = await getAdditionalInformation.innerHTML();
