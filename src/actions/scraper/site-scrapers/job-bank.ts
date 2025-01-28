@@ -526,19 +526,28 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
     CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
 
-  let workEnviromentValues = false;
-  let workSettingValues = false;
+  if (getEnviromentLists) {
+    for (const listItem of await getEnviromentLists.allInnerTexts()) {
+      if (listItem === "Work setting") {
+        break;
+      } else if (listItem !== "Work site environment") {
+        console.log("Enviroment List Item: " + listItem);
+      }
+    }
+  }
 
-  for (const listItem of await getEnviromentLists.allInnerTexts()) {
-    if (listItem === "Work site environment") {
-      workEnviromentValues = true;
-    } else if (listItem === "Work setting") {
-      workEnviromentValues = false;
-      workSettingValues = true;
-    } else if (workEnviromentValues) {
-      console.log("Enviroment List Item: " + listItem);
-    } else if (workSettingValues) {
-      console.log("Work Setting List Item: " + listItem);
+  const getSettingLists = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
+  );
+
+  if (getSettingLists) {
+    let settingValue = false;
+    for (const listItem of await getEnviromentLists.allInnerTexts()) {
+      if (listItem === "Work setting") {
+        settingValue = true;
+      } else if (settingValue) {
+        console.log("Setting List Item: " + listItem);
+      }
     }
   }
 }
