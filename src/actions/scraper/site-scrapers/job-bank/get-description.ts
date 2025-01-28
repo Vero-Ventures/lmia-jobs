@@ -78,7 +78,8 @@ async function getEnviromentAndSetting(
 
   try {
     const getEnviromentLists = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.enviroment
+      CONFIG.selectors.govJobBank.jobDetails.description.enviroment,
+      2500
     );
     const enviromentInnerText = await getEnviromentLists.allInnerTexts();
 
@@ -95,7 +96,8 @@ async function getEnviromentAndSetting(
 
   try {
     const getSettingLists = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.setting
+      CONFIG.selectors.govJobBank.jobDetails.description.setting,
+      2500
     );
     const settingInnerText = await getSettingLists.allInnerTexts();
 
@@ -124,7 +126,8 @@ async function getCredentials(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.credentials
+      CONFIG.selectors.govJobBank.jobDetails.description.credentials,
+      2500
     );
 
     const credentialsInnerHtml = await getCredentialsList.innerHTML();
@@ -164,7 +167,8 @@ async function getBenefits(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.benefits
+      CONFIG.selectors.govJobBank.jobDetails.description.benefits,
+      2500
     );
 
     const credentialsInnerHtml = await getCredentialsList.innerHTML();
@@ -264,7 +268,8 @@ async function getSkills(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getSkillsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills
+      CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills,
+      2500
     );
     const skillsInnerHtml = await getSkillsList.innerHTML();
 

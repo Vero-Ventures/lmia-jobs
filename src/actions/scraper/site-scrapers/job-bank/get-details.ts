@@ -61,9 +61,7 @@ export async function getJobDetails(
           : undefined,
       paymentType: paymentDetails.paymentType,
       workHours:
-        paymentDetails.workHours !== "null"
-          ? Number(paymentDetails.workHours)
-          : 0,
+        paymentDetails.workHours !== "null" ? paymentDetails.workHours : "0",
       employmentType: otherDetails.employmentType,
       startDate: otherDetails.startDate
         ? otherDetails.startDate

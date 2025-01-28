@@ -27,7 +27,7 @@ export async function scrapeGovJobBank(
     pageNum += 1;
 
     // Testing: Limit Pages To 1
-    if (pageNum > 0) {
+    if (pageNum > 1) {
       scrape = false;
     }
   }

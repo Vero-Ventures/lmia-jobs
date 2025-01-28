@@ -12,7 +12,7 @@ export type JobPostData = {
   minPayValue: number;
   maxPayValue: number | undefined;
   paymentType: string;
-  workHours: number;
+  workHours: string;
   employmentType: string;
   startDate: string;
   vacancies: number;
