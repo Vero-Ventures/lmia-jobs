@@ -486,6 +486,8 @@ export async function getDescription(
 
   // await getEnviromentDescription(browserHandler);
 
+  await getCredentialsAndSkills(browserHandler)
+
   const description = "null";
   return description;
 }
