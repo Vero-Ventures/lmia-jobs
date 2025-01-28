@@ -476,13 +476,15 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const postUrl = "43236893";
-
   await browserHandler.visitPage(
-    `https://www.jobbank.gc.ca/jobsearch/jobposting/` +
-      postUrl +
-      `?source=searchresults`
+    `https://www.jobbank.gc.ca/jobsearch/jobposting/43236893?source=searchresults`
   );
+
+  await new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 10000);
+  });
 
   await browserHandler.printPage();
 
