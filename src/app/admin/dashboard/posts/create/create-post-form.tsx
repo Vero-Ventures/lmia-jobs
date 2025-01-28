@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { createJobPost } from "./actions";
+import { useRouter } from "next/navigation";
+import FormSubmitButton from "@/components/form-submit-button";
 
 const createPostSchema = z
   .object({
@@ -130,6 +133,7 @@ export function CreatePostForm() {
       monthsToPost: 1,
     },
   });
+  const router = useRouter();
 
   const selectedJobBoards = [
     form.watch("postAsylum"),
@@ -141,6 +145,17 @@ export function CreatePostForm() {
   const monthsToPost = form.watch("monthsToPost");
 
   async function onSubmit(values: CreatePost) {
+    toast.promise(createJobPost(values), {
+      loading: "Creating job posting...",
+      success: () => {
+        form.reset();
+        router.push("/dashboard");
+        return "Job posting created successfully";
+      },
+      error: (error) => {
+        if (error instanceof Error) return error.message;
+      },
+    });
     await createJobPost(values);
     form.reset();
   }
@@ -605,9 +620,12 @@ export function CreatePostForm() {
                 variant="outline">
                 <Link href="/dashboard">Cancel</Link>
               </Button>
-              <Button className="order-1 w-full sm:order-2" type="submit">
-                Create
-              </Button>
+              <FormSubmitButton
+                className="order-1 w-full sm:order-2"
+                isPending={form.formState.isSubmitting}
+                loadingValue="Creating job posting..."
+                value="Create"
+              />
             </div>
           </form>
         </Form>
