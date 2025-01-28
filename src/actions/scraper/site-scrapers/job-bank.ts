@@ -476,7 +476,13 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const description = "null";
+  const postUrl = "43236893";
+
+  await browserHandler.visitPage(
+    `https://www.jobbank.gc.ca/jobsearch/jobposting/` +
+      postUrl +
+      `?source=searchresults`
+  );
 
   await browserHandler.printPage();
 
@@ -520,6 +526,8 @@ export async function getDescription(
   //     console.log("Credential Body: " + (await listItem.innerText()));
   //   }
   // }
+
+  const description = "null";
 
   return description;
 }
