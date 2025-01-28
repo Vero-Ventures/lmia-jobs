@@ -285,13 +285,13 @@ async function getSkills(browserHandler: BrowserHandler): Promise<{
           .split(",");
 
         if (tagAndText[0] === "<h4>") {
-          currentSkillHeader = tagAndText[1];
+          currentSkillHeader = tagAndText[1].trim();
           skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
           skillIndex += 1;
         }
 
         if (tagAndText[0] === "<span>" && currentSkillHeader) {
-          skillsListValues[skillIndex].attributes.push(tagAndText[1]);
+          skillsListValues[skillIndex].attributes.push(tagAndText[1].trim());
         }
       }
     }
@@ -326,8 +326,40 @@ async function getAdditionalInformation(
       .map((item) => item.replace(/\t/g, ""));
 
     if (infoCleanedHtml) {
+      let section = "";
+      let otherIndex = -1;
       for (const listItem of infoCleanedHtml) {
-        console.log("Item: " + listItem);
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        if (tagAndText[0] === "<h4>") {
+          if (tagAndText[1].includes("Work conditions")) {
+            section = "conditions";
+          } else if (tagAndText[1].includes("Personal suitability")) {
+            section = "suitability";
+          } else {
+            section = tagAndText[1].trim();
+            otherList.push({ title: section, attributes: [] });
+            otherIndex = otherIndex += 1;
+          }
+        }
+
+        if (tagAndText[0] === "<span>") {
+          const attribute = tagAndText[1].trim();
+
+          switch (section) {
+            case "conditions":
+              conditionsList.push(attribute);
+              break;
+            case "suitability":
+              suitabilityList.push(attribute);
+              break;
+            default:
+              otherList[otherIndex].attributes.push(attribute);
+              break;
+          }
+        }
       }
     }
   } catch {}
