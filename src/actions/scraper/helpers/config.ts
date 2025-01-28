@@ -42,7 +42,7 @@ export const CONFIG = {
           onSiteImg: `span.fa-icon-desc.fa-icon.fas.fa-building`,
 
           enviroment: `div:has(> h4:has-text("Work site environment"))`,
-          setting: `div:has(h4:has-text("Work setting")) ul li`,
+          setting: `div:has(> h4:has-text("Work setting"))`,
 
           credentials: {
             container: `div[property="skills"]`,

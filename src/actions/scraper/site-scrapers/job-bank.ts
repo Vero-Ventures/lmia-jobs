@@ -482,15 +482,63 @@ export async function getDescription(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
+  await getOverviewDescription(browserHandler);
+
+  await getEnviromentDescription(browserHandler);
+
+  const description = "null";
+  return description;
+}
+
+export async function getOverviewDescription(browserHandler: BrowserHandler) {
+  const getEducation = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.education
+  );
+  const educationValue = (await getEducation.allInnerTexts()).pop();
+  if (educationValue) {
+    console.log(educationValue);
+  }
+
+  const getExperience = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.experience
+  );
+  const experienceValue = (await getExperience.allInnerTexts()).pop();
+  if (experienceValue) {
+    console.log(experienceValue);
+  }
+
+  const getOnSite = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.onSite
+  );
+  const filteredToOnSite = getOnSite.filter({
+    has: browserHandler.page.locator(
+      CONFIG.selectors.govJobBank.jobDetails.description.onSiteImg
+    ),
+  });
+  const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
+  if (onSiteValue) {
+    console.log(onSiteValue);
+  }
+}
+
+export async function getEnviromentDescription(browserHandler: BrowserHandler) {
   const getEnviromentLists = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
 
+  let workEnviromentValues = false;
+  let workSettingValues = false;
+
   for (const listItem of await getEnviromentLists.allInnerTexts()) {
-    console.log("Enviroment List Item: " + listItem);
+    if (listItem === "Work site environment") {
+      workEnviromentValues = true;
+    } else if (listItem === "Work setting") {
+      workEnviromentValues = false;
+      workSettingValues = true;
+    } else if (workEnviromentValues) {
+      console.log("Enviroment List Item: " + listItem);
+    } else if (workSettingValues) {
+      console.log("Work Setting List Item: " + listItem);
+    }
   }
-
-  const description = "null";
-
-  return description;
 }
