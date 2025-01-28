@@ -620,7 +620,7 @@ export async function getCredentialsAndSkills(
   // }
 
   const getSkillsList = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.credentials
+    CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills
   );
 
   const skillsInnerHtml = await getSkillsList.innerHTML();
