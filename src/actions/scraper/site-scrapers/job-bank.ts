@@ -490,6 +490,13 @@ export async function getDescription(
 
   // console.log("setting: " + (await setting.innerText()));
 
+  const test = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.credentials.test,
+    2500
+  );
+
+  console.log("Test: " + (await test.innerText()));
+
   const credentials = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.credentials.container,
     2500
