@@ -522,41 +522,39 @@ export async function getOverviewDescription(browserHandler: BrowserHandler) {
 }
 
 export async function getEnviromentDescription(browserHandler: BrowserHandler) {
-  const getEnviromentLists = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
-  );
-
-  const innerText = await getEnviromentLists.allInnerTexts();
-
-  if (getEnviromentLists) {
-    for (const listItem of innerText[0].split(`\n`)) {
-      console.log("List Item");
-      console.log(listItem);
-
-      if (listItem === "Work setting") {
-        console.log("Break");
-        break;
-      } else if (listItem !== "Work site environment") {
-        console.log("Enviroment List Item: " + listItem);
-        console.log("Next");
-      }
-    }
-  }
-
-  // const getSettingLists = await browserHandler.waitAndGetElement(
-  //   CONFIG.selectors.govJobBank.jobDetails.description.setting
+  // const getEnviromentLists = await browserHandler.waitAndGetElement(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   // );
 
-  // if (getSettingLists) {
-  //   let settingValue = false;
-  //   for (const listItem of await getEnviromentLists.allInnerTexts()) {
+  // const enviromentInnerText = await getEnviromentLists.allInnerTexts();
+
+  // if (getEnviromentLists) {
+  //   for (const listItem of enviromentInnerText[0].split(`\n`)) {
   //     if (listItem === "Work setting") {
-  //       settingValue = true;
-  //       console.log("Work Setting");
-  //     } else if (settingValue) {
-  //       console.log("Setting List Item: " + listItem);
-  //       console.log("Next");
+  //       break;
+  //     } else if (listItem !== "Work site environment") {
+  //       console.log("Enviroment List Item: " + listItem);
   //     }
   //   }
   // }
+
+  const getSettingLists = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.setting
+  );
+
+  const settingInnerText = await getSettingLists.allInnerTexts();
+
+  if (getSettingLists) {
+    let settingValues = false;
+    console.log("Test");
+    console.log(settingInnerText);
+    for (const listItem of settingInnerText[0].split(`\n`)) {
+      if (listItem === "Work setting") {
+        settingValues = true;
+        console.log("Work Setting");
+      } else if (settingValues) {
+        console.log("Setting List Item: " + listItem);
+      }
+    }
+  }
 }
