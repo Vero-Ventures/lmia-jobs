@@ -484,16 +484,33 @@ export async function getDescription(
       "?source=searchresults"
   );
 
-  const getJobTitle = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.header.jobTitle
+  const getEducation = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.education
   );
-  const jobTitleValue = (await getJobTitle.allInnerTexts()).pop();
+  const educationValue = (await getEducation.allInnerTexts()).pop();
 
-  if (jobTitleValue) {
-    console.log(jobTitleValue);
+  if (educationValue) {
+    console.log(educationValue);
   }
 
-  await browserHandler.printPage();
+  const getExperience = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.experience
+  );
+  const experienceValue = (await getExperience.allInnerTexts()).pop();
+
+  if (experienceValue) {
+    console.log(experienceValue);
+  }
+
+  const getOnSite = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.onSite
+  );
+  const onSiteValue = (await getOnSite.allInnerTexts()).pop();
+
+  if (onSiteValue) {
+    console.log(onSiteValue);
+  }
+
 
   const description = "null";
 
