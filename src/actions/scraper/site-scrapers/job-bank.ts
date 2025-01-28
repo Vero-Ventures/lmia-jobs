@@ -565,15 +565,14 @@ export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
 
   const credentialsInnerText = await getCredentialsList.innerHTML();
 
-  console.log("Inner HTML");
-  console.log(credentialsInnerText);
+  const cleanedInternalHtml = credentialsInnerText
+    .split(`\n`)
+    .filter((item) => item.trim() !== "")
+    .map((item) => item.replace(/\t/g, ""));
 
-  console.log("Inner HTML");
-  console.log(credentialsInnerText.split(`\n`));
-
-  // if (credentialsInnerText) {
-  //   for (const listItem of credentialsInnerText[0].split(`\n`)) {
-  //     console.log(listItem);
-  //   }
-  // }
+  if (cleanedInternalHtml) {
+    for (const listItem of cleanedInternalHtml) {
+      console.log(listItem);
+    }
+  }
 }
