@@ -476,15 +476,15 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43244758";
+  const post = "43244767";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  console.log(JSON.stringify(await getOverviewDescription(browserHandler)));
+  // console.log(JSON.stringify(await getOverviewDescription(browserHandler)));
 
-  // console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
+  console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
 
   // console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
 
@@ -539,7 +539,12 @@ export async function getOverviewDescription(
   };
 }
 
-export async function getEnviromentDescription(browserHandler: BrowserHandler) {
+export async function getEnviromentDescription(
+  browserHandler: BrowserHandler
+): Promise<{ enviroment: string[] | null; setting: string[] | null }> {
+  const enviromentListValues = [];
+  const settingListValues = [];
+
   const getEnviromentLists = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
@@ -551,7 +556,7 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
       if (listItem === "Work setting") {
         break;
       } else if (listItem !== "Work site environment") {
-        console.log("Enviroment List Item: " + listItem);
+        enviromentListValues.push(listItem);
       }
     }
   }
@@ -568,10 +573,15 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
       if (listItem === "Work setting") {
         settingValues = true;
       } else if (settingValues) {
-        console.log("Setting List Item: " + listItem);
+        settingListValues.push(listItem);
       }
     }
   }
+
+  return {
+    enviroment: enviromentListValues.length > 0 ? enviromentListValues : null,
+    setting: settingListValues.length > 0 ? settingListValues : null,
+  };
 }
 
 export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
