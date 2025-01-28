@@ -40,14 +40,14 @@ export const CONFIG = {
           experience: `p[property="experienceRequirements qualification"] span`,
           onSite: `p span.description`,
 
-          enviroment: `div:has(h4:text-is("Work site environment")) li`,
+          enviroment: `div:has(h4:has-text("Work site environment")) li`,
+          setting: `div:has(h4:has-text("Work setting")) li`,
 
           credentials: {
-            container: `div[property="skills"]:(h3)`,
+            container: `div[property="skills"]:has(h3)`,
             headers: `h4`,
             items: `ul`,
           },
-
           specializedSkills: {
             container: `div[property="experienceRequirements"]`,
             headers: `h4`,
