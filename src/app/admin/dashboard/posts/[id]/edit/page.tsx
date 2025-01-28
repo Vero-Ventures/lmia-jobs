@@ -1,5 +1,4 @@
 import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
-import { JobPostForm } from "../../job-post-form";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -9,6 +8,7 @@ import type {
   PaymentType,
   Province,
 } from "@/app/lib/constants";
+import { EditPostForm } from "./edit-post-form";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -29,9 +29,9 @@ export default async function EditPost({ params }: PageProps) {
   });
   return (
     <div>
-      <JobPostForm
-        mode="Edit"
+      <EditPostForm
         initialValues={{
+          id: jobPosting.id,
           email: jobPosting.email,
           jobTitle: jobPosting.jobTitle,
           organizationName: jobPosting.organizationName,
@@ -47,12 +47,6 @@ export default async function EditPost({ params }: PageProps) {
           maxPayValue: jobPosting.maxPayValue || 0,
           description: jobPosting.description,
           language: jobPosting.language as Language,
-          postAsylum: jobPosting.postAsylum,
-          postDisabled: jobPosting.postDisabled,
-          postIndigenous: jobPosting.postIndigenous,
-          postNewcomers: jobPosting.postNewcomers,
-          postYouth: jobPosting.postYouth,
-          monthsToPost: 1,
         }}
       />
     </div>
