@@ -43,7 +43,7 @@ export const CONFIG = {
           enviroment: `div:has(h4:text-is("Work site environment")) li`,
 
           credentials: {
-            container: `div[property="skills"] >> has(h3:has-text("Credentials"))`,
+            container: `div[property="skills"] >> has=(h3:has-text("Credentials"))`,
             headers: `h4`,
             items: `ul`,
           },
