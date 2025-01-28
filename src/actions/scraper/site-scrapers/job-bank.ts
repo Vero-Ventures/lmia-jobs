@@ -482,38 +482,12 @@ export async function getDescription(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  const getEducation = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.education
-  );
-  const educationValue = (await getEducation.allInnerTexts()).pop();
-
-  if (educationValue) {
-    console.log(educationValue);
-  }
-
-  const getExperience = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.experience
-  );
-  const experienceValue = (await getExperience.allInnerTexts()).pop();
-
-  if (experienceValue) {
-    console.log(experienceValue);
-  }
-
-  const getOnSite = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.onSite
+  const getEnviromentLists = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
 
-  const filteredToOnSite = getOnSite.filter({
-    has: browserHandler.page.locator(
-      CONFIG.selectors.govJobBank.jobDetails.description.onSiteImg
-    ),
-  });
-
-  const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
-
-  if (onSiteValue) {
-    console.log(onSiteValue);
+  for (const listItem of await getEnviromentLists.allInnerTexts()) {
+    console.log("Enviroment List Item: " + listItem);
   }
 
   const description = "null";
