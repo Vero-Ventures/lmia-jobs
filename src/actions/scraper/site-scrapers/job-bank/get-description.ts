@@ -4,12 +4,6 @@ import { CONFIG } from "@/actions/scraper/helpers/config";
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43247448";
-
-  await browserHandler.visitPage(
-    CONFIG.urls.searchResult + String(post) + "?source=searchresults"
-  );
-
   console.log(JSON.stringify(await getBaseOverviewValues(browserHandler)));
 
   console.log(JSON.stringify(await getEnviromentAndSetting(browserHandler)));
@@ -25,6 +19,7 @@ export async function getDescription(
   console.log(JSON.stringify(await getAdditionalInformation(browserHandler)));
 
   const description = "null";
+  
   return description;
 }
 

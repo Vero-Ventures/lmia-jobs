@@ -43,7 +43,7 @@ export async function getJobDetails(
 
     const otherDetails = await getOtherJobDetails(browserHandler);
 
-    await getDescription(browserHandler);
+    await getDescription(browserHandler, );
 
     const data = {
       postId,
