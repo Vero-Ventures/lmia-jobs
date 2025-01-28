@@ -603,7 +603,13 @@ export async function getCredentialsAndSkills(
 
   if (cleanedInternalHtml) {
     for (const listItem of cleanedInternalHtml) {
-      console.log(listItem);
+      const tagAndText = listItem
+        .replace(/<span>(.*?)<\/span>/, "<span>, $1, </span>")
+        .split(",");
+
+      if (tagAndText[0] === "<span>") {
+        credentialsListValues.push(tagAndText[1]);
+      }
     }
   }
 
