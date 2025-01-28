@@ -59,7 +59,7 @@ async function scrapePosts(
 
     // Testing: Limit Posts Handled Per Page.
     const allPosts = await posts.all();
-    const testPosts = [allPosts[0]];
+    const testPosts = [allPosts[0], allPosts[1], allPosts[2]];
 
     for (const post of testPosts) {
       const postedToBank = post.locator(
