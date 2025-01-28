@@ -44,7 +44,7 @@ export const CONFIG = {
           setting: `div:has(h4:has-text("Work setting")) li`,
 
           credentials: {
-            container: `div[property="skills"]:has(h3)`,
+            container: `div[property="skills"] (h3)`,
             headers: `h4`,
             items: `ul`,
           },
@@ -58,6 +58,7 @@ export const CONFIG = {
           supervision: `div[property="responsibilities"] h4:text-is("Supervision") + ul`,
 
           additionalInformation: {
+            container: ``,
             conditionsAndCapacity: ``,
             personalSuitability: ``,
           },
