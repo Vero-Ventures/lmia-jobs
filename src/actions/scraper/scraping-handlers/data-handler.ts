@@ -56,6 +56,7 @@ export class DataHandler {
       for (const post of jobPosts) {
         const newPost = {
           ...post,
+          workHours: Number(post.workHours.split(" to ")[0]),
           postAsylum: false,
           postDisabled: false,
           postIndigenous: false,
