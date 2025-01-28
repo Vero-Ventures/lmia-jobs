@@ -33,6 +33,7 @@ export const JOB_TYPES = [
 ] as const;
 
 export const jobTypeLabels = ["Full Time", "Part Time"] as const;
+export type JobType = (typeof jobTypeLabels)[number];
 
 export const PROVINCES = [
   {
@@ -90,6 +91,7 @@ export const PROVINCES = [
 ] as const;
 
 export const paymentTypes = ["Hourly", "Salary"] as const;
+export type PaymentType = (typeof paymentTypes)[number];
 
 export const provinceValues = [
   "AB",
@@ -106,7 +108,9 @@ export const provinceValues = [
   "NU",
   "YT",
 ] as const;
+export type Province = (typeof provinceValues)[number];
 
 export const languages = ["English", "French", "Other"] as const;
+export type Language = (typeof languages)[number];
 
 export const PRICE_PER_MONTH = 5;
