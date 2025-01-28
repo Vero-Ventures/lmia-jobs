@@ -478,21 +478,20 @@ export async function getDescription(
 ): Promise<string> {
   const description = "null";
 
+  const enviroment = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
+  );
+
+  console.log("Enviroment: " + (await enviroment.innerText()));
+
   const setting = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.setting
   );
 
   console.log("setting: " + (await setting.innerText()));
 
-  // const enviroment = await browserHandler.waitAndGetElement(
-  //   CONFIG.selectors.govJobBank.jobDetails.description.enviroment
-  // );
-
-  // console.log("Enviroment: " + (await enviroment.innerText()));
-
   // const credentials = await browserHandler.waitAndGetElement(
   //   CONFIG.selectors.govJobBank.jobDetails.description.credentials.container,
-  //   2500
   // );
 
   // const credentialsHeader = credentials.locator(
