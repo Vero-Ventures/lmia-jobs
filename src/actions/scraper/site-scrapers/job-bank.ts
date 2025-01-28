@@ -469,21 +469,21 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43244780";
+  const post = "43210916";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  // console.log(JSON.stringify(await getBaseOverviewValues(browserHandler)));
+  console.log(JSON.stringify(await getBaseOverviewValues(browserHandler)));
 
-  // console.log(JSON.stringify(await getEnviromentAndSetting(browserHandler)));
+  console.log(JSON.stringify(await getEnviromentAndSetting(browserHandler)));
 
   // console.log(JSON.stringify(await getCredentials(browserHandler)));
 
   // console.log(JSON.stringify(await getBenefits(browserHandler)));
 
-  console.log(JSON.stringify(await getTasksAndSupervision(browserHandler)));
+  // console.log(JSON.stringify(await getTasksAndSupervision(browserHandler)));
 
   // console.log(JSON.stringify(await getSkills(browserHandler)));
 
