@@ -36,7 +36,7 @@ export default async function Page({
   return (
     <main>
       <div className="container mx-auto space-y-4 pt-4 text-primary">
-        <Form action={`/${jobsiteId}`} className="flex gap-2">
+        <Form action={`/`} className="flex gap-2">
           <Input name="jobTitle" placeholder="Search Jobs..." />
           <Input
             type="hidden"
@@ -67,9 +67,7 @@ export default async function Page({
           <div className="mt-2 space-y-8">
             {jobPostings.map((jobPosting) => {
               return (
-                <Link
-                  key={jobPosting.id}
-                  href={`/${jobsiteId}/posts/${jobPosting.id}`}>
+                <Link key={jobPosting.id} href={`/posts/${jobPosting.id}`}>
                   <JobListCard jobPosting={jobPosting} />
                 </Link>
               );

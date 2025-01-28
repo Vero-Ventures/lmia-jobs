@@ -21,7 +21,7 @@ export default async function EditPost({ params }: PageProps) {
   });
 
   if (!data) {
-    redirect("/admin");
+    redirect("/");
   }
   const jobPosting = await selectUserSingleJobPosting({
     id,

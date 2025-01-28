@@ -22,7 +22,7 @@ export default async function Page({
   });
 
   if (!data) {
-    redirect("/admin");
+    redirect("/");
   }
 
   const { jobTitle } = await searchParams;
@@ -40,11 +40,11 @@ export default async function Page({
             Your Postings ({jobPostings.length})
           </h1>
           <Button asChild>
-            <Link href={"/admin/dashboard/create-post"}>Create Post</Link>
+            <Link href={"/dashboard/posts/create"}>Create Post</Link>
           </Button>
         </div>
         <div className="space-y-4 pt-4 text-primary">
-          <Form action={`/admin/dashboard`} className="flex gap-2">
+          <Form action={`/`} className="flex gap-2">
             <Input
               name="jobTitle"
               placeholder="Search Jobs..."
@@ -62,7 +62,7 @@ export default async function Page({
               return (
                 <Link
                   key={jobPosting.id}
-                  href={`/admin/dashboard/posts/${jobPosting.id}`}>
+                  href={`/dashboard/posts/${jobPosting.id}`}>
                   <JobListCard jobPosting={jobPosting} />
                 </Link>
               );

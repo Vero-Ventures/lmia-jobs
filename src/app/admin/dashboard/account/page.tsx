@@ -23,7 +23,7 @@ export default function Page() {
   const { data: session, isPending } = useSession();
 
   if (!session && !isPending) {
-    redirect("/admin");
+    redirect("/");
   }
 
   const [newEmail, setNewEmail] = useState("");
@@ -54,7 +54,7 @@ export default function Page() {
       await signOut({
         fetchOptions: {
           onSuccess: () => {
-            redirect("/admin");
+            redirect("/");
           },
         },
       });

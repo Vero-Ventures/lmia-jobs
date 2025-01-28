@@ -12,7 +12,7 @@ export function SignOut() {
         await signOut({
           fetchOptions: {
             onSuccess: () => {
-              router.push("/admin");
+              router.push("/");
             },
           },
         })

@@ -2,28 +2,39 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const domainName = req.headers.get("host") || "";
+  const hostname = req.headers.get("host") ?? "";
 
-  const validRoutes: Record<string, string> = {
-    "manageopportunities.ca": "/admin",
-    "accessibleopportunities.ca": "/disability-job-board",
-    "asylumopportunities.ca": "/asylum-job-board",
-    "indigenousopportunities.ca": "/indigenous-job-board",
-    "immigrantopportunities.ca": "/newcomers-job-board",
-    "youthopportunities.ca": "/youth-job-board",
-  };
+  // Extract the pathname from the requested URL (e.g., /about, /contact)
+  const { pathname } = req.nextUrl;
 
-  const targetPath = validRoutes[domainName];
-  const route = req.nextUrl.pathname;
+  // Check if the request is coming from a local development environment
+  const isLocal =
+    hostname.includes("localhost") || hostname.includes("127.0.0.1");
 
-  if (targetPath && route === "/") {
-    const url = new URL(validRoutes[domainName], req.nextUrl.origin);
-    return NextResponse.redirect(url);
+  const isPreview = hostname.includes("-yaniv-s-projects.vercel.app");
+
+  let targetPath: string;
+
+  if (isLocal || isPreview) {
+    targetPath = `/${process.env.JOB_SITE}${pathname}`;
+  } else {
+    const validDomains: Record<string, string> = {
+      "manageopportunities.ca": "admin",
+      "accessibleopportunities.ca": "accessible",
+      "asylumopportunities.ca": "asylum",
+      "indigenousopportunities.ca": "indigenous",
+      "immigrantopportunities.ca": "newcomers",
+      "youthopportunities.ca": "youth",
+    };
+
+    targetPath = `${validDomains[hostname]}${pathname}`;
   }
 
-  return NextResponse.next();
+  console.log({ targetPath });
+
+  return NextResponse.rewrite(new URL(targetPath, req.url));
 }
 
 export const config = {
-  matcher: ["/:path*"],
+  matcher: ["/((?!api|_next|static|favicon.ico|.*\\..*).*)"],
 };

@@ -38,7 +38,7 @@ export default async function SinglePostPage({ params }: PageProps) {
   });
 
   if (!data) {
-    redirect("/admin");
+    redirect("/");
   }
   const jobPosting = await selectUserSingleJobPosting({
     id,
@@ -55,7 +55,7 @@ export default async function SinglePostPage({ params }: PageProps) {
             </CardTitle>
             <div className="flex gap-2">
               <Button asChild>
-                <Link href={`/admin/dashboard/posts/${jobPosting.id}/edit`}>
+                <Link href={`/dashboard/posts/${jobPosting.id}/edit`}>
                   <Pencil />
                   <span>Edit</span>
                 </Link>

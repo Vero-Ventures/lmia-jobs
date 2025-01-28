@@ -603,7 +603,7 @@ export function CreatePostForm() {
                 asChild
                 className="order-2 w-full sm:order-1"
                 variant="outline">
-                <Link href="/admin/dashboard">Cancel</Link>
+                <Link href="/dashboard">Cancel</Link>
               </Button>
               <Button className="order-1 w-full sm:order-2" type="submit">
                 Create

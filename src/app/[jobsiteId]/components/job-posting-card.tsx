@@ -49,7 +49,7 @@ export function JobPostingCard({
           {isAdmin && (
             <div className="flex gap-2">
               <Button asChild>
-                <Link href={`/admin/dashboard/update-post/${jobPosting.id}`}>
+                <Link href={`/dashboard/update-post/${jobPosting.id}`}>
                   <Pencil />
                   <span>Edit</span>
                 </Link>

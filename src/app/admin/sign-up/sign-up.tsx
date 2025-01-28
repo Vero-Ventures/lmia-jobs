@@ -55,7 +55,7 @@ export function SignUp() {
             <Button
               type="submit"
               className="mx-auto w-3/5 py-6 text-base mb:text-lg"
-              onClick={() => router.replace("/admin/sign-in")}>
+              onClick={() => router.replace("/sign-in")}>
               Go To Sign In
             </Button>
           </div>
@@ -134,7 +134,7 @@ export function SignUp() {
                   email,
                   password,
                   name: email,
-                  callbackURL: "/admin/sign-in",
+                  callbackURL: "/sign-in",
                 },
                 {
                   onResponse: () => {
@@ -160,7 +160,7 @@ export function SignUp() {
             )}
           </Button>
           <Link
-            href="/admin/sign-in"
+            href="/sign-in"
             className="mx-auto inline-block text-sm underline">
             Back to sign in
           </Link>
@@ -182,7 +182,7 @@ export function SignUp() {
       </CardHeader>
       <CardContent>
         <Button className="w-full" asChild>
-          <Link href="/admin/sign-in">Go To Sign In</Link>
+          <Link href="/sign-in">Go To Sign In</Link>
         </Button>
       </CardContent>
     </Card>

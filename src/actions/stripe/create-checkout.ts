@@ -14,13 +14,13 @@ const stripe = new Stripe(
 
 const success_url =
   process.env.STRIPE_CONFIG! === "production"
-    ? "https://manageopportunities.ca/admin/payment-confirmed"
-    : "http://localhost:3000/admin/payment-confirmed";
+    ? "https://manageopportunities.ca/payment-confirmed"
+    : "http://localhost:3000/payment-confirmed";
 
 const cancel_url =
   process.env.STRIPE_CONFIG! === "production"
-    ? "https://manageopportunities.ca/admin/dashboard"
-    : "http://localhost:3000/admin/dashboard";
+    ? "https://manageopportunities.ca/dashboard"
+    : "http://localhost:3000/dashboard";
 
 export async function createStripeCheckout(
   userId: string,

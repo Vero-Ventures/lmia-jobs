@@ -34,7 +34,7 @@ export default function Page({
   const { data: session, isPending } = authClient.useSession();
 
   if (!session && !isPending) {
-    redirect("/admin");
+    redirect("/");
   }
 
   const [loadingPostData, setLoadingPostData] = useState(true);
@@ -145,7 +145,7 @@ export default function Page({
             postYouth: jobPosting.postYouth,
           });
         } else {
-          redirect("/admin/dashboard");
+          redirect("/dashboard");
         }
       }
 
@@ -203,7 +203,7 @@ export default function Page({
       if (updateResult === "updated") {
         setShowPostingSuccess(true);
         setTimeout(() => {
-          redirect("/admin/dashboard");
+          redirect("/dashboard");
         }, 750);
       } else {
         result = updateResult;
@@ -647,7 +647,7 @@ export default function Page({
               type="button"
               className="w-2/5 mb:py-6 mb:text-lg sm:w-1/3 md:text-xl"
               disabled={submittingPost}>
-              <Link href="/admin/dashboard">Cancel</Link>
+              <Link href="/dashboard">Cancel</Link>
             </Button>
             <Button
               type="submit"

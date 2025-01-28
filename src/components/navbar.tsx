@@ -7,9 +7,9 @@ import { Button } from "./ui/button";
 import { SignOut } from "./sign-out";
 
 const links = [
-  { text: "Home", url: "/admin/dashboard" },
-  { text: "Pricing", url: "/admin/pricing" },
-  { text: "Contact", url: "/admin/contact-us" },
+  { text: "Home", url: "/dashboard" },
+  { text: "Pricing", url: "/pricing" },
+  { text: "Contact", url: "/contact-us" },
 ];
 
 export default async function Navbar() {
@@ -18,11 +18,9 @@ export default async function Navbar() {
   });
   return (
     <header className="flex h-16 flex-col items-center bg-white px-4 sm:h-14 sm:flex-row lg:px-6">
-      <Link
-        className="flex items-center justify-center"
-        href="/admin/dashboard">
+      <Link className="flex items-center justify-center" href="/dashboard">
         <BriefcaseIcon className="h-6 w-6" />
-        <span className="ml-2 font-semibold">LMIA Opportunities</span>
+        <span className="ml-2 font-semibold">Manage Opportunities</span>
       </Link>
       <nav className="flex items-center justify-center gap-4 py-2 sm:ml-auto sm:mt-0 sm:gap-6">
         {links.map((link) => (
@@ -34,17 +32,17 @@ export default async function Navbar() {
         {data ? (
           <>
             <Button asChild variant="link">
-              <Link href="/admin/dashboard/account">Account</Link>
+              <Link href="/dashboard/account">Account</Link>
             </Button>
             <SignOut />
           </>
         ) : (
           <>
             <Button asChild variant="secondary">
-              <Link href="/admin/sign-up">Sign Up</Link>
+              <Link href="/sign-up">Sign Up</Link>
             </Button>
             <Button asChild>
-              <Link href="/admin/sign-in">Log In</Link>
+              <Link href="/sign-in">Log In</Link>
             </Button>
           </>
         )}

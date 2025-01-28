@@ -104,7 +104,7 @@ export function ResetPassword() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.push("/admin/sign-in");
+                    router.push("/sign-in");
                   },
                 }
               );

@@ -31,7 +31,7 @@ export default async function Layout({
   return (
     <div className={cn(jobsiteId)}>
       <header className="p-4">
-        <Link href={`/${jobsiteId}`}>
+        <Link href={`/`}>
           <h1 className="text-xl font-bold text-primary">{jobSite.title}</h1>
         </Link>
       </header>

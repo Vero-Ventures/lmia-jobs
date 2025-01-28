@@ -12,5 +12,5 @@ export default async function CheckPayment() {
     await checkUserPurchases(data?.user.id);
   }
 
-  redirect("/admin/dashboard");
+  redirect("/dashboard");
 }
