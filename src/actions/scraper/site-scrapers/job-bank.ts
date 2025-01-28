@@ -475,19 +475,21 @@ export async function getDescription(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  // console.log(JSON.stringify(await getOverviewDescription(browserHandler)));
+  // console.log(JSON.stringify(await getOverviewValues(browserHandler)));
 
-  // console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
+  // console.log(JSON.stringify(await getEnviromentAndSetting(browserHandler)));
 
-  // console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
+  // console.log(JSON.stringify(await getCredentials(browserHandler)));
 
-  console.log(JSON.stringify(await getBenefits(browserHandler)));
+  // console.log(JSON.stringify(await getBenefits(browserHandler)));
+
+  // console.log(JSON.stringify(await getSkills(browserHandler)));
 
   const description = "null";
   return description;
 }
 
-export async function getOverviewDescription(
+export async function getOverviewValues(
   browserHandler: BrowserHandler
 ): Promise<{
   education: string;
@@ -519,7 +521,7 @@ export async function getOverviewDescription(
   );
   const filteredToOnSite = getOnSite.filter({
     has: browserHandler.page.locator(
-      CONFIG.selectors.govJobBank.jobDetails.description.onSiteImg
+      CONFIG.selectors.govJobBank.jobDetails.description.onSiteFilter
     ),
   });
   const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
@@ -534,7 +536,7 @@ export async function getOverviewDescription(
   };
 }
 
-export async function getEnviromentDescription(
+export async function getEnviromentAndSetting(
   browserHandler: BrowserHandler
 ): Promise<{ enviroment: string[] | null; setting: string[] | null }> {
   const enviromentListValues: string[] = [];
@@ -581,14 +583,10 @@ export async function getEnviromentDescription(
   };
 }
 
-export async function getCredentialsAndSkills(
-  browserHandler: BrowserHandler
-): Promise<{
+export async function getCredentials(browserHandler: BrowserHandler): Promise<{
   credentials: string[] | null;
-  skills: { skill: string; attributes: string[] }[] | null;
 }> {
   const credentialsListValues: string[] = [];
-  const skillsListValues: { skill: string; attributes: string[] }[] = [];
 
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
@@ -615,42 +613,9 @@ export async function getCredentialsAndSkills(
     }
   } catch {}
 
-  try {
-    const getSkillsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills
-    );
-    const skillsInnerHtml = await getSkillsList.innerHTML();
-
-    const skillsCleanedHtml = skillsInnerHtml
-      .split(`\n`)
-      .filter((item) => item.trim() !== "")
-      .map((item) => item.replace(/\t/g, ""));
-
-    if (skillsCleanedHtml) {
-      let currentSkillHeader = "";
-      let skillIndex = -1;
-      for (const listItem of skillsCleanedHtml) {
-        const tagAndText = listItem
-          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
-          .split(",");
-
-        if (tagAndText[0] === "<h4>") {
-          currentSkillHeader = tagAndText[1];
-          skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
-          skillIndex += 1;
-        }
-
-        if (tagAndText[0] === "<span>" && currentSkillHeader) {
-          skillsListValues[skillIndex].attributes.push(tagAndText[1]);
-        }
-      }
-    }
-  } catch {}
-
   return {
     credentials:
       credentialsListValues.length > 0 ? credentialsListValues : null,
-    skills: skillsListValues.length > 0 ? skillsListValues : null,
   };
 }
 
@@ -709,5 +674,85 @@ export async function getBenefits(browserHandler: BrowserHandler): Promise<{
     health: healthBenifits,
     financial: financialBenefits,
     other: otherBenefits,
+  };
+}
+
+export async function getTasksAndSupervision(
+  browserHandler: BrowserHandler
+): Promise<{
+  tasks: string[];
+  supervision: string | null;
+}> {
+  const tasksList: string[] = [];
+  const supervision = "null";
+
+  try {
+    const getTasksList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.tasksAndSupervision
+    );
+
+    const tasksInnerHtml = await getTasksList.innerHTML();
+
+    const tasksCleanedHtml = tasksInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (tasksCleanedHtml) {
+      for (const listItem of tasksCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        console.log(tagAndText[1]);
+      }
+    }
+  } catch {}
+
+  return {
+    tasks: tasksList,
+    supervision: supervision !== "null" ? supervision : null,
+  };
+}
+
+export async function getSkills(browserHandler: BrowserHandler): Promise<{
+  skills: { skill: string; attributes: string[] }[] | null;
+}> {
+  const skillsListValues: { skill: string; attributes: string[] }[] = [];
+
+  try {
+    const getSkillsList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills
+    );
+    const skillsInnerHtml = await getSkillsList.innerHTML();
+
+    const skillsCleanedHtml = skillsInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (skillsCleanedHtml) {
+      let currentSkillHeader = "";
+      let skillIndex = -1;
+      for (const listItem of skillsCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        if (tagAndText[0] === "<h4>") {
+          currentSkillHeader = tagAndText[1];
+          skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
+          skillIndex += 1;
+        }
+
+        if (tagAndText[0] === "<span>" && currentSkillHeader) {
+          skillsListValues[skillIndex].attributes.push(tagAndText[1]);
+        }
+      }
+    }
+  } catch {}
+
+  return {
+    skills: skillsListValues.length > 0 ? skillsListValues : null,
   };
 }
