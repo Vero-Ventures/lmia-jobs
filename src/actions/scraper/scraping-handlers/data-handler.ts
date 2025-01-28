@@ -62,7 +62,7 @@ export class DataHandler {
           postIndigenous: false,
           postNewcomers: false,
           postYouth: false,
-          expiresAt: new Date().toISOString().split("T")[0],
+          expiresAt: new Date(),
           paymentConfirmed: false,
         };
 
