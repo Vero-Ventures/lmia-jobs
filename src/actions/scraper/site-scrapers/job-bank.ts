@@ -478,54 +478,47 @@ export async function getDescription(
 ): Promise<string> {
   const description = "null";
 
+  const setting = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.setting
+  );
+
+  console.log("setting: " + (await setting.innerText()));
+
   // const enviroment = await browserHandler.waitAndGetElement(
   //   CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   // );
 
   // console.log("Enviroment: " + (await enviroment.innerText()));
 
-  // const setting = await browserHandler.waitAndGetElement(
-  //   CONFIG.selectors.govJobBank.jobDetails.description.setting
+  // const credentials = await browserHandler.waitAndGetElement(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.credentials.container,
+  //   2500
   // );
 
-  // console.log("setting: " + (await setting.innerText()));
+  // const credentialsHeader = credentials.locator(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.credentials.headers
+  // );
 
-  const test = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.credentials.test,
-    2500
-  );
+  // const credentialsHeaders = await credentialsHeader.allInnerTexts();
 
-  console.log("Test: " + (await test.innerText()));
+  // for (const credHeader of credentialsHeaders) {
+  //   console.log("Credentials Header: " + credHeader);
+  // }
 
-  const credentials = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.credentials.container,
-    2500
-  );
+  // const credentialsBodies = credentials.locator(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.credentials.items
+  // );
 
-  const credentialsHeader = credentials.locator(
-    CONFIG.selectors.govJobBank.jobDetails.description.credentials.headers
-  );
+  // const numCredentialBodies = await credentialsBodies.count();
 
-  const credentialsHeaders = await credentialsHeader.allInnerTexts();
-
-  for (const credHeader of credentialsHeaders) {
-    console.log("Credentials Header: " + credHeader);
-  }
-
-  const credentialsBodies = credentials.locator(
-    CONFIG.selectors.govJobBank.jobDetails.description.credentials.items
-  );
-
-  const numCredentialBodies = await credentialsBodies.count();
-
-  for (let i = 0; i < numCredentialBodies; i++) {
-    const list = credentialsBodies.nth(i);
-    console.log("New List");
-    for (let i = 0; i < (await list.count()); i++) {
-      const listItem = list.nth(i);
-      console.log("Credential Body: " + (await listItem.innerText()));
-    }
-  }
+  // for (let i = 0; i < numCredentialBodies; i++) {
+  //   const list = credentialsBodies.nth(i);
+  //   console.log("New List");
+  //   for (let i = 0; i < (await list.count()); i++) {
+  //     const listItem = list.nth(i);
+  //     console.log("Credential Body: " + (await listItem.innerText()));
+  //   }
+  // }
 
   return description;
 }

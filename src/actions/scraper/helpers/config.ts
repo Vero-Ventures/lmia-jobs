@@ -44,10 +44,9 @@ export const CONFIG = {
           setting: `div:has(h4:has-text("Work setting")) li`,
 
           credentials: {
-            container: `div[property="skills"] h3`,
+            container: `div[property="skills"]`,
             headers: `h4`,
             items: `ul`,
-            test: `h3:has-text("Additional information")`,
           },
           specializedSkills: {
             container: `div[property="experienceRequirements"]`,
