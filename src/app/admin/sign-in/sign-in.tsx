@@ -54,7 +54,7 @@ export default function SignIn() {
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
               <Link
-                href="/admin/sign-in/forgot-password"
+                href="/sign-in/forgot-password"
                 className="ml-auto inline-block text-sm underline">
                 Forgot your password?
               </Link>
@@ -105,7 +105,7 @@ export default function SignIn() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.replace("/admin/dashboard");
+                    router.replace("/dashboard");
                   },
                 }
               );
@@ -113,7 +113,7 @@ export default function SignIn() {
             {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
           </Button>
           <Link
-            href="/admin/sign-up"
+            href="/sign-up"
             className="mx-auto inline-block text-sm underline">
             Create an account
           </Link>

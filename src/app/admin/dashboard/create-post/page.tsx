@@ -3,9 +3,6 @@
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import Navbar from "@/components/navbar";
-import { SessionLinks } from "@/app/admin/dashboard/lib/constants";
-import Footer from "@/components/footer";
 import { XCircle } from "lucide-react";
 import { PROVINCES } from "@/app/lib/constants";
 import Form from "next/form";
@@ -37,7 +34,7 @@ export default function Page({
   const { data: session, isPending } = authClient.useSession();
 
   if (!session && !isPending) {
-    redirect("/admin");
+    redirect("/");
   }
 
   const [loadingPostData, setLoadingPostData] = useState(true);
@@ -45,6 +42,7 @@ export default function Page({
   const [submittingPost, setSubmittingPost] = useState(false);
 
   const [formValues, setFormValues] = useState({
+    email: "",
     jobTitle: "",
     organizationName: "",
     region: "",
@@ -115,13 +113,11 @@ export default function Page({
         setLoadingPostData(true);
         setPostUpdate(true);
 
-        const [result, jobPosting] = await getJobPost(
-          postId,
-          session!.user.email
-        );
+        const [result, jobPosting] = await getJobPost(postId, session!.user.id);
 
         if (result && jobPosting) {
           setFormValues({
+            email: jobPosting.email,
             jobTitle: jobPosting.jobTitle,
             organizationName: jobPosting.organizationName,
             region: jobPosting.region,
@@ -149,7 +145,7 @@ export default function Page({
             postYouth: jobPosting.postYouth,
           });
         } else {
-          redirect("/admin/dashboard");
+          redirect("/dashboard");
         }
       }
 
@@ -177,13 +173,13 @@ export default function Page({
 
       const [creationResult, numBoards, newPostId] = await createJobPost(
         formValues,
-        postTime,
-        session!.user.email
+        session!.user.id,
+        postTime
       );
 
       if (creationResult === "created") {
         const checkoutResult = await createStripeCheckout(
-          session!.user.email,
+          session!.user.id,
           numBoards,
           postTime,
           newPostId!
@@ -201,13 +197,13 @@ export default function Page({
       const updateResult = await updateJobPost(
         formValues,
         postId,
-        session!.user.email
+        session!.user.id
       );
 
       if (updateResult === "updated") {
         setShowPostingSuccess(true);
         setTimeout(() => {
-          redirect("/admin/dashboard");
+          redirect("/dashboard");
         }, 750);
       } else {
         result = updateResult;
@@ -222,14 +218,27 @@ export default function Page({
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-white">
-      <Navbar links={SessionLinks} />
+    <div>
       <div
         className={`m-6 mx-auto flex w-4/5 max-w-3xl flex-col rounded-lg border-2 border-gray-800 bg-white p-2 px-4 mb:w-5/6 mb:pt-4 sm:w-4/5 md:w-3/4 md:px-6 ${loadingPostData ? "opacity-50" : ""}`}>
         <Form className="flex flex-col" action={submitPostForm}>
           <Button className="w-10 self-end justify-self-end bg-white">
             <XCircle className="min-h-8 min-w-8 bg-white text-black" />
           </Button>
+
+          <div className="md:mx-auto md:w-4/5">
+            <label className="p-2 font-semibold mb:text-lg">
+              Contact Email
+            </label>
+            <Input
+              className="border-2 border-gray-500 md:text-base"
+              type="text"
+              name="email"
+              value={formValues.email}
+              onChange={handleValueChange}
+              required
+            />
+          </div>
 
           <div className="md:mx-auto md:w-4/5">
             <label className="p-2 font-semibold mb:text-lg">Job Title</label>
@@ -638,7 +647,7 @@ export default function Page({
               type="button"
               className="w-2/5 mb:py-6 mb:text-lg sm:w-1/3 md:text-xl"
               disabled={submittingPost}>
-              <Link href="/admin/dashboard">Cancel</Link>
+              <Link href="/dashboard">Cancel</Link>
             </Button>
             <Button
               type="submit"
@@ -649,7 +658,6 @@ export default function Page({
           </div>
         </Form>
       </div>
-      <Footer />
     </div>
   );
 }

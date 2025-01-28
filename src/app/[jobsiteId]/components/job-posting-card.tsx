@@ -49,7 +49,7 @@ export function JobPostingCard({
           {isAdmin && (
             <div className="flex gap-2">
               <Button asChild>
-                <Link href={`/admin/dashboard/update-post/${jobPosting.id}`}>
+                <Link href={`/dashboard/update-post/${jobPosting.id}`}>
                   <Pencil />
                   <span>Edit</span>
                 </Link>
@@ -91,7 +91,9 @@ export function JobPostingCard({
         <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
           {jobPosting.organizationName}
         </CardDescription>
-        {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
+        <div>
+          {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
+        </div>
         <div className="ml-auto flex w-fit flex-col">
           <div className="mt-2 text-start text-sm text-gray-500 dark:text-gray-400">
             Opened: {new Date(jobPosting.createdAt).toDateString()}

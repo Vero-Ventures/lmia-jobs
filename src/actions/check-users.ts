@@ -24,7 +24,7 @@ export async function checkInactiveUserAges() {
             )
           );
 
-        await db.delete(jobPostings).where(eq(jobPostings.email, user.email));
+        await db.delete(jobPostings).where(eq(jobPostings.userId, user.id));
       }
     });
 

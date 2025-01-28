@@ -6,8 +6,10 @@ import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import type { JobPosting } from "@/app/lib/types";
+import { revalidatePath } from "next/cache";
 
 export type JobPostForm = {
+  email: string;
   jobTitle: string;
   organizationName: string;
   region: string;
@@ -31,8 +33,8 @@ export type JobPostForm = {
 
 export async function createJobPost(
   formData: JobPostForm,
-  postTime: number,
-  userEmail: string
+  userId: string,
+  postTime: number
 ): Promise<[string, number, string | null]> {
   try {
     let numBoards = 0;
@@ -57,6 +59,7 @@ export async function createJobPost(
 
     const postData = {
       ...formData,
+      userId: userId,
       address: formData.address === "" ? null : formData.address,
       startDate: formData.startDate,
       vacancies:
@@ -73,10 +76,8 @@ export async function createJobPost(
           ? null
           : Math.ceil(Number(formData.maxPayValue)),
       language: formData.language === "" ? null : formData.language,
-      email: userEmail,
-      expiresAt: expireryDate.toISOString().split("T")[0],
+      expiresAt: expireryDate,
       paymentConfirmed: false,
-      hidden: true,
     };
 
     const result = await db
@@ -95,7 +96,7 @@ export async function createJobPost(
 export async function updateJobPost(
   formData: JobPostForm,
   postId: string,
-  userEmail: string
+  userId: string
 ): Promise<string> {
   try {
     const session = await auth.api.getSession({
@@ -129,9 +130,7 @@ export async function updateJobPost(
       await db
         .update(jobPostings)
         .set(postData)
-        .where(
-          and(eq(jobPostings.id, postId), eq(jobPostings.email, userEmail))
-        );
+        .where(and(eq(jobPostings.id, postId), eq(jobPostings.userId, userId)));
 
       return "updated";
     }
@@ -143,13 +142,13 @@ export async function updateJobPost(
 
 export async function getJobPost(
   postId: string,
-  email: string
+  userId: string
 ): Promise<[boolean, JobPosting | null]> {
   try {
     const result = await db
       .select()
       .from(jobPostings)
-      .where(and(eq(jobPostings.id, postId), eq(jobPostings.email, email)))
+      .where(and(eq(jobPostings.id, postId), eq(jobPostings.userId, userId)))
       .then((res) => res[0]);
 
     if (result) {
@@ -165,13 +164,14 @@ export async function getJobPost(
 
 export async function editPostVisibility(
   postId: string,
-  hidden: boolean
+  hidePost: boolean
 ): Promise<string> {
   try {
     await db
       .update(jobPostings)
-      .set({ hidden })
+      .set({ hidden: hidePost })
       .where(eq(jobPostings.id, postId));
+    revalidatePath(`/dashboard/posts/${jobPostings.id}`);
     return "success";
   } catch (error) {
     console.error(error);

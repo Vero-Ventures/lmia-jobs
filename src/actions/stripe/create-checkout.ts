@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/index";
-import { user, stripeCustomer } from "@/db/schema";
+import { stripeCustomer } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 import { Stripe } from "stripe";
@@ -12,28 +12,27 @@ const stripe = new Stripe(
     : process.env.DEVELOPER_STRIPE_PRIVATE_KEY!
 );
 
+const success_url =
+  process.env.STRIPE_CONFIG! === "production"
+    ? "https://manageopportunities.ca/payment-confirmed"
+    : "http://localhost:3000/payment-confirmed";
+
+const cancel_url =
+  process.env.STRIPE_CONFIG! === "production"
+    ? "https://manageopportunities.ca/dashboard"
+    : "http://localhost:3000/dashboard";
+
 export async function createStripeCheckout(
-  userEmail: string,
+  userId: string,
   postBoards: number,
   postTime: number,
   postId: string
 ): Promise<{ result: boolean; url: string }> {
   try {
-    const currentUser = await db
-      .select()
-      .from(user)
-      .where(eq(user.email, userEmail))
-      .then((res) => res[0]);
-
-    if (!currentUser) {
-      console.error("User Not Found.");
-      return { result: false, url: "" };
-    }
-
     const stripeUser = await db
       .select()
       .from(stripeCustomer)
-      .where(eq(stripeCustomer.userId, currentUser.id))
+      .where(eq(stripeCustomer.userId, userId))
       .then((res) => res[0]);
 
     if (stripeUser) {
@@ -76,8 +75,8 @@ export async function createStripeCheckout(
             quantity: 1,
           },
         ],
-        cancel_url: "https://manageopportunities.ca/admin/purchase",
-        success_url: "https://manageopportunities.ca/admin/dashboard",
+        success_url: success_url,
+        cancel_url: cancel_url,
       });
 
       if (checkoutSession.url) {
