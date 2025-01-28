@@ -682,8 +682,6 @@ export async function getBenefits(browserHandler: BrowserHandler): Promise<{
           .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
           .split(",");
 
-        console.log("Item: " + listItem);
-
         if (tagAndText[0] === "<h4>") {
           console.log("Title: " + tagAndText[1]);
           benefitType = tagAndText[1];
@@ -691,16 +689,19 @@ export async function getBenefits(browserHandler: BrowserHandler): Promise<{
 
         if (tagAndText[0] === "<span>") {
           const benefit = tagAndText[1];
-          console.log("Value: " + tagAndText[1]);
+          console.log("Value: " + benefit);
 
           switch (benefitType) {
             case "Health benefits":
+              console.log('Push Health')
               healthBenifits.push(benefit);
               break;
             case "Financial benefits":
+              console.log('Push Financial')
               financialBenefits.push(benefit);
               break;
             case "Other benefits":
+              console.log('Push Other')
               otherBenefits.push(benefit);
               break;
           }
