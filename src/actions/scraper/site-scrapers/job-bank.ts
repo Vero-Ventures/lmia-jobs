@@ -22,7 +22,7 @@ export async function scrapeGovJobBank(
     newPosts.push(...newPostIds);
     pageNum += 1;
 
-    // Testing Limit
+    // Testing: Limit Pages To 1
     if (pageNum > 0) {
       scrape = false;
     }
@@ -53,7 +53,7 @@ async function scrapePosts(
       CONFIG.selectors.govJobBank.jobPosting
     );
 
-    // Testing Limit
+    // Testing: Limit Posts Handled Per Page.
     const allPosts = await posts.all();
     const testPosts = [allPosts[0]];
 
