@@ -476,7 +476,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43244767";
+  const post = "43244758";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -484,9 +484,9 @@ export async function getDescription(
 
   // console.log(JSON.stringify(await getOverviewDescription(browserHandler)));
 
-  console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
+  // console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
 
-  // console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
+  console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
 
   const description = "null";
   return description;
@@ -542,8 +542,8 @@ export async function getOverviewDescription(
 export async function getEnviromentDescription(
   browserHandler: BrowserHandler
 ): Promise<{ enviroment: string[] | null; setting: string[] | null }> {
-  const enviromentListValues = [];
-  const settingListValues = [];
+  const enviromentListValues: string[] = [];
+  const settingListValues: string[] = [];
 
   const getEnviromentLists = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.enviroment
@@ -584,7 +584,12 @@ export async function getEnviromentDescription(
   };
 }
 
-export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
+export async function getCredentialsAndSkills(
+  browserHandler: BrowserHandler
+): Promise<{ credentials: string[] | null; skills: string[] | null }> {
+  const credentialsListValues: string[] = [];
+  const skillsListValues: string[] = [];
+
   const getCredentialsList = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.credentials
   );
@@ -601,4 +606,10 @@ export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
       console.log(listItem);
     }
   }
+
+  return {
+    credentials:
+      credentialsListValues.length > 0 ? credentialsListValues : null,
+    skills: skillsListValues.length > 0 ? skillsListValues : null,
+  };
 }
