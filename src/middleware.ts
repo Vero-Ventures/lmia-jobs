@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   const hostname = req.headers.get("host") ?? "";
 
   // Extract the pathname from the requested URL (e.g., /about, /contact)
-  const { pathname } = req.nextUrl;
+  const { pathname, search } = req.nextUrl;
 
   // Check if the request is coming from a local development environment
   const isLocal =
@@ -16,7 +16,7 @@ export function middleware(req: NextRequest) {
   let targetPath: string;
 
   if (isLocal || isPreview) {
-    targetPath = `/${process.env.JOB_SITE}${pathname}`;
+    targetPath = `/${process.env.JOB_SITE}${pathname}${search}`;
   } else {
     const validDomains: Record<string, string> = {
       "manageopportunities.ca": "admin",
@@ -27,10 +27,8 @@ export function middleware(req: NextRequest) {
       "youthopportunities.ca": "youth",
     };
 
-    targetPath = `${validDomains[hostname]}${pathname}`;
+    targetPath = `${validDomains[hostname]}${pathname}${search}`;
   }
-
-  console.log({ targetPath });
 
   return NextResponse.rewrite(new URL(targetPath, req.url));
 }

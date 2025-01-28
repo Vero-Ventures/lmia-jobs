@@ -23,8 +23,8 @@ export default async function Page({
   const { jobsiteId } = await params;
   const search = await searchParams;
   const jobTitle = search.jobTitle ?? "";
-  const location = search.location === "All" ? "" : (search.location ?? "");
-  const jobType = search.jobType ? "" : (search.jobType ?? "");
+  const location = search.location ?? "All";
+  const jobType = search.jobType ?? "All";
 
   const jobPostings = await selectAllJobPostings({
     jobBoard: jobsiteId,
