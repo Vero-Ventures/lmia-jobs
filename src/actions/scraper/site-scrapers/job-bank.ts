@@ -563,11 +563,14 @@ export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
     CONFIG.selectors.govJobBank.jobDetails.description.credentials
   );
 
-  const credentialsInnerText = await getCredentialsList.allInnerTexts();
+  const credentialsInnerText = await getCredentialsList.innerHTML();
 
-  if (credentialsInnerText) {
-    for (const listItem of credentialsInnerText[0].split(`\n`)) {
-      console.log(listItem);
-    }
-  }
+  console.log('Inner HTML')
+  console.log(credentialsInnerText)
+
+  // if (credentialsInnerText) {
+  //   for (const listItem of credentialsInnerText[0].split(`\n`)) {
+  //     console.log(listItem);
+  //   }
+  // }
 }
