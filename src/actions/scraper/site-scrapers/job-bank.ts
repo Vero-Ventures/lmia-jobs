@@ -486,7 +486,7 @@ export async function getDescription(
 
   // await getEnviromentDescription(browserHandler);
 
-  await getCredentialsAndSkills(browserHandler)
+  await getCredentialsAndSkills(browserHandler);
 
   const description = "null";
   return description;
@@ -565,8 +565,11 @@ export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
 
   const credentialsInnerText = await getCredentialsList.innerHTML();
 
-  console.log('Inner HTML')
-  console.log(credentialsInnerText)
+  console.log("Inner HTML");
+  console.log(credentialsInnerText);
+
+  console.log("Inner HTML");
+  console.log(credentialsInnerText.split(`\n`));
 
   // if (credentialsInnerText) {
   //   for (const listItem of credentialsInnerText[0].split(`\n`)) {
