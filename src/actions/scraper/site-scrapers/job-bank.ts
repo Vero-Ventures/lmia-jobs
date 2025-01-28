@@ -476,15 +476,15 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43244767";
+  const post = "43244758";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  await getOverviewDescription(browserHandler);
+  // await getOverviewDescription(browserHandler);
 
-  await getEnviromentDescription(browserHandler);
+  // await getEnviromentDescription(browserHandler);
 
   const description = "null";
   return description;
@@ -522,21 +522,21 @@ export async function getOverviewDescription(browserHandler: BrowserHandler) {
 }
 
 export async function getEnviromentDescription(browserHandler: BrowserHandler) {
-  // const getEnviromentLists = await browserHandler.waitAndGetElement(
-  //   CONFIG.selectors.govJobBank.jobDetails.description.enviroment
-  // );
+  const getEnviromentLists = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
+  );
 
-  // const enviromentInnerText = await getEnviromentLists.allInnerTexts();
+  const enviromentInnerText = await getEnviromentLists.allInnerTexts();
 
-  // if (getEnviromentLists) {
-  //   for (const listItem of enviromentInnerText[0].split(`\n`)) {
-  //     if (listItem === "Work setting") {
-  //       break;
-  //     } else if (listItem !== "Work site environment") {
-  //       console.log("Enviroment List Item: " + listItem);
-  //     }
-  //   }
-  // }
+  if (getEnviromentLists) {
+    for (const listItem of enviromentInnerText[0].split(`\n`)) {
+      if (listItem === "Work setting") {
+        break;
+      } else if (listItem !== "Work site environment") {
+        console.log("Enviroment List Item: " + listItem);
+      }
+    }
+  }
 
   const getSettingLists = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.setting
@@ -546,15 +546,26 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
 
   if (getSettingLists) {
     let settingValues = false;
-    console.log("Test");
-    console.log(settingInnerText);
     for (const listItem of settingInnerText[0].split(`\n`)) {
       if (listItem === "Work setting") {
         settingValues = true;
-        console.log("Work Setting");
       } else if (settingValues) {
         console.log("Setting List Item: " + listItem);
       }
+    }
+  }
+}
+
+export async function getCredentialsAndSkills(browserHandler: BrowserHandler) {
+  const getCredentialsList = await browserHandler.waitAndGetElement(
+    CONFIG.selectors.govJobBank.jobDetails.description.credentials
+  );
+
+  const credentialsInnerText = await getCredentialsList.allInnerTexts();
+
+  if (credentialsInnerText) {
+    for (const listItem of credentialsInnerText[0].split(`\n`)) {
+      console.log(listItem);
     }
   }
 }

@@ -38,22 +38,16 @@ export const CONFIG = {
         description: {
           education: `ul[property="educationRequirements qualification"] li span`,
           experience: `p[property="experienceRequirements qualification"] span`,
+
           onSite: `p span.description`,
           onSiteImg: `span.fa-icon-desc.fa-icon.fas.fa-building`,
 
           enviroment: `div:has(> h4:has-text("Work site environment"))`,
           setting: `div:has(> h4:has-text("Work setting"))`,
 
-          credentials: {
-            container: `div[property="skills"]`,
-            headers: `h4`,
-            items: `ul`,
-          },
-          specializedSkills: {
-            container: `div[property="experienceRequirements"]`,
-            headers: `h4`,
-            tasks: `ul`,
-          },
+          credentials: `div[property="skills"]:has(> h3:has-text("Credentials"))`,
+          specializedSkills: `div[property="experienceRequirements"]`,
+          additionalInfo: `div[property="skills"]:has(> h3:has-text("Additional information"))`,
 
           tasks: `div[property="responsibilities"] h4:text-is("Tasks") + ul`,
           supervision: `div[property="responsibilities"] h4:text-is("Supervision") + ul`,
