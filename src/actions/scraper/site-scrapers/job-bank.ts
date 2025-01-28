@@ -484,7 +484,8 @@ export async function getDescription(
   // console.log("Enviroment: " + (await enviroment.innerText()));
 
   const credentials = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.credentials.container
+    CONFIG.selectors.govJobBank.jobDetails.description.credentials.container,
+    2500
   );
 
   const credentialsHeader = credentials.locator(
