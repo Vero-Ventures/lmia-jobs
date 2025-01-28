@@ -476,7 +476,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43244758";
+  const post = "43063766";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -586,29 +586,66 @@ export async function getEnviromentDescription(
 
 export async function getCredentialsAndSkills(
   browserHandler: BrowserHandler
-): Promise<{ credentials: string[] | null; skills: string[] | null }> {
+): Promise<{
+  credentials: string[] | null;
+  skills: { skill: string; attributes: string[] }[] | null;
+}> {
   const credentialsListValues: string[] = [];
-  const skillsListValues: string[] = [];
+  const skillsListValues: { skill: string; attributes: string[] }[] = [];
 
-  const getCredentialsList = await browserHandler.waitAndGetElement(
+  // const getCredentialsList = await browserHandler.waitAndGetElement(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.credentials
+  // );
+
+  // const credentialsInnerHtml = await getCredentialsList.innerHTML();
+
+  // const credentialsCleanedHtml = credentialsInnerHtml
+  //   .split(`\n`)
+  //   .filter((item) => item.trim() !== "")
+  //   .map((item) => item.replace(/\t/g, ""));
+
+  // if (credentialsCleanedHtml) {
+  //   for (const listItem of credentialsCleanedHtml) {
+  //     const tagAndText = listItem
+  //       .replace(
+  //         /<(\w+)>((?:.|\n)*?)<\/\1>/g,
+  //         "<$1>, $2, </$1>"
+  //       )
+  //       .split(",");
+
+  //     if (tagAndText[0] === "<span>") {
+  //       credentialsListValues.push(tagAndText[1]);
+  //     }
+  //   }
+  // }
+
+  const getSkillsList = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.credentials
   );
 
-  const credentialsInnerText = await getCredentialsList.innerHTML();
+  const skillsInnerHtml = await getSkillsList.innerHTML();
 
-  const cleanedInternalHtml = credentialsInnerText
+  const skillsCleanedHtml = skillsInnerHtml
     .split(`\n`)
     .filter((item) => item.trim() !== "")
     .map((item) => item.replace(/\t/g, ""));
 
-  if (cleanedInternalHtml) {
-    for (const listItem of cleanedInternalHtml) {
+  if (skillsCleanedHtml) {
+    let currentSkillHeader = "";
+    let skillIndex = -1;
+    for (const listItem of skillsCleanedHtml) {
       const tagAndText = listItem
-        .replace(/<span>(.*?)<\/span>/, "<span>, $1, </span>")
+        .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
         .split(",");
 
-      if (tagAndText[0] === "<span>") {
-        credentialsListValues.push(tagAndText[1]);
+      if (tagAndText[0] === "<h4>") {
+        currentSkillHeader = tagAndText[1];
+        skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
+        skillIndex += 1;
+      }
+
+      if (tagAndText[0] === "<span>" && currentSkillHeader) {
+        skillsListValues[skillIndex].attributes.push(tagAndText[1]);
       }
     }
   }

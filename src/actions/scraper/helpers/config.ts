@@ -56,6 +56,8 @@ export const CONFIG = {
             container: ``,
             conditionsAndCapacity: ``,
             personalSuitability: ``,
+            securityAndSafty: ``,
+            transportation: ``,
           },
 
           benefits: {
