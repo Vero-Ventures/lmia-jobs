@@ -476,10 +476,13 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  await browserHandler.visitPage(
-    `https://www.jobbank.gc.ca/jobsearch/jobposting/43236893?source=searchresults`
-  );
+  const post = "43236893"
 
+  await browserHandler.visitPage(
+    CONFIG.urls.searchResult +
+      String(post) +
+      "?source=searchresults"
+  );
 
   const getJobTitle = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.header.jobTitle

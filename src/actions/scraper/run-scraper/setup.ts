@@ -44,7 +44,7 @@ export const desciptionTest = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    getDescription(pageHandler);
+    await getDescription(pageHandler);
   } catch (error) {
     console.error("Create Scraper Error: " + error);
   } finally {
