@@ -684,7 +684,7 @@ export async function getBenefits(browserHandler: BrowserHandler): Promise<{
 
         if (tagAndText[0] === "<h4>") {
           console.log("Title: " + tagAndText[1]);
-          benefitType = tagAndText[1];
+          benefitType = tagAndText[1].trim();
         }
 
         if (tagAndText[0] === "<span>") {
@@ -693,15 +693,15 @@ export async function getBenefits(browserHandler: BrowserHandler): Promise<{
 
           switch (benefitType) {
             case "Health benefits":
-              console.log('Push Health')
+              console.log("Push Health");
               healthBenifits.push(benefit);
               break;
             case "Financial benefits":
-              console.log('Push Financial')
+              console.log("Push Financial");
               financialBenefits.push(benefit);
               break;
             case "Other benefits":
-              console.log('Push Other')
+              console.log("Push Other");
               otherBenefits.push(benefit);
               break;
           }
