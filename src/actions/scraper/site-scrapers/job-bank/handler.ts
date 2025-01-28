@@ -24,11 +24,12 @@ export async function scrapeGovJobBank(
   while (scrape) {
     const newPostIds = await scrapePosts(browserHandler, pageNum);
     newPosts.push(...newPostIds);
-    pageNum += 1;
 
     // Testing: Limit Pages To 1
-    if (pageNum > 2) {
+    if ((pageNum = 1)) {
       scrape = false;
+    } else {
+      pageNum += 1;
     }
   }
 
