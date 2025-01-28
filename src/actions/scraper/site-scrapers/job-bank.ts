@@ -475,7 +475,7 @@ export async function getDescription(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  // console.log(JSON.stringify(await getOverviewValues(browserHandler)));
+  // console.log(JSON.stringify(await getBaseOverviewValues(browserHandler)));
 
   // console.log(JSON.stringify(await getEnviromentAndSetting(browserHandler)));
 
@@ -483,13 +483,17 @@ export async function getDescription(
 
   // console.log(JSON.stringify(await getBenefits(browserHandler)));
 
+  console.log(JSON.stringify(await getTasksAndSupervision(browserHandler)));
+
   // console.log(JSON.stringify(await getSkills(browserHandler)));
+
+  // console.log(JSON.stringify(await getAdditionalInformation(browserHandler)));
 
   const description = "null";
   return description;
 }
 
-export async function getOverviewValues(
+export async function getBaseOverviewValues(
   browserHandler: BrowserHandler
 ): Promise<{
   education: string;
@@ -684,7 +688,7 @@ export async function getTasksAndSupervision(
   supervision: string | null;
 }> {
   const tasksList: string[] = [];
-  const supervision = "null";
+  let supervision = "null";
 
   try {
     const getTasksList = await browserHandler.waitAndGetElement(
@@ -699,12 +703,19 @@ export async function getTasksAndSupervision(
       .map((item) => item.replace(/\t/g, ""));
 
     if (tasksCleanedHtml) {
+      let getSupervision = false;
       for (const listItem of tasksCleanedHtml) {
         const tagAndText = listItem
           .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
           .split(",");
 
-        console.log(tagAndText[1]);
+        if (tagAndText[0] === "<h4>" && tagAndText[1] === "Supervision") {
+          getSupervision = true;
+        } else if (getSupervision && tagAndText[0] === "<span>") {
+          supervision = tagAndText[1];
+        } else if (tagAndText[0] === "<span>") {
+          tasksList.push(tagAndText[1]);
+        }
       }
     }
   } catch {}

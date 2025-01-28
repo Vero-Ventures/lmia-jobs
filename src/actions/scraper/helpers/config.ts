@@ -44,8 +44,9 @@ export const CONFIG = {
           setting: `div:has(> h4:has-text("Work setting"))`,
           credentials: `div[property="skills"]:has(> h3:has-text("Credentials"))`,
           benefits: `div[property="jobBenefits"]`,
-          tasksAndSupervision: ``,
+          tasksAndSupervision: `div[property="responsibilities"]`,
           specializedSkills: `div[property="experienceRequirements"]`,
+          // 3 Values: ConditionsAndCapability, PersonalSuitability, Other.
           additionalInformation: ``,
         },
       },
