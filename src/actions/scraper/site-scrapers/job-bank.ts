@@ -709,12 +709,15 @@ export async function getTasksAndSupervision(
           .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
           .split(",");
 
-        if (tagAndText[0] === "<h4>" && tagAndText[1] === "Supervision") {
+        if (
+          tagAndText[0] === "<h4>" &&
+          tagAndText[1].trim() === "Supervision"
+        ) {
           getSupervision = true;
         } else if (getSupervision && tagAndText[0] === "<span>") {
-          supervision = tagAndText[1];
+          supervision = tagAndText[1].trim();
         } else if (tagAndText[0] === "<span>") {
-          tasksList.push(tagAndText[1]);
+          tasksList.push(tagAndText[1].trim());
         }
       }
     }
