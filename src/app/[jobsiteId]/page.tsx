@@ -57,7 +57,7 @@ export default async function Page({
           <span>Filters</span>
         </div>
         <div className="flex gap-2 font-semibold">
-          <FilterSelect initalValue={jobType} filterType="job type" />
+          <FilterSelect initalValue={jobType} filterType="jobType" />
           <FilterSelect initalValue={location} filterType="location" />
         </div>
       </div>

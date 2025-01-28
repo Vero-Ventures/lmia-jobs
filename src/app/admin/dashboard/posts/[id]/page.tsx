@@ -38,7 +38,7 @@ export default async function SinglePostPage({ params }: PageProps) {
   });
 
   if (!data) {
-    redirect("/");
+    redirect("/sign-in");
   }
   const jobPosting = await selectUserSingleJobPosting({
     id,
