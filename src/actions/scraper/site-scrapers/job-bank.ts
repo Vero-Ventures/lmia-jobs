@@ -482,11 +482,11 @@ export async function getDescription(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
   );
 
-  await getOverviewDescription(browserHandler);
+  console.log(JSON.stringify(await getOverviewDescription(browserHandler)));
 
-  // await getEnviromentDescription(browserHandler);
+  // console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
 
-  // await getCredentialsAndSkills(browserHandler);
+  // console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
 
   const description = "null";
   return description;
@@ -531,10 +531,6 @@ export async function getOverviewDescription(
   if (onSiteValue) {
     onSite = onSiteValue;
   }
-
-  console.log(education);
-  console.log(experience);
-  console.log(onSite);
 
   return {
     education,
