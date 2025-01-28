@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
-import { eq, and, ilike, inArray, gt } from "drizzle-orm";
+import { eq, and, gt, type SQL, ilike } from "drizzle-orm";
+import type { PgColumn } from "drizzle-orm/pg-core";
 
 export async function selectAllJobPostings({
   jobBoard,
@@ -16,35 +17,36 @@ export async function selectAllJobPostings({
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
+  const jobBoardMap: Record<string, PgColumn> = {
+    indigenous: jobPostings.postIndigenous,
+    newcomers: jobPostings.postNewcomers,
+    accessible: jobPostings.postDisabled,
+    youth: jobPostings.postYouth,
+    asylum: jobPostings.postAsylum,
+  };
+
+  const filters: SQL[] = [
+    eq(jobPostings.paymentConfirmed, true),
+    gt(jobPostings.expiresAt, currentDate),
+    eq(jobBoardMap[jobBoard], true),
+  ];
+
+  if (jobType !== "All") {
+    filters.push(eq(jobPostings.employmentType, jobType));
+  }
+
+  if (location !== "All") {
+    filters.push(eq(jobPostings.region, location));
+  }
+
+  if (jobTitle) {
+    filters.push(ilike(jobPostings.jobTitle, "%" + jobTitle));
+  }
+
   return await db
     .select()
     .from(jobPostings)
-    .where(
-      and(
-        eq(jobPostings.paymentConfirmed, true),
-        inArray(jobPostings.postDisabled, [
-          true,
-          jobBoard === "accessible-job-board",
-        ]),
-        inArray(jobPostings.postAsylum, [
-          true,
-          jobBoard === "asylum-job-board",
-        ]),
-        inArray(jobPostings.postIndigenous, [
-          true,
-          jobBoard === "indigenous-job-board",
-        ]),
-        inArray(jobPostings.postNewcomers, [
-          true,
-          jobBoard === "newcomers-job-board",
-        ]),
-        inArray(jobPostings.postYouth, [true, jobBoard === "youth-job-board"]),
-        ilike(jobPostings.region, "%" + location),
-        ilike(jobPostings.employmentType, "%" + jobType),
-        ilike(jobPostings.jobTitle, "%" + jobTitle),
-        gt(jobPostings.expiresAt, currentDate)
-      )
-    );
+    .where(and(...filters));
 }
 
 export async function selectUserJobPostings({

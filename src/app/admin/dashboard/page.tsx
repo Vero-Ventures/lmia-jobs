@@ -22,7 +22,7 @@ export default async function Page({
   });
 
   if (!data) {
-    redirect("/");
+    redirect("/sign-in");
   }
 
   const { jobTitle } = await searchParams;

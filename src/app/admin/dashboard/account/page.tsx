@@ -23,7 +23,7 @@ export default function Page() {
   const { data: session, isPending } = useSession();
 
   if (!session && !isPending) {
-    redirect("/");
+    redirect("/sign-in");
   }
 
   const [newEmail, setNewEmail] = useState("");

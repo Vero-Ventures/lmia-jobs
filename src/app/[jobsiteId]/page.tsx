@@ -23,8 +23,8 @@ export default async function Page({
   const { jobsiteId } = await params;
   const search = await searchParams;
   const jobTitle = search.jobTitle ?? "";
-  const location = search.location === "All" ? "" : (search.location ?? "");
-  const jobType = search.jobType ? "" : (search.jobType ?? "");
+  const location = search.location ?? "All";
+  const jobType = search.jobType ?? "All";
 
   const jobPostings = await selectAllJobPostings({
     jobBoard: jobsiteId,
@@ -57,7 +57,7 @@ export default async function Page({
           <span>Filters</span>
         </div>
         <div className="flex gap-2 font-semibold">
-          <FilterSelect initalValue={jobType} filterType="job type" />
+          <FilterSelect initalValue={jobType} filterType="jobType" />
           <FilterSelect initalValue={location} filterType="location" />
         </div>
       </div>
