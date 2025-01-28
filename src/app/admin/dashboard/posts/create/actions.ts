@@ -5,6 +5,9 @@ import { headers } from "next/headers";
 import type { CreatePost } from "./create-post-form";
 import { db } from "@/db";
 import { jobPostings } from "@/db/schema";
+import { redirect } from "next/navigation";
+import { and, eq } from "drizzle-orm";
+import type { EditPost } from "../[id]/edit/edit-post-form";
 
 export async function createJobPost(formData: CreatePost) {
   try {
@@ -47,6 +50,45 @@ export async function createJobPost(formData: CreatePost) {
       .then((res) => res[0]);
 
     return jobPostingId;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function updateJobPost(formData: EditPost, postId: string) {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session) {
+      redirect("/sign-in");
+    }
+
+    const postData = {
+      ...formData,
+      userId: session.user.id,
+      address: formData.address === "" ? null : formData.address,
+      region: formData.province,
+      startDate: formData.startDate,
+      vacancies: !formData.vacancies
+        ? null
+        : Math.ceil(Number(formData.vacancies)),
+      workHours: !formData.workHours
+        ? null
+        : Math.ceil(Number(formData.workHours)),
+      minPayValue: Math.ceil(Number(formData.minPayValue)),
+      maxPayValue: !formData.maxPayValue
+        ? null
+        : Math.ceil(Number(formData.maxPayValue)),
+      language: formData.language,
+    };
+
+    await db
+      .update(jobPostings)
+      .set(postData)
+      .where(
+        and(eq(jobPostings.id, postId), eq(jobPostings.userId, session.user.id))
+      );
   } catch (error) {
     console.error(error);
   }
