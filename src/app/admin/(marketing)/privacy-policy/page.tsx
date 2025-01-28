@@ -1,4 +1,4 @@
-import PrivacyPolicy from "@/app/admin/privacy-policy/privacy-policy.mdx";
+import PrivacyPolicy from "@/app/admin/(marketing)/privacy-policy/privacy-policy.mdx";
 
 export default async function Page() {
   const components = {

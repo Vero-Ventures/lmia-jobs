@@ -1,4 +1,4 @@
-import TermsOfService from "@/app/admin/terms-of-service/terms-of-service.mdx";
+import TermsOfService from "@/app/admin/(marketing)/terms-of-service/terms-of-service.mdx";
 
 export default async function Page() {
   const components = {
