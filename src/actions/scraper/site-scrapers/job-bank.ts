@@ -291,9 +291,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
       2500
     );
     address = (await getAddress.allInnerTexts()).pop();
-  } catch (error) {
-    console.error("Address Not Found: " + error);
-  }
+  } catch {}
 
   try {
     const getCity = await browserHandler.waitAndGetElement(
@@ -358,9 +356,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       2500
     );
     maxPay = (await getMaxPay.allInnerTexts()).pop();
-  } catch (error) {
-    console.error("Maximum Pay Not Found: " + error);
-  }
+  } catch {}
 
   try {
     const getPaymentType = await browserHandler.waitAndGetElement(
@@ -430,11 +426,8 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       CONFIG.selectors.govJobBank.jobDetails.details.startDateContainer,
       2500
     );
-
     startDate = (await startDateContainer.allInnerTexts()).pop()?.split(":")[1];
-  } catch (error) {
-    console.error("Start Date Not Found: " + error);
-  }
+  } catch {}
 
   try {
     const vacanciesContainer = await browserHandler.waitAndGetElement(
@@ -476,7 +469,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  const post = "43063766";
+  const post = "43244758";
 
   await browserHandler.visitPage(
     CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -486,7 +479,9 @@ export async function getDescription(
 
   // console.log(JSON.stringify(await getEnviromentDescription(browserHandler)));
 
-  console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
+  // console.log(JSON.stringify(await getCredentialsAndSkills(browserHandler)));
+
+  console.log(JSON.stringify(await getBenefits(browserHandler)));
 
   const description = "null";
   return description;
@@ -495,13 +490,13 @@ export async function getDescription(
 export async function getOverviewDescription(
   browserHandler: BrowserHandler
 ): Promise<{
-  education: string | null;
-  experience: string | null;
-  onSite: string | null;
+  education: string;
+  experience: string;
+  onSite: string;
 }> {
-  let education = null;
-  let experience = null;
-  let onSite = null;
+  let education = "null";
+  let experience = "null";
+  let onSite = "null";
 
   const getEducation = await browserHandler.waitAndGetElement(
     CONFIG.selectors.govJobBank.jobDetails.description.education
@@ -545,38 +540,40 @@ export async function getEnviromentDescription(
   const enviromentListValues: string[] = [];
   const settingListValues: string[] = [];
 
-  const getEnviromentLists = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.enviroment
-  );
+  try {
+    const getEnviromentLists = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.enviroment
+    );
+    const enviromentInnerText = await getEnviromentLists.allInnerTexts();
 
-  const enviromentInnerText = await getEnviromentLists.allInnerTexts();
-
-  if (getEnviromentLists) {
-    for (const listItem of enviromentInnerText[0].split(`\n`)) {
-      if (listItem === "Work setting") {
-        break;
-      } else if (listItem !== "Work site environment") {
-        enviromentListValues.push(listItem);
+    if (getEnviromentLists) {
+      for (const listItem of enviromentInnerText[0].split(`\n`)) {
+        if (listItem === "Work setting") {
+          break;
+        } else if (listItem !== "Work site environment") {
+          enviromentListValues.push(listItem);
+        }
       }
     }
-  }
+  } catch {}
 
-  const getSettingLists = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.setting
-  );
+  try {
+    const getSettingLists = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.setting
+    );
+    const settingInnerText = await getSettingLists.allInnerTexts();
 
-  const settingInnerText = await getSettingLists.allInnerTexts();
-
-  if (getSettingLists) {
-    let settingValues = false;
-    for (const listItem of settingInnerText[0].split(`\n`)) {
-      if (listItem === "Work setting") {
-        settingValues = true;
-      } else if (settingValues) {
-        settingListValues.push(listItem);
+    if (getSettingLists) {
+      let settingValues = false;
+      for (const listItem of settingInnerText[0].split(`\n`)) {
+        if (listItem === "Work setting") {
+          settingValues = true;
+        } else if (settingValues) {
+          settingListValues.push(listItem);
+        }
       }
     }
-  }
+  } catch {}
 
   return {
     enviroment: enviromentListValues.length > 0 ? enviromentListValues : null,
@@ -593,66 +590,123 @@ export async function getCredentialsAndSkills(
   const credentialsListValues: string[] = [];
   const skillsListValues: { skill: string; attributes: string[] }[] = [];
 
-  // const getCredentialsList = await browserHandler.waitAndGetElement(
-  //   CONFIG.selectors.govJobBank.jobDetails.description.credentials
-  // );
+  try {
+    const getCredentialsList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.credentials
+    );
 
-  // const credentialsInnerHtml = await getCredentialsList.innerHTML();
+    const credentialsInnerHtml = await getCredentialsList.innerHTML();
 
-  // const credentialsCleanedHtml = credentialsInnerHtml
-  //   .split(`\n`)
-  //   .filter((item) => item.trim() !== "")
-  //   .map((item) => item.replace(/\t/g, ""));
+    const credentialsCleanedHtml = credentialsInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
 
-  // if (credentialsCleanedHtml) {
-  //   for (const listItem of credentialsCleanedHtml) {
-  //     const tagAndText = listItem
-  //       .replace(
-  //         /<(\w+)>((?:.|\n)*?)<\/\1>/g,
-  //         "<$1>, $2, </$1>"
-  //       )
-  //       .split(",");
+    if (credentialsCleanedHtml) {
+      for (const listItem of credentialsCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
 
-  //     if (tagAndText[0] === "<span>") {
-  //       credentialsListValues.push(tagAndText[1]);
-  //     }
-  //   }
-  // }
-
-  const getSkillsList = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills
-  );
-
-  const skillsInnerHtml = await getSkillsList.innerHTML();
-
-  const skillsCleanedHtml = skillsInnerHtml
-    .split(`\n`)
-    .filter((item) => item.trim() !== "")
-    .map((item) => item.replace(/\t/g, ""));
-
-  if (skillsCleanedHtml) {
-    let currentSkillHeader = "";
-    let skillIndex = -1;
-    for (const listItem of skillsCleanedHtml) {
-      const tagAndText = listItem
-        .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
-        .split(",");
-
-      if (tagAndText[0] === "<h4>") {
-        currentSkillHeader = tagAndText[1];
-        skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
-        skillIndex += 1;
-      }
-
-      if (tagAndText[0] === "<span>" && currentSkillHeader) {
-        skillsListValues[skillIndex].attributes.push(tagAndText[1]);
+        if (tagAndText[0] === "<span>") {
+          credentialsListValues.push(tagAndText[1]);
+        }
       }
     }
-  }
+  } catch {}
+
+  try {
+    const getSkillsList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills
+    );
+    const skillsInnerHtml = await getSkillsList.innerHTML();
+
+    const skillsCleanedHtml = skillsInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (skillsCleanedHtml) {
+      let currentSkillHeader = "";
+      let skillIndex = -1;
+      for (const listItem of skillsCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        if (tagAndText[0] === "<h4>") {
+          currentSkillHeader = tagAndText[1];
+          skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
+          skillIndex += 1;
+        }
+
+        if (tagAndText[0] === "<span>" && currentSkillHeader) {
+          skillsListValues[skillIndex].attributes.push(tagAndText[1]);
+        }
+      }
+    }
+  } catch {}
 
   return {
     credentials:
       credentialsListValues.length > 0 ? credentialsListValues : null,
     skills: skillsListValues.length > 0 ? skillsListValues : null,
+  };
+}
+
+export async function getBenefits(browserHandler: BrowserHandler): Promise<{
+  health: string[] | null;
+  financial: string[] | null;
+  other: string[] | null;
+}> {
+  const healthBenifits: string[] = [];
+  const financialBenefits: string[] = [];
+  const otherBenefits: string[] = [];
+
+  try {
+    const getCredentialsList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.benefits
+    );
+
+    const credentialsInnerHtml = await getCredentialsList.innerHTML();
+
+    const credentialsCleanedHtml = credentialsInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (credentialsCleanedHtml) {
+      let benefitType = "none";
+      for (const listItem of credentialsCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        if (tagAndText[0] === "<h4>") {
+          benefitType = tagAndText[1];
+        }
+
+        if (tagAndText[0] === "<span>") {
+          const benefit = tagAndText[1];
+          switch (benefitType) {
+            case "Health benefits":
+              healthBenifits.push(benefit);
+              break;
+            case "Financial benefits":
+              financialBenefits.push(benefit);
+              break;
+            case "Other benefits":
+              otherBenefits.push(benefit);
+              break;
+          }
+        }
+      }
+    }
+  } catch {}
+
+  return {
+    health: healthBenifits,
+    financial: financialBenefits,
+    other: otherBenefits,
   };
 }

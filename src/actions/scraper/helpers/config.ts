@@ -60,11 +60,7 @@ export const CONFIG = {
             transportation: ``,
           },
 
-          benefits: {
-            health: ``,
-            financial: ``,
-            other: ``,
-          },
+          benefits: `div[property="jobBenefits"]`,
         },
       },
 
