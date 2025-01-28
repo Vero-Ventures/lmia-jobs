@@ -485,7 +485,7 @@ export async function getDescription(
 
   // console.log(JSON.stringify(await getTasksAndSupervision(browserHandler)));
 
-  // console.log(JSON.stringify(await getSkills(browserHandler)));
+  console.log(JSON.stringify(await getSkills(browserHandler)));
 
   // console.log(JSON.stringify(await getAdditionalInformation(browserHandler)));
 
@@ -611,7 +611,7 @@ export async function getCredentials(browserHandler: BrowserHandler): Promise<{
           .split(",");
 
         if (tagAndText[0] === "<span>") {
-          credentialsListValues.push(tagAndText[1]);
+          credentialsListValues.push(tagAndText[1].trim());
         }
       }
     }
@@ -656,7 +656,7 @@ export async function getBenefits(browserHandler: BrowserHandler): Promise<{
         }
 
         if (tagAndText[0] === "<span>") {
-          const benefit = tagAndText[1];
+          const benefit = tagAndText[1].trim();
 
           switch (benefitType) {
             case "Health benefits":
