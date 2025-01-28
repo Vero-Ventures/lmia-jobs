@@ -526,10 +526,13 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
     CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
 
+  const innerText = await getEnviromentLists.allInnerTexts();
+
   if (getEnviromentLists) {
-    for (const listItem of await getEnviromentLists.allInnerTexts()) {
-      console.log("List Item")
-      console.log(listItem)
+    for (const listItem of innerText[0].split(`\n`)) {
+      console.log("List Item");
+      console.log(listItem);
+
       if (listItem === "Work setting") {
         console.log("Break");
         break;
@@ -540,20 +543,20 @@ export async function getEnviromentDescription(browserHandler: BrowserHandler) {
     }
   }
 
-  const getSettingLists = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.setting
-  );
+  // const getSettingLists = await browserHandler.waitAndGetElement(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.setting
+  // );
 
-  if (getSettingLists) {
-    let settingValue = false;
-    for (const listItem of await getEnviromentLists.allInnerTexts()) {
-      if (listItem === "Work setting") {
-        settingValue = true;
-        console.log("Work Setting");
-      } else if (settingValue) {
-        console.log("Setting List Item: " + listItem);
-        console.log("Next");
-      }
-    }
-  }
+  // if (getSettingLists) {
+  //   let settingValue = false;
+  //   for (const listItem of await getEnviromentLists.allInnerTexts()) {
+  //     if (listItem === "Work setting") {
+  //       settingValue = true;
+  //       console.log("Work Setting");
+  //     } else if (settingValue) {
+  //       console.log("Setting List Item: " + listItem);
+  //       console.log("Next");
+  //     }
+  //   }
+  // }
 }
