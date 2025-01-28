@@ -482,13 +482,15 @@ export async function getDescription(
     CONFIG.selectors.govJobBank.jobDetails.description.enviroment
   );
 
-  console.log("Enviroment: " + (await enviroment.innerText()));
+  const enviromentText = await enviroment.innerText();
 
-  const setting = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.setting
-  );
+  console.log("Enviroment: " + enviromentText);
 
-  console.log("setting: " + (await setting.innerText()));
+  // const setting = await browserHandler.waitAndGetElement(
+  //   CONFIG.selectors.govJobBank.jobDetails.description.setting
+  // );
+
+  // console.log("setting: " + (await setting.innerText()));
 
   // const credentials = await browserHandler.waitAndGetElement(
   //   CONFIG.selectors.govJobBank.jobDetails.description.credentials.container,
