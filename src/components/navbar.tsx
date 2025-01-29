@@ -23,7 +23,9 @@ export default async function Navbar() {
         className="flex items-center justify-center"
         href={data ? "/dashboard" : "/"}>
         <BriefcaseIcon className="h-6 w-6" />
-        <span className="ml-2 font-semibold">Manage Opportunities</span>
+        <span className="ml-2 font-bold tracking-tighter">
+          Manage Opportunities
+        </span>
       </Link>
       <nav className="flex items-center justify-center gap-4 py-2 sm:ml-auto sm:mt-0 sm:gap-6">
         {links.map((link) => (
