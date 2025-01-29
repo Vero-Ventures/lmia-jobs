@@ -3,12 +3,16 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { jobPosting } from "@/db/schema";
+import { jobBoardPosting, jobPosting } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import type { CreatePost, EditPost } from "@/app/lib/job-postings/schema";
+import type { CreateJobPosting, EditPost } from "@/app/lib/job-postings/schema";
+import type { JobBoard } from "@/app/lib/constants";
 
-export async function createJobPost(formData: CreatePost) {
+export async function createJobPost(
+  formData: CreateJobPosting,
+  selectedJobBoards: JobBoard[]
+) {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -23,9 +27,6 @@ export async function createJobPost(formData: CreatePost) {
     const postData = {
       ...rest,
       userId: session.user.id,
-      address: formData.address === "" ? null : formData.address,
-      region: formData.province,
-      startDate: formData.startDate,
       vacancies: !formData.vacancies
         ? null
         : Math.ceil(Number(formData.vacancies)),
@@ -36,17 +37,25 @@ export async function createJobPost(formData: CreatePost) {
       maxPayValue: !formData.maxPayValue
         ? null
         : Math.ceil(Number(formData.maxPayValue)),
-      language: formData.language,
       expiresAt: expiryDate,
       paymentConfirmed: false,
       hidden: true,
     };
 
-    const jobPostingId = await db
-      .insert(jobPostings)
+    const { id: jobPostingId } = await db
+      .insert(jobPosting)
       .values(postData)
-      .returning({ id: jobPostings.id })
+      .returning({ id: jobPosting.id })
       .then((res) => res[0]);
+
+    await Promise.all(
+      selectedJobBoards.map(async (jobBoard) => {
+        return db.insert(jobBoardPosting).values({
+          jobBoard,
+          jobPostingId,
+        });
+      })
+    );
 
     return jobPostingId;
   } catch (error) {
@@ -83,10 +92,10 @@ export async function updateJobPost(formData: EditPost, postId: string) {
     };
 
     await db
-      .update(jobPostings)
+      .update(jobPosting)
       .set(postData)
       .where(
-        and(eq(jobPostings.id, postId), eq(jobPostings.userId, session.user.id))
+        and(eq(jobPosting.id, postId), eq(jobPosting.userId, session.user.id))
       );
   } catch (error) {
     console.error(error);
