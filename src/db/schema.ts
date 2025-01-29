@@ -1,8 +1,15 @@
 import {
+  employmentTypeLabels,
+  JOB_BOARDS,
+  languages,
+  paymentTypes,
+  provinceValues,
+} from "@/app/lib/constants";
+import {
   boolean,
   date,
   integer,
-  uuid,
+  pgEnum,
   pgTable,
   serial,
   text,
@@ -16,18 +23,6 @@ export const user = pgTable("user", {
   emailVerified: boolean("email_verified").notNull(),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-});
-
-export const userMailing = pgTable("user_mailing", {
-  id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  tempPassword: text("temp_password"),
-  newlyCreated: boolean("newly_created").notNull().default(true),
-  activated: boolean("activated").notNull().default(false),
-  optedOut: boolean("opted_out").notNull().default(false),
-  ignore: boolean("ignore").notNull().default(false),
 });
 
 export const account = pgTable("account", {
@@ -46,15 +41,6 @@ export const account = pgTable("account", {
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   idToken: text("id_token"),
   scope: text("scope"),
-});
-
-export const stripeCustomer = pgTable("stripeCustomer", {
-  id: uuid("id").primaryKey().defaultRandom().notNull(),
-  userId: text("user_id")
-    .unique()
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  stripeId: text("stripe_id").notNull().unique(),
 });
 
 export const session = pgTable("session", {
@@ -79,34 +65,77 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
-export const jobPostings = pgTable("job_postings", {
-  id: uuid("id").primaryKey().defaultRandom().notNull(),
-  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
-  email: text("email").notNull(),
-  jobTitle: text("job_title").notNull(),
-  organizationName: text("organization_name").notNull(),
-  region: text("region").notNull(),
-  city: text("city").notNull(),
-  address: text("address"),
-  startDate: date("start_date").notNull(),
-  vacancies: integer("vacancies"),
-  employmentType: text("employment_type").notNull(),
-  workHours: integer("work_hours"),
-  paymentType: text("payment_type").notNull(),
-  minPayValue: integer("min_pay_value").notNull(),
-  maxPayValue: integer("max_pay_value"),
-  description: text("description").notNull(),
-  language: text("language"),
-  postAsylum: boolean("post_asylum").notNull(),
-  postDisabled: boolean("post_disabled").notNull(),
-  postIndigenous: boolean("post_indigenous").notNull(),
-  postNewcomers: boolean("post_newcomers").notNull(),
-  postYouth: boolean("post_youth").notNull(),
-  hidden: boolean("hidden").notNull().default(false),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at")
+export const languageEnum = pgEnum("language", languages);
+
+export const employmentTypeEnum = pgEnum(
+  "employment_type",
+  employmentTypeLabels
+);
+
+export const paymentTypeEnum = pgEnum("payment_type", paymentTypes);
+
+export const provinceEnum = pgEnum("province", provinceValues);
+
+export const jobPosting = pgTable("job_posting", {
+  id: serial().primaryKey(),
+  userId: text().references(() => user.id, { onDelete: "cascade" }),
+  email: text().notNull(),
+  title: text().notNull(),
+  orgName: text().notNull(),
+  province: provinceEnum().notNull(),
+  city: text().notNull(),
+  address: text(),
+  startDate: date(),
+  vacancies: integer(),
+  employmentType: employmentTypeEnum().notNull(),
+  workHours: integer(),
+  paymentType: paymentTypeEnum().notNull(),
+  minPayValue: integer().notNull(),
+  maxPayValue: integer(),
+  description: text().notNull(),
+  language: languageEnum().notNull(),
+  hidden: boolean().notNull(),
+  paymentConfirmed: boolean().notNull(),
+  expiresAt: date({ mode: "date" }).notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp()
     .notNull()
     .$onUpdate(() => new Date()),
-  paymentConfirmed: boolean("paymentConfirmed").notNull(),
-  expiresAt: date("expires_at", { mode: "date" }).notNull(),
 });
+
+export const jobBoardEnum = pgEnum("job_board", JOB_BOARDS);
+
+export const jobBoardPosting = pgTable("job_board_posting", {
+  id: serial().primaryKey(),
+  jobBoard: jobBoardEnum().notNull(),
+  jobPostingId: integer().references(() => jobPosting.id, {
+    onDelete: "cascade",
+  }),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp()
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
+
+export const stripeCustomer = pgTable("stripe_customer", {
+  id: serial().primaryKey(),
+  userId: text()
+    .unique()
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  stripeId: text().notNull().unique(),
+});
+
+export const userMailing = pgTable("user_mailing", {
+  id: serial().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  tempPassword: text("temp_password"),
+  newlyCreated: boolean("newly_created").notNull().default(true),
+  activated: boolean("activated").notNull().default(false),
+  optedOut: boolean("opted_out").notNull().default(false),
+  ignore: boolean("ignore").notNull().default(false),
+});
+
+export type JobPosting = typeof jobPosting.$inferSelect;

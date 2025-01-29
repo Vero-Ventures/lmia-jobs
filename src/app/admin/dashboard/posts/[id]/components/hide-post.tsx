@@ -1,16 +1,21 @@
 "use client";
 
 import { editPostVisibility } from "@/actions/handle-job-posts";
-import type { JobPosting } from "@/app/lib/types";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
-export default function HidePost({ jobPosting }: { jobPosting: JobPosting }) {
-  return jobPosting.hidden ? (
+export default function HidePost({
+  id,
+  hidden,
+}: {
+  id: number;
+  hidden: boolean;
+}) {
+  return hidden ? (
     <Button
       onClick={async () => {
-        toast.promise(editPostVisibility(jobPosting.id, false), {
+        toast.promise(editPostVisibility(id, false), {
           loading: "Loading...",
           success: () => {
             return "Your post will now be shown";
@@ -24,7 +29,7 @@ export default function HidePost({ jobPosting }: { jobPosting: JobPosting }) {
   ) : (
     <Button
       onClick={async () => {
-        toast.promise(editPostVisibility(jobPosting.id, true), {
+        toast.promise(editPostVisibility(id, true), {
           loading: "Loading...",
           success: () => {
             return "Your post is hidden";

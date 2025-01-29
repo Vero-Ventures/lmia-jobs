@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { SignOut } from "./sign-out";
 
 const links = [
-  { text: "Home", url: "/dashboard" },
+  { text: "Home", url: "/" },
   { text: "Pricing", url: "/pricing" },
   { text: "Contact", url: "/contact-us" },
 ];
@@ -18,7 +18,7 @@ export default async function Navbar() {
   });
   return (
     <header className="flex h-16 flex-col items-center bg-white px-4 sm:h-14 sm:flex-row lg:px-6">
-      <Link className="flex items-center justify-center" href="/dashboard">
+      <Link className="flex items-center justify-center" href="/">
         <BriefcaseIcon className="h-6 w-6" />
         <span className="ml-2 font-semibold">Manage Opportunities</span>
       </Link>

@@ -1,1 +1,0 @@
-ALTER TABLE "job_postings" ADD COLUMN "hidden" boolean DEFAULT false NOT NULL;

@@ -7,13 +7,13 @@ import { selectUserJobPostings } from "@/db/queries/jobPostings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { JobListCard } from "@/app/[jobsiteId]/components/job-list-card";
+import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    jobTitle?: string;
+    title?: string;
     postId?: string;
   }>;
 }) {
@@ -25,11 +25,11 @@ export default async function Page({
     redirect("/sign-in");
   }
 
-  const { jobTitle } = await searchParams;
+  const { title } = await searchParams;
 
   const jobPostings = await selectUserJobPostings({
     userId: data.user.id,
-    jobTitle: jobTitle,
+    title,
   });
 
   return (
@@ -48,7 +48,7 @@ export default async function Page({
             <Input
               name="jobTitle"
               placeholder="Search Jobs..."
-              defaultValue={jobTitle}
+              defaultValue={title}
             />
             <Button>Search</Button>
           </Form>

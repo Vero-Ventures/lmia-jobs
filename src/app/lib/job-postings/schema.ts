@@ -1,6 +1,6 @@
 import { z } from "zod";
 import {
-  jobTypeLabels,
+  employmentTypeLabels,
   languages,
   paymentTypes,
   provinceValues,
@@ -27,7 +27,7 @@ export const createPostSchema = z
       .number()
       .min(0, { message: "Available Position must be greater than or equal 0" })
       .optional(),
-    employmentType: z.enum(jobTypeLabels, {
+    employmentType: z.enum(employmentTypeLabels, {
       message: "Please select an employment type.",
     }),
     workHours: z.coerce
@@ -95,7 +95,7 @@ export const editPostSchema = z
       .number()
       .min(0, { message: "Available Position must be greater than or equal 0" })
       .optional(),
-    employmentType: z.enum(jobTypeLabels, {
+    employmentType: z.enum(employmentTypeLabels, {
       message: "Please select an employment type.",
     }),
     workHours: z.coerce

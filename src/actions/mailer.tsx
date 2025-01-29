@@ -1,12 +1,11 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPostings, user, userMailing } from "@/db/schema";
+import { jobPosting, user, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
-import type { JobPosting } from "@/app/lib/types";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -29,7 +28,7 @@ export async function mailInvitesAndReminders() {
         )
       );
 
-    const userPosts = await db.select().from(jobPostings);
+    const userPosts = await db.select().from(jobPosting);
 
     if (newUsersMailing.length > 0) {
       await db
@@ -98,7 +97,7 @@ export async function sendInvitesAndReminders(
       const totalPosts = userPostings.length;
 
       const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
-      const topPostNames = topPosts.map((post) => post.jobTitle);
+      const topPostNames = topPosts.map((post) => post.title);
 
       const expiredTimeStamp =
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;

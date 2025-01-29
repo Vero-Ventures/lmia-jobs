@@ -1,14 +1,15 @@
-"use client";
-
-import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export default function Component() {
-  const { data: session, isPending } = authClient.useSession();
+export default async function Page() {
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (session && !isPending) {
+  if (data) {
     redirect("/dashboard");
   }
 

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import type {
-  JobType,
+  EmploymentType,
   Language,
   PaymentType,
   Province,
@@ -40,7 +40,7 @@ export default async function EditPost({ params }: PageProps) {
           address: jobPosting.address || "",
           startDate: jobPosting.startDate,
           vacancies: jobPosting.vacancies || 0,
-          employmentType: jobPosting.employmentType as JobType,
+          employmentType: jobPosting.employmentType as EmploymentType,
           workHours: jobPosting.workHours || 0,
           paymentType: jobPosting.paymentType as PaymentType,
           minPayValue: jobPosting.minPayValue,

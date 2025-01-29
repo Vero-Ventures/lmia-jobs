@@ -7,30 +7,30 @@ import { Separator } from "@/components/ui/separator";
 import { FilterIcon } from "lucide-react";
 import { JobListCard } from "./components/job-list-card";
 import Link from "next/link";
+import type { EmploymentType, JobBoard, Province } from "../lib/constants";
 
 export default async function Page({
   params,
   searchParams,
 }: {
-  params: Promise<{ jobsiteId: string }>;
+  params: Promise<{ jobBoard: JobBoard }>;
   searchParams: Promise<{
-    jobTitle?: string;
-    jobType?: string;
-    location?: string;
-    jobPostingId?: string;
+    title?: string;
+    employmentType?: EmploymentType | "All";
+    province?: Province | "All";
   }>;
 }) {
-  const { jobsiteId } = await params;
+  const { jobBoard } = await params;
   const search = await searchParams;
-  const jobTitle = search.jobTitle ?? "";
-  const location = search.location ?? "All";
-  const jobType = search.jobType ?? "All";
+  const title = search.title ?? "";
+  const province = search.province ?? "All";
+  const employmentType = search.employmentType ?? "All";
 
-  const jobPostings = await selectAllJobPostings({
-    jobBoard: jobsiteId,
-    jobTitle: jobTitle,
-    location: location,
-    jobType: jobType,
+  const result = await selectAllJobPostings({
+    jobBoard,
+    title,
+    province,
+    employmentType,
   });
 
   return (
@@ -40,15 +40,15 @@ export default async function Page({
           <Input name="jobTitle" placeholder="Search Jobs..." />
           <Input
             type="hidden"
-            value={jobType}
-            name="jobType"
-            disabled={jobType === "ALL" || jobType === undefined}
+            value={employmentType}
+            name="employmentType"
+            disabled={employmentType === "All" || employmentType === undefined}
           />
           <Input
             type="hidden"
-            value={location}
-            name="location"
-            disabled={location === "ALL" || location === undefined}
+            value={province}
+            name="province"
+            disabled={province === "All" || province === undefined}
           />
           <Button>Search</Button>
         </Form>
@@ -57,18 +57,21 @@ export default async function Page({
           <span>Filters</span>
         </div>
         <div className="flex gap-2 font-semibold">
-          <FilterSelect initalValue={jobType} filterType="jobType" />
-          <FilterSelect initalValue={location} filterType="location" />
+          <FilterSelect
+            initalValue={employmentType}
+            filterType="employmentType"
+          />
+          <FilterSelect initalValue={province} filterType="province" />
         </div>
       </div>
       <Separator className="mt-4" />
       <section className="container mx-auto p-4">
-        {jobPostings.length > 0 ? (
+        {result.length > 0 ? (
           <div className="mt-2 space-y-8">
-            {jobPostings.map((jobPosting) => {
+            {result.map(({ job_posting }) => {
               return (
-                <Link key={jobPosting.id} href={`/posts/${jobPosting.id}`}>
-                  <JobListCard jobPosting={jobPosting} />
+                <Link key={job_posting.id} href={`/posts/${job_posting.id}`}>
+                  <JobListCard jobPosting={job_posting} />
                 </Link>
               );
             })}

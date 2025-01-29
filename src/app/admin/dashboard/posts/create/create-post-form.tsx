@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  JOB_TYPES,
+  EMPLOYMENT_TYPES,
   languages,
   paymentTypes,
   PRICE_PER_MONTH,
@@ -131,7 +131,7 @@ export function CreatePostForm() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {JOB_TYPES.map((jobType) => (
+                          {EMPLOYMENT_TYPES.map((jobType) => (
                             <SelectItem
                               key={jobType.value}
                               value={jobType.value}>

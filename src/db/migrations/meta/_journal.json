@@ -5,29 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1737573954029,
-      "tag": "0000_fine_spencer_smythe",
+      "when": 1738132942056,
+      "tag": "0000_fair_thunderbolt",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1737578630084,
-      "tag": "0001_smart_killraven",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1737657626380,
-      "tag": "0002_chunky_big_bertha",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1737684718940,
-      "tag": "0003_left_steel_serpent",
+      "when": 1738140465942,
+      "tag": "0001_perpetual_betty_brant",
       "breakpoints": true
     }
   ]
