@@ -7,12 +7,18 @@ import { jobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import type { JobPosting } from "@/app/lib/types";
 import { revalidatePath } from "next/cache";
+import type {
+  EmploymentType,
+  Language,
+  PaymentType,
+  Province,
+} from "@/app/lib/constants";
 
 export type JobPostForm = {
   email: string;
-  jobTitle: string;
-  organizationName: string;
-  region: string;
+  title: string;
+  orgName: string;
+  province: string;
   city: string;
   address: string | null;
   startDate: string;
@@ -24,35 +30,14 @@ export type JobPostForm = {
   maxPayValue: string | null;
   description: string;
   language: string;
-  postAsylum: boolean;
-  postDisabled: boolean;
-  postIndigenous: boolean;
-  postNewcomers: boolean;
-  postYouth: boolean;
 };
 
 export async function createJobPost(
   formData: JobPostForm,
   userId: string,
   postTime: number
-): Promise<[string, number, string | null]> {
+): Promise<[string, number, number | null]> {
   try {
-    let numBoards = 0;
-
-    const boards = [
-      formData.postAsylum,
-      formData.postDisabled,
-      formData.postIndigenous,
-      formData.postNewcomers,
-      formData.postYouth,
-    ];
-
-    for (const board of boards) {
-      if (board) {
-        numBoards += 1;
-      }
-    }
-
     const expireryDate = new Date();
 
     expireryDate.setMonth(new Date().getMonth() + postTime);
@@ -60,8 +45,15 @@ export async function createJobPost(
     const postData = {
       ...formData,
       userId: userId,
-      address: formData.address === "" ? null : formData.address,
-      startDate: formData.startDate,
+      language: formData.language as Language,
+      province: formData.province as Province,
+      employmentType: formData.employmentType as EmploymentType,
+      paymentType: formData.paymentType as PaymentType,
+      minPayValue: Math.ceil(Number(formData.minPayValue)),
+      maxPayValue:
+        formData.maxPayValue === ""
+          ? null
+          : Math.ceil(Number(formData.maxPayValue)),
       vacancies:
         formData.vacancies === ""
           ? null
@@ -70,23 +62,18 @@ export async function createJobPost(
         formData.workHours === ""
           ? null
           : Math.ceil(Number(formData.workHours)),
-      minPayValue: Math.ceil(Number(formData.minPayValue)),
-      maxPayValue:
-        formData.maxPayValue === ""
-          ? null
-          : Math.ceil(Number(formData.maxPayValue)),
-      language: formData.language === "" ? null : formData.language,
-      expiresAt: expireryDate,
+      hidden: true,
       paymentConfirmed: false,
+      expiresAt: expireryDate,
     };
 
     const result = await db
-      .insert(jobPostings)
+      .insert(jobPosting)
       .values(postData)
       .returning()
       .then((res) => res[0]);
 
-    return ["created", numBoards, result.id];
+    return ["created", 0, result.id];
   } catch (error) {
     console.error(error);
     return ["error", 0, null];
@@ -95,7 +82,7 @@ export async function createJobPost(
 
 export async function updateJobPost(
   formData: JobPostForm,
-  postId: string,
+  postId: number,
   userId: string
 ): Promise<string> {
   try {
@@ -109,8 +96,15 @@ export async function updateJobPost(
     } else {
       const postData = {
         ...formData,
-        address: formData.address === "" ? null : formData.address,
-        startDate: formData.startDate,
+        language: formData.language as Language,
+        province: formData.province as Province,
+        employmentType: formData.employmentType as EmploymentType,
+        paymentType: formData.paymentType as PaymentType,
+        minPayValue: Math.ceil(Number(formData.minPayValue)),
+        maxPayValue:
+          formData.maxPayValue === ""
+            ? null
+            : Math.ceil(Number(formData.maxPayValue)),
         vacancies:
           formData.vacancies === ""
             ? null
@@ -119,18 +113,12 @@ export async function updateJobPost(
           formData.workHours === ""
             ? null
             : Math.ceil(Number(formData.workHours)),
-        minPayValue: Math.ceil(Number(formData.minPayValue)),
-        maxPayValue:
-          formData.maxPayValue === ""
-            ? null
-            : Math.ceil(Number(formData.maxPayValue)),
-        language: formData.language === "" ? null : formData.language,
       };
 
       await db
-        .update(jobPostings)
+        .update(jobPosting)
         .set(postData)
-        .where(and(eq(jobPostings.id, postId), eq(jobPostings.userId, userId)));
+        .where(and(eq(jobPosting.id, postId), eq(jobPosting.userId, userId)));
 
       return "updated";
     }
@@ -141,14 +129,14 @@ export async function updateJobPost(
 }
 
 export async function getJobPost(
-  postId: string,
+  postId: number,
   userId: string
 ): Promise<[boolean, JobPosting | null]> {
   try {
     const result = await db
       .select()
-      .from(jobPostings)
-      .where(and(eq(jobPostings.id, postId), eq(jobPostings.userId, userId)))
+      .from(jobPosting)
+      .where(and(eq(jobPosting.id, postId), eq(jobPosting.userId, userId)))
       .then((res) => res[0]);
 
     if (result) {
