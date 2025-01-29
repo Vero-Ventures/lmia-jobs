@@ -12,31 +12,36 @@ function Footer() {
         </div>
         <div className="grid justify-center gap-1 text-center">
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
-          <Link
-            href="https://accessibleopportunities.ca/disability-job-board"
+          <a
+            target="_blank"
+            href="https://accessibleopportunities.ca"
             className="ml-1 pb-1.5 text-base">
             Accessible Opportunities
-          </Link>
-          <Link
-            href="https://asylumopportunities.ca/asylum-job-board"
+          </a>
+          <a
+            target="_blank"
+            href="https://asylumopportunities.ca"
             className="ml-1 pb-1.5 text-base">
             Asylum Opportunities
-          </Link>
-          <Link
-            href="https://immigrantopportunities.ca/newcomers-job-board"
+          </a>
+          <a
+            target="_blank"
+            href="https://immigrantopportunities.ca"
             className="ml-1 pb-1.5 text-base">
             Immigrant Opportunities
-          </Link>
-          <Link
-            href="https://indigenousopportunities.ca/indigenous-job-board"
+          </a>
+          <a
+            target="_blank"
+            href="https://indigenousopportunities.ca"
             className="ml-1 pb-1.5 text-base">
             Indigenous Opportunities
-          </Link>
-          <Link
-            href="https://youthopportunities.ca/youth-job-board"
+          </a>
+          <a
+            target="_blank"
+            href="https://youthopportunities.ca"
             className="ml-1 text-base">
             Youth Opportunities
-          </Link>
+          </a>
         </div>
         <div className="grid content-start justify-center gap-y-4 text-center text-base">
           <h3 className="text-xl font-semibold">Legal</h3>

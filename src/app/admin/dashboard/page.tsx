@@ -6,8 +6,8 @@ import Link from "next/link";
 import { selectUserJobPostings } from "@/db/queries/jobPostings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
+import P from "@/components/paragraph";
 
 export default async function Page({
   searchParams,
@@ -54,10 +54,9 @@ export default async function Page({
           </Form>
         </div>
       </div>
-      <Separator className="mt-4" />
-      <section className="container mx-auto p-4">
+      <section className="container mx-auto mt-8 p-4">
         {jobPostings.length > 0 ? (
-          <div className="mt-2 space-y-8">
+          <div className="space-y-8">
             {jobPostings.map((jobPosting) => {
               return (
                 <Link
@@ -69,7 +68,7 @@ export default async function Page({
             })}
           </div>
         ) : (
-          <p className="mt-10 text-center">No jobs matched the filter.</p>
+          <P className="text-center">No jobs matched the filter.</P>
         )}
       </section>
     </main>

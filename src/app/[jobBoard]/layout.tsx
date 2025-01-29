@@ -34,7 +34,9 @@ export default async function Layout({
     <div className={jobBoard}>
       <header className="p-4">
         <Link href={`/`}>
-          <h1 className="text-xl font-bold text-primary">{title}</h1>
+          <span className="text-xl font-bold tracking-tighter text-primary">
+            {title}
+          </span>
         </Link>
       </header>
       {children}

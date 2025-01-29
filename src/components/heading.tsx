@@ -6,6 +6,7 @@ const headingVariants = cva(null, {
     variant: {
       h1: "text-3xl font-bold tracking-tighter",
       h2: "text-xl font-semibold",
+      h3: "text-lg font-semibold",
     },
   },
   defaultVariants: {
