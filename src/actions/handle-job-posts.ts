@@ -21,7 +21,7 @@ export type JobPostForm = {
   province: string;
   city: string;
   address: string | null;
-  startDate: string;
+  startDate: Date;
   vacancies: string | null;
   employmentType: string;
   workHours: string | null;

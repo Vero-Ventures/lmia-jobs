@@ -48,7 +48,7 @@ export default function Page({
     province: "",
     city: "",
     address: "",
-    startDate: new Date().toISOString().split("T")[0],
+    startDate: new Date(),
     vacancies: "",
     employmentType: "",
     workHours: "",
@@ -118,7 +118,9 @@ export default function Page({
             province: jobPosting.province,
             city: jobPosting.city,
             address: jobPosting.address ? jobPosting.address! : "",
-            startDate: jobPosting.startDate ? jobPosting.startDate! : "",
+            startDate: jobPosting.startDate
+              ? jobPosting.startDate!
+              : new Date(),
             vacancies: jobPosting.vacancies
               ? String(jobPosting.vacancies!)
               : "",
@@ -329,7 +331,7 @@ export default function Page({
                 className="mx-auto w-max border-2 border-gray-500 text-center mb:text-lg mb:font-semibold sm:text-xl md:min-w-48 md:text-xl"
                 type="date"
                 name="startDate"
-                value={formValues.startDate}
+                value={String(formValues.startDate)}
                 onChange={handleValueChange}
               />
             </div>
