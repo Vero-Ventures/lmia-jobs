@@ -5,19 +5,15 @@ import {
 } from "@/actions/scraper/site-scrapers/job-bank/get-details";
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
-// import type { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
 
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
 ): Promise<{
-  postIds: string[];
-  postEmails: { postId: string; email: string }[];
-  postDetails: JobPostData[];
+  postEmails: Record<string, string[]>;
+  postDetails: JobPostData;
 }> {
   let pageNum = 1;
   let scrape = true;
-
-  // const dataHandler = new DataHandler();
 
   const newPosts: string[] = [];
 
@@ -33,16 +29,12 @@ export async function scrapeGovJobBank(
     }
   }
 
-  const { postEmails, badPostIds, postDetails } = await visitPages(
+  const { postEmails, postDetails } = await visitPages(
     browserHandler,
     newPosts
   );
 
-  const postIds = newPosts!.filter(
-    (postId: string) => !badPostIds.includes(postId)
-  );
-
-  return { postIds, postEmails, postDetails };
+  return { postEmails, postDetails };
 }
 
 async function scrapePosts(
@@ -84,15 +76,12 @@ async function visitPages(
   browserHandler: BrowserHandler,
   postIds: string[]
 ): Promise<{
-  postEmails: { postId: string; email: string }[];
-  postDetails: JobPostData[];
-  badPostIds: string[];
+  postEmails: Record<string, string[]>;
+  postDetails: JobPostData;
 }> {
   try {
-    const postEmails: { postId: string; email: string }[] = [];
-    const postDetails: JobPostData[] = [];
-    const badPostIds: string[] = [];
-
+    const postEmails: Record<string, string[]> = {};
+    const postDetails: JobPostData = {};
     for (const post of postIds) {
       await browserHandler.visitPage(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -102,25 +91,29 @@ async function visitPages(
 
       if (!email) {
         console.error("Post With ID: " + post + " Has Invalid Email");
-        badPostIds.push(post);
         continue;
-      } else {
-        postEmails.push({ postId: post, email });
       }
 
       const details = await getJobDetails(browserHandler, post, email);
 
       if (!details) {
         console.error("Post With ID: " + post + " Has Invalid Details");
-        badPostIds.push(post);
       } else {
-        postDetails.push(details);
+        if (postEmails.hasOwnProperty(email)) {
+          postEmails[email].push(post);
+        } else {
+          postEmails[email] = [post];
+        }
+
+        if (!postDetails.hasOwnProperty(post)) {
+          postEmails[email] = [post];
+        }
       }
     }
 
-    return { postEmails, postDetails, badPostIds };
+    return { postEmails, postDetails };
   } catch (error) {
-    console.error("Error getting gettig post page emails: " + error);
-    return { postEmails: [], badPostIds: [], postDetails: [] };
+    console.error("Error getting getting Email or Details: " + error);
+    return { postEmails: {}, postDetails: {} };
   }
 }

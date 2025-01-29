@@ -3,15 +3,11 @@ import type { Browser, BrowserContext, Page } from "playwright-core";
 import chromium from "@sparticuz/chromium";
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
+import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
 import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank/handler";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
-
-  let result = {
-    postIds: ["error"],
-    postEmails: [{ email: "error", postId: "error" }],
-  };
   try {
     const [newBrowser, _context, page] = await createChromiunm();
 
@@ -19,14 +15,13 @@ export const runScraper = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    result = await runSiteScrapers(pageHandler);
+    await runSiteScrapers(pageHandler);
   } catch (error) {
     console.error("Create Scraper Error: " + error);
   } finally {
     if (browser) {
       browser.close();
     }
-    return result;
   }
 };
 
@@ -63,9 +58,15 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
   }
 }
 
-async function runSiteScrapers(handler: BrowserHandler): Promise<{
-  postIds: string[];
-  postEmails: { email: string; postId: string }[];
-}> {
-  return await scrapeGovJobBank(handler);
+async function runSiteScrapers(handler: BrowserHandler) {
+  const emailsAndPosts = await scrapeGovJobBank(handler);
+
+  const dataHandler = new DataHandler(
+    emailsAndPosts.postEmails,
+    emailsAndPosts.postDetails
+  );
+
+  dataHandler.createUsers()
+
+  dataHandler.createPosts()
 }

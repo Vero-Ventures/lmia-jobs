@@ -48,7 +48,6 @@ export async function getJobDetails(
     console.log(description);
 
     const data = {
-      postId,
       email: postEmail,
       title: headerInfo.title,
       orgName: headerInfo.orgName,
@@ -76,7 +75,7 @@ export async function getJobDetails(
       language: otherDetails.language,
     };
 
-    return data;
+    return { postId: data };
   } catch (error) {
     console.error("Error on Page : " + postId + ",\n" + error);
     return null;
