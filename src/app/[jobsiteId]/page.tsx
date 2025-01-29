@@ -14,23 +14,22 @@ export default async function Page({
 }: {
   params: Promise<{ jobsiteId: string }>;
   searchParams: Promise<{
-    jobTitle?: string;
-    jobType?: string;
-    location?: string;
-    jobPostingId?: string;
+    title?: string;
+    employmentType?: string;
+    province?: string;
   }>;
 }) {
   const { jobsiteId } = await params;
   const search = await searchParams;
-  const jobTitle = search.jobTitle ?? "";
-  const location = search.location ?? "All";
-  const jobType = search.jobType ?? "All";
+  const title = search.title ?? "";
+  const province = search.province ?? "All";
+  const employmentType = search.employmentType ?? "All";
 
-  const jobPostings = await selectAllJobPostings({
-    jobBoard: jobsiteId,
-    jobTitle: jobTitle,
-    location: location,
-    jobType: jobType,
+  const result = await selectAllJobPostings({
+    jobBoardId: +jobsiteId,
+    title,
+    province,
+    employmentType,
   });
 
   return (
@@ -40,15 +39,15 @@ export default async function Page({
           <Input name="jobTitle" placeholder="Search Jobs..." />
           <Input
             type="hidden"
-            value={jobType}
-            name="jobType"
-            disabled={jobType === "ALL" || jobType === undefined}
+            value={employmentType}
+            name="employmentType"
+            disabled={employmentType === "ALL" || employmentType === undefined}
           />
           <Input
             type="hidden"
-            value={location}
-            name="location"
-            disabled={location === "ALL" || location === undefined}
+            value={province}
+            name="province"
+            disabled={province === "ALL" || province === undefined}
           />
           <Button>Search</Button>
         </Form>
@@ -57,18 +56,21 @@ export default async function Page({
           <span>Filters</span>
         </div>
         <div className="flex gap-2 font-semibold">
-          <FilterSelect initalValue={jobType} filterType="jobType" />
-          <FilterSelect initalValue={location} filterType="location" />
+          <FilterSelect
+            initalValue={employmentType}
+            filterType="employmentType"
+          />
+          <FilterSelect initalValue={province} filterType="province" />
         </div>
       </div>
       <Separator className="mt-4" />
       <section className="container mx-auto p-4">
-        {jobPostings.length > 0 ? (
+        {result.length > 0 ? (
           <div className="mt-2 space-y-8">
-            {jobPostings.map((jobPosting) => {
+            {result.map(({ job_posting }) => {
               return (
-                <Link key={jobPosting.id} href={`/posts/${jobPosting.id}`}>
-                  <JobListCard jobPosting={jobPosting} />
+                <Link key={job_posting.id} href={`/posts/${job_posting.id}`}>
+                  <JobListCard jobPosting={job_posting} />
                 </Link>
               );
             })}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { JOB_SITES } from "./app/lib/constants";
 
 export function middleware(req: NextRequest) {
   const hostname = req.headers.get("host") ?? "";
@@ -18,14 +19,11 @@ export function middleware(req: NextRequest) {
   if (isLocal || isPreview) {
     targetPath = `/${process.env.JOB_SITE}${pathname}${search}`;
   } else {
-    const validDomains: Record<string, string> = {
-      "manageopportunities.ca": "admin",
-      "accessibleopportunities.ca": "accessible",
-      "asylumopportunities.ca": "asylum",
-      "indigenousopportunities.ca": "indigenous",
-      "immigrantopportunities.ca": "newcomers",
-      "youthopportunities.ca": "youth",
-    };
+    const validDomains: Record<string, number> = {};
+
+    JOB_SITES.forEach((site, i) => {
+      validDomains[site.domain] = i;
+    });
 
     targetPath = `${validDomains[hostname]}${pathname}${search}`;
   }

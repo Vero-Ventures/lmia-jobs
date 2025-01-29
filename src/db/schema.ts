@@ -125,3 +125,5 @@ export const userMailing = pgTable("user_mailing", {
   optedOut: boolean("opted_out").notNull().default(false),
   ignore: boolean("ignore").notNull().default(false),
 });
+
+export type JobPosting = typeof jobPosting.$inferSelect;

@@ -1,27 +1,27 @@
 export const JOB_SITES = [
   {
-    id: "accessible",
-    title: "Accessible Opportunities Job Board",
-  },
-  {
-    id: "asylum",
-    title: "Asylum Opportunities Job Board",
-  },
-  {
-    id: "indigenous",
-    title: "Indigenous Opportunities Job Board",
-  },
-  {
-    id: "newcomers",
-    title: "Newcomers Opportunities Job Board",
-  },
-  {
-    id: "youth",
-    title: "Youth Opportunities Job Board",
-  },
-  {
-    id: "admin",
     title: "Manage Opportunities",
+    domain: "manageopportunities.ca",
+  },
+  {
+    title: "Accessible Opportunities",
+    domain: "accessibleopportunities.ca",
+  },
+  {
+    title: "Asylum Opportunities",
+    domain: "asylumopportunities.ca",
+  },
+  {
+    title: "Indigenous Opportunities",
+    domain: "indigenousopportunities.ca",
+  },
+  {
+    title: "Newcomers Opportunities",
+    domain: "immigrantopportunities.ca",
+  },
+  {
+    title: "Youth Opportunities",
+    domain: "youthopportunities.ca",
   },
 ];
 

@@ -6,8 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { JobPosting } from "@/app/lib/types";
 import { Badge } from "@/components/ui/badge";
+import type { JobPosting } from "@/db/schema";
 
 export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
   const currentDate = new Date();
@@ -17,9 +17,9 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
         <div className="flex flex-col justify-between gap-4 sm:flex-row">
           <div className="space-y-2">
             <CardTitle className={`titleCase overflow-clip text-xl font-bold`}>
-              {jobPosting.jobTitle}
+              {jobPosting.title}
             </CardTitle>
-            <CardDescription>{jobPosting.organizationName}</CardDescription>
+            <CardDescription>{jobPosting.orgName}</CardDescription>
             <div>
               {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
               {currentDate > jobPosting.expiresAt && (
@@ -29,7 +29,7 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
           </div>
           <div className="space-x-4 text-sm text-gray-500">
             <Badge variant="outline">
-              {jobPosting.city}, {jobPosting.region}
+              {jobPosting.city}, {jobPosting.province}
             </Badge>
           </div>
         </div>
