@@ -9,17 +9,17 @@ import type { JobPostData } from "@/actions/scraper/helpers/types";
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
 ): Promise<{
-  postEmails: Record<string, string[]>;
-  postDetails: JobPostData;
+  postEmails: Record<string, Set<string>>;
+  postDetails: Record<string, JobPostData>;
 }> {
   let pageNum = 1;
   let scrape = true;
 
-  const newPosts: string[] = [];
+  const newPosts = new Set<string>();
 
   while (scrape) {
     const newPostIds = await scrapePosts(browserHandler, pageNum);
-    newPosts.push(...newPostIds);
+    newPostIds.forEach((value) => newPosts.add(value));
 
     // Testing: Limit Pages To 1
     if ((pageNum = 1)) {
@@ -31,7 +31,7 @@ export async function scrapeGovJobBank(
 
   const { postEmails, postDetails } = await visitPages(
     browserHandler,
-    newPosts
+    Array.from(newPosts)
   );
 
   return { postEmails, postDetails };
@@ -43,7 +43,6 @@ async function scrapePosts(
 ): Promise<string[]> {
   try {
     const pagePostIds: string[] = [];
-
     await browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
     const posts = await browserHandler.waitAndGetElement(
@@ -76,12 +75,12 @@ async function visitPages(
   browserHandler: BrowserHandler,
   postIds: string[]
 ): Promise<{
-  postEmails: Record<string, string[]>;
-  postDetails: JobPostData;
+  postEmails: Record<string, Set<string>>;
+  postDetails: Record<string, JobPostData>;
 }> {
   try {
-    const postEmails: Record<string, string[]> = {};
-    const postDetails: JobPostData = {};
+    const postEmails: Record<string, Set<string>> = {};
+    const postDetails: Record<string, JobPostData> = {};
     for (const post of postIds) {
       await browserHandler.visitPage(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -100,13 +99,13 @@ async function visitPages(
         console.error("Post With ID: " + post + " Has Invalid Details");
       } else {
         if (postEmails.hasOwnProperty(email)) {
-          postEmails[email].push(post);
+          postEmails[email].add(post);
         } else {
-          postEmails[email] = [post];
+          postEmails[email] = new Set<string>(post);
         }
 
         if (!postDetails.hasOwnProperty(post)) {
-          postEmails[email] = [post];
+          postDetails[post] = details;
         }
       }
     }

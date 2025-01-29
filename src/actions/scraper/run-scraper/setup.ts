@@ -67,12 +67,6 @@ async function runSiteScrapers(handler: BrowserHandler) {
   );
 
   try {
-    await dataHandler.createUsers();
-  } catch (error) {
-    console.error("Error Creating Users: " + error);
-  }
-
-  try {
     await dataHandler.createPosts();
   } catch (error) {
     console.error("Error Creating Posts: " + error);

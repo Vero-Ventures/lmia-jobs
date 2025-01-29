@@ -75,7 +75,7 @@ export async function getJobDetails(
       language: otherDetails.language,
     };
 
-    return { postId: data };
+    return data;
   } catch (error) {
     console.error("Error on Page : " + postId + ",\n" + error);
     return null;

@@ -6,12 +6,13 @@ import type { JobPostData } from "@/actions/scraper/helpers/types";
 
 export class DataHandler {
   constructor(
-    public users: Record<string, string[]>,
-    public posts: JobPostData
+    public users: Record<string, Set<string>>,
+    public posts: Record<string, JobPostData>
   ) {}
 
-  async createUsers(): Promise<void> {
+  async handleCreateUser(_userEmail: string): Promise<void> {
     try {
+    } catch (error) {
       const emails = Object.keys(this.users);
 
       const userEmails = await db.select({ email: user.email }).from(user);
@@ -29,14 +30,6 @@ export class DataHandler {
           );
         }
       }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async handleCreateUser(_userEmail: string): Promise<void> {
-    try {
-    } catch (error) {
       throw error;
     }
   }
