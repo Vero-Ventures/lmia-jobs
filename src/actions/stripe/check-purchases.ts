@@ -28,14 +28,14 @@ export async function checkUserPurchases(userId: string): Promise<boolean> {
         customer: stripeUser.stripeId,
       });
 
-      const validPurchases: string[] = [];
+      const validPurchases: number[] = [];
 
       for (const purchase of customerPurchases.data) {
         const paymentIntent = await stripe.paymentIntents.retrieve(
           purchase.payment_intent as string
         );
 
-        validPurchases.push(paymentIntent.metadata.postId);
+        validPurchases.push(Number(paymentIntent.metadata.postId));
       }
 
       await db
