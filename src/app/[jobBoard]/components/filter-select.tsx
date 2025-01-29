@@ -43,7 +43,9 @@ export default function FilterSelect({
         router.push(pathname + "?" + createQueryString(paramString, value))
       }>
       <SelectTrigger>
-        <SelectValue placeholder={`Choose ${filterType}`} />
+        <SelectValue
+          placeholder={`Choose ${filterType === "employmentType" ? "employment type" : "province"}`}
+        />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="All">All</SelectItem>

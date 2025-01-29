@@ -24,6 +24,7 @@ import { useToast } from "@/components/ui/toasts/use-toast";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Heading from "@/components/heading";
 
 // Define the 'contact us' form via Zod schema.
 const formSchema = z.object({
@@ -98,7 +99,9 @@ export default function Page() {
 
   return (
     <main className="mx-auto min-h-dvh max-w-xl py-20">
-      <h1 className="mb-6 text-center text-4xl font-bold">Contact Us</h1>
+      <Heading variant="h1" className="mb-4 text-center">
+        Contact Us
+      </Heading>
       <Form {...form}>
         <form
           id="ContactForm"

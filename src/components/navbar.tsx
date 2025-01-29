@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { BriefcaseIcon } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "./ui/button";
@@ -22,8 +21,9 @@ export default async function Navbar() {
       <Link
         className="flex items-center justify-center"
         href={data ? "/dashboard" : "/"}>
-        <BriefcaseIcon className="h-6 w-6" />
-        <span className="ml-2 font-semibold">Manage Opportunities</span>
+        <span className="text-xl font-bold tracking-tighter">
+          Manage Opportunities
+        </span>
       </Link>
       <nav className="flex items-center justify-center gap-4 py-2 sm:ml-auto sm:mt-0 sm:gap-6">
         {links.map((link) => (
