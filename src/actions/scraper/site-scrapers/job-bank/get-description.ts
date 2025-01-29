@@ -246,9 +246,9 @@ async function getBenefits(
   } catch {}
 
   return {
-    health: healthBenifits,
-    financial: financialBenefits,
-    other: otherBenefits,
+    health: healthBenifits.length > 0 ? healthBenifits : null,
+    financial: financialBenefits.length > 0 ? financialBenefits : null,
+    other: otherBenefits.length > 0 ? otherBenefits : null,
   };
 }
 
@@ -432,10 +432,7 @@ function createFormattedDescription(
   additionalInfo: AdditionalInfo
 ): string {
   try {
-    let description = `
-    Education: ${overviewValues.education}
-    Experience: ${overviewValues.experience}
-    Job Site: ${overviewValues.onSite}
+    let description = `Education: ${overviewValues.education} \nExperience: ${overviewValues.experience}\n Job Site: ${overviewValues.onSite}
     `;
 
     if (enviromentAndSetting.enviroment) {
