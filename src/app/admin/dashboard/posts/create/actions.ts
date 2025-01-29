@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { jobPostings } from "@/db/schema";
+import { jobPosting } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import type { CreatePost, EditPost } from "@/app/lib/job-postings/schema";

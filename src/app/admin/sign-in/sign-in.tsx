@@ -10,90 +10,60 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { emailOtp, signIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 export default function SignIn() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [state, setState] = useState<{ email: string | null }>({ email: null });
+  const [code, setCode] = useState("");
 
-  return (
+  return state.email ? (
     <Card className="mx-auto max-w-md">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
         <CardDescription className="text-xs md:text-sm">
-          Enter your email below to login to your account
+          Login using the code sent to your email address.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="user@example.com"
-              required
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              value={email}
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                href="/sign-in/forgot-password"
-                className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
-            </div>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="password"
-                autoComplete="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2 top-2 h-6 w-6">
-                {showPassword ? <EyeOff /> : <Eye />}
-              </Button>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="remember"
-              onClick={() => {
-                setRememberMe(!rememberMe);
-              }}
-            />
-            <Label htmlFor="remember">Remember me</Label>
-          </div>
-
+      <CardContent className="space-y-4">
+        <div className="flex justify-center">
+          <InputOTP
+            name="code"
+            value={code}
+            onChange={(value) => setCode(value)}
+            maxLength={6}>
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+        <div className="flex justify-center">
           <Button
-            type="submit"
-            className="w-full"
+            variant="link"
+            type="button"
             disabled={loading}
             onClick={async () => {
-              await signIn.email(
-                { email, password, rememberMe },
+              await emailOtp.sendVerificationOtp(
+                {
+                  email,
+                  type: "sign-in",
+                },
                 {
                   onResponse: () => {
                     setLoading(false);
@@ -105,19 +75,99 @@ export default function SignIn() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    router.replace("/dashboard");
+                    setState({ email });
                   },
                 }
               );
             }}>
-            {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+            {loading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              "Resend verification code"
+            )}
           </Button>
-          <Link
-            href="/sign-up"
-            className="mx-auto inline-block text-sm underline">
-            Create an account
-          </Link>
         </div>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={loading}
+          onClick={async () => {
+            await signIn.emailOtp(
+              {
+                email,
+                otp: code,
+              },
+              {
+                onResponse: () => {
+                  setLoading(false);
+                },
+                onRequest: () => {
+                  setLoading(true);
+                },
+                onError: (ctx) => {
+                  toast.error(ctx.error.message);
+                },
+                onSuccess: async () => {
+                  router.replace("/dashboard");
+                },
+              }
+            );
+          }}>
+          {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+        </Button>
+      </CardContent>
+    </Card>
+  ) : (
+    <Card className="mx-auto max-w-md">
+      <CardHeader>
+        <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
+        <CardDescription className="text-xs md:text-sm">
+          Enter your email below to login to your account
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="user@example.com"
+            required
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            value={email}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={loading}
+          onClick={async () => {
+            await emailOtp.sendVerificationOtp(
+              {
+                email,
+                type: "sign-in",
+              },
+              {
+                onResponse: () => {
+                  setLoading(false);
+                },
+                onRequest: () => {
+                  setLoading(true);
+                },
+                onError: (ctx) => {
+                  toast.error(ctx.error.message);
+                },
+                onSuccess: async () => {
+                  setState({ email });
+                },
+              }
+            );
+          }}>
+          {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+        </Button>
       </CardContent>
     </Card>
   );
