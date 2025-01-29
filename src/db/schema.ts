@@ -17,18 +17,6 @@ export const user = pgTable("user", {
   updatedAt: timestamp("updated_at").notNull(),
 });
 
-export const userMailing = pgTable("user_mailing", {
-  id: serial("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  tempPassword: text("temp_password"),
-  newlyCreated: boolean("newly_created").notNull().default(true),
-  activated: boolean("activated").notNull().default(false),
-  optedOut: boolean("opted_out").notNull().default(false),
-  ignore: boolean("ignore").notNull().default(false),
-});
-
 export const account = pgTable("account", {
   id: text("id").primaryKey(),
   userId: text("user_id")
@@ -118,10 +106,22 @@ export const jobBoardPosting = pgTable("job_board_posting", {
 });
 
 export const stripeCustomer = pgTable("stripe_customer", {
-  id: serial().primaryKey().notNull(),
+  id: serial().primaryKey(),
   userId: text()
     .unique()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   stripeId: text().notNull().unique(),
+});
+
+export const userMailing = pgTable("user_mailing", {
+  id: serial().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  tempPassword: text("temp_password"),
+  newlyCreated: boolean("newly_created").notNull().default(true),
+  activated: boolean("activated").notNull().default(false),
+  optedOut: boolean("opted_out").notNull().default(false),
+  ignore: boolean("ignore").notNull().default(false),
 });
