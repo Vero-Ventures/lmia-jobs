@@ -20,14 +20,14 @@ import {
 } from "lucide-react";
 
 interface PageProps {
-  params: Promise<{ id: number }>;
+  params: Promise<{ id: string }>;
 }
 
 export default async function SinglePostPage({ params }: PageProps) {
   const currentDate = new Date();
   const { id } = await params;
 
-  const jobPosting = await selectSingleJobPosting(id);
+  const jobPosting = await selectSingleJobPosting(Number(id));
   return (
     <div className="container mx-auto py-8">
       <Card className="h-fit overflow-y-auto">
