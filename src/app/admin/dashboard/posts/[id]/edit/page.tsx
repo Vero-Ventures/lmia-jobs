@@ -11,7 +11,7 @@ import type {
 import { EditPostForm } from "./edit-post-form";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }
 
 export default async function EditPost({ params }: PageProps) {
@@ -31,14 +31,14 @@ export default async function EditPost({ params }: PageProps) {
     <div>
       <EditPostForm
         initialValues={{
-          id: jobPosting.id,
+          id: String(jobPosting.id),
           email: jobPosting.email,
-          jobTitle: jobPosting.jobTitle,
-          organizationName: jobPosting.organizationName,
-          province: jobPosting.region as Province,
+          jobTitle: jobPosting.title,
+          organizationName: jobPosting.orgName,
+          province: jobPosting.province as Province,
           city: jobPosting.city,
           address: jobPosting.address || "",
-          startDate: jobPosting.startDate,
+          startDate: jobPosting.startDate ? jobPosting.startDate : "",
           vacancies: jobPosting.vacancies || 0,
           employmentType: jobPosting.employmentType as EmploymentType,
           workHours: jobPosting.workHours || 0,
