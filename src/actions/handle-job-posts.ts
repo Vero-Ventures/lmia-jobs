@@ -49,6 +49,7 @@ export async function createJobPost(
       province: formData.province as Province,
       employmentType: formData.employmentType as EmploymentType,
       paymentType: formData.paymentType as PaymentType,
+      startDate: new Date(formData.startDate),
       minPayValue: Math.ceil(Number(formData.minPayValue)),
       maxPayValue:
         formData.maxPayValue === ""
@@ -100,6 +101,7 @@ export async function updateJobPost(
         province: formData.province as Province,
         employmentType: formData.employmentType as EmploymentType,
         paymentType: formData.paymentType as PaymentType,
+        startDate: new Date(formData.startDate),
         minPayValue: Math.ceil(Number(formData.minPayValue)),
         maxPayValue:
           formData.maxPayValue === ""

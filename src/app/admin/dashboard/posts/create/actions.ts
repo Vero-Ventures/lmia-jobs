@@ -30,10 +30,11 @@ export async function createJobPost(formData: CreatePost) {
       ...rest,
       title: formData.jobTitle,
       orgName: formData.organizationName,
-      language: formData.language as Language,
+      startDate: new Date(formData.startDate),
       province: formData.province as Province,
       employmentType: formData.employmentType as EmploymentType,
       paymentType: formData.paymentType as PaymentType,
+      language: formData.language as Language,
       expiresAt: expiryDate,
       paymentConfirmed: false,
       hidden: true,
@@ -65,10 +66,11 @@ export async function updateJobPost(formData: EditPost, postId: string) {
       id: Number(formData.id),
       title: formData.jobTitle,
       orgName: formData.organizationName,
-      language: formData.language as Language,
+      startDate: new Date(formData.startDate),
       province: formData.province as Province,
       employmentType: formData.employmentType as EmploymentType,
       paymentType: formData.paymentType as PaymentType,
+      language: formData.language as Language,
     };
 
     await db
