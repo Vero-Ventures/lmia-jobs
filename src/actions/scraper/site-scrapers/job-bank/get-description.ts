@@ -432,7 +432,7 @@ function createFormattedDescription(
   additionalInfo: AdditionalInfo
 ): string {
   try {
-    let description = `Education: ${overviewValues.education} \nExperience: ${overviewValues.experience}\n Job Site: ${overviewValues.onSite}
+    let description = `Education: ${overviewValues.education} \nExperience: ${overviewValues.experience} \n\nJob Site: ${overviewValues.onSite}
     `;
 
     if (enviromentAndSetting.enviroment) {
@@ -444,7 +444,7 @@ function createFormattedDescription(
     }
 
     if (credentials.credentials) {
-      description += `\nRequired Credentials: `;
+      description += `\n\nRequired Credentials: `;
 
       for (const credential of credentials.credentials) {
         description += `\n -${credential}`;
@@ -452,7 +452,7 @@ function createFormattedDescription(
     }
 
     if (skillsAndAttributes.skills) {
-      description += `\nSpecialized Skills: `;
+      description += `\n\nSpecialized Skills: `;
 
       for (const skill of skillsAndAttributes.skills) {
         description += `\n -${skill.skill}`;
@@ -463,7 +463,7 @@ function createFormattedDescription(
     }
 
     if (additionalInfo.conditionsAndCapability) {
-      description += `\nConditions and Psyical Capabilities: `;
+      description += `\n\nConditions and Psyical Capabilities: `;
 
       for (const value of additionalInfo.conditionsAndCapability) {
         description += `\n -${value}`;
@@ -471,18 +471,17 @@ function createFormattedDescription(
     }
 
     if (tasksAndSupervision.tasks) {
-      description += `\nTasks: `;
+      description += `\n\nTasks: `;
       for (const value of tasksAndSupervision.tasks) {
         description += `\n -${value}`;
       }
-    }
-
-    if (tasksAndSupervision.supervision) {
-      description += `\nSupervision: ${tasksAndSupervision.supervision}`;
+      if (tasksAndSupervision.supervision) {
+        description += `\nSupervision: ${tasksAndSupervision.supervision}`;
+      }
     }
 
     if (additionalInfo.personalSuitability) {
-      description += `\nPersonal Suitability: `;
+      description += `\n\nPersonal Suitability: `;
 
       for (const value of additionalInfo.personalSuitability) {
         description += `\n -${value}`;
@@ -494,7 +493,7 @@ function createFormattedDescription(
       benefitsValues.financial ||
       benefitsValues.other
     ) {
-      description += `\nBenefits: `;
+      description += `\n\nBenefits: `;
       if (benefitsValues.health) {
         description += `\n -Health: `;
         for (const attribute of benefitsValues.health) {
@@ -518,7 +517,7 @@ function createFormattedDescription(
     }
 
     if (additionalInfo.other) {
-      description += `\Additional Info: `;
+      description += `\n\nAdditional Info: `;
 
       for (const value of additionalInfo.other) {
         description += `\n -${value.title}`;
