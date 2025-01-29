@@ -26,7 +26,7 @@ export async function scrapeGovJobBank(
     newPosts.push(...newPostIds);
 
     // Testing: Limit Pages To 1
-    if ((pageNum = 1)) {
+    if ((pageNum = 2)) {
       scrape = false;
     } else {
       pageNum += 1;
