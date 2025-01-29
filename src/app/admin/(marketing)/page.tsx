@@ -19,7 +19,7 @@ export default async function Page() {
         Effortlessly Create and Manage Job Postings Across Multiple Job Boards
       </h1>
       <Button asChild className="mt-4 py-8 text-2xl font-bold">
-        <Link href={"/sign-up"}>Get Started For Free</Link>
+        <Link href={"/sign-in"}>Get Started For Free</Link>
       </Button>
     </main>
   );

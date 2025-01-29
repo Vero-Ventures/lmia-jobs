@@ -41,9 +41,6 @@ export default async function Navbar() {
           </>
         ) : (
           <>
-            <Button asChild variant="secondary">
-              <Link href="/sign-up">Sign Up</Link>
-            </Button>
             <Button asChild>
               <Link href="/sign-in">Log In</Link>
             </Button>
