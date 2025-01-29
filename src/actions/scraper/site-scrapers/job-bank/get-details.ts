@@ -45,6 +45,8 @@ export async function getJobDetails(
 
     const description = await getDescription(browserHandler);
 
+    console.log(description)
+
     const data = {
       postId,
       email: postEmail,
