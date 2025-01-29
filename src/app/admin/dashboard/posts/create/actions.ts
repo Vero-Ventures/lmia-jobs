@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { jobPostings } from "@/db/schema";
+import { jobPosting } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import type { CreatePost, EditPost } from "@/app/lib/job-postings/schema";
@@ -43,9 +43,9 @@ export async function createJobPost(formData: CreatePost) {
     };
 
     const jobPostingId = await db
-      .insert(jobPostings)
+      .insert(jobPosting)
       .values(postData)
-      .returning({ id: jobPostings.id })
+      .returning({ id: jobPosting.id })
       .then((res) => res[0]);
 
     return jobPostingId;
@@ -83,10 +83,10 @@ export async function updateJobPost(formData: EditPost, postId: string) {
     };
 
     await db
-      .update(jobPostings)
+      .update(jobPosting)
       .set(postData)
       .where(
-        and(eq(jobPostings.id, postId), eq(jobPostings.userId, session.user.id))
+        and(eq(jobPosting.id, postId), eq(jobPosting.userId, session.user.id))
       );
   } catch (error) {
     console.error(error);
