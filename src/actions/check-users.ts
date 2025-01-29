@@ -19,7 +19,7 @@ export async function checkInactiveUserAges() {
           .set({ ignore: true })
           .where(
             and(
-              eq(userMailing.userId, user.id),
+              eq(userMailing.email, user.email),
               eq(userMailing.activated, false)
             )
           );
