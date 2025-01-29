@@ -2,7 +2,6 @@ import {
   boolean,
   date,
   integer,
-  uuid,
   pgTable,
   serial,
   text,
@@ -119,7 +118,7 @@ export const jobBoardPosting = pgTable("job_board_posting", {
 });
 
 export const stripeCustomer = pgTable("stripe_customer", {
-  id: uuid().primaryKey().defaultRandom().notNull(),
+  id: serial().primaryKey().notNull(),
   userId: text()
     .unique()
     .notNull()
