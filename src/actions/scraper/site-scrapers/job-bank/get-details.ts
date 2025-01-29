@@ -43,7 +43,7 @@ export async function getJobDetails(
 
     const otherDetails = await getOtherJobDetails(browserHandler);
 
-    await getDescription(browserHandler);
+    const description = await getDescription(browserHandler);
 
     const data = {
       postId,
@@ -69,12 +69,12 @@ export async function getJobDetails(
       vacancies:
         otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
       language: otherDetails.language,
-      description: "null",
+      description: description,
     };
 
     return data;
   } catch (error) {
-    console.error("Error: " + error);
+    console.error("Error on Page : " + postId + ",\n" + error);
     return null;
   }
 }
@@ -98,7 +98,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
       jobTitle = jobTitleValue;
     }
   } catch (error) {
-    console.error("Job Title Not Found: " + error);
+    throw "Job Title Not Found: " + error;
   }
 
   try {
@@ -130,6 +130,10 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     }
   }
 
+  if (organizationName === "null") {
+    throw "Organization Name Or Link Not Found";
+  }
+
   try {
     const getPostedDate = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.header.postedDate
@@ -147,7 +151,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
       postedDate = `${year}-${month}-${day}`;
     }
   } catch (error) {
-    console.error("Posted Date Not Found: " + error);
+    throw "Posted Date Not Found: " + error;
   }
 
   return {
@@ -184,7 +188,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
       city = cityValue;
     }
   } catch (error) {
-    console.error("City Not Found: " + error);
+    throw "City Not Found: " + error;
   }
 
   try {
@@ -197,7 +201,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
       region = regionValue;
     }
   } catch (error) {
-    console.error("Region Not Found: " + error);
+    throw "Region Not Found: " + error;
   }
 
   return {
@@ -228,7 +232,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       minPay = minPayValue;
     }
   } catch (error) {
-    console.error("Minimum Pay Not Found: " + error);
+    throw "Minimum Pay Not Found: " + error;
   }
 
   try {
@@ -248,7 +252,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 
     paymentType = paymentTypeValue === "HOUR" ? "Hourly" : "Salary";
   } catch (error) {
-    console.error("Payment Type Not Found: " + error);
+    throw "Payment Type Not Found: " + error;
   }
 
   try {
@@ -263,7 +267,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       workHours = workHoursNum;
     }
   } catch (error) {
-    console.error("Work Hours Not Found: " + error);
+    throw "Work Hours Not Found: " + error;
   }
 
   return {
@@ -299,7 +303,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       }
     }
   } catch (error) {
-    console.error("Employment Type Not Found: " + error);
+    throw "Employment Type Not Found: " + error;
   }
 
   try {
@@ -322,7 +326,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       vacancies = vacanciesNum ? vacanciesNum : "null";
     }
   } catch (error) {
-    console.error("Vacancies Type Not Found: " + error);
+    throw "Vacancies Not Found: " + error;
   }
 
   try {
@@ -336,7 +340,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
       language = languageValue;
     }
   } catch (error) {
-    console.error("Language Type Not Found: " + error);
+    throw "Language Not Found: " + error;
   }
 
   return {

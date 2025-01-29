@@ -4,63 +4,87 @@ import { CONFIG } from "@/actions/scraper/helpers/config";
 export async function getDescription(
   browserHandler: BrowserHandler
 ): Promise<string> {
-  console.log("New Page");
+  try {
+    const overviewValues = await getBaseOverviewValues(browserHandler);
 
-  console.log(JSON.stringify(await getBaseOverviewValues(browserHandler)));
+    const enviromentAndSetting = await getEnviromentAndSetting(browserHandler);
 
-  console.log(JSON.stringify(await getEnviromentAndSetting(browserHandler)));
+    const credentials = await getCredentials(browserHandler);
 
-  console.log(JSON.stringify(await getCredentials(browserHandler)));
+    const benefitsValues = await getBenefits(browserHandler);
 
-  console.log(JSON.stringify(await getBenefits(browserHandler)));
+    const tasksAndSupervision = await getTasksAndSupervision(browserHandler);
 
-  console.log(JSON.stringify(await getTasksAndSupervision(browserHandler)));
+    const skillsAndAttributes = await getSkills(browserHandler);
 
-  console.log(JSON.stringify(await getSkills(browserHandler)));
+    const additionalInfo = await getAdditionalInformation(browserHandler);
 
-  console.log(JSON.stringify(await getAdditionalInformation(browserHandler)));
-
-  const description = "null";
-
-  return description;
+    return createFormattedDescription(
+      overviewValues,
+      enviromentAndSetting,
+      credentials,
+      benefitsValues,
+      tasksAndSupervision,
+      skillsAndAttributes,
+      additionalInfo
+    );
+  } catch (error) {
+    throw error;
+  }
 }
 
-async function getBaseOverviewValues(browserHandler: BrowserHandler): Promise<{
+type OverviewValues = {
   education: string;
   experience: string;
   onSite: string;
-}> {
+};
+
+async function getBaseOverviewValues(
+  browserHandler: BrowserHandler
+): Promise<OverviewValues> {
   let education = "null";
   let experience = "null";
   let onSite = "null";
 
-  const getEducation = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.education
-  );
-  const educationValue = (await getEducation.allInnerTexts()).pop();
-  if (educationValue) {
-    education = educationValue;
+  try {
+    const getEducation = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.education
+    );
+    const educationValue = (await getEducation.allInnerTexts()).pop();
+    if (educationValue) {
+      education = educationValue;
+    }
+  } catch (error) {
+    throw "Error finding Education: " + error;
   }
 
-  const getExperience = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.experience
-  );
-  const experienceValue = (await getExperience.allInnerTexts()).pop();
-  if (experienceValue) {
-    experience = experienceValue;
+  try {
+    const getExperience = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.experience
+    );
+    const experienceValue = (await getExperience.allInnerTexts()).pop();
+    if (experienceValue) {
+      experience = experienceValue;
+    }
+  } catch (error) {
+    throw "Error finding Experience: " + error;
   }
 
-  const getOnSite = await browserHandler.waitAndGetElement(
-    CONFIG.selectors.govJobBank.jobDetails.description.onSite
-  );
-  const filteredToOnSite = getOnSite.filter({
-    has: browserHandler.page.locator(
-      CONFIG.selectors.govJobBank.jobDetails.description.onSiteFilter
-    ),
-  });
-  const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
-  if (onSiteValue) {
-    onSite = onSiteValue;
+  try {
+    const getOnSite = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.govJobBank.jobDetails.description.onSite
+    );
+    const filteredToOnSite = getOnSite.filter({
+      has: browserHandler.page.locator(
+        CONFIG.selectors.govJobBank.jobDetails.description.onSiteFilter
+      ),
+    });
+    const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
+    if (onSiteValue) {
+      onSite = onSiteValue;
+    }
+  } catch (error) {
+    throw "Error finding On Site: " + error;
   }
 
   return {
@@ -70,16 +94,21 @@ async function getBaseOverviewValues(browserHandler: BrowserHandler): Promise<{
   };
 }
 
+type EnviromentAndSetting = {
+  enviroment: string[] | null;
+  setting: string[] | null;
+};
+
 async function getEnviromentAndSetting(
   browserHandler: BrowserHandler
-): Promise<{ enviroment: string[] | null; setting: string[] | null }> {
+): Promise<EnviromentAndSetting> {
   const enviromentListValues: string[] = [];
   const settingListValues: string[] = [];
 
   try {
     const getEnviromentLists = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.description.enviroment,
-      2500
+      1500
     );
     const enviromentInnerText = await getEnviromentLists.allInnerTexts();
 
@@ -97,7 +126,7 @@ async function getEnviromentAndSetting(
   try {
     const getSettingLists = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.description.setting,
-      2500
+      1500
     );
     const settingInnerText = await getSettingLists.allInnerTexts();
 
@@ -119,15 +148,19 @@ async function getEnviromentAndSetting(
   };
 }
 
-async function getCredentials(browserHandler: BrowserHandler): Promise<{
+type Credentials = {
   credentials: string[] | null;
-}> {
+};
+
+async function getCredentials(
+  browserHandler: BrowserHandler
+): Promise<Credentials> {
   const credentialsListValues: string[] = [];
 
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.description.credentials,
-      2500
+      1500
     );
 
     const credentialsInnerHtml = await getCredentialsList.innerHTML();
@@ -156,11 +189,15 @@ async function getCredentials(browserHandler: BrowserHandler): Promise<{
   };
 }
 
-async function getBenefits(browserHandler: BrowserHandler): Promise<{
+type BenefitsValues = {
   health: string[] | null;
   financial: string[] | null;
   other: string[] | null;
-}> {
+};
+
+async function getBenefits(
+  browserHandler: BrowserHandler
+): Promise<BenefitsValues> {
   const healthBenifits: string[] = [];
   const financialBenefits: string[] = [];
   const otherBenefits: string[] = [];
@@ -168,7 +205,7 @@ async function getBenefits(browserHandler: BrowserHandler): Promise<{
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.description.benefits,
-      2500
+      1500
     );
 
     const credentialsInnerHtml = await getCredentialsList.innerHTML();
@@ -215,10 +252,14 @@ async function getBenefits(browserHandler: BrowserHandler): Promise<{
   };
 }
 
-async function getTasksAndSupervision(browserHandler: BrowserHandler): Promise<{
+type TasksAndSupervision = {
   tasks: string[];
   supervision: string | null;
-}> {
+};
+
+async function getTasksAndSupervision(
+  browserHandler: BrowserHandler
+): Promise<TasksAndSupervision> {
   const tasksList: string[] = [];
   let supervision = "null";
 
@@ -253,7 +294,9 @@ async function getTasksAndSupervision(browserHandler: BrowserHandler): Promise<{
         }
       }
     }
-  } catch {}
+  } catch (error) {
+    throw "Error finding Description: " + error;
+  }
 
   return {
     tasks: tasksList,
@@ -261,15 +304,19 @@ async function getTasksAndSupervision(browserHandler: BrowserHandler): Promise<{
   };
 }
 
-async function getSkills(browserHandler: BrowserHandler): Promise<{
+type SkillsAndAttributes = {
   skills: { skill: string; attributes: string[] }[] | null;
-}> {
+};
+
+async function getSkills(
+  browserHandler: BrowserHandler
+): Promise<SkillsAndAttributes> {
   const skillsListValues: { skill: string; attributes: string[] }[] = [];
 
   try {
     const getSkillsList = await browserHandler.waitAndGetElement(
       CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills,
-      2500
+      1500
     );
     const skillsInnerHtml = await getSkillsList.innerHTML();
 
@@ -304,13 +351,15 @@ async function getSkills(browserHandler: BrowserHandler): Promise<{
   };
 }
 
-async function getAdditionalInformation(
-  browserHandler: BrowserHandler
-): Promise<{
+type AdditionalInfo = {
   conditionsAndCapability: string[] | null;
   personalSuitability: string[] | null;
   other: { title: string; attributes: string[] }[] | null;
-}> {
+};
+
+async function getAdditionalInformation(
+  browserHandler: BrowserHandler
+): Promise<AdditionalInfo> {
   const conditionsList: string[] = [];
   const suitabilityList: string[] = [];
   const otherList: { title: string; attributes: string[] }[] = [];
@@ -371,4 +420,119 @@ async function getAdditionalInformation(
     personalSuitability: suitabilityList.length > 0 ? suitabilityList : null,
     other: otherList.length > 0 ? otherList : null,
   };
+}
+
+function createFormattedDescription(
+  overviewValues: OverviewValues,
+  enviromentAndSetting: EnviromentAndSetting,
+  credentials: Credentials,
+  benefitsValues: BenefitsValues,
+  tasksAndSupervision: TasksAndSupervision,
+  skillsAndAttributes: SkillsAndAttributes,
+  additionalInfo: AdditionalInfo
+): string {
+  try {
+    let description = `
+    Education: ${overviewValues.education}
+    Experience: ${overviewValues.experience}
+    Job Site: ${overviewValues.onSite}
+    `;
+
+    if (enviromentAndSetting.enviroment) {
+      description += `\nWork Enviroment: ` + enviromentAndSetting.enviroment;
+    }
+
+    if (enviromentAndSetting.setting) {
+      description += `\nWork Setting: ` + enviromentAndSetting.setting;
+    }
+
+    if (credentials.credentials) {
+      description += `\nRequired Credentials: `;
+
+      for (const credential of credentials.credentials) {
+        description += `\n -${credential}`;
+      }
+    }
+
+    if (skillsAndAttributes.skills) {
+      description += `\nSpecialized Skills: `;
+
+      for (const skill of skillsAndAttributes.skills) {
+        description += `\n -${skill.skill}`;
+        for (const attribute of skill.attributes) {
+          description += `\n  --${attribute}`;
+        }
+      }
+    }
+
+    if (additionalInfo.conditionsAndCapability) {
+      description += `\nConditions and Psyical Capabilities: `;
+
+      for (const value of additionalInfo.conditionsAndCapability) {
+        description += `\n -${value}`;
+      }
+    }
+
+    if (tasksAndSupervision.tasks) {
+      description += `\nTasks: `;
+      for (const value of tasksAndSupervision.tasks) {
+        description += `\n -${value}`;
+      }
+    }
+
+    if (tasksAndSupervision.supervision) {
+      description += `\nSupervision: ${tasksAndSupervision.supervision}`;
+    }
+
+    if (additionalInfo.personalSuitability) {
+      description += `\nPersonal Suitability: `;
+
+      for (const value of additionalInfo.personalSuitability) {
+        description += `\n -${value}`;
+      }
+    }
+
+    if (
+      benefitsValues.health ||
+      benefitsValues.financial ||
+      benefitsValues.other
+    ) {
+      description += `\nBenefits: `;
+      if (benefitsValues.health) {
+        description += `\n -Health: `;
+        for (const attribute of benefitsValues.health) {
+          description += `\n  --${attribute}`;
+        }
+      }
+
+      if (benefitsValues.financial) {
+        description += `\n -Financial: `;
+        for (const attribute of benefitsValues.financial) {
+          description += `\n  --${attribute}`;
+        }
+      }
+
+      if (benefitsValues.other) {
+        description += `\n -Other: `;
+        for (const attribute of benefitsValues.other) {
+          description += `\n  --${attribute}`;
+        }
+      }
+    }
+
+    if (additionalInfo.other) {
+      description += `\Additional Info: `;
+
+      for (const value of additionalInfo.other) {
+        description += `\n -${value.title}`;
+        for (const attribute of value.attributes) {
+          description += `\n  --${attribute}`;
+        }
+      }
+    }
+
+    return description;
+  } catch (error) {
+    throw "Error creating Description: " + error;
+  }
 }
