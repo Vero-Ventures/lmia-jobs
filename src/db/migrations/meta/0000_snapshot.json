@@ -1,5 +1,5 @@
 {
-  "id": "f1ce2d8b-6e2e-49d4-a733-ba445ee5f409",
+  "id": "8637132b-045a-4ced-99e5-a257ab0f1ae3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -105,44 +105,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.job_board": {
-      "name": "job_board",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.job_board_posting": {
       "name": "job_board_posting",
       "schema": "",
@@ -153,11 +115,12 @@
           "primaryKey": true,
           "notNull": true
         },
-        "job_board_id": {
-          "name": "job_board_id",
-          "type": "integer",
+        "job_board": {
+          "name": "job_board",
+          "type": "job_board",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "job_posting_id": {
           "name": "job_posting_id",
@@ -181,15 +144,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "job_board_posting_job_board_id_job_board_id_fk": {
-          "name": "job_board_posting_job_board_id_job_board_id_fk",
-          "tableFrom": "job_board_posting",
-          "tableTo": "job_board",
-          "columnsFrom": ["job_board_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "job_board_posting_job_posting_id_job_posting_id_fk": {
           "name": "job_board_posting_job_posting_id_job_posting_id_fk",
           "tableFrom": "job_board_posting",
@@ -242,7 +196,8 @@
         },
         "province": {
           "name": "province",
-          "type": "text",
+          "type": "province",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -262,7 +217,7 @@
           "name": "start_date",
           "type": "date",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "vacancies": {
           "name": "vacancies",
@@ -272,7 +227,8 @@
         },
         "employment_type": {
           "name": "employment_type",
-          "type": "text",
+          "type": "employment_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -284,7 +240,8 @@
         },
         "payment_type": {
           "name": "payment_type",
-          "type": "text",
+          "type": "payment_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -308,9 +265,10 @@
         },
         "language": {
           "name": "language",
-          "type": "text",
+          "type": "language",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "hidden": {
           "name": "hidden",
@@ -665,7 +623,47 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.employment_type": {
+      "name": "employment_type",
+      "schema": "public",
+      "values": ["Full Time", "Part Time"]
+    },
+    "public.job_board": {
+      "name": "job_board",
+      "schema": "public",
+      "values": ["accessible", "asylum", "indigenous", "newcomers", "youth"]
+    },
+    "public.language": {
+      "name": "language",
+      "schema": "public",
+      "values": ["English", "French", "English and French"]
+    },
+    "public.payment_type": {
+      "name": "payment_type",
+      "schema": "public",
+      "values": ["Salary", "Hourly"]
+    },
+    "public.province": {
+      "name": "province",
+      "schema": "public",
+      "values": [
+        "AB",
+        "BC",
+        "MB",
+        "NB",
+        "NL",
+        "NS",
+        "ON",
+        "PE",
+        "QC",
+        "SK",
+        "NT",
+        "NU",
+        "YT"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

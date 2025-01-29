@@ -1,29 +1,29 @@
-export const JOB_SITES = [
-  {
+export const JOB_SITES = {
+  admin: {
     title: "Manage Opportunities",
     domain: "manageopportunities.ca",
   },
-  {
+  accessible: {
     title: "Accessible Opportunities",
     domain: "accessibleopportunities.ca",
   },
-  {
+  asylum: {
     title: "Asylum Opportunities",
     domain: "asylumopportunities.ca",
   },
-  {
+  indigenous: {
     title: "Indigenous Opportunities",
     domain: "indigenousopportunities.ca",
   },
-  {
+  newcomers: {
     title: "Newcomers Opportunities",
     domain: "immigrantopportunities.ca",
   },
-  {
+  youth: {
     title: "Youth Opportunities",
     domain: "youthopportunities.ca",
   },
-];
+};
 
 export const JOB_TYPES = [
   {
@@ -112,6 +112,7 @@ export const provinceValues = [
   "NU",
   "YT",
 ] as const;
+
 export type Province = (typeof provinceValues)[number];
 
 export const languages = ["English", "French", "Other"] as const;

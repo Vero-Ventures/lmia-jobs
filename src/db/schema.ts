@@ -1,7 +1,9 @@
+import { provinceValues } from "@/app/lib/constants";
 import {
   boolean,
   date,
   integer,
+  pgEnum,
   pgTable,
   serial,
   text,
@@ -57,24 +59,39 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
+export const languageEnum = pgEnum("language", [
+  "English",
+  "French",
+  "English and French",
+]);
+
+export const employmentTypeEnum = pgEnum("employment_type", [
+  "Full Time",
+  "Part Time",
+]);
+
+export const paymentTypeEnum = pgEnum("payment_type", ["Salary", "Hourly"]);
+
+export const provinceEnum = pgEnum("province", provinceValues);
+
 export const jobPosting = pgTable("job_posting", {
   id: serial().primaryKey(),
   userId: text().references(() => user.id, { onDelete: "cascade" }),
   email: text().notNull(),
   title: text().notNull(),
   orgName: text().notNull(),
-  province: text().notNull(),
+  province: provinceEnum().notNull(),
   city: text().notNull(),
   address: text(),
-  startDate: date().notNull(),
+  startDate: date(),
   vacancies: integer(),
-  employmentType: text().notNull(),
+  employmentType: employmentTypeEnum().notNull(),
   workHours: integer(),
-  paymentType: text().notNull(),
+  paymentType: paymentTypeEnum().notNull(),
   minPayValue: integer().notNull(),
   maxPayValue: integer(),
   description: text().notNull(),
-  language: text(),
+  language: languageEnum().notNull(),
   hidden: boolean(),
   paymentConfirmed: boolean().notNull(),
   expiresAt: date({ mode: "date" }).notNull(),
@@ -84,18 +101,17 @@ export const jobPosting = pgTable("job_posting", {
     .$onUpdate(() => new Date()),
 });
 
-export const jobBoard = pgTable("job_board", {
-  id: serial().primaryKey(),
-  name: text().notNull(),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp()
-    .notNull()
-    .$onUpdate(() => new Date()),
-});
+export const jobBoardEnum = pgEnum("job_board", [
+  "accessible",
+  "asylum",
+  "indigenous",
+  "newcomers",
+  "youth",
+]);
 
 export const jobBoardPosting = pgTable("job_board_posting", {
   id: serial().primaryKey(),
-  jobBoardId: integer().references(() => jobBoard.id, { onDelete: "cascade" }),
+  jobBoard: jobBoardEnum().notNull(),
   jobPostingId: integer().references(() => jobPosting.id, {
     onDelete: "cascade",
   }),
