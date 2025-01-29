@@ -39,39 +39,41 @@ export async function getJobDetails(
 
     const locationDetails = await getJobLocationDetails(browserHandler);
 
-    const paymentDetails = await getJobPayDetails(browserHandler);
-
     const otherDetails = await getOtherJobDetails(browserHandler);
+
+    const paymentDetails = await getJobPayDetails(browserHandler);
 
     const description = await getDescription(browserHandler);
 
-    console.log(description)
+    console.log(description);
 
     const data = {
       postId,
       email: postEmail,
-      jobTitle: headerInfo.jobTitle,
-      organizationName: headerInfo.organizationName,
-      address: locationDetails.address,
+      title: headerInfo.title,
+      orgName: headerInfo.orgName,
+      province: locationDetails.province,
       city: locationDetails.city,
-      region: locationDetails.region,
+      address: locationDetails.address,
+      startDate: otherDetails.startDate
+        ? otherDetails.startDate
+        : headerInfo.postedDate,
+      vacancies:
+        otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
+      employmentType: otherDetails.employmentType,
+      workHours:
+        paymentDetails.workHours !== "null"
+          ? Number(paymentDetails.workHours)
+          : 0,
+      paymentType: paymentDetails.paymentType,
       minPayValue:
         paymentDetails.minPay !== "null" ? Number(paymentDetails.minPay) : 0,
       maxPayValue:
         paymentDetails.maxPay !== undefined
           ? Number(paymentDetails.maxPay)
           : undefined,
-      paymentType: paymentDetails.paymentType,
-      workHours:
-        paymentDetails.workHours !== "null" ? paymentDetails.workHours : "0",
-      employmentType: otherDetails.employmentType,
-      startDate: otherDetails.startDate
-        ? otherDetails.startDate
-        : headerInfo.postedDate,
-      vacancies:
-        otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
-      language: otherDetails.language,
       description: description,
+      language: otherDetails.language,
     };
 
     return data;
@@ -82,12 +84,12 @@ export async function getJobDetails(
 }
 
 async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
-  jobTitle: string;
-  organizationName: string;
+  title: string;
+  orgName: string;
   postedDate: string;
 }> {
-  let jobTitle = "null";
-  let organizationName = "null";
+  let title = "null";
+  let orgName = "null";
   let postedDate = "null";
 
   try {
@@ -97,7 +99,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     const jobTitleValue = (await getJobTitle.allInnerTexts()).pop();
 
     if (jobTitleValue) {
-      jobTitle = jobTitleValue;
+      title = jobTitleValue;
     }
   } catch (error) {
     throw "Job Title Not Found: " + error;
@@ -112,7 +114,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     ).pop();
 
     if (organizationNameValue) {
-      organizationName = organizationNameValue;
+      orgName = organizationNameValue;
     }
   } catch (error) {
     console.error("Organization Name Text Not Found: " + error);
@@ -125,14 +127,14 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
       ).pop();
 
       if (organizationNameValue) {
-        organizationName = organizationNameValue;
+        orgName = organizationNameValue;
       }
     } catch (error) {
       console.error("Organization Name Link Not Found: " + error);
     }
   }
 
-  if (organizationName === "null") {
+  if (orgName === "null") {
     throw "Organization Name Or Link Not Found";
   }
 
@@ -157,8 +159,8 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
   }
 
   return {
-    jobTitle,
-    organizationName,
+    title,
+    orgName,
     postedDate,
   };
 }
@@ -166,11 +168,11 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
 async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
   address: string | undefined;
   city: string;
-  region: string;
+  province: string;
 }> {
-  let address = undefined;
+  let province = "null";
   let city = "null";
-  let region = "null";
+  let address = undefined;
 
   try {
     const getAddress = await browserHandler.waitAndGetElement(
@@ -200,7 +202,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
     const regionValue = (await getRegion.allInnerTexts()).pop();
 
     if (regionValue) {
-      region = regionValue;
+      province = regionValue;
     }
   } catch (error) {
     throw "Region Not Found: " + error;
@@ -209,7 +211,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
   return {
     address,
     city,
-    region,
+    province,
   };
 }
 
@@ -340,6 +342,10 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
     if (languageValue) {
       language = languageValue;
+    }
+
+    if (language !== "English" && language !== "French") {
+      language = "English and French";
     }
   } catch (error) {
     throw "Language Not Found: " + error;
