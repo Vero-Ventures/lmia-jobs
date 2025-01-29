@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Copyright from "./copyright";
 
 function Footer() {
   return (
@@ -85,7 +84,14 @@ function Footer() {
           </Link>
         </div>
       </div>
-      <Copyright />
+      <p className="mt-8 text-center">
+        © {new Date().getFullYear()} LMIA Jobs - Developed by{" "}
+        <a
+          href="https://www.veroventures.com/"
+          className="text-blue-600 hover:text-blue-700">
+          Vero Ventures
+        </a>
+      </p>
     </footer>
   );
 }
