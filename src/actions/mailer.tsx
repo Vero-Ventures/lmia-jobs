@@ -44,14 +44,7 @@ export async function mailInvitesAndReminders() {
         .where(inArray(user.id, newUserIds));
 
       newUsers.forEach(async (user) => {
-        sendInvitesAndReminders(
-          user.email,
-          newUsersMailing.find((mailing) => mailing.userId === user.id)!
-            .tempPassword!,
-          user.createdAt,
-          userPosts,
-          true
-        );
+        sendInvitesAndReminders(user.email, user.createdAt, userPosts, true);
       });
     }
 
@@ -64,14 +57,7 @@ export async function mailInvitesAndReminders() {
         .where(inArray(user.id, remindUserIds));
 
       remindUsers.forEach(async (user) => {
-        sendInvitesAndReminders(
-          user.email,
-          remindUsersMailing.find((mailing) => mailing.userId === user.id)!
-            .tempPassword!,
-          user.createdAt,
-          userPosts,
-          false
-        );
+        sendInvitesAndReminders(user.email, user.createdAt, userPosts, false);
       });
     }
 
@@ -85,7 +71,6 @@ export async function mailInvitesAndReminders() {
 
 export async function sendInvitesAndReminders(
   email: string,
-  tempPassword: string,
   creationDate: Date,
   userPosts: JobPosting[],
   isInvite: boolean
@@ -111,7 +96,6 @@ export async function sendInvitesAndReminders(
           react: (
             <InviteEmail
               email={email}
-              tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -126,7 +110,6 @@ export async function sendInvitesAndReminders(
           react: (
             <ReminderEmail
               email={email}
-              tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}

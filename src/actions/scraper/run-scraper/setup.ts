@@ -66,7 +66,7 @@ async function runSiteScrapers(handler: BrowserHandler) {
     emailsAndPosts.postDetails
   );
 
-  dataHandler.createUsers()
+  await dataHandler.createUsers();
 
-  dataHandler.createPosts()
+  await dataHandler.createPosts();
 }

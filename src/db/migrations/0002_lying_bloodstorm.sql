@@ -1,0 +1,1 @@
+ALTER TABLE "user_mailing" DROP COLUMN "temp_password";

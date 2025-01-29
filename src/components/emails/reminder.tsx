@@ -10,13 +10,11 @@ import {
 
 export default function ReminderEmail({
   email,
-  tempPassword,
   expiredDate,
   postNames,
   totalPosts,
 }: {
   email: string;
-  tempPassword: string;
   expiredDate: string;
   postNames: string[];
   totalPosts: number;
@@ -65,14 +63,9 @@ export default function ReminderEmail({
             </Section>
             <Section style={accountSection}>
               <Text style={text}>
-                Use the following temporary credientals to log into your account
-                and recive an email verification message. Once verified, you
-                will be able to reset your password or log in to your account.
-              </Text>
-              <Text style={credentialText}>
-                Email: {email}
-                <br />
-                Temporary Password: {tempPassword}
+                Use the your email to to log into your account and recive an
+                email verification message. Once verified, you will be able to
+                log in to your account.
               </Text>
               <Text style={linkText}>
                 <a href={`https://lmia-jobs.vercel.app/sign-in`}>
@@ -163,11 +156,6 @@ const titleText = {
   fontSize: "20px",
   fontWeight: "bold",
   color: "#1a73e8",
-};
-
-const credentialText = {
-  ...text,
-  fontWeight: "bold",
 };
 
 const postText = {
