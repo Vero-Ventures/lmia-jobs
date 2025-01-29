@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPosting, user, userMailing } from "@/db/schema";
+import { jobPostings, user, userMailing } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
 export async function checkInactiveUserAges() {
@@ -24,7 +24,7 @@ export async function checkInactiveUserAges() {
             )
           );
 
-        await db.delete(jobPosting).where(eq(jobPosting.userId, user.id));
+        await db.delete(jobPostings).where(eq(jobPostings.userId, user.id));
       }
     });
 

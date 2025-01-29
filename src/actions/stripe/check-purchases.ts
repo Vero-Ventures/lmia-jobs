@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/index";
-import { stripeCustomer, jobPosting } from "@/db/schema";
+import { stripeCustomer, jobPostings } from "@/db/schema";
 import { eq, inArray, notInArray } from "drizzle-orm";
 
 import { Stripe } from "stripe";
@@ -39,13 +39,13 @@ export async function checkUserPurchases(userId: string): Promise<boolean> {
       }
 
       await db
-        .update(jobPosting)
+        .update(jobPostings)
         .set({ paymentConfirmed: true })
-        .where(inArray(jobPosting.id, validPurchases));
+        .where(inArray(jobPostings.id, validPurchases));
 
       await db
-        .delete(jobPosting)
-        .where(notInArray(jobPosting.id, validPurchases));
+        .delete(jobPostings)
+        .where(notInArray(jobPostings.id, validPurchases));
 
       return true;
     }

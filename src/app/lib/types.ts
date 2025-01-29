@@ -1,12 +1,12 @@
 export type JobPosting = {
-  id: number;
+  id: string;
   email: string;
-  title: string;
-  orgName: string;
-  province: string;
+  jobTitle: string;
+  organizationName: string;
+  region: string;
   city: string;
   address: string | null;
-  startDate: string | null;
+  startDate: string;
   vacancies: number | null;
   employmentType: string;
   workHours: number | null;
@@ -14,10 +14,15 @@ export type JobPosting = {
   minPayValue: number;
   maxPayValue: number | null;
   description: string;
-  language: string;
+  language: string | null;
+  postAsylum: boolean;
+  postDisabled: boolean;
+  postIndigenous: boolean;
+  postNewcomers: boolean;
+  postYouth: boolean;
   hidden: boolean;
-  paymentConfirmed: boolean;
   createdAt: Date;
   updatedAt: Date;
   expiresAt: Date;
+  paymentConfirmed: boolean;
 };

@@ -28,7 +28,7 @@ export default function Page({
   searchParams,
 }: {
   searchParams: Promise<{
-    postId?: number;
+    postId?: string;
   }>;
 }) {
   const { data: session, isPending } = authClient.useSession();
@@ -43,9 +43,9 @@ export default function Page({
 
   const [formValues, setFormValues] = useState({
     email: "",
-    title: "",
-    orgName: "",
-    province: "",
+    jobTitle: "",
+    organizationName: "",
+    region: "",
     city: "",
     address: "",
     startDate: new Date().toISOString().split("T")[0],
@@ -57,6 +57,11 @@ export default function Page({
     maxPayValue: "",
     description: "",
     language: "",
+    postAsylum: false,
+    postDisabled: false,
+    postIndigenous: false,
+    postNewcomers: false,
+    postYouth: false,
   });
 
   const [postTime, setPostTime] = useState(1);
@@ -113,12 +118,12 @@ export default function Page({
         if (result && jobPosting) {
           setFormValues({
             email: jobPosting.email,
-            title: jobPosting.title,
-            orgName: jobPosting.orgName,
-            province: jobPosting.province,
+            jobTitle: jobPosting.jobTitle,
+            organizationName: jobPosting.organizationName,
+            region: jobPosting.region,
             city: jobPosting.city,
             address: jobPosting.address ? jobPosting.address! : "",
-            startDate: jobPosting.startDate ? jobPosting.startDate! : "",
+            startDate: jobPosting.startDate,
             vacancies: jobPosting.vacancies
               ? String(jobPosting.vacancies!)
               : "",
@@ -132,7 +137,12 @@ export default function Page({
               ? String(jobPosting.maxPayValue!)
               : "",
             description: jobPosting.description,
-            language: jobPosting.language,
+            language: jobPosting.language ? jobPosting!.language! : "",
+            postAsylum: jobPosting.postAsylum,
+            postDisabled: jobPosting.postDisabled,
+            postIndigenous: jobPosting.postIndigenous,
+            postNewcomers: jobPosting.postNewcomers,
+            postYouth: jobPosting.postYouth,
           });
         } else {
           redirect("/dashboard");
@@ -172,7 +182,7 @@ export default function Page({
           session!.user.id,
           numBoards,
           postTime,
-          String(newPostId!)
+          newPostId!
         );
 
         if (checkoutResult.result) {
@@ -235,8 +245,8 @@ export default function Page({
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
-              name="title"
-              value={formValues.title}
+              name="jobTitle"
+              value={formValues.jobTitle}
               onChange={handleValueChange}
               required
             />
@@ -249,8 +259,8 @@ export default function Page({
             <Input
               className="border-2 border-gray-500 md:text-base"
               type="text"
-              name="orgName"
-              value={formValues.orgName}
+              name="organizationName"
+              value={formValues.organizationName}
               onChange={handleValueChange}
               required
             />
@@ -263,10 +273,8 @@ export default function Page({
               </label>
               <div className="flex flex-col">
                 <Select
-                  value={formValues.province}
-                  onValueChange={(value) =>
-                    handleValueChange(value, "province")
-                  }
+                  value={formValues.region}
+                  onValueChange={(value) => handleValueChange(value, "region")}
                   required>
                   <SelectTrigger className="ml-4 min-w-32 border-2 border-gray-500 text-base font-semibold mb:ml-2 mb:mt-3 mb:min-w-48 mb:text-lg sm:min-w-32 md:min-w-40">
                     <SelectValue placeholder="Select" />
@@ -286,7 +294,7 @@ export default function Page({
                 <Input
                   className="mx-auto h-1 w-0 p-0 opacity-0"
                   required
-                  value={formValues.province}
+                  value={formValues.region}
                   onChange={handleValueChange}
                 />
               </div>
@@ -499,10 +507,8 @@ export default function Page({
                 <SelectItem value="French" className="text-lg font-semibold">
                   French
                 </SelectItem>
-                <SelectItem
-                  value="English and French"
-                  className="text-lg font-semibold">
-                  English and French
+                <SelectItem value="Other" className="text-lg font-semibold">
+                  Other
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -517,6 +523,10 @@ export default function Page({
                 <Checkbox
                   className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
                   name="Disabled"
+                  onCheckedChange={() =>
+                    handleValueChange(!formValues.postDisabled, "postDisabled")
+                  }
+                  checked={formValues.postDisabled}
                 />
               </div>
 
@@ -527,6 +537,10 @@ export default function Page({
                 <Checkbox
                   className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
                   name="Asylum"
+                  onCheckedChange={() =>
+                    handleValueChange(!formValues.postAsylum, "postAsylum")
+                  }
+                  checked={formValues.postAsylum}
                 />
               </div>
 
@@ -537,6 +551,13 @@ export default function Page({
                 <Checkbox
                   className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
                   name="Indigenous"
+                  onCheckedChange={() =>
+                    handleValueChange(
+                      !formValues.postIndigenous,
+                      "postIndigenous"
+                    )
+                  }
+                  checked={formValues.postIndigenous}
                 />
               </div>
 
@@ -547,6 +568,13 @@ export default function Page({
                 <Checkbox
                   className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
                   name="Newcomers"
+                  onCheckedChange={() =>
+                    handleValueChange(
+                      !formValues.postNewcomers,
+                      "postNewcomers"
+                    )
+                  }
+                  checked={formValues.postNewcomers}
                 />
               </div>
 
@@ -557,6 +585,10 @@ export default function Page({
                 <Checkbox
                   className="ml-4 h-10 w-10 rounded-md border-2 border-gray-500 data-[state=checked]:bg-gray-300 sm:ml-8 md:mx-auto"
                   name="Youth"
+                  onCheckedChange={() =>
+                    handleValueChange(!formValues.postYouth, "postYouth")
+                  }
+                  checked={formValues.postYouth}
                 />
               </div>
             </div>
