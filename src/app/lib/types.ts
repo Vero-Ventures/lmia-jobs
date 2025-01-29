@@ -6,7 +6,7 @@ import type {
 } from "@/app/lib/constants";
 
 export type JobPosting = {
-  userId: string;
+  userId: string | null;
   email: string;
   title: string;
   orgName: string;
