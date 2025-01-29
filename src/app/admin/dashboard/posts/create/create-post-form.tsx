@@ -70,7 +70,7 @@ export function CreatePostForm() {
   const monthsToPost = form.watch("monthsToPost");
 
   async function onSubmit(values: CreateJobPosting) {
-    toast.promise(createJobPost(values), {
+    toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
       success: () => {
         form.reset();
@@ -81,8 +81,6 @@ export function CreatePostForm() {
         if (error instanceof Error) return error.message;
       },
     });
-    await createJobPost(values);
-    form.reset();
   }
 
   return (
@@ -168,7 +166,7 @@ export function CreatePostForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Weekly Hours{" "}
+                        Work Hours{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>
@@ -191,7 +189,7 @@ export function CreatePostForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Available Positions{" "}
+                        Vacancies{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>
@@ -296,12 +294,7 @@ export function CreatePostForm() {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Address{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter an address" {...field} />
                       </FormControl>
