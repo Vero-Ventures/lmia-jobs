@@ -128,9 +128,8 @@ export const stripeCustomer = pgTable("stripe_customer", {
 
 export const userMailing = pgTable("user_mailing", {
   id: serial().primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+  email: text().unique().notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
   newlyCreated: boolean("newly_created").notNull().default(true),
   activated: boolean("activated").notNull().default(false),
   optedOut: boolean("opted_out").notNull().default(false),

@@ -1,23 +1,28 @@
+import type {
+  EmploymentType,
+  Language,
+  PaymentType,
+  Province,
+} from "@/app/lib/constants";
+
 export type JobPosting = {
-  id: number;
+  userId: string;
   email: string;
   title: string;
   orgName: string;
-  province: string;
+  province: Province;
   city: string;
   address: string | null;
-  startDate: Date | null;
+  startDate: Date;
   vacancies: number | null;
-  employmentType: string;
+  employmentType: EmploymentType;
   workHours: number | null;
-  paymentType: string;
+  paymentType: PaymentType;
   minPayValue: number;
   maxPayValue: number | null;
   description: string;
-  language: string;
+  language: Language;
   hidden: boolean;
   paymentConfirmed: boolean;
-  createdAt: Date;
-  updatedAt: Date;
   expiresAt: Date;
 };
