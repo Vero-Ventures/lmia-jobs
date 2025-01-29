@@ -1,31 +1,61 @@
-export const JOB_SITES = {
-  admin: {
-    title: "Manage Opportunities",
-    domain: "manageopportunities.ca",
-  },
-  accessible: {
-    title: "Accessible Opportunities",
-    domain: "accessibleopportunities.ca",
-  },
-  asylum: {
-    title: "Asylum Opportunities",
-    domain: "asylumopportunities.ca",
-  },
-  indigenous: {
-    title: "Indigenous Opportunities",
-    domain: "indigenousopportunities.ca",
-  },
-  newcomers: {
-    title: "Newcomers Opportunities",
-    domain: "immigrantopportunities.ca",
-  },
-  youth: {
-    title: "Youth Opportunities",
-    domain: "youthopportunities.ca",
-  },
+export const JOB_BOARD_TITLES: Record<JobBoard, string> = {
+  accessible: "Accessible Opportunities",
+
+  asylum: "Asylum Opportunities",
+
+  indigenous: "Indigenous Opportunities",
+
+  newcomers: "Newcomers Opportunities",
+
+  youth: "Youth Opportunities",
 };
 
-export const JOB_TYPES = [
+export const JOB_BOARD_DOMAINS: Record<string, JobBoard | "admin"> = {
+  "manageopportunities.ca": "admin",
+  "accessibleopportunities.ca": "accessible",
+  "asylumopportunities.ca": "asylum",
+  "indigenousopportunities.ca": "indigenous",
+  "immigrantopportunities.ca": "newcomers",
+  "youthopportunities.ca": "youth",
+};
+// export const JOB_BOARD_TITLES = {
+//   admin: {
+//     title: "Manage Opportunities",
+//     domain: "manageopportunities.ca",
+//   },
+//   accessible: {
+//     title: "Accessible Opportunities",
+//     domain: "accessibleopportunities.ca",
+//   },
+//   asylum: {
+//     title: "Asylum Opportunities",
+//     domain: "asylumopportunities.ca",
+//   },
+//   indigenous: {
+//     title: "Indigenous Opportunities",
+//     domain: "indigenousopportunities.ca",
+//   },
+//   newcomers: {
+//     title: "Newcomers Opportunities",
+//     domain: "immigrantopportunities.ca",
+//   },
+//   youth: {
+//     title: "Youth Opportunities",
+//     domain: "youthopportunities.ca",
+//   },
+// };
+
+export const JOB_BOARDS = [
+  "accessible",
+  "asylum",
+  "indigenous",
+  "newcomers",
+  "youth",
+] as const;
+
+export type JobBoard = (typeof JOB_BOARDS)[number];
+
+export const EMPLOYMENT_TYPES = [
   {
     label: "Full Time",
     value: "Full Time",
@@ -36,8 +66,8 @@ export const JOB_TYPES = [
   },
 ] as const;
 
-export const jobTypeLabels = ["Full Time", "Part Time"] as const;
-export type JobType = (typeof jobTypeLabels)[number];
+export const employmentTypeLabels = ["Full Time", "Part Time"] as const;
+export type EmploymentType = (typeof employmentTypeLabels)[number];
 
 export const PROVINCES = [
   {
@@ -115,7 +145,7 @@ export const provinceValues = [
 
 export type Province = (typeof provinceValues)[number];
 
-export const languages = ["English", "French", "Other"] as const;
+export const languages = ["English", "French", "English and French"] as const;
 export type Language = (typeof languages)[number];
 
 export const PRICE_PER_MONTH = 5;

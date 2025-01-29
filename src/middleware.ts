@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { JOB_SITES } from "./app/lib/constants";
+import { JOB_BOARD_DOMAINS } from "./app/lib/constants";
 
 export function middleware(req: NextRequest) {
   const hostname = req.headers.get("host") ?? "";
@@ -14,19 +14,7 @@ export function middleware(req: NextRequest) {
 
   const isPreview = hostname.includes("-yaniv-s-projects.vercel.app");
 
-  let targetPath: string;
-
-  if (isLocal || isPreview) {
-    targetPath = `/${process.env.JOB_SITE}${pathname}${search}`;
-  } else {
-    const validDomains: Record<string, number> = {};
-
-    JOB_SITES.forEach((site, i) => {
-      validDomains[site.domain] = i;
-    });
-
-    targetPath = `${validDomains[hostname]}${pathname}${search}`;
-  }
+  const targetPath = `/${isLocal || isPreview ? process.env.JOB_SITE : JOB_BOARD_DOMAINS[hostname]}${pathname}${search}`;
 
   return NextResponse.rewrite(new URL(targetPath, req.url));
 }

@@ -1,4 +1,10 @@
-import { provinceValues } from "@/app/lib/constants";
+import {
+  employmentTypeLabels,
+  JOB_BOARDS,
+  languages,
+  paymentTypes,
+  provinceValues,
+} from "@/app/lib/constants";
 import {
   boolean,
   date,
@@ -59,18 +65,14 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
-export const languageEnum = pgEnum("language", [
-  "English",
-  "French",
-  "English and French",
-]);
+export const languageEnum = pgEnum("language", languages);
 
-export const employmentTypeEnum = pgEnum("employment_type", [
-  "Full Time",
-  "Part Time",
-]);
+export const employmentTypeEnum = pgEnum(
+  "employment_type",
+  employmentTypeLabels
+);
 
-export const paymentTypeEnum = pgEnum("payment_type", ["Salary", "Hourly"]);
+export const paymentTypeEnum = pgEnum("payment_type", paymentTypes);
 
 export const provinceEnum = pgEnum("province", provinceValues);
 
@@ -92,7 +94,7 @@ export const jobPosting = pgTable("job_posting", {
   maxPayValue: integer(),
   description: text().notNull(),
   language: languageEnum().notNull(),
-  hidden: boolean(),
+  hidden: boolean().notNull(),
   paymentConfirmed: boolean().notNull(),
   expiresAt: date({ mode: "date" }).notNull(),
   createdAt: timestamp().notNull().defaultNow(),
@@ -101,13 +103,7 @@ export const jobPosting = pgTable("job_posting", {
     .$onUpdate(() => new Date()),
 });
 
-export const jobBoardEnum = pgEnum("job_board", [
-  "accessible",
-  "asylum",
-  "indigenous",
-  "newcomers",
-  "youth",
-]);
+export const jobBoardEnum = pgEnum("job_board", JOB_BOARDS);
 
 export const jobBoardPosting = pgTable("job_board_posting", {
   id: serial().primaryKey(),

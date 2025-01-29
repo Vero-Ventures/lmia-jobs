@@ -9,14 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { JOB_TYPES, PROVINCES } from "@/app/lib/constants";
+import { EMPLOYMENT_TYPES, PROVINCES } from "@/app/lib/constants";
 
 export default function FilterSelect({
   initalValue,
   filterType,
 }: {
   initalValue?: string;
-  filterType: string;
+  filterType: "employmentType" | "province";
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -24,7 +24,8 @@ export default function FilterSelect({
 
   const paramString = filterType;
 
-  const selections = filterType === "jobType" ? JOB_TYPES : PROVINCES;
+  const selections =
+    filterType === "employmentType" ? EMPLOYMENT_TYPES : PROVINCES;
 
   const createQueryString = useCallback(
     (name: string, value: string) => {

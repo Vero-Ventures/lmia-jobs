@@ -27,7 +27,7 @@ import HidePost from "./components/hide-post";
 import Link from "next/link";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }
 
 export default async function SinglePostPage({ params }: PageProps) {
@@ -51,7 +51,7 @@ export default async function SinglePostPage({ params }: PageProps) {
           <div className="flex justify-between">
             <CardTitle
               className={`titleCase text-2xl font-bold dark:text-white`}>
-              {jobPosting.jobTitle}
+              {jobPosting.title}
             </CardTitle>
             <div className="flex gap-2">
               <Button asChild>
@@ -60,11 +60,11 @@ export default async function SinglePostPage({ params }: PageProps) {
                   <span>Edit</span>
                 </Link>
               </Button>
-              <HidePost jobPosting={jobPosting} />
+              <HidePost id={jobPosting.id} hidden={jobPosting.hidden} />
             </div>
           </div>
           <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
-            {jobPosting.organizationName}
+            {jobPosting.orgName}
           </CardDescription>
           <div>
             {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
@@ -95,7 +95,7 @@ export default async function SinglePostPage({ params }: PageProps) {
                 <MapPinIcon className="size-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-gray-500 dark:text-gray-400">
                   {jobPosting.address && `${jobPosting.address}, `}
-                  {jobPosting.city}, {jobPosting.region}
+                  {jobPosting.city}, {jobPosting.province}
                 </span>
               </div>
               <div className="flex items-center gap-2">

@@ -1,23 +1,24 @@
+import type { EmploymentType, JobBoard, Province } from "@/app/lib/constants";
 import { db } from "@/db";
 import { jobBoardPosting, jobPosting } from "@/db/schema";
-import { eq, and, gt, type SQL, ilike } from "drizzle-orm";
+import { eq, and, gt, type SQL, ilike, desc } from "drizzle-orm";
 
 export async function selectAllJobPostings({
-  jobBoardId,
+  jobBoard,
   title,
   province,
   employmentType,
 }: {
-  jobBoardId: number;
+  jobBoard: JobBoard;
   title: string;
-  province: string;
-  employmentType: string;
+  province: Province | "All";
+  employmentType: EmploymentType | "All";
 }) {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
   const filters: SQL[] = [
-    eq(jobBoardPosting.jobBoardId, jobBoardId),
+    eq(jobBoardPosting.jobBoard, jobBoard),
     eq(jobPosting.paymentConfirmed, true),
     gt(jobPosting.expiresAt, currentDate),
   ];
@@ -38,7 +39,8 @@ export async function selectAllJobPostings({
     .select()
     .from(jobBoardPosting)
     .innerJoin(jobPosting, eq(jobBoardPosting.jobPostingId, jobPosting.id))
-    .where(and(...filters));
+    .where(and(...filters))
+    .orderBy(desc(jobBoardPosting.createdAt));
 }
 
 export async function selectUserJobPostings({
@@ -53,6 +55,7 @@ export async function selectUserJobPostings({
   if (title) {
     filters.push(eq(jobPosting.title, title));
   }
+
   return await db
     .select()
     .from(jobPosting)

@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { jobPostings } from "@/db/schema";
+import { jobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import type { JobPosting } from "@/app/lib/types";
 import { revalidatePath } from "next/cache";
@@ -163,15 +163,15 @@ export async function getJobPost(
 }
 
 export async function editPostVisibility(
-  postId: string,
+  id: number,
   hidePost: boolean
 ): Promise<string> {
   try {
     await db
-      .update(jobPostings)
+      .update(jobPosting)
       .set({ hidden: hidePost })
-      .where(eq(jobPostings.id, postId));
-    revalidatePath(`/dashboard/posts/${jobPostings.id}`);
+      .where(eq(jobPosting.id, id));
+    revalidatePath(`/dashboard/posts/${jobPosting.id}`);
     return "success";
   } catch (error) {
     console.error(error);

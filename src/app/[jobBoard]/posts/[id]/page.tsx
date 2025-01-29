@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }
 
 export default async function SinglePostPage({ params }: PageProps) {
@@ -35,11 +35,11 @@ export default async function SinglePostPage({ params }: PageProps) {
           <div className="flex justify-between">
             <CardTitle
               className={`titleCase text-2xl font-bold dark:text-white`}>
-              {jobPosting.jobTitle}
+              {jobPosting.title}
             </CardTitle>
           </div>
           <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">
-            {jobPosting.organizationName}
+            {jobPosting.orgName}
           </CardDescription>
           <div>
             {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
@@ -70,7 +70,7 @@ export default async function SinglePostPage({ params }: PageProps) {
                 <MapPinIcon className="size-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-gray-500 dark:text-gray-400">
                   {jobPosting.address && `${jobPosting.address}, `}
-                  {jobPosting.city}, {jobPosting.region}
+                  {jobPosting.city}, {jobPosting.province}
                 </span>
               </div>
               <div className="flex items-center gap-2">

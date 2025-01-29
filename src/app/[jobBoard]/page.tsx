@@ -7,26 +7,27 @@ import { Separator } from "@/components/ui/separator";
 import { FilterIcon } from "lucide-react";
 import { JobListCard } from "./components/job-list-card";
 import Link from "next/link";
+import type { EmploymentType, JobBoard, Province } from "../lib/constants";
 
 export default async function Page({
   params,
   searchParams,
 }: {
-  params: Promise<{ jobsiteId: string }>;
+  params: Promise<{ jobBoard: JobBoard }>;
   searchParams: Promise<{
     title?: string;
-    employmentType?: string;
-    province?: string;
+    employmentType?: EmploymentType | "All";
+    province?: Province | "All";
   }>;
 }) {
-  const { jobsiteId } = await params;
+  const { jobBoard } = await params;
   const search = await searchParams;
   const title = search.title ?? "";
   const province = search.province ?? "All";
   const employmentType = search.employmentType ?? "All";
 
   const result = await selectAllJobPostings({
-    jobBoardId: +jobsiteId,
+    jobBoard,
     title,
     province,
     employmentType,
@@ -41,13 +42,13 @@ export default async function Page({
             type="hidden"
             value={employmentType}
             name="employmentType"
-            disabled={employmentType === "ALL" || employmentType === undefined}
+            disabled={employmentType === "All" || employmentType === undefined}
           />
           <Input
             type="hidden"
             value={province}
             name="province"
-            disabled={province === "ALL" || province === undefined}
+            disabled={province === "All" || province === undefined}
           />
           <Button>Search</Button>
         </Form>
