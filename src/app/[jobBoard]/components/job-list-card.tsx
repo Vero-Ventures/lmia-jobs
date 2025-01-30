@@ -30,7 +30,7 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
           </div>
           <div className="space-x-4 text-sm text-gray-500">
             <Badge>
-              {jobPosting.city}, {jobPosting.province}
+              {jobPosting.city && jobPosting.city + ", "} {jobPosting.province}
             </Badge>
           </div>
         </div>

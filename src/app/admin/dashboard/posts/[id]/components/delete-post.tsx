@@ -22,7 +22,7 @@ export function DeletePost({ id }: { id: number }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" className="space-x-2">
+        <Button variant="destructive" className="space-x-2">
           <Trash2 />
           <span>Delete Post</span>
         </Button>
