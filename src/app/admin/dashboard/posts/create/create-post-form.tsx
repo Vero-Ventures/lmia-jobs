@@ -49,7 +49,7 @@ export function CreatePostForm() {
       email: "",
       title: "",
       orgName: "",
-      province: "AB",
+      province: "BC",
       city: "",
       address: "",
       startDate: new Date(),

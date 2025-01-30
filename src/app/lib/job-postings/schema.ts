@@ -90,6 +90,15 @@ export const createJobPostingSchema = createInsertSchema(jobPosting, {
       .number()
       .min(1, { message: "Months posted must be greater than 0" }),
   })
+  .omit({
+    createdAt: true,
+    expiresAt: true,
+    hidden: true,
+    id: true,
+    userId: true,
+    paymentConfirmed: true,
+    updatedAt: true,
+  })
   .refine(
     (postData) => {
       return (
