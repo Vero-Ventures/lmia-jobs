@@ -32,23 +32,31 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { updateJobPost } from "../../create/actions";
 import FormSubmitButton from "@/components/form-submit-button";
-import { useRouter } from "next/navigation";
-import type { EditPost } from "@/app/lib/job-postings/schema";
-import { editPostSchema } from "@/app/lib/job-postings/schema";
+import { useParams, useRouter } from "next/navigation";
+import type { EditJobPosting } from "@/app/lib/job-postings/schema";
+import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
+import { formatDate } from "@/lib/utils";
 
-export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
-  const form = useForm<EditPost>({
-    resolver: zodResolver(editPostSchema),
+export function EditPostForm({
+  initialValues,
+}: {
+  initialValues: EditJobPosting;
+}) {
+  const params = useParams<{ id: string }>();
+  const postId = Number.parseInt(params.id);
+
+  const form = useForm<EditJobPosting>({
+    resolver: zodResolver(editJobPostingSchema),
     defaultValues: { ...initialValues },
   });
   const router = useRouter();
 
-  async function onSubmit(values: EditPost) {
-    toast.promise(updateJobPost(values, initialValues.id), {
+  async function onSubmit(values: EditJobPosting) {
+    toast.promise(updateJobPost(values, postId), {
       loading: "Updating job posting...",
       success: () => {
         form.reset();
-        router.push(`/dashboard/posts/${initialValues.id}`);
+        router.push(`/dashboard/posts/${postId}`);
         return "Job posting updated successfully";
       },
       error: (error) => {
@@ -70,7 +78,7 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
               <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="jobTitle"
+                  name="title"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Job Title</FormLabel>
@@ -114,19 +122,14 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
                   name="startDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Hiring Date{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Start Date</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
                           min="1900-01-01"
-                          defaultValue={field.value}
+                          defaultValue={formatDate(field.value)}
                           onChange={(e) => {
-                            field.onChange(e.target.value);
+                            field.onChange(new Date(e.target.value));
                           }}
                         />
                       </FormControl>
@@ -140,7 +143,7 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Weekly Hours{" "}
+                        Work Hours{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>
@@ -163,7 +166,7 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Available Positions{" "}
+                        Vacancies{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>
@@ -232,7 +235,7 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
               <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="organizationName"
+                  name="orgName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Organization Name</FormLabel>
@@ -268,12 +271,7 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Address{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter an address" {...field} />
                       </FormControl>
@@ -405,9 +403,7 @@ export function EditPostForm({ initialValues }: { initialValues: EditPost }) {
                 asChild
                 className="order-2 w-full sm:order-1"
                 variant="outline">
-                <Link href={`/dashboard/posts/${initialValues.id}`}>
-                  Cancel
-                </Link>
+                <Link href={`/dashboard/posts/${postId}`}>Cancel</Link>
               </Button>
               <FormSubmitButton
                 className="order-1 w-full sm:order-2"
