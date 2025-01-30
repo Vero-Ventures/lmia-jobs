@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -38,8 +38,9 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
       <CardContent>
         <div className="flex justify-between">
           <P>
-            Salary: ${`${jobPosting.minPayValue}`}{" "}
-            {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}
+            ${`${formatMoney(jobPosting.minPayValue)}`}{" "}
+            {jobPosting.maxPayValue &&
+              `to $${formatMoney(jobPosting.maxPayValue)}`}
             {jobPosting.paymentType === "Hourly" ? " hourly" : " annually"}
           </P>
         </div>

@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import P from "./paragraph";
 import Heading from "./heading";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatMoney } from "@/lib/utils";
 
 export default function SingleJobPosting({
   jobPosting,
@@ -90,8 +90,10 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <CircleDollarSignIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                ${jobPosting.minPayValue}{" "}
-                {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
+                ${formatMoney(jobPosting.minPayValue)}{" "}
+                {jobPosting.maxPayValue
+                  ? `to $${formatMoney(jobPosting.maxPayValue)}`
+                  : ""}{" "}
                 {jobPosting.paymentType === "Hourly" ? "hourly" : "annually"}
               </span>
             </div>
