@@ -2,12 +2,6 @@ import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import type {
-  JobType,
-  Language,
-  PaymentType,
-  Province,
-} from "@/app/lib/constants";
 import { EditPostForm } from "./edit-post-form";
 
 interface PageProps {
@@ -24,29 +18,28 @@ export default async function EditPost({ params }: PageProps) {
     redirect("/");
   }
   const jobPosting = await selectUserSingleJobPosting({
-    id,
+    id: +id,
     userId: data.user.id,
   });
   return (
     <div>
       <EditPostForm
         initialValues={{
-          id: jobPosting.id,
           email: jobPosting.email,
-          jobTitle: jobPosting.jobTitle,
-          organizationName: jobPosting.organizationName,
-          province: jobPosting.region as Province,
+          title: jobPosting.title,
+          orgName: jobPosting.orgName,
+          province: jobPosting.province,
           city: jobPosting.city,
           address: jobPosting.address || "",
           startDate: jobPosting.startDate,
           vacancies: jobPosting.vacancies || 0,
-          employmentType: jobPosting.employmentType as JobType,
+          employmentType: jobPosting.employmentType,
           workHours: jobPosting.workHours || 0,
-          paymentType: jobPosting.paymentType as PaymentType,
+          paymentType: jobPosting.paymentType,
           minPayValue: jobPosting.minPayValue,
           maxPayValue: jobPosting.maxPayValue || 0,
           description: jobPosting.description,
-          language: jobPosting.language as Language,
+          language: jobPosting.language,
         }}
       />
     </div>

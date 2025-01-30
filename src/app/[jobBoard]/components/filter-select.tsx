@@ -9,14 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { JOB_TYPES, PROVINCES } from "@/app/lib/constants";
+import { EMPLOYMENT_TYPES, PROVINCES } from "@/app/lib/constants";
 
 export default function FilterSelect({
-  initalValue,
+  initialValue,
   filterType,
 }: {
-  initalValue?: string;
-  filterType: string;
+  initialValue?: string;
+  filterType: "employmentType" | "province";
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -24,7 +24,8 @@ export default function FilterSelect({
 
   const paramString = filterType;
 
-  const selections = filterType === "jobType" ? JOB_TYPES : PROVINCES;
+  const selections =
+    filterType === "employmentType" ? EMPLOYMENT_TYPES : PROVINCES;
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -37,12 +38,14 @@ export default function FilterSelect({
   );
   return (
     <Select
-      defaultValue={initalValue}
+      defaultValue={initialValue}
       onValueChange={(value) =>
         router.push(pathname + "?" + createQueryString(paramString, value))
       }>
       <SelectTrigger>
-        <SelectValue placeholder={`Choose ${filterType}`} />
+        <SelectValue
+          placeholder={`Choose ${filterType === "employmentType" ? "employment type" : "province"}`}
+        />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="All">All</SelectItem>

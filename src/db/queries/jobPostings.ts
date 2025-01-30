@@ -1,76 +1,66 @@
+import type { EmploymentType, JobBoard, Province } from "@/app/lib/constants";
 import { db } from "@/db";
-import { jobPostings } from "@/db/schema";
-import { eq, and, gt, type SQL, ilike } from "drizzle-orm";
-import type { PgColumn } from "drizzle-orm/pg-core";
+import { jobBoardPosting, jobPosting } from "@/db/schema";
+import { eq, and, gt, type SQL, ilike, desc } from "drizzle-orm";
 
 export async function selectAllJobPostings({
   jobBoard,
-  jobTitle,
-  location,
-  jobType,
+  title,
+  province,
+  employmentType,
 }: {
-  jobBoard: string;
-  jobTitle: string;
-  jobType: string;
-  location: string;
+  jobBoard: JobBoard;
+  title: string;
+  province: Province | "All";
+  employmentType: EmploymentType | "All";
 }) {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
-  const jobBoardMap: Record<string, PgColumn> = {
-    indigenous: jobPostings.postIndigenous,
-    newcomers: jobPostings.postNewcomers,
-    accessible: jobPostings.postDisabled,
-    youth: jobPostings.postYouth,
-    asylum: jobPostings.postAsylum,
-  };
-
   const filters: SQL[] = [
-    eq(jobPostings.paymentConfirmed, true),
-    gt(jobPostings.expiresAt, currentDate),
-    eq(jobBoardMap[jobBoard], true),
+    eq(jobBoardPosting.jobBoard, jobBoard),
+    eq(jobPosting.hidden, false),
+    // eq(jobPosting.paymentConfirmed, true),
+    gt(jobPosting.expiresAt, currentDate),
   ];
 
-  if (jobType !== "All") {
-    filters.push(eq(jobPostings.employmentType, jobType));
+  if (employmentType !== "All") {
+    filters.push(eq(jobPosting.employmentType, employmentType));
   }
 
-  if (location !== "All") {
-    filters.push(eq(jobPostings.region, location));
+  if (province !== "All") {
+    filters.push(eq(jobPosting.province, province));
   }
 
-  if (jobTitle) {
-    filters.push(ilike(jobPostings.jobTitle, "%" + jobTitle));
+  if (title) {
+    filters.push(ilike(jobPosting.title, "%" + title));
   }
 
   return await db
     .select()
-    .from(jobPostings)
-    .where(and(...filters));
+    .from(jobBoardPosting)
+    .innerJoin(jobPosting, eq(jobBoardPosting.jobPostingId, jobPosting.id))
+    .where(and(...filters))
+    .orderBy(desc(jobBoardPosting.createdAt));
 }
 
 export async function selectUserJobPostings({
   userId,
-  jobTitle,
+  title,
 }: {
   userId: string;
-  jobTitle?: string;
+  title?: string;
 }) {
-  if (jobTitle) {
-    return await db
-      .select()
-      .from(jobPostings)
-      .where(
-        and(
-          eq(jobPostings.userId, userId),
-          eq(jobPostings.jobTitle, jobTitle ?? "")
-        )
-      );
+  const filters: SQL[] = [eq(jobPosting.userId, userId)];
+
+  if (title) {
+    filters.push(eq(jobPosting.title, title));
   }
+
   return await db
     .select()
-    .from(jobPostings)
-    .where(eq(jobPostings.userId, userId));
+    .from(jobPosting)
+    .where(and(...filters));
 }
 
 export async function selectUserSingleJobPosting({
@@ -78,19 +68,19 @@ export async function selectUserSingleJobPosting({
   id,
 }: {
   userId: string;
-  id: string;
+  id: number;
 }) {
   return await db
     .select()
-    .from(jobPostings)
-    .where(and(eq(jobPostings.userId, userId), eq(jobPostings.id, id)))
+    .from(jobPosting)
+    .where(and(eq(jobPosting.userId, userId), eq(jobPosting.id, id)))
     .then((res) => res[0]);
 }
 
-export async function selectSingleJobPosting(id: string) {
+export async function selectSingleJobPosting(id: number) {
   return await db
     .select()
-    .from(jobPostings)
-    .where(eq(jobPostings.id, id))
+    .from(jobPosting)
+    .where(eq(jobPosting.id, id))
     .then((res) => res[0]);
 }

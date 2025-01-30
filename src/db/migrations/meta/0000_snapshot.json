@@ -1,5 +1,5 @@
 {
-  "id": "b51b4540-4bd7-42c9-8d69-ec8dee887fbd",
+  "id": "8637132b-045a-4ced-99e5-a257ab0f1ae3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -105,32 +105,99 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.job_postings": {
-      "name": "job_postings",
+    "public.job_board_posting": {
+      "name": "job_board_posting",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "job_board": {
+          "name": "job_board",
+          "type": "job_board",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "job_posting_id": {
+          "name": "job_posting_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "default": "now()"
         },
-        "job_title": {
-          "name": "job_title",
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "job_board_posting_job_posting_id_job_posting_id_fk": {
+          "name": "job_board_posting_job_posting_id_job_posting_id_fk",
+          "tableFrom": "job_board_posting",
+          "tableTo": "job_posting",
+          "columnsFrom": ["job_posting_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.job_posting": {
+      "name": "job_posting",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "organization_name": {
-          "name": "organization_name",
+        "title": {
+          "name": "title",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "region": {
-          "name": "region",
+        "org_name": {
+          "name": "org_name",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "province": {
+          "name": "province",
+          "type": "province",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -146,11 +213,11 @@
           "primaryKey": false,
           "notNull": false
         },
-        "start_time": {
-          "name": "start_time",
+        "start_date": {
+          "name": "start_date",
           "type": "date",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "vacancies": {
           "name": "vacancies",
@@ -160,7 +227,8 @@
         },
         "employment_type": {
           "name": "employment_type",
-          "type": "text",
+          "type": "employment_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -172,7 +240,8 @@
         },
         "payment_type": {
           "name": "payment_type",
-          "type": "text",
+          "type": "payment_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -196,43 +265,26 @@
         },
         "language": {
           "name": "language",
-          "type": "text",
+          "type": "language",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": false
         },
-        "post_asylum": {
-          "name": "post_asylum",
+        "payment_confirmed": {
+          "name": "payment_confirmed",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "post_disabled": {
-          "name": "post_disabled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "post_indigenous": {
-          "name": "post_indigenous",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "post_newcomers": {
-          "name": "post_newcomers",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "post_youth": {
-          "name": "post_youth",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
+        "expires_at": {
+          "name": "expires_at",
+          "type": "date",
           "primaryKey": false,
           "notNull": true
         },
@@ -248,22 +300,20 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
-        },
-        "paymentConfirmed": {
-          "name": "paymentConfirmed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "job_posting_user_id_user_id_fk": {
+          "name": "job_posting_user_id_user_id_fk",
+          "tableFrom": "job_posting",
+          "tableTo": "user",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -347,16 +397,15 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.stripeCustomer": {
-      "name": "stripeCustomer",
+    "public.stripe_customer": {
+      "name": "stripe_customer",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "user_id": {
           "name": "user_id",
@@ -373,9 +422,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "stripeCustomer_user_id_user_id_fk": {
-          "name": "stripeCustomer_user_id_user_id_fk",
-          "tableFrom": "stripeCustomer",
+        "stripe_customer_user_id_user_id_fk": {
+          "name": "stripe_customer_user_id_user_id_fk",
+          "tableFrom": "stripe_customer",
           "tableTo": "user",
           "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
@@ -385,13 +434,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "stripeCustomer_user_id_unique": {
-          "name": "stripeCustomer_user_id_unique",
+        "stripe_customer_userId_unique": {
+          "name": "stripe_customer_userId_unique",
           "nullsNotDistinct": false,
           "columns": ["user_id"]
         },
-        "stripeCustomer_stripe_id_unique": {
-          "name": "stripeCustomer_stripe_id_unique",
+        "stripe_customer_stripeId_unique": {
+          "name": "stripe_customer_stripeId_unique",
           "nullsNotDistinct": false,
           "columns": ["stripe_id"]
         }
@@ -484,15 +533,15 @@
           "notNull": true,
           "default": true
         },
-        "opted_out": {
-          "name": "opted_out",
+        "activated": {
+          "name": "activated",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
           "default": false
         },
-        "activated": {
-          "name": "activated",
+        "opted_out": {
+          "name": "opted_out",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
@@ -574,7 +623,47 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.employment_type": {
+      "name": "employment_type",
+      "schema": "public",
+      "values": ["Full Time", "Part Time"]
+    },
+    "public.job_board": {
+      "name": "job_board",
+      "schema": "public",
+      "values": ["accessible", "asylum", "indigenous", "newcomers", "youth"]
+    },
+    "public.language": {
+      "name": "language",
+      "schema": "public",
+      "values": ["English", "French", "English and French"]
+    },
+    "public.payment_type": {
+      "name": "payment_type",
+      "schema": "public",
+      "values": ["Salary", "Hourly"]
+    },
+    "public.province": {
+      "name": "province",
+      "schema": "public",
+      "values": [
+        "AB",
+        "BC",
+        "MB",
+        "NB",
+        "NL",
+        "NS",
+        "ON",
+        "PE",
+        "QC",
+        "SK",
+        "NT",
+        "NU",
+        "YT"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

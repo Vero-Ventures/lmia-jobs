@@ -22,8 +22,10 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { JobBoard } from "@/app/lib/constants";
 import {
-  JOB_TYPES,
+  EMPLOYMENT_TYPES,
+  JOB_BOARDS,
   languages,
   paymentTypes,
   PRICE_PER_MONTH,
@@ -35,20 +37,22 @@ import Link from "next/link";
 import { createJobPost } from "./actions";
 import { useRouter } from "next/navigation";
 import FormSubmitButton from "@/components/form-submit-button";
-import type { CreatePost } from "@/app/lib/job-postings/schema";
-import { createPostSchema } from "@/app/lib/job-postings/schema";
+import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
+import { createJobPostingSchema } from "@/app/lib/job-postings/schema";
+import { formatDate } from "@/lib/utils";
+import { useState } from "react";
 
 export function CreatePostForm() {
-  const form = useForm<CreatePost>({
-    resolver: zodResolver(createPostSchema),
+  const form = useForm<CreateJobPosting>({
+    resolver: zodResolver(createJobPostingSchema),
     defaultValues: {
       email: "",
-      jobTitle: "",
-      organizationName: "",
-      province: "AB",
+      title: "",
+      orgName: "",
+      province: "BC",
       city: "",
       address: "",
-      startDate: new Date().toISOString().split("T")[0],
+      startDate: new Date(),
       vacancies: 0,
       employmentType: "Full Time",
       workHours: 0,
@@ -57,27 +61,16 @@ export function CreatePostForm() {
       maxPayValue: 0,
       description: "",
       language: "English",
-      postAsylum: false,
-      postDisabled: false,
-      postIndigenous: false,
-      postNewcomers: false,
-      postYouth: false,
       monthsToPost: 1,
     },
   });
   const router = useRouter();
+  const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>([]);
 
-  const selectedJobBoards = [
-    form.watch("postAsylum"),
-    form.watch("postDisabled"),
-    form.watch("postIndigenous"),
-    form.watch("postNewcomers"),
-    form.watch("postYouth"),
-  ].filter(Boolean).length;
   const monthsToPost = form.watch("monthsToPost");
 
-  async function onSubmit(values: CreatePost) {
-    toast.promise(createJobPost(values), {
+  async function onSubmit(values: CreateJobPosting) {
+    toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
       success: () => {
         form.reset();
@@ -88,8 +81,6 @@ export function CreatePostForm() {
         if (error instanceof Error) return error.message;
       },
     });
-    await createJobPost(values);
-    form.reset();
   }
 
   return (
@@ -105,7 +96,7 @@ export function CreatePostForm() {
               <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="jobTitle"
+                  name="title"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Job Title</FormLabel>
@@ -131,7 +122,7 @@ export function CreatePostForm() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {JOB_TYPES.map((jobType) => (
+                          {EMPLOYMENT_TYPES.map((jobType) => (
                             <SelectItem
                               key={jobType.value}
                               value={jobType.value}>
@@ -149,19 +140,14 @@ export function CreatePostForm() {
                   name="startDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Hiring Date{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Start Date</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
                           min="1900-01-01"
-                          defaultValue={field.value}
+                          defaultValue={formatDate(field.value)}
                           onChange={(e) => {
-                            field.onChange(e.target.value);
+                            field.onChange(new Date(e.target.value));
                           }}
                         />
                       </FormControl>
@@ -175,7 +161,7 @@ export function CreatePostForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Weekly Hours{" "}
+                        Work Hours{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>
@@ -198,7 +184,7 @@ export function CreatePostForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Available Positions{" "}
+                        Vacancies{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>
@@ -267,7 +253,7 @@ export function CreatePostForm() {
               <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="organizationName"
+                  name="orgName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Organization Name</FormLabel>
@@ -303,12 +289,7 @@ export function CreatePostForm() {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Address{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter an address" {...field} />
                       </FormControl>
@@ -440,81 +421,35 @@ export function CreatePostForm() {
                 Posting Preferences
               </h2>
               <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <FormField
-                  control={form.control}
-                  name="postDisabled"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel>Accessible Job Board</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="postAsylum"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel>Asylum Job Board</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="postIndigenous"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel>Indigenous Job Board</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="postNewcomers"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel>Newcomers Job Board</FormLabel>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="postYouth"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel>Youth Job Board</FormLabel>
-                    </FormItem>
-                  )}
-                />
+                {JOB_BOARDS.map((jobBoard) => (
+                  <div
+                    className="flex items-center space-x-2 capitalize"
+                    key={jobBoard}>
+                    <Checkbox
+                      id={jobBoard}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedJobBoards([
+                            ...selectedJobBoards,
+                            jobBoard,
+                          ]);
+                        } else {
+                          setSelectedJobBoards(
+                            selectedJobBoards.filter(
+                              (selectedJobBoard) =>
+                                selectedJobBoard !== jobBoard
+                            )
+                          );
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor={jobBoard}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      {jobBoard}
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -540,7 +475,7 @@ export function CreatePostForm() {
               <div className="space-y-2 sm:text-right">
                 <h2 className="text-2xl font-bold">Total Price</h2>
                 <p className="text-xl font-semibold">
-                  ${selectedJobBoards * monthsToPost * PRICE_PER_MONTH}
+                  ${selectedJobBoards.length * monthsToPost * PRICE_PER_MONTH}
                 </p>
               </div>
             </div>
