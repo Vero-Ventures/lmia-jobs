@@ -43,7 +43,9 @@ export default function SingleJobPosting({
         </div>
       )}
       <div className="space-y-4">
-        <Heading className={`titleCase`}>{jobPosting.title}</Heading>
+        <Heading className={`titleCase text-primary`}>
+          {jobPosting.title}
+        </Heading>
 
         <P className="mt-2 text-gray-600">
           Posted on{" "}
@@ -98,7 +100,7 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <ClockIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                {`${jobPosting.workHours ? jobPosting.workHours + " / Week" : "N/A"}`}
+                {`${jobPosting.workHours ? jobPosting.workHours + " Hours / Week" : "N/A"}`}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -129,12 +131,16 @@ export default function SingleJobPosting({
         <div className="space-y-4">
           {jobPosting.language && (
             <div className="space-y-2">
-              <Heading variant="h3">Languages</Heading>
+              <Heading variant="h3" className="text-primary">
+                Languages
+              </Heading>
               <P>{jobPosting.language}</P>
             </div>
           )}
           <div className="space-y-2">
-            <Heading variant="h3">Job Description</Heading>
+            <Heading variant="h3" className="text-primary">
+              Job Description
+            </Heading>
             <P dangerouslySetInnerHTML={{ __html: jobPosting.description }} />
           </div>
         </div>
