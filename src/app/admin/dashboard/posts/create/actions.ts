@@ -6,7 +6,10 @@ import { db } from "@/db";
 import { jobBoardPosting, jobPosting } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import type { CreateJobPosting, EditPost } from "@/app/lib/job-postings/schema";
+import type {
+  CreateJobPosting,
+  EditJobPosting,
+} from "@/app/lib/job-postings/schema";
 import type { JobBoard } from "@/app/lib/constants";
 
 export async function createJobPost(
@@ -63,7 +66,7 @@ export async function createJobPost(
   }
 }
 
-export async function updateJobPost(formData: EditPost, postId: string) {
+export async function updateJobPost(formData: EditJobPosting, postId: number) {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -75,9 +78,6 @@ export async function updateJobPost(formData: EditPost, postId: string) {
     const postData = {
       ...formData,
       userId: session.user.id,
-      address: formData.address === "" ? null : formData.address,
-      region: formData.province,
-      startDate: formData.startDate,
       vacancies: !formData.vacancies
         ? null
         : Math.ceil(Number(formData.vacancies)),
@@ -88,7 +88,6 @@ export async function updateJobPost(formData: EditPost, postId: string) {
       maxPayValue: !formData.maxPayValue
         ? null
         : Math.ceil(Number(formData.maxPayValue)),
-      language: formData.language,
     };
 
     await db

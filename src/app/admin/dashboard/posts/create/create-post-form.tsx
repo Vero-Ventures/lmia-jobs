@@ -140,12 +140,7 @@ export function CreatePostForm() {
                   name="startDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Start Date{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Start Date</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
@@ -427,7 +422,9 @@ export function CreatePostForm() {
               </h2>
               <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {JOB_BOARDS.map((jobBoard) => (
-                  <div className="flex items-center space-x-2" key={jobBoard}>
+                  <div
+                    className="flex items-center space-x-2 capitalize"
+                    key={jobBoard}>
                     <Checkbox
                       id={jobBoard}
                       onCheckedChange={(checked) => {
