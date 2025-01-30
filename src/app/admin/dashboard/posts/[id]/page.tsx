@@ -25,6 +25,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import HidePost from "./components/hide-post";
 import Link from "next/link";
+import { DeletePost } from "./components/delete-post";
 
 interface PageProps {
   params: Promise<{ id: number }>;
@@ -61,6 +62,7 @@ export default async function SinglePostPage({ params }: PageProps) {
                 </Link>
               </Button>
               <HidePost id={jobPosting.id} hidden={jobPosting.hidden} />
+              <DeletePost id={jobPosting.id} />
             </div>
           </div>
           <CardDescription className="mt-2 text-gray-500 dark:text-gray-400">

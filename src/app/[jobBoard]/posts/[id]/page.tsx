@@ -1,3 +1,4 @@
+import P from "@/components/paragraph";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -116,19 +117,14 @@ export default async function SinglePostPage({ params }: PageProps) {
                 <h5 className={`text-base font-bold dark:text-white`}>
                   Languages
                 </h5>
-                <p className="text-gray-500 dark:text-gray-400">
-                  {jobPosting.language}
-                </p>
+                <P>{jobPosting.language}</P>
               </div>
             )}
             <div className="space-y-2">
               <h5 className={`text-base font-bold dark:text-white`}>
                 Job Description
               </h5>
-              <p
-                className="text-gray-500 dark:text-gray-400"
-                dangerouslySetInnerHTML={{ __html: jobPosting.description }}
-              />
+              <P dangerouslySetInnerHTML={{ __html: jobPosting.description }} />
             </div>
           </CardContent>
           <CardFooter>

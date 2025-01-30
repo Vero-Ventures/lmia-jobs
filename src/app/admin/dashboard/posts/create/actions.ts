@@ -101,3 +101,8 @@ export async function updateJobPost(formData: EditPost, postId: string) {
     console.error(error);
   }
 }
+
+export async function deletePost(id: number) {
+  await db.delete(jobBoardPosting).where(eq(jobBoardPosting.jobPostingId, id));
+  await db.delete(jobPosting).where(eq(jobPosting.id, id));
+}
