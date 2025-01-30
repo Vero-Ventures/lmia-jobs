@@ -53,10 +53,10 @@ export default async function Page({
         </Form>
         <div className="flex gap-2 font-semibold">
           <FilterSelect
-            initalValue={employmentType}
+            initialValue={employmentType}
             filterType="employmentType"
           />
-          <FilterSelect initalValue={province} filterType="province" />
+          <FilterSelect initialValue={province} filterType="province" />
         </div>
       </div>
       <section className="container mx-auto mt-8 p-4">
