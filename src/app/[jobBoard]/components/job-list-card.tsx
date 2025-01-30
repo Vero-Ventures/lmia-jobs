@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { JobPosting } from "@/db/schema";
+import P from "@/components/paragraph";
 
 export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
   const currentDate = new Date();
@@ -28,18 +29,18 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
             </div>
           </div>
           <div className="space-x-4 text-sm text-gray-500">
-            <Badge variant="outline">
-              {jobPosting.city}, {jobPosting.province}
+            <Badge>
+              {jobPosting.city && jobPosting.city + ", "} {jobPosting.province}
             </Badge>
           </div>
         </div>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <P>
             {jobPosting.employmentType} - From ${`${jobPosting.minPayValue}`}{" "}
             {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
-          </p>
+          </P>
         </div>
       </CardContent>
     </Card>
