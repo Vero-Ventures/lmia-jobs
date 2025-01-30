@@ -36,6 +36,7 @@ import { useParams, useRouter } from "next/navigation";
 import type { EditJobPosting } from "@/app/lib/job-postings/schema";
 import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
 import { formatDate } from "@/lib/utils";
+import MoneyInput from "@/components/money-input";
 
 export function EditPostForm({
   initialValues,
@@ -354,46 +355,17 @@ export function EditPostForm({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
+                <MoneyInput
+                  form={form}
                   name="minPayValue"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Minimum Pay</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter a minimum pay"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Minimum Pay"
+                  placeholder="Enter the minimum pay"
                 />
-                <FormField
-                  control={form.control}
+                <MoneyInput
+                  form={form}
                   name="maxPayValue"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Maximum Pay{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={form.watch("minPayValue") || 0}
-                          placeholder="Enter a maximum pay"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Maximum Pay"
+                  placeholder="Enter the maximum pay"
                 />
               </div>
             </div>
