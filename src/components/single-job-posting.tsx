@@ -92,7 +92,7 @@ export default function SingleJobPosting({
               <span className="text-gray-600">
                 ${jobPosting.minPayValue}{" "}
                 {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
-                {jobPosting.paymentType}
+                {jobPosting.paymentType === "Hourly" ? "hourly" : "annually"}
               </span>
             </div>
           </div>

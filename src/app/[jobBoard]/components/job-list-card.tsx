@@ -38,8 +38,9 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
       <CardContent>
         <div className="flex justify-between">
           <P>
-            {jobPosting.employmentType} - From ${`${jobPosting.minPayValue}`}{" "}
-            {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
+            Salary: ${`${jobPosting.minPayValue}`}{" "}
+            {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}
+            {jobPosting.paymentType === "Hourly" ? " hourly" : " annually"}
           </P>
         </div>
       </CardContent>
