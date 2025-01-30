@@ -50,7 +50,7 @@ export async function createJobPost(
 
     await Promise.all(
       selectedJobBoards.map(async (jobBoard) => {
-        return db.insert(jobBoardPosting).values({
+        return await db.insert(jobBoardPosting).values({
           jobBoard,
           jobPostingId,
         });
