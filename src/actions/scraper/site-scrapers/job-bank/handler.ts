@@ -1,4 +1,7 @@
 import { CONFIG } from "@/actions/scraper/helpers/config";
+import { db } from "@/db/index";
+import { jobPosting } from "@/db/schema";
+import { isNotNull } from "drizzle-orm";
 import {
   getEmail,
   getJobDetails,
@@ -17,6 +20,11 @@ export async function scrapeGovJobBank(
 
   const newPosts = new Set<string>();
 
+  const existingPosts = await db
+    .select({ jobBankId: jobPosting.jobBankId })
+    .from(jobPosting)
+    .where(isNotNull(jobPosting.jobBankId));
+
   while (scrape) {
     const newPostIds = await scrapePosts(browserHandler, pageNum);
     newPostIds.forEach((value) => newPosts.add(value));
@@ -29,9 +37,19 @@ export async function scrapeGovJobBank(
     }
   }
 
+  const newPostsArray = [...newPosts];
+
+  const existingPostsArray: string[] = existingPosts.map(
+    (row) => row.jobBankId!
+  );
+
+  const validPosts = newPostsArray.filter(
+    (postId) => !existingPostsArray.includes(postId)
+  );
+
   const { postEmails, postDetails } = await visitPages(
     browserHandler,
-    Array.from(newPosts)
+    validPosts
   );
 
   return { postEmails, postDetails };

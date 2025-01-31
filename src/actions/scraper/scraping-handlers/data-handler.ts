@@ -60,6 +60,7 @@ export class DataHandler {
 
       return {
         userId: process.env.ADMIN_USER_ID!,
+        jobBankId: postId,
         email: postDetails.email,
         title: postDetails.title,
         orgName: postDetails.orgName,

@@ -78,6 +78,7 @@ export const provinceEnum = pgEnum("province", provinceValues);
 
 export const jobPosting = pgTable("job_posting", {
   id: serial().primaryKey(),
+  jobBankId: text(),
   userId: text().references(() => user.id, { onDelete: "cascade" }),
   email: text().notNull(),
   title: text().notNull(),

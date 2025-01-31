@@ -7,6 +7,7 @@ import type {
 
 export type JobPosting = {
   userId: string | null;
+  jobBankId: string | null;
   email: string;
   title: string;
   orgName: string;

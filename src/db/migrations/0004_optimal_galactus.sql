@@ -1,0 +1,1 @@
+ALTER TABLE "job_posting" ADD COLUMN "job_bank_id" text;
