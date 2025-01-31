@@ -38,7 +38,7 @@ export async function createStripeUser(userEmail: string): Promise<boolean> {
 
       await db
         .insert(stripeCustomer)
-        .values({ userId: currentUser.id, stripeId: customer.id });
+        .values({ userId: currentUser.id, id: customer.id });
 
       const scrapedUser = await db
         .select()

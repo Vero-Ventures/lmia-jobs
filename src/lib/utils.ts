@@ -16,3 +16,17 @@ const moneyFormatter = new Intl.NumberFormat("en-CA", {
 export function formatMoney(num: number) {
   return moneyFormatter.format(num);
 }
+
+export async function tryCatch<T>(promise: Promise<T>) {
+  let data = null;
+  let error = null;
+  try {
+    data = await promise;
+  } catch (e) {
+    if (e instanceof Error) {
+      error = e;
+    }
+  } finally {
+    return { data, error };
+  }
+}

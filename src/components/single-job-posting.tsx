@@ -8,7 +8,6 @@ import {
   CalendarIcon,
   CircleDollarSignIcon,
   ClockIcon,
-  HandCoins,
   MailIcon,
   MapPinIcon,
   Pencil,
@@ -18,6 +17,7 @@ import Link from "next/link";
 import P from "./paragraph";
 import Heading from "./heading";
 import { formatDate, formatMoney } from "@/lib/utils";
+import PayButton from "./pay-button";
 
 export default function SingleJobPosting({
   jobPosting,
@@ -33,12 +33,7 @@ export default function SingleJobPosting({
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-20">
       {isOwner && isAdmin && (
         <div className="flex justify-end gap-2 px-4">
-          {!jobPosting.paymentConfirmed && (
-            <Button>
-              <HandCoins />
-              <span>Pay</span>
-            </Button>
-          )}
+          {!jobPosting.paymentConfirmed && <PayButton id={jobPosting.id} />}
           <Button asChild>
             <Link href={`/dashboard/posts/${jobPosting.id}/edit`}>
               <Pencil />

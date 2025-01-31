@@ -72,10 +72,10 @@ export function CreatePostForm() {
   async function onSubmit(values: CreateJobPosting) {
     toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
-      success: async (data) => {
-        if (data) {
+      success: async (id) => {
+        if (id) {
           await createCheckoutSession({
-            jobPostingId: data,
+            jobPostingId: id,
             numMonths: monthsToPost,
             numJobBoards: selectedJobBoards.length,
           });

@@ -51,7 +51,9 @@ export async function createCheckoutSession({
     // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
     session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
-      success_url: getUrl("/payment-confirmed"),
+      success_url: getUrl(
+        "/payment-confirmed?stripe_session_id={CHECKOUT_SESSION_ID}"
+      ),
       cancel_url: getUrl(return_url),
       mode: "payment",
       payment_intent_data: {
@@ -84,5 +86,5 @@ export async function createCheckoutSession({
     );
   }
 
-  return redirect(session.url ?? "/dashboard");
+  return redirect(session.url ?? return_url);
 }
