@@ -10,36 +10,29 @@ import type {
 import type { JobPosting as JobPostingData } from "@/app/lib/types";
 
 export class DataHandler {
-  constructor(
-    public users: Record<string, Set<string>>,
-    public posts: Record<string, JobPostData>
-  ) {}
+  constructor(public posts: JobPostData[]) {}
 
   async createPosts(): Promise<void> {
-    console.log(JSON.stringify(this.users));
     console.log(JSON.stringify(this.posts));
 
     try {
-      const emails = Object.keys(this.users);
-
       const userEmails = await db.select({ email: user.email }).from(user);
 
       const emailArray: string[] = userEmails.map((row) => row.email);
 
-      const newEmails = emails.filter((email) => !emailArray.includes(email));
+      const postsFromNewEmails = this.posts.filter(
+        (post) => !emailArray.includes(post.email)
+      );
 
       const newPosts = [];
 
-      for (const newEmail of newEmails) {
-        const userPosts = this.users[newEmail];
-        for (const post of userPosts) {
-          try {
-            newPosts.push(await this.handlePostCreation(post));
-          } catch (error) {
-            console.error(
-              "Error Creating User With Email: " + newEmail + ", " + error
-            );
-          }
+      for (const newPost of postsFromNewEmails) {
+        try {
+          newPosts.push(await this.handlePostCreation(newPost));
+        } catch (error) {
+          console.error(
+            "Error Creating Post With Id: " + newPost.postId + ", " + error
+          );
         }
       }
 
@@ -53,32 +46,30 @@ export class DataHandler {
     }
   }
 
-  async handlePostCreation(postId: string): Promise<JobPostingData> {
+  async handlePostCreation(postData: JobPostData): Promise<JobPostingData> {
     try {
-      const postDetails = this.posts[postId];
-
       const expireryDate = new Date();
 
       expireryDate.setMonth(new Date().getMonth() + 3);
 
       return {
         userId: process.env.ADMIN_USER_ID!,
-        jobBankId: postId,
-        email: postDetails.email,
-        title: postDetails.title,
-        orgName: postDetails.orgName,
-        province: postDetails.province as Province,
-        city: postDetails.city,
-        address: postDetails.address ? postDetails.address : null,
-        startDate: new Date(postDetails.startDate),
-        vacancies: postDetails.vacancies,
-        employmentType: postDetails.employmentType as EmploymentType,
-        workHours: postDetails.workHours,
-        paymentType: postDetails.paymentType as PaymentType,
-        minPayValue: postDetails.minPayValue,
-        maxPayValue: postDetails.maxPayValue ? postDetails.maxPayValue : null,
-        description: postDetails.description,
-        language: postDetails.language as Language,
+        jobBankId: postData.postId,
+        email: postData.email,
+        title: postData.title,
+        orgName: postData.orgName,
+        province: postData.province as Province,
+        city: postData.city,
+        address: postData.address ? postData.address : null,
+        startDate: new Date(postData.startDate),
+        vacancies: postData.vacancies,
+        employmentType: postData.employmentType as EmploymentType,
+        workHours: postData.workHours,
+        paymentType: postData.paymentType as PaymentType,
+        minPayValue: postData.minPayValue,
+        maxPayValue: postData.maxPayValue ? postData.maxPayValue : null,
+        description: postData.description,
+        language: postData.language as Language,
         hidden: false,
         paymentConfirmed: true,
         expiresAt: expireryDate,

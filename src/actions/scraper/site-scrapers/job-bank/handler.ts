@@ -11,14 +11,11 @@ import type { JobPostData } from "@/actions/scraper/helpers/types";
 
 export async function scrapeGovJobBank(
   browserHandler: BrowserHandler
-): Promise<{
-  postEmails: Record<string, Set<string>>;
-  postDetails: Record<string, JobPostData>;
-}> {
+): Promise<JobPostData[]> {
   let pageNum = 1;
   let scrape = true;
 
-  const newPosts = new Set<string>();
+  const newPostIds: string[] = [];
 
   const existingPosts = await db
     .select({ jobBankId: jobPosting.jobBankId })
@@ -26,41 +23,36 @@ export async function scrapeGovJobBank(
     .where(isNotNull(jobPosting.jobBankId));
 
   while (scrape) {
-    const newPostIds = await scrapePosts(browserHandler, pageNum);
-    newPostIds.forEach((value) => newPosts.add(value));
+    const newPosts = await scrapePosts(browserHandler, pageNum);
+    newPosts.forEach((value) => newPostIds.push(value));
 
     // Testing: Limit Pages To 1
     if ((pageNum = 1)) {
       scrape = false;
     } else {
-      pageNum += 1;
+      pageNum += 2;
     }
   }
-
-  const newPostsArray = [...newPosts];
 
   const existingPostsArray: string[] = existingPosts.map(
     (row) => row.jobBankId!
   );
 
-  const validPosts = newPostsArray.filter(
+  const validPosts = newPostIds.filter(
     (postId) => !existingPostsArray.includes(postId)
   );
 
-  const { postEmails, postDetails } = await visitPages(
-    browserHandler,
-    validPosts
-  );
+  const postDetails = await visitPages(browserHandler, validPosts);
 
-  return { postEmails, postDetails };
+  return postDetails;
 }
 
 async function scrapePosts(
   browserHandler: BrowserHandler,
   pageNum: number
-): Promise<string[]> {
+): Promise<Set<string>> {
   try {
-    const pagePostIds: string[] = [];
+    const pagePostIds = new Set<string>();
     await browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
 
     const posts = await browserHandler.waitAndGetElement(
@@ -78,27 +70,24 @@ async function scrapePosts(
 
       if ((await postedToBank.innerText()).includes("Posted on Job Bank")) {
         const fullId = await post.getAttribute("id");
-        pagePostIds.push(fullId!.split("-")[1]);
+        pagePostIds.add(fullId!.split("-")[1]);
       }
     }
 
     return pagePostIds;
   } catch (error) {
     console.error("Error getting job post Ids: " + error);
-    return [];
+    return new Set<string>();
   }
 }
 
 async function visitPages(
   browserHandler: BrowserHandler,
   postIds: string[]
-): Promise<{
-  postEmails: Record<string, Set<string>>;
-  postDetails: Record<string, JobPostData>;
-}> {
+): Promise<JobPostData[]> {
   try {
-    const postEmails: Record<string, Set<string>> = {};
-    const postDetails: Record<string, JobPostData> = {};
+    const postDetails: JobPostData[] = [];
+
     for (const post of postIds) {
       await browserHandler.visitPage(
         CONFIG.urls.searchResult + String(post) + "?source=searchresults"
@@ -116,21 +105,13 @@ async function visitPages(
       if (!details) {
         console.error("Post With ID: " + post + " Has Invalid Details");
       } else {
-        if (postEmails.hasOwnProperty(email)) {
-          postEmails[email].add(post);
-        } else {
-          postEmails[email] = new Set<string>(post);
-        }
-
-        if (!postDetails.hasOwnProperty(post)) {
-          postDetails[post] = details;
-        }
+        postDetails.push(details);
       }
     }
 
-    return { postEmails, postDetails };
+    return postDetails;
   } catch (error) {
     console.error("Error getting getting Email or Details: " + error);
-    return { postEmails: {}, postDetails: {} };
+    return [];
   }
 }

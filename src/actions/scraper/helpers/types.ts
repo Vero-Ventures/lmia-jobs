@@ -3,6 +3,7 @@ export type UserData = {
 };
 
 export type JobPostData = {
+  postId: string;
   email: string;
   title: string;
   orgName: string;

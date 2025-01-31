@@ -59,12 +59,9 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
 }
 
 async function runSiteScrapers(handler: BrowserHandler) {
-  const emailsAndPosts = await scrapeGovJobBank(handler);
+  const postsToSave = await scrapeGovJobBank(handler);
 
-  const dataHandler = new DataHandler(
-    emailsAndPosts.postEmails,
-    emailsAndPosts.postDetails
-  );
+  const dataHandler = new DataHandler(postsToSave);
 
   try {
     await dataHandler.createPosts();
