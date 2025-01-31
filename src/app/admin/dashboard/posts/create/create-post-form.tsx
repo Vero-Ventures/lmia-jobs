@@ -35,13 +35,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { createJobPost } from "./actions";
-import { useRouter } from "next/navigation";
 import FormSubmitButton from "@/components/form-submit-button";
 import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
 import { createJobPostingSchema } from "@/app/lib/job-postings/schema";
 import { formatDate } from "@/lib/utils";
 import { useState } from "react";
 import MoneyInput from "@/components/money-input";
+import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 
 export function CreatePostForm() {
   const form = useForm<CreateJobPosting>({
@@ -65,7 +65,6 @@ export function CreatePostForm() {
       monthsToPost: 1,
     },
   });
-  const router = useRouter();
   const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>([]);
 
   const monthsToPost = form.watch("monthsToPost");
@@ -73,9 +72,14 @@ export function CreatePostForm() {
   async function onSubmit(values: CreateJobPosting) {
     toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
-      success: () => {
-        form.reset();
-        router.push("/dashboard");
+      success: async (id) => {
+        if (id) {
+          await createCheckoutSession({
+            jobPostingId: id,
+            numMonths: monthsToPost,
+            numJobBoards: selectedJobBoards.length,
+          });
+        }
         return "Job posting created successfully";
       },
       error: (error) => {

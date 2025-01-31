@@ -20,7 +20,7 @@ export async function createJobPost(
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session) return null;
+    if (!session) return redirect("/sign-in");
 
     const { monthsToPost, ...rest } = formData;
 
@@ -42,7 +42,7 @@ export async function createJobPost(
         : Math.ceil(Number(formData.maxPayValue)),
       expiresAt: expiryDate,
       paymentConfirmed: false,
-      hidden: true,
+      hidden: false,
     };
 
     const { id: jobPostingId } = await db
@@ -51,19 +51,52 @@ export async function createJobPost(
       .returning({ id: jobPosting.id })
       .then((res) => res[0]);
 
-    await Promise.all(
-      selectedJobBoards.map(async (jobBoard) => {
-        return await db.insert(jobBoardPosting).values({
-          jobBoard,
-          jobPostingId,
-        });
-      })
-    );
+    await createJobBoardPostings({ id: jobPostingId, selectedJobBoards });
 
     return jobPostingId;
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function createJobBoardPostings({
+  id,
+  selectedJobBoards,
+}: {
+  id: number;
+  selectedJobBoards: JobBoard[];
+}) {
+  await Promise.all(
+    selectedJobBoards.map(async (jobBoard) => {
+      return await db.insert(jobBoardPosting).values({
+        jobBoard,
+        jobPostingId: id,
+      });
+    })
+  );
+}
+
+export async function removeJobBoardPostings(id: number) {
+  await db.delete(jobBoardPosting).where(eq(jobBoardPosting.jobPostingId, id));
+}
+
+export async function updateJobBoardPostings({
+  id,
+  selectedJobBoards,
+  monthsToPost,
+}: {
+  id: number;
+  selectedJobBoards: JobBoard[];
+  monthsToPost: number;
+}) {
+  await removeJobBoardPostings(id);
+  await createJobBoardPostings({ id, selectedJobBoards });
+  const expiryDate = new Date();
+  expiryDate.setMonth(new Date().getMonth() + Math.max(12, monthsToPost));
+  await db
+    .update(jobPosting)
+    .set({ expiresAt: expiryDate })
+    .where(eq(jobPosting.id, id));
 }
 
 export async function updateJobPost(formData: EditJobPosting, postId: number) {
@@ -102,6 +135,6 @@ export async function updateJobPost(formData: EditJobPosting, postId: number) {
 }
 
 export async function deletePost(id: number) {
-  await db.delete(jobBoardPosting).where(eq(jobBoardPosting.jobPostingId, id));
+  await removeJobBoardPostings(id);
   await db.delete(jobPosting).where(eq(jobPosting.id, id));
 }
