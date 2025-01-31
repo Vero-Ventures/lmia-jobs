@@ -48,6 +48,9 @@ export class DataHandler {
         await db.insert(jobPosting).values(newPosts);
       }
 
+      console.log("Emails: " + JSON.stringify(newEmailsArray));
+      console.log("Emails Set: " + JSON.stringify(newEmails));
+
       await this.createUserMailingList(newEmailsArray);
     } catch (error) {
       throw error;
@@ -98,6 +101,7 @@ export class DataHandler {
     }[]
   ) {
     try {
+      console.log("Emails: " + JSON.stringify(newEmails));
       await db.insert(userMailing).values(newEmails);
     } catch (error) {
       throw error;
