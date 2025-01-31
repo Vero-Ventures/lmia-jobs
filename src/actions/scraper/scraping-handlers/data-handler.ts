@@ -60,7 +60,7 @@ export class DataHandler {
         orgName: postData.orgName,
         province: postData.province as Province,
         city: postData.city,
-        address: postData.address ? postData.address : "null",
+        address: postData.address ? postData.address : "",
         startDate: new Date(postData.startDate),
         vacancies: postData.vacancies,
         employmentType: postData.employmentType as EmploymentType,
