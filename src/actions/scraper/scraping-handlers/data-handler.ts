@@ -45,9 +45,12 @@ export class DataHandler {
       }
 
       if (newPosts.length > 1) {
+        console.log("Check For Double Call");
         await db.insert(jobPosting).values(newPosts);
         // await this.createUserMailingList(newEmailsArray);
       }
+
+      return;
     } catch (error) {
       throw error;
     }
