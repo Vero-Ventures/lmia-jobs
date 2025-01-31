@@ -46,12 +46,8 @@ export class DataHandler {
 
       if (newPosts.length > 1) {
         await db.insert(jobPosting).values(newPosts);
+        // await this.createUserMailingList(newEmailsArray);
       }
-
-      console.log("Emails: " + JSON.stringify(newEmailsArray));
-      console.log("Emails Set: " + JSON.stringify(newEmails));
-
-      await this.createUserMailingList(newEmailsArray);
     } catch (error) {
       throw error;
     }
