@@ -30,6 +30,7 @@ export async function createJobPost(formData: CreatePost) {
       ...rest,
       title: formData.jobTitle,
       orgName: formData.organizationName,
+      address: formData.address ? formData.address : "",
       startDate: new Date(formData.startDate),
       province: formData.province as Province,
       employmentType: formData.employmentType as EmploymentType,
