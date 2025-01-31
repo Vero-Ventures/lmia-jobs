@@ -32,18 +32,15 @@ export async function syncStripeDataToDatabase(customerId: string) {
     return;
   }
 
-  // Update job postings to be paid.
-  await Promise.all(
-    purchases.data.map(async (purchase) => {
-      const paymentIntent = await stripe.paymentIntents.retrieve(
-        purchase.payment_intent as string
-      );
-      const jobPostingId = paymentIntent.metadata.jobPostingId;
+  const purchase = purchases.data[0];
 
-      await db
-        .update(jobPosting)
-        .set({ paymentConfirmed: true })
-        .where(eq(jobPosting.id, Number(jobPostingId)));
-    })
+  const paymentIntent = await stripe.paymentIntents.retrieve(
+    purchase.payment_intent as string
   );
+  const jobPostingId = paymentIntent.metadata.jobPostingId;
+
+  await db
+    .update(jobPosting)
+    .set({ paymentConfirmed: true })
+    .where(eq(jobPosting.id, Number(jobPostingId)));
 }
