@@ -62,6 +62,8 @@ export class DataHandler {
 
       expireryDate.setMonth(new Date().getMonth() + 3);
 
+      console.log(expireryDate);
+
       return {
         userId: process.env.ADMIN_USER_ID!,
         jobBankId: postData.postId,

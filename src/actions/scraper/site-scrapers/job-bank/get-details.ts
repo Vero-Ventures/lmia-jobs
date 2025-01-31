@@ -2,6 +2,7 @@ import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser
 import { CONFIG } from "@/actions/scraper/helpers/config";
 import { getDescription } from "@/actions/scraper/site-scrapers/job-bank/get-description";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
+import { PROVINCES } from "@/app/lib/constants";
 
 export async function getEmail(
   browserHandler: BrowserHandler
@@ -151,6 +152,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
       const day = String(date.getDate()).padStart(2, "0");
 
       postedDate = `${year}-${month}-${day}`;
+      console.log(postedDate);
     }
   } catch (error) {
     throw "Posted Date Not Found: " + error;
@@ -199,7 +201,9 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
     );
     const regionValue = (await getRegion.allInnerTexts()).pop();
 
-    if (regionValue) {
+    const ProvincesArray = PROVINCES.map((province) => String(province.value));
+
+    if (regionValue && ProvincesArray.includes(regionValue)) {
       province = regionValue;
     }
   } catch (error) {
