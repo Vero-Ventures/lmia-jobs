@@ -64,7 +64,7 @@ export class DataHandler {
         startDate: new Date(postData.startDate),
         vacancies: postData.vacancies,
         employmentType: postData.employmentType as EmploymentType,
-        workHours: postData.workHours,
+        workHours: Math.floor(postData.workHours),
         maxWorkHours: postData.maxWorkHours
           ? Number(postData.maxWorkHours)
           : null,
