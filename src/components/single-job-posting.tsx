@@ -11,6 +11,7 @@ import {
   MailIcon,
   MapPinIcon,
   Pencil,
+  UploadCloud,
   User2Icon,
 } from "lucide-react";
 import Link from "next/link";
@@ -32,6 +33,12 @@ export default function SingleJobPosting({
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-20">
       {isOwner && isAdmin && (
         <div className="flex justify-end gap-2 px-4">
+          {!jobPosting.paymentConfirmed && (
+            <Button>
+              <UploadCloud />
+              <span>Publish</span>
+            </Button>
+          )}
           <Button asChild>
             <Link href={`/dashboard/posts/${jobPosting.id}/edit`}>
               <Pencil />

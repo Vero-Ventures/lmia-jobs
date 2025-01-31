@@ -1,101 +1,77 @@
 "use server";
 
-import { db } from "@/db/index";
-import { stripeCustomer } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import {
+  getStripeCustomerId,
+  storeStripeCustomerId,
+} from "@/db/queries/stripeCustomer";
+import { auth } from "@/lib/auth";
+import { stripe } from "@/lib/stripe";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { Stripe } from "stripe";
+export async function createCheckoutSession({
+  jobPostingId,
+  numMonths,
+  numJobBoards,
+}: {
+  jobPostingId: number;
+  numJobBoards: number;
+  numMonths: number;
+}) {
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-const stripe = new Stripe(
-  process.env.STRIPE_CONFIG! === "production"
-    ? process.env.PRODUCTION_STRIPE_PRIVATE_KEY!
-    : process.env.DEVELOPER_STRIPE_PRIVATE_KEY!
-);
-
-const success_url =
-  process.env.STRIPE_CONFIG! === "production"
-    ? "https://manageopportunities.ca/payment-confirmed"
-    : "http://localhost:3000/payment-confirmed";
-
-const cancel_url =
-  process.env.STRIPE_CONFIG! === "production"
-    ? "https://manageopportunities.ca/dashboard"
-    : "http://localhost:3000/dashboard";
-
-export async function createStripeCheckout(
-  userId: string,
-  postBoards: number,
-  postTime: number,
-  postId: string
-): Promise<{ result: boolean; url: string }> {
-  try {
-    const stripeUser = await db
-      .select()
-      .from(stripeCustomer)
-      .where(eq(stripeCustomer.userId, userId))
-      .then((res) => res[0]);
-
-    if (stripeUser) {
-      const checkoutSession = await stripe.checkout.sessions.create({
-        ui_mode: "hosted",
-        customer: stripeUser.stripeId,
-        mode: "payment",
-        payment_intent_data: {
-          metadata: {
-            boards: postBoards.toString(),
-            time: postTime.toString(),
-            postId: postId,
-          },
-        },
-        line_items: [
-          {
-            price_data: {
-              currency: "cad",
-              product_data: {
-                name:
-                  "Post on up to " +
-                  postBoards +
-                  " boards for " +
-                  postTime +
-                  " months.",
-                description:
-                  "Create an Opportunties job board posting to appear on up to " +
-                  postBoards +
-                  " Opportunities job boards for the next " +
-                  postTime +
-                  " months.",
-                metadata: {
-                  boards: postBoards,
-                  time: postTime,
-                  postId: postId,
-                },
-              },
-              unit_amount: postBoards * postTime * 500,
-            },
-            quantity: 1,
-          },
-        ],
-        success_url: success_url,
-        cancel_url: cancel_url,
-      });
-
-      if (checkoutSession.url) {
-        return { result: true, url: checkoutSession.url };
-      } else {
-        console.error("Stripe Session Creation Failed.");
-        return { result: false, url: "" };
-      }
-    } else {
-      console.error("Stripe User Not Found.");
-      return { result: false, url: "" };
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      return { result: false, url: "" };
-    } else {
-      console.error("Unexpected Error.");
-      return { result: false, url: "" };
-    }
+  if (!data) {
+    redirect("/");
   }
+
+  const user = data.user;
+
+  // Get the stripeCustomerId from your database
+  let { id: stripeCustomerId } = await getStripeCustomerId(user.id);
+
+  // Create a new Stripe customer if this user doesn't have one
+  if (!stripeCustomerId) {
+    const newCustomer = await stripe.customers.create({
+      email: user.email,
+      metadata: {
+        userId: user.id, // DO NOT FORGET THIS
+      },
+    });
+
+    // Store the relation between userId and stripeCustomerId in your KV
+    await storeStripeCustomerId(newCustomer.id, user.id);
+    stripeCustomerId = newCustomer.id;
+  }
+
+  // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
+  const checkout = await stripe.checkout.sessions.create({
+    customer: stripeCustomerId,
+    success_url: `${process.env.BETTER_AUTH_URL}/payment-confirmed`,
+    cancel_url: `${process.env.BETTER_AUTH_URL}/dashboard`,
+    payment_intent_data: {
+      metadata: {
+        numJobBoards,
+        numMonths,
+        jobPostingId,
+        userId: user.id,
+      },
+    },
+    line_items: [
+      {
+        price_data: {
+          currency: "cad",
+          product_data: {
+            name: `Post on up to ${numJobBoards} job boards for ${numMonths} months.`,
+            description: `Create a job board posting to appear on up to ${numJobBoards} Opportunities job boards for the next
+            ${numMonths} months.`,
+          },
+          unit_amount: numJobBoards * numMonths * 500,
+        },
+        quantity: 1,
+      },
+    ],
+  });
+  return checkout.url;
 }

@@ -118,12 +118,11 @@ export const jobBoardPosting = pgTable("job_board_posting", {
 });
 
 export const stripeCustomer = pgTable("stripe_customer", {
-  id: serial().primaryKey(),
+  id: text().primaryKey(),
   userId: text()
     .unique()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  stripeId: text().notNull().unique(),
 });
 
 export const userMailing = pgTable("user_mailing", {
