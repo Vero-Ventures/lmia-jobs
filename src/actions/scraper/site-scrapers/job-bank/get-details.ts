@@ -233,7 +233,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
     const minPayValue = (await getMinPay.allInnerTexts()).pop();
 
     if (minPayValue) {
-      minPay = minPayValue;
+      minPay = minPayValue.replace(/,/g, "");
     }
   } catch (error) {
     throw "Minimum Pay Not Found: " + error;
@@ -244,7 +244,11 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       CONFIG.selectors.govJobBank.jobDetails.payment.paymentMaximum,
       2500
     );
-    maxPay = (await getMaxPay.allInnerTexts()).pop();
+    const maxPayValue = (await getMaxPay.allInnerTexts()).pop();
+
+    if (maxPayValue) {
+      maxPay = maxPayValue.replace(/,/g, "");
+    }
   } catch {}
 
   try {
