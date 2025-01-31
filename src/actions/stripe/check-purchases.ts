@@ -1,31 +1,18 @@
 "use server";
 
-import { db } from "@/db/index";
-import { stripeCustomer } from "@/db/schema";
-import { eq } from "drizzle-orm";
-
-import { Stripe } from "stripe";
-
-const stripe = new Stripe(
-  process.env.STRIPE_CONFIG! === "production"
-    ? process.env.PRODUCTION_STRIPE_PRIVATE_KEY!
-    : process.env.DEVELOPER_STRIPE_PRIVATE_KEY!
-);
+import { getStripeCustomerId } from "@/db/queries/stripeCustomer";
+import { stripe } from "@/lib/stripe";
 
 export async function checkUserPurchases(userId: string): Promise<boolean> {
   try {
-    const stripeUser = await db
-      .select()
-      .from(stripeCustomer)
-      .where(eq(stripeCustomer.userId, userId))
-      .then((res) => res[0]);
+    const stripeCustomerId = await getStripeCustomerId(userId);
 
-    if (!stripeUser) {
+    if (!stripeCustomerId) {
       console.error("Stripe User Not Found");
       return false;
     } else {
       const customerPurchases = await stripe.charges.list({
-        customer: stripeUser.stripeId,
+        customer: stripeCustomerId,
       });
 
       const validPurchases: string[] = [];
