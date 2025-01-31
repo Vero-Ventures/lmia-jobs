@@ -42,7 +42,7 @@ export async function syncStripeDataToDatabase(customerId: string) {
 
       await db
         .update(jobPosting)
-        .set({ paymentConfirmed: true, hidden: false })
+        .set({ paymentConfirmed: true })
         .where(eq(jobPosting.id, Number(jobPostingId)));
     })
   );

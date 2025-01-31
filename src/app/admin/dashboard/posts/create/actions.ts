@@ -42,7 +42,7 @@ export async function createJobPost(
         : Math.ceil(Number(formData.maxPayValue)),
       expiresAt: expiryDate,
       paymentConfirmed: false,
-      hidden: true,
+      hidden: false,
     };
 
     const { id: jobPostingId } = await db
