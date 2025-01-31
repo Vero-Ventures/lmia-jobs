@@ -11,7 +11,6 @@ import SignInEmail from "@/components/emails/sign-in-email";
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 export const auth = betterAuth({
-  trustedOrigins: [process.env.BETTER_AUTH_URL!],
   database: drizzleAdapter(db, {
     provider: "pg",
   }),

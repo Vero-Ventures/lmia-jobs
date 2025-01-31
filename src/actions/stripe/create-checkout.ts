@@ -25,13 +25,13 @@ export async function createCheckoutSession({
   });
 
   if (!data) {
-    redirect("/");
+    redirect("/sign-in");
   }
 
   const user = data.user;
 
   // Get the stripeCustomerId from your database
-  let { id: stripeCustomerId } = await getStripeCustomerId(user.id);
+  let stripeCustomerId = await getStripeCustomerId(user.id);
 
   // Create a new Stripe customer if this user doesn't have one
   if (!stripeCustomerId) {
@@ -53,6 +53,7 @@ export async function createCheckoutSession({
       customer: stripeCustomerId,
       success_url: getUrl("/payment-confirmed"),
       cancel_url: getUrl(return_url),
+      mode: "payment",
       payment_intent_data: {
         metadata: {
           numJobBoards,

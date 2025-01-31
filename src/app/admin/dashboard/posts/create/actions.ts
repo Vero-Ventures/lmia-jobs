@@ -20,7 +20,7 @@ export async function createJobPost(
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session) return null;
+    if (!session) return redirect("/sign-in");
 
     const { monthsToPost, ...rest } = formData;
 
