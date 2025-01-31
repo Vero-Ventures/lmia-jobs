@@ -54,7 +54,12 @@ export default function SingleJobPosting({
           })}{" "}
           by {jobPosting.orgName}
         </P>
-        <div>
+        <div className="flex gap-2">
+          {jobPosting.paymentConfirmed ? (
+            <Badge variant="success">Paid</Badge>
+          ) : (
+            <Badge variant="warning">Not Paid</Badge>
+          )}
           {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
         </div>
         {isAdmin && isOwner && (

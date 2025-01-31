@@ -22,6 +22,11 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
             </CardTitle>
             <CardDescription>{jobPosting.orgName}</CardDescription>
             <div>
+              {jobPosting.paymentConfirmed ? (
+                <Badge variant="success">Paid</Badge>
+              ) : (
+                <Badge variant="warning">Not Paid</Badge>
+              )}
               {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
               {currentDate > jobPosting.expiresAt && (
                 <Badge variant="destructive">Expired</Badge>
