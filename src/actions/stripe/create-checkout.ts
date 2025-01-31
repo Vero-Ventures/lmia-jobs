@@ -5,7 +5,7 @@ import {
   storeStripeCustomerId,
 } from "@/db/queries/stripeCustomer";
 import { auth } from "@/lib/auth";
-import { stripe } from "@/lib/stripe";
+import { getUrl, stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -48,8 +48,8 @@ export async function createCheckoutSession({
   // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
   const checkout = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
-    success_url: `${process.env.BETTER_AUTH_URL}/payment-confirmed`,
-    cancel_url: `${process.env.BETTER_AUTH_URL}/dashboard`,
+    success_url: getUrl("/payment-confirmed"),
+    cancel_url: getUrl("/dashboard"),
     payment_intent_data: {
       metadata: {
         numJobBoards,
