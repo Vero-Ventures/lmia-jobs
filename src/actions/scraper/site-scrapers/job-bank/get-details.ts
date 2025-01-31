@@ -152,7 +152,6 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
       const day = String(date.getDate()).padStart(2, "0");
 
       postedDate = `${year}-${month}-${day}`;
-      console.log(postedDate);
     }
   } catch (error) {
     throw "Posted Date Not Found: " + error;

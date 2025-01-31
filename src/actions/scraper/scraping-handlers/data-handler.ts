@@ -45,9 +45,8 @@ export class DataHandler {
       }
 
       if (newPosts.length > 1) {
-        console.log("Check For Double Call");
         await db.insert(jobPosting).values(newPosts);
-        // await this.createUserMailingList(newEmailsArray);
+        await this.createUserMailingList(newEmailsArray);
       }
 
       return;
@@ -61,8 +60,6 @@ export class DataHandler {
       const expireryDate = new Date();
 
       expireryDate.setMonth(new Date().getMonth() + 3);
-
-      console.log(expireryDate);
 
       return {
         userId: process.env.ADMIN_USER_ID!,
@@ -102,7 +99,6 @@ export class DataHandler {
     }[]
   ) {
     try {
-      console.log("Emails: " + JSON.stringify(newEmails));
       await db.insert(userMailing).values(newEmails);
     } catch (error) {
       throw error;
