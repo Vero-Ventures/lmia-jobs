@@ -13,11 +13,12 @@ export type JobPosting = {
   orgName: string;
   province: Province;
   city: string;
-  address: string | null;
+  address: string;
   startDate: Date;
   vacancies: number | null;
   employmentType: EmploymentType;
   workHours: number | null;
+  maxWorkHours: number | null;
   paymentType: PaymentType;
   minPayValue: number;
   maxPayValue: number | null;

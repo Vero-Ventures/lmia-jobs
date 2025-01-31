@@ -60,11 +60,14 @@ export class DataHandler {
         orgName: postData.orgName,
         province: postData.province as Province,
         city: postData.city,
-        address: postData.address ? postData.address : null,
+        address: postData.address ? postData.address : "null",
         startDate: new Date(postData.startDate),
         vacancies: postData.vacancies,
         employmentType: postData.employmentType as EmploymentType,
         workHours: postData.workHours,
+        maxWorkHours: postData.maxWorkHours
+          ? Number(postData.maxWorkHours)
+          : null,
         paymentType: postData.paymentType as PaymentType,
         minPayValue: Math.floor(postData.minPayValue),
         maxPayValue: postData.maxPayValue

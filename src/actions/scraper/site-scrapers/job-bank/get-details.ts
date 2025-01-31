@@ -59,10 +59,10 @@ export async function getJobDetails(
       vacancies:
         otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
       employmentType: otherDetails.employmentType,
-      workHours:
-        paymentDetails.workHours !== "null"
-          ? Number(paymentDetails.workHours)
-          : 0,
+      workHours: paymentDetails.workHours,
+      maxWorkHours: paymentDetails.maxWorkHours
+        ? paymentDetails.maxWorkHours
+        : null,
       paymentType: paymentDetails.paymentType,
       minPayValue:
         paymentDetails.minPay !== "null" ? Number(paymentDetails.minPay) : 0,
@@ -217,12 +217,14 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
   minPay: string;
   maxPay: string | undefined;
   paymentType: string;
-  workHours: string;
+  workHours: number;
+  maxWorkHours: number | undefined;
 }> {
   let minPay = "null";
   let maxPay = undefined;
   let paymentType = "null";
-  let workHours = "null";
+  let workHours = 0;
+  let maxWorkHours = undefined;
 
   try {
     const getMinPay = await browserHandler.waitAndGetElement(
@@ -267,9 +269,10 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       const workHoursNum = workHoursValue.split("hours")[0].trim();
 
       if (workHoursNum.includes(" to ")) {
-        workHours = workHoursNum.split(" to ")[0];
+        workHours = Number(workHoursNum.split(" to ")[0]);
+        maxWorkHours = Number(workHoursNum.split(" to ")[1]);
       } else {
-        workHours = workHoursNum;
+        workHours = Number(workHoursNum);
       }
     }
   } catch (error) {
@@ -281,6 +284,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
     maxPay,
     paymentType,
     workHours,
+    maxWorkHours,
   };
 }
 
