@@ -39,10 +39,7 @@ export class DataHandler {
       }
 
       if (newPosts.length > 1) {
-        console.log("Write Posts");
-        console.log("New Posts To Write: " + JSON.stringify(newPosts));
         await db.insert(jobPosting).values(newPosts);
-        console.log("Wrote Posts");
       }
 
       await this.createUserMailingList([...newEmails]);
