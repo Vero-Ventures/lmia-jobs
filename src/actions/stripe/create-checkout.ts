@@ -46,34 +46,42 @@ export async function createCheckoutSession({
     await storeStripeCustomerId(newCustomer.id, user.id);
     stripeCustomerId = newCustomer.id;
   }
-
-  // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
-  const checkout = await stripe.checkout.sessions.create({
-    customer: stripeCustomerId,
-    success_url: getUrl("/payment-confirmed"),
-    cancel_url: getUrl(return_url),
-    payment_intent_data: {
-      metadata: {
-        numJobBoards,
-        numMonths,
-        jobPostingId,
-        userId: user.id,
-      },
-    },
-    line_items: [
-      {
-        price_data: {
-          currency: "cad",
-          product_data: {
-            name: `Post on up to ${numJobBoards} job boards for ${numMonths} months.`,
-            description: `Create a job board posting to appear on up to ${numJobBoards} Opportunities job boards for the next
-            ${numMonths} months.`,
-          },
-          unit_amount: numJobBoards * numMonths * 500,
+  let session;
+  try {
+    // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
+    session = await stripe.checkout.sessions.create({
+      customer: stripeCustomerId,
+      success_url: getUrl("/payment-confirmed"),
+      cancel_url: getUrl(return_url),
+      payment_intent_data: {
+        metadata: {
+          numJobBoards,
+          numMonths,
+          jobPostingId,
+          userId: user.id,
         },
-        quantity: 1,
       },
-    ],
-  });
-  return checkout.url;
+      line_items: [
+        {
+          price_data: {
+            currency: "cad",
+            product_data: {
+              name: `Post on up to ${numJobBoards} job boards for ${numMonths} months.`,
+              description: `Create a job board posting to appear on up to ${numJobBoards} Opportunities job boards for the next
+            ${numMonths} months.`,
+            },
+            unit_amount: numJobBoards * numMonths * 500,
+          },
+          quantity: 1,
+        },
+      ],
+    });
+  } catch (error) {
+    console.log("Error creating checkout session:", error);
+    throw new Error(
+      "Failed to create checkout session. Please refresh and try again."
+    );
+  }
+
+  return redirect(session.url ?? "/dashboard");
 }
