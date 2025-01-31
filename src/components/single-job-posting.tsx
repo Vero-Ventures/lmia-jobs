@@ -8,10 +8,10 @@ import {
   CalendarIcon,
   CircleDollarSignIcon,
   ClockIcon,
+  HandCoins,
   MailIcon,
   MapPinIcon,
   Pencil,
-  UploadCloud,
   User2Icon,
 } from "lucide-react";
 import Link from "next/link";
@@ -35,8 +35,8 @@ export default function SingleJobPosting({
         <div className="flex justify-end gap-2 px-4">
           {!jobPosting.paymentConfirmed && (
             <Button>
-              <UploadCloud />
-              <span>Publish</span>
+              <HandCoins />
+              <span>Pay</span>
             </Button>
           )}
           <Button asChild>
