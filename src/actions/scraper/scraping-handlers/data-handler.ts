@@ -26,11 +26,17 @@ export class DataHandler {
 
       const newPosts = [];
       const newEmails = new Set<string>();
+      const newEmailsArray = [];
 
       for (const newPost of postsFromNewEmails) {
         try {
           newPosts.push(await this.handlePostCreation(newPost));
-          newEmails.add(newPost.email);
+          if (!newEmails.has(newPost.email)) {
+            newEmails.add(newPost.email);
+            newEmailsArray.push({
+              email: newPost.email,
+            });
+          }
         } catch (error) {
           console.error(
             "Error Creating Post With Id: " + newPost.postId + ", " + error
@@ -42,7 +48,7 @@ export class DataHandler {
         await db.insert(jobPosting).values(newPosts);
       }
 
-      await this.createUserMailingList([...newEmails]);
+      await this.createUserMailingList(newEmailsArray);
     } catch (error) {
       throw error;
     }
@@ -86,16 +92,12 @@ export class DataHandler {
     }
   }
 
-  async createUserMailingList(emailArray: string[]) {
+  async createUserMailingList(
+    newEmails: {
+      email: string;
+    }[]
+  ) {
     try {
-      const newEmails = [];
-
-      for (const email of emailArray) {
-        newEmails.push({
-          email: email,
-        });
-      }
-
       await db.insert(userMailing).values(newEmails);
     } catch (error) {
       throw error;
