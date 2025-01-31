@@ -16,6 +16,9 @@ export class DataHandler {
   ) {}
 
   async createPosts(): Promise<void> {
+    console.log(JSON.stringify(this.users));
+    console.log(JSON.stringify(this.posts));
+
     try {
       const emails = Object.keys(this.users);
 
