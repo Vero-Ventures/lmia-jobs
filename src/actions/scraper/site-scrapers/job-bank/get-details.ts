@@ -266,7 +266,11 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
     if (workHoursValue) {
       const workHoursNum = workHoursValue.split("hours")[0].trim();
 
-      workHours = workHoursNum;
+      if (workHoursNum.includes(" to ")) {
+        workHours = workHoursNum.split(" to ")[0];
+      } else {
+        workHours = workHoursNum;
+      }
     }
   } catch (error) {
     throw "Work Hours Not Found: " + error;
