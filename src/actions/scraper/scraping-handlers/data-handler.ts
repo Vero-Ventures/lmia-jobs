@@ -25,12 +25,12 @@ export class DataHandler {
       );
 
       const newPosts = [];
-
-      console.log("Posts To Write: " + JSON.stringify(postsFromNewEmails));
+      const newEmails = new Set<string>();
 
       for (const newPost of postsFromNewEmails) {
         try {
           newPosts.push(await this.handlePostCreation(newPost));
+          newEmails.add(newPost.email);
         } catch (error) {
           console.error(
             "Error Creating Post With Id: " + newPost.postId + ", " + error
@@ -38,13 +38,14 @@ export class DataHandler {
         }
       }
 
-      console.log("New Posts To Write: " + JSON.stringify(newPosts));
-
       if (newPosts.length > 1) {
+        console.log("Write Posts");
+        console.log("New Posts To Write: " + JSON.stringify(newPosts));
         await db.insert(jobPosting).values(newPosts);
+        console.log("Wrote Posts");
       }
 
-      this.createUserMailingList(emailArray);
+      await this.createUserMailingList([...newEmails]);
     } catch (error) {
       throw error;
     }
