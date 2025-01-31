@@ -45,6 +45,7 @@ export async function createJobPost(
     const postData = {
       ...formData,
       userId: userId,
+      address: formData.address ? formData.address : "",
       language: formData.language as Language,
       province: formData.province as Province,
       employmentType: formData.employmentType as EmploymentType,
@@ -97,6 +98,7 @@ export async function updateJobPost(
     } else {
       const postData = {
         ...formData,
+        address: formData.address ? formData.address : "",
         language: formData.language as Language,
         province: formData.province as Province,
         employmentType: formData.employmentType as EmploymentType,
