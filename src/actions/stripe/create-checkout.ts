@@ -13,10 +13,12 @@ export async function createCheckoutSession({
   jobPostingId,
   numMonths,
   numJobBoards,
+  return_url = "/dashboard",
 }: {
   jobPostingId: number;
   numJobBoards: number;
   numMonths: number;
+  return_url?: string;
 }) {
   const data = await auth.api.getSession({
     headers: await headers(),
@@ -49,7 +51,7 @@ export async function createCheckoutSession({
   const checkout = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
     success_url: getUrl("/payment-confirmed"),
-    cancel_url: getUrl("/dashboard"),
+    cancel_url: getUrl(return_url),
     payment_intent_data: {
       metadata: {
         numJobBoards,
