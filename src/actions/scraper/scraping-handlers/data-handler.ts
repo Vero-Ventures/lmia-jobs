@@ -26,6 +26,8 @@ export class DataHandler {
 
       const newPosts = [];
 
+      console.log("Posts To Write: " + JSON.stringify(postsFromNewEmails));
+
       for (const newPost of postsFromNewEmails) {
         try {
           newPosts.push(await this.handlePostCreation(newPost));
@@ -35,6 +37,8 @@ export class DataHandler {
           );
         }
       }
+
+      console.log("New Posts To Write: " + JSON.stringify(newPosts));
 
       if (newPosts.length > 1) {
         await db.insert(jobPosting).values(newPosts);
