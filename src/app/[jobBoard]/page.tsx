@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { JobListCard } from "./components/job-list-card";
 import Link from "next/link";
-import type { EmploymentType, JobBoard, Province } from "../lib/constants";
+import type { EmploymentType, JobBoard, Province } from "@/app/lib/constants";
 import P from "@/components/paragraph";
 
 export default async function Page({

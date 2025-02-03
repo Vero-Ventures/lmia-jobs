@@ -1,4 +1,4 @@
-import { JOB_BOARD_TITLES, type JobBoard } from "../lib/constants";
+import { JOB_BOARD_TITLES, type JobBoard } from "@/app/lib/constants";
 import { notFound } from "next/navigation";
 import type React from "react";
 import Link from "next/link";

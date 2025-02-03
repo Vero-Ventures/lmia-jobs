@@ -1,5 +1,5 @@
 import PrivacyPolicy from "@/app/admin/(marketing)/privacy-policy/privacy-policy.mdx";
-import { mdxComponents } from "../components/mdx";
+import { mdxComponents } from "@/app/admin/(marketing)/components/mdx";
 
 export default async function Page() {
   return (

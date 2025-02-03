@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "..";
-import { stripeCustomer } from "../schema";
+import { db } from "@/db";
+import { stripeCustomer } from "@/db/schema";
 
 export async function getStripeCustomerId(userId: string) {
   const result = await db

@@ -1,5 +1,5 @@
 import TermsOfService from "@/app/admin/(marketing)/terms-of-service/terms-of-service.mdx";
-import { mdxComponents } from "../components/mdx";
+import { mdxComponents } from "@/app/admin/(marketing)/components/mdx";
 
 export default async function Page() {
   return (
