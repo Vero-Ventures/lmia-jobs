@@ -43,7 +43,7 @@ export async function createStripeUser(userEmail: string): Promise<boolean> {
       const scrapedUser = await db
         .select()
         .from(userMailing)
-        .where(eq(userMailing.userId, currentUser.id));
+        .where(eq(userMailing.email, currentUser.email));
 
       if (scrapedUser[0]) {
         await db.update(userMailing).set({ activated: true });

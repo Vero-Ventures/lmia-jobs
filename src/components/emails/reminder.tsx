@@ -10,13 +10,11 @@ import {
 
 export default function ReminderEmail({
   email,
-  tempPassword,
   expiredDate,
   postNames,
   totalPosts,
 }: {
   email: string;
-  tempPassword: string;
   expiredDate: string;
   postNames: string[];
   totalPosts: number;
@@ -48,10 +46,9 @@ export default function ReminderEmail({
               job postings across each job board and join us at Opportunities.
             </Text>
             <Text style={text}>
-              To get you started we created an account ready for you to get
-              started with these postings already created. If you do not join
-              and activate by {expiredDate}, this account will be deleted. The
-              following job postings will be lost.
+              Join now to create an account and keep these postings up as long
+              as you want. If you do not create an the account and claim your
+              posts before {expiredDate}, the postings will be lost.
             </Text>
             <Section style={postSection}>
               {postNames.map((postName) => (
@@ -65,14 +62,9 @@ export default function ReminderEmail({
             </Section>
             <Section style={accountSection}>
               <Text style={text}>
-                Use the following temporary credientals to log into your account
-                and recive an email verification message. Once verified, you
-                will be able to reset your password or log in to your account.
-              </Text>
-              <Text style={credentialText}>
-                Email: {email}
-                <br />
-                Temporary Password: {tempPassword}
+                Use the your email to to log into your account and recive an
+                email verification message. Once verified, you will be able to
+                log in to your account.
               </Text>
               <Text style={linkText}>
                 <a href={`https://lmia-jobs.vercel.app/sign-in`}>
@@ -163,11 +155,6 @@ const titleText = {
   fontSize: "20px",
   fontWeight: "bold",
   color: "#1a73e8",
-};
-
-const credentialText = {
-  ...text,
-  fontWeight: "bold",
 };
 
 const postText = {

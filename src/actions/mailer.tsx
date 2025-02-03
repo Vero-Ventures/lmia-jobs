@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPosting, user, userMailing, type JobPosting } from "@/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
+import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
 import { Resend } from "resend";
 import InviteEmail from "@/components/emails/invite";
 import ReminderEmail from "@/components/emails/reminder";
@@ -36,42 +36,14 @@ export async function mailInvitesAndReminders() {
         .set({ newlyCreated: false })
         .where(eq(userMailing.newlyCreated, true));
 
-      const newUserIds = newUsersMailing.map((user) => user.userId);
-
-      const newUsers = await db
-        .select()
-        .from(user)
-        .where(inArray(user.id, newUserIds));
-
-      newUsers.forEach(async (user) => {
-        sendInvitesAndReminders(
-          user.email,
-          newUsersMailing.find((mailing) => mailing.userId === user.id)!
-            .tempPassword!,
-          user.createdAt,
-          userPosts,
-          true
-        );
+      newUsersMailing.forEach(async (user) => {
+        sendInvitesAndReminders(user.email, user.createdAt, userPosts, true);
       });
     }
 
     if (remindUsersMailing.length > 0) {
-      const remindUserIds = newUsersMailing.map((user) => user.userId);
-
-      const remindUsers = await db
-        .select()
-        .from(user)
-        .where(inArray(user.id, remindUserIds));
-
-      remindUsers.forEach(async (user) => {
-        sendInvitesAndReminders(
-          user.email,
-          remindUsersMailing.find((mailing) => mailing.userId === user.id)!
-            .tempPassword!,
-          user.createdAt,
-          userPosts,
-          false
-        );
+      remindUsersMailing.forEach(async (user) => {
+        sendInvitesAndReminders(user.email, user.createdAt, userPosts, false);
       });
     }
 
@@ -85,7 +57,6 @@ export async function mailInvitesAndReminders() {
 
 export async function sendInvitesAndReminders(
   email: string,
-  tempPassword: string,
   creationDate: Date,
   userPosts: JobPosting[],
   isInvite: boolean
@@ -111,7 +82,6 @@ export async function sendInvitesAndReminders(
           react: (
             <InviteEmail
               email={email}
-              tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -126,7 +96,6 @@ export async function sendInvitesAndReminders(
           react: (
             <ReminderEmail
               email={email}
-              tempPassword={tempPassword}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -144,22 +113,17 @@ export async function sendInvitesAndReminders(
 }
 
 export async function optOutOfReminders(email: string): Promise<string> {
-  const optedOutUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.email, email))
-    .then((res) => res[0]);
+  try {
+    await db
+      .update(userMailing)
+      .set({ optedOut: true })
+      .where(eq(userMailing.email, email));
 
-  if (!optedOutUser) {
-    throw new Error("User with that email could not be found.");
+    return "true";
+  } catch (error) {
+    console.error("Error Setting Opt Out For User: " + error);
+    return "error";
   }
-
-  await db
-    .update(userMailing)
-    .set({ optedOut: true })
-    .where(eq(userMailing.userId, optedOutUser.id));
-
-  return "true";
 }
 
 export async function sendContactEmail(

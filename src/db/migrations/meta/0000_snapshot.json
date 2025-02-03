@@ -1,5 +1,5 @@
 {
-  "id": "8637132b-045a-4ced-99e5-a257ab0f1ae3",
+  "id": "06e9493c-febb-4398-aa50-13d37395fe5e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -170,6 +170,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "job_bank_id": {
+          "name": "job_bank_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "user_id": {
           "name": "user_id",
           "type": "text",
@@ -211,13 +217,13 @@
           "name": "address",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "start_date": {
           "name": "start_date",
           "type": "date",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "vacancies": {
           "name": "vacancies",
@@ -234,6 +240,12 @@
         },
         "work_hours": {
           "name": "work_hours",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "max_work_hours": {
+          "name": "max_work_hours",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -274,7 +286,7 @@
           "name": "hidden",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "payment_confirmed": {
           "name": "payment_confirmed",
@@ -403,18 +415,12 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "stripe_id": {
-          "name": "stripe_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -438,11 +444,6 @@
           "name": "stripe_customer_userId_unique",
           "nullsNotDistinct": false,
           "columns": ["user_id"]
-        },
-        "stripe_customer_stripeId_unique": {
-          "name": "stripe_customer_stripeId_unique",
-          "nullsNotDistinct": false,
-          "columns": ["stripe_id"]
         }
       },
       "policies": {},
@@ -514,17 +515,18 @@
           "primaryKey": true,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
+        "email": {
+          "name": "email",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "temp_password": {
-          "name": "temp_password",
-          "type": "text",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
         "newly_created": {
           "name": "newly_created",
@@ -556,19 +558,15 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "user_mailing_user_id_user_id_fk": {
-          "name": "user_mailing_user_id_user_id_fk",
-          "tableFrom": "user_mailing",
-          "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_mailing_email_unique": {
+          "name": "user_mailing_email_unique",
+          "nullsNotDistinct": false,
+          "columns": ["email"]
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -642,7 +640,7 @@
     "public.payment_type": {
       "name": "payment_type",
       "schema": "public",
-      "values": ["Salary", "Hourly"]
+      "values": ["Hourly", "Salary"]
     },
     "public.province": {
       "name": "province",

@@ -10,13 +10,11 @@ import {
 
 export default function InviteEmail({
   email,
-  tempPassword,
   expiredDate,
   postNames,
   totalPosts,
 }: {
   email: string;
-  tempPassword: string;
   expiredDate: string;
   postNames: string[];
   totalPosts: number;
@@ -48,11 +46,9 @@ export default function InviteEmail({
               job postings across each job board and join us at Opportunities.
             </Text>
             <Text style={text}>
-              To get you started we have have an account ready for you with
-              these postings already created. Join now to activate your pre-made
-              account and keep these postings up as long as you want. If you do
-              not activate the account, before {expiredDate}, it will be deleted
-              and the postings will be lost.
+              Join now to create an account and keep these postings up as long
+              as you want. If you do not create an the account and claim your
+              posts before {expiredDate}, the postings will be lost.
             </Text>
             <Section style={postSection}>
               {postNames.map((postName) => (
@@ -66,14 +62,9 @@ export default function InviteEmail({
             </Section>
             <Section style={accountSection}>
               <Text style={text}>
-                Use the following temporary credientals to log into your account
-                and recive an email verification message. Once verified, you
-                will be able to reset your password or log in to your account.
-              </Text>
-              <Text style={credentialText}>
-                Email: {email}
-                <br />
-                Temporary Password: {tempPassword}
+                Use the your email to to log into your account and recive an
+                email verification message. Once verified, you will be able to
+                log in to your account.
               </Text>
               <Text style={linkText}>
                 <a href={`https://lmia-jobs.vercel.app/sign-in`}>
@@ -165,11 +156,6 @@ const titleText = {
   fontSize: "20px",
   fontWeight: "bold",
   color: "#1a73e8",
-};
-
-const credentialText = {
-  ...text,
-  fontWeight: "bold",
 };
 
 const postText = {

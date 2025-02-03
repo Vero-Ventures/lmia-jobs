@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { EditPostForm } from "./edit-post-form";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
 }
 
 export default async function EditPost({ params }: PageProps) {
