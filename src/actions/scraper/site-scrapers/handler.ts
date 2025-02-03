@@ -1,7 +1,6 @@
 import { CONFIG } from "@/actions/scraper/helpers/config";
 import { db } from "@/db/index";
-import { jobPosting } from "@/db/schema";
-import { isNotNull } from "drizzle-orm";
+import { user } from "@/db/schema";
 import {
   getEmail,
   getJobDetails,
@@ -9,109 +8,64 @@ import {
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 
-export async function scrapeGovJobBank(
-  browserHandler: BrowserHandler
-): Promise<JobPostData[]> {
-  let pageNum = 1;
-  let scrape = true;
-
-  const newPostIds: string[] = [];
-
-  const existingPosts = await db
-    .select({ jobBankId: jobPosting.jobBankId })
-    .from(jobPosting)
-    .where(isNotNull(jobPosting.jobBankId));
-
-  while (scrape) {
-    const newPosts = await scrapePosts(browserHandler, pageNum);
-    newPosts.forEach((value) => newPostIds.push(value));
-
-    // Testing: Limit Pages To 2
-    if (pageNum === 2) {
-      scrape = false;
-    } else {
-      pageNum += 1;
-    }
-  }
-
-  const existingPostsArray: string[] = existingPosts.map(
-    (row) => row.jobBankId!
-  );
-
-  const validPosts = newPostIds.filter(
-    (postId) => !existingPostsArray.includes(postId)
-  );
-
-  const postDetails = await visitPages(browserHandler, validPosts);
-
-  return postDetails;
-}
-
-async function scrapePosts(
+export async function scrapeJobBankPost(
   browserHandler: BrowserHandler,
-  pageNum: number
-): Promise<Set<string>> {
+  postId: string = "test"
+): Promise<JobPostData> {
   try {
-    const pagePostIds = new Set<string>();
-    await browserHandler.visitPage(CONFIG.urls.govSearchPage + String(pageNum));
-
-    const posts = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobPosting
+    await browserHandler.visitPage(
+      CONFIG.urls.searchResult + postId + "?source=searchresults"
     );
 
-    // Testing: Limit Posts Handled Per Page.
-    const allPosts = await posts.all();
-    const testPosts = [allPosts[0], allPosts[1], allPosts[2]];
+    const email = await getPageEmail(browserHandler, postId);
 
-    for (const post of testPosts) {
-      const postedToBank = post.locator(
-        CONFIG.selectors.govJobBank.postedToBank
-      );
-
-      if ((await postedToBank.innerText()).includes("Posted on Job Bank")) {
-        const fullId = await post.getAttribute("id");
-        pagePostIds.add(fullId!.split("-")[1]);
-      }
-    }
-
-    return pagePostIds;
-  } catch (error) {
-    console.error("Error getting job post Ids: " + error);
-    return new Set<string>();
-  }
-}
-
-async function visitPages(
-  browserHandler: BrowserHandler,
-  postIds: string[]
-): Promise<JobPostData[]> {
-  try {
-    const postDetails: JobPostData[] = [];
-
-    for (const post of postIds) {
-      await browserHandler.visitPage(
-        CONFIG.urls.searchResult + String(post) + "?source=searchresults"
-      );
-
-      const email = await getEmail(browserHandler);
-
-      if (!email) {
-        console.error("Post With ID: " + post + " Has Invalid Email");
-        continue;
-      }
-
-      const details = await getJobDetails(browserHandler, post, email);
-
-      if (!details) {
-        console.error("Post With ID: " + post + " Has Invalid Details");
-      } else {
-        postDetails.push(details);
-      }
-    }
+    const postDetails = await getPageDetails(browserHandler, postId, email);
 
     return postDetails;
   } catch (error) {
-    console.error("Error getting getting Email or Details: " + error);
-    return [];
+    throw "Error Getting Post: " + error;
+  }
+}
+
+async function getPageEmail(
+  browserHandler: BrowserHandler,
+  postId: string
+): Promise<string> {
+  try {
+    const email = await getEmail(browserHandler);
+
+    if (!email) {
+      throw "Post With ID: " + postId + " Has Invalid Email";
+    }
+
+    const userEmails = await db.select({ email: user.email }).from(user);
+
+    const emailArray: string[] = userEmails.map((row) => row.email);
+
+    if (emailArray.includes(email)) {
+      throw "Posting Email Belongs To Existing User";
+    } else {
+      return email;
+    }
+  } catch (error) {
+    throw "Error Getting Post Email: " + error;
+  }
+}
+
+async function getPageDetails(
+  browserHandler: BrowserHandler,
+  postId: string,
+  email: string
+): Promise<JobPostData> {
+  try {
+    const details = await getJobDetails(browserHandler, postId, email);
+
+    if (!details) {
+      throw "Post With ID: " + postId + " Has Invalid Details";
+    }
+
+    return details;
+  } catch (error) {
+    throw "Error getting getting Email or Details: " + error;
   }
 }

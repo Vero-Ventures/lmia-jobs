@@ -1,5 +1,5 @@
 import { db } from "@/db/index";
-import { jobPosting, user, userMailing } from "@/db/schema";
+import { jobPosting, userMailing } from "@/db/schema";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 import type {
   EmploymentType,
@@ -10,48 +10,25 @@ import type {
 import type { JobPosting as JobPostingData } from "@/app/lib/types";
 
 export class DataHandler {
-  constructor(public posts: JobPostData[]) {}
+  constructor(public post: JobPostData) {}
 
   async createPosts(): Promise<void> {
-    console.log(JSON.stringify(this.posts));
+    console.log(JSON.stringify(this.post));
 
     try {
-      const userEmails = await db.select({ email: user.email }).from(user);
+      const newPost = await this.handlePostCreation(this.post);
 
-      const emailArray: string[] = userEmails.map((row) => row.email);
+      await db.insert(jobPosting).values(newPost);
 
-      const postsFromNewEmails = this.posts.filter(
-        (post) => !emailArray.includes(post.email)
-      );
-
-      const newPosts = [];
-      const newEmails = new Set<string>();
-      const newEmailsArray = [];
-
-      for (const newPost of postsFromNewEmails) {
-        try {
-          newPosts.push(await this.handlePostCreation(newPost));
-          if (!newEmails.has(newPost.email)) {
-            newEmails.add(newPost.email);
-            newEmailsArray.push({
-              email: newPost.email,
-            });
-          }
-        } catch (error) {
-          console.error(
-            "Error Creating Post With Id: " + newPost.postId + ", " + error
-          );
-        }
-      }
-
-      if (newPosts.length > 1) {
-        await db.insert(jobPosting).values(newPosts);
-        await this.createUserMailingList(newEmailsArray);
+      try {
+        await db.insert(userMailing).values({ email: this.post.email });
+      } catch (error) {
+        throw error;
       }
 
       return;
     } catch (error) {
-      throw error;
+      throw "Error Creating Post With Id: " + this.post.postId + ", " + error;
     }
   }
 
@@ -75,7 +52,7 @@ export class DataHandler {
         employmentType: postData.employmentType as EmploymentType,
         workHours: Math.floor(postData.workHours),
         maxWorkHours: postData.maxWorkHours
-          ? Number(postData.maxWorkHours)
+          ? Math.floor(postData.maxWorkHours)
           : null,
         paymentType: postData.paymentType as PaymentType,
         minPayValue: Math.floor(postData.minPayValue),
@@ -88,18 +65,6 @@ export class DataHandler {
         paymentConfirmed: true,
         expiresAt: expireryDate,
       };
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async createUserMailingList(
-    newEmails: {
-      email: string;
-    }[]
-  ) {
-    try {
-      await db.insert(userMailing).values(newEmails);
     } catch (error) {
       throw error;
     }

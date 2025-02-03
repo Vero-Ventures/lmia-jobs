@@ -4,7 +4,7 @@ import chromium from "@sparticuz/chromium";
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
-import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/handler";
+import { scrapeJobBankPost } from "@/actions/scraper/site-scrapers/handler";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
@@ -15,9 +15,17 @@ export const runScraper = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    await runSiteScrapers(pageHandler);
+    const postsToSave = await scrapeJobBankPost(pageHandler);
+
+    const dataHandler = new DataHandler(postsToSave);
+
+    try {
+      await dataHandler.createPosts();
+    } catch (error) {
+      console.error("Error Creating Posts: " + error);
+    }
   } catch (error) {
-    console.error("Create Scraper Error: " + error);
+    console.error("Error Creating Scraper: " + error);
   } finally {
     if (browser) {
       browser.close();
@@ -55,17 +63,5 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
   } catch (error) {
     console.error("Browser Launch Failed:", error);
     throw error;
-  }
-}
-
-async function runSiteScrapers(handler: BrowserHandler) {
-  const postsToSave = await scrapeGovJobBank(handler);
-
-  const dataHandler = new DataHandler(postsToSave);
-
-  try {
-    await dataHandler.createPosts();
-  } catch (error) {
-    console.error("Error Creating Posts: " + error);
   }
 }

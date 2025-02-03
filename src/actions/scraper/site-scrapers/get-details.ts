@@ -8,12 +8,10 @@ export async function getEmail(
   browserHandler: BrowserHandler
 ): Promise<string | null> {
   try {
-    await browserHandler.waitAndClickInput(
-      CONFIG.selectors.govJobBank.inputs.howToApply
-    );
+    await browserHandler.waitAndClickInput(CONFIG.inputs.howToApply);
 
     const email = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.postEmail,
+      CONFIG.selectors.postEmail,
       5000
     );
 
@@ -93,7 +91,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getJobTitle = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.header.jobTitle
+      CONFIG.selectors.jobDetails.header.jobTitle
     );
     const jobTitleValue = (await getJobTitle.allInnerTexts()).pop();
 
@@ -106,7 +104,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getOrganizationName = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.header.organizationNameText
+      CONFIG.selectors.jobDetails.header.organizationNameText
     );
     const organizationNameValue = (
       await getOrganizationName.allInnerTexts()
@@ -119,7 +117,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     console.error("Organization Name Text Not Found: " + error);
     try {
       const getOrganizationLink = await browserHandler.waitAndGetElement(
-        CONFIG.selectors.govJobBank.jobDetails.header.organizationNameLink
+        CONFIG.selectors.jobDetails.header.organizationNameLink
       );
       const organizationNameValue = (
         await getOrganizationLink.allInnerTexts()
@@ -139,7 +137,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getPostedDate = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.header.postedDate
+      CONFIG.selectors.jobDetails.header.postedDate
     );
     const postedDateValue = (await getPostedDate.allInnerTexts()).pop();
 
@@ -175,7 +173,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getAddress = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.location.locationAddress,
+      CONFIG.selectors.jobDetails.location.locationAddress,
       2500
     );
     address = (await getAddress.allInnerTexts()).pop();
@@ -183,7 +181,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getCity = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.location.locationCity
+      CONFIG.selectors.jobDetails.location.locationCity
     );
     const cityValue = (await getCity.allInnerTexts()).pop();
 
@@ -196,7 +194,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getRegion = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.location.locationRegion
+      CONFIG.selectors.jobDetails.location.locationRegion
     );
     const regionValue = (await getRegion.allInnerTexts()).pop();
 
@@ -231,7 +229,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getMinPay = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.payment.paymentMinimum
+      CONFIG.selectors.jobDetails.payment.paymentMinimum
     );
     const minPayValue = (await getMinPay.allInnerTexts()).pop();
 
@@ -244,7 +242,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getMaxPay = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.payment.paymentMaximum,
+      CONFIG.selectors.jobDetails.payment.paymentMaximum,
       2500
     );
     const maxPayValue = (await getMaxPay.allInnerTexts()).pop();
@@ -256,7 +254,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getPaymentType = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.payment.paymentType
+      CONFIG.selectors.jobDetails.payment.paymentType
     );
 
     const paymentTypeValue = (await getPaymentType.allInnerTexts()).pop();
@@ -268,7 +266,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getWorkHours = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.payment.workHours
+      CONFIG.selectors.jobDetails.payment.workHours
     );
     const workHoursValue = (await getWorkHours.allInnerTexts()).pop();
 
@@ -308,7 +306,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getEmploymentType = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.details.employmentType
+      CONFIG.selectors.jobDetails.details.employmentType
     );
     const employmentTypeValue = (await getEmploymentType.allInnerTexts()).pop();
 
@@ -325,7 +323,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const startDateContainer = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.details.startDateContainer,
+      CONFIG.selectors.jobDetails.details.startDateContainer,
       2500
     );
     startDate = (await startDateContainer.allInnerTexts()).pop()?.split(":")[1];
@@ -333,7 +331,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const vacanciesContainer = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.details.vacanciesContainer
+      CONFIG.selectors.jobDetails.details.vacanciesContainer
     );
 
     const vacanciesValue = (await vacanciesContainer.allInnerTexts()).pop();
@@ -348,7 +346,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
   try {
     const getLanguage = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.details.language
+      CONFIG.selectors.jobDetails.details.language
     );
 
     const languageValue = (await getLanguage.allInnerTexts()).pop();
