@@ -31,7 +31,7 @@ export default async function EditPost({ params }: PageProps) {
           province: jobPosting.province,
           city: jobPosting.city,
           address: jobPosting.address || "",
-          startDate: jobPosting.startDate ? String(jobPosting.startDate) : "",
+          startDate: jobPosting.startDate,
           vacancies: jobPosting.vacancies || 0,
           employmentType: jobPosting.employmentType,
           workHours: jobPosting.workHours || 0,
