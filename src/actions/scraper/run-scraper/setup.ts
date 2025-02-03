@@ -6,7 +6,7 @@ import { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import { DataHandler } from "@/actions/scraper/site-scraper/update-database";
 import { scrapeJobBankPost } from "@/actions/scraper/site-scraper/handler";
 
-export const runScraper = async () => {
+export const runScraper = async (postId: string) => {
   let browser: Browser | undefined;
   try {
     const [newBrowser, _context, page] = await createChromiunm();
@@ -15,7 +15,7 @@ export const runScraper = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    const postsToSave = await scrapeJobBankPost(pageHandler);
+    const postsToSave = await scrapeJobBankPost(pageHandler, postId);
 
     const dataHandler = new DataHandler(postsToSave);
 
