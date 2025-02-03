@@ -20,7 +20,10 @@ export async function POST(request: Request) {
     } else {
       try {
         console.log(body.postLink);
-        // await runScraper(monitorPostUrl);
+        console.log(body.postLink.split("jobposting/")[1]);
+
+        // const postId = body.postLink.split('jobposting/')[1]
+        // await runScraper(postId);
 
         return new Response("Completed", { status: 200 });
       } catch (error) {
