@@ -5,7 +5,7 @@ import { isNotNull } from "drizzle-orm";
 import {
   getEmail,
   getJobDetails,
-} from "@/actions/scraper/site-scrapers/job-bank/get-details";
+} from "@/actions/scraper/site-scrapers/get-details";
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 
