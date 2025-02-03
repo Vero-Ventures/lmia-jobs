@@ -1,5 +1,5 @@
 {
-  "id": "06e9493c-febb-4398-aa50-13d37395fe5e",
+  "id": "ef9c47cf-6002-4669-984b-22df3dfca199",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -440,8 +440,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "stripe_customer_userId_unique": {
-          "name": "stripe_customer_userId_unique",
+        "stripe_customer_user_id_unique": {
+          "name": "stripe_customer_user_id_unique",
           "nullsNotDistinct": false,
           "columns": ["user_id"]
         }

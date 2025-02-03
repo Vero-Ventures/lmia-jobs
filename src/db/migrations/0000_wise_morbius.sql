@@ -1,8 +1,3 @@
-CREATE TYPE "public"."employment_type" AS ENUM('Full Time', 'Part Time');--> statement-breakpoint
-CREATE TYPE "public"."job_board" AS ENUM('accessible', 'asylum', 'indigenous', 'newcomers', 'youth');--> statement-breakpoint
-CREATE TYPE "public"."language" AS ENUM('English', 'French', 'English and French');--> statement-breakpoint
-CREATE TYPE "public"."payment_type" AS ENUM('Hourly', 'Salary');--> statement-breakpoint
-CREATE TYPE "public"."province" AS ENUM('AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'ON', 'PE', 'QC', 'SK', 'NT', 'NU', 'YT');--> statement-breakpoint
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
@@ -69,7 +64,7 @@ CREATE TABLE "session" (
 CREATE TABLE "stripe_customer" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
-	CONSTRAINT "stripe_customer_userId_unique" UNIQUE("user_id")
+	CONSTRAINT "stripe_customer_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "user" (
