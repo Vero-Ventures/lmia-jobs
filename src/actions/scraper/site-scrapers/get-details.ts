@@ -1,6 +1,6 @@
 import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
-import { getDescription } from "@/actions/scraper/site-scrapers/job-bank/get-description";
+import { getDescription } from "@/actions/scraper/site-scrapers/get-description";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 import { PROVINCES } from "@/app/lib/constants";
 

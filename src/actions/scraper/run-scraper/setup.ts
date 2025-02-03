@@ -4,7 +4,7 @@ import chromium from "@sparticuz/chromium";
 import UserAgent from "user-agents";
 import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
 import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
-import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/job-bank/handler";
+import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/handler";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;
