@@ -3,7 +3,6 @@
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log(body);
 
     if (
       !body.authorization ||
@@ -20,6 +19,7 @@ export async function POST(request: Request) {
       });
     } else {
       try {
+        console.log(body.postLink);
         // await runScraper(monitorPostUrl);
 
         return new Response("Completed", { status: 200 });
