@@ -1,4 +1,4 @@
-import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
+import type { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
 
 export async function getDescription(

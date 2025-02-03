@@ -2,9 +2,9 @@ import { chromium as playwright } from "playwright-core";
 import type { Browser, BrowserContext, Page } from "playwright-core";
 import chromium from "@sparticuz/chromium";
 import UserAgent from "user-agents";
-import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
-import { scrapeJobBankPost } from "@/actions/scraper/site-scrapers/handler";
+import { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
+import { DataHandler } from "@/actions/scraper/site-scraper/update-database";
+import { scrapeJobBankPost } from "@/actions/scraper/site-scraper/handler";
 
 export const runScraper = async () => {
   let browser: Browser | undefined;

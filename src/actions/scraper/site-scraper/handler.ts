@@ -4,8 +4,8 @@ import { user } from "@/db/schema";
 import {
   getEmail,
   getJobDetails,
-} from "@/actions/scraper/site-scrapers/get-details";
-import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
+} from "@/actions/scraper/site-scraper/get-details";
+import type { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 
 export async function scrapeJobBankPost(
