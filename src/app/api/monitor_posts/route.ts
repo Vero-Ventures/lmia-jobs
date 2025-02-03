@@ -1,6 +1,6 @@
 // import { runScraper } from "@/actions/scraper/run-scraper/setup";
 
-export default async function handler(request: Request) {
+export async function GET(request: Request) {
   try {
     const headers = request.headers;
     console.log(headers);
