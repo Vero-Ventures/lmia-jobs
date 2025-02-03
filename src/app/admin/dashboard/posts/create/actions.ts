@@ -128,7 +128,7 @@ export async function updateJobPost(formData: EditJobPosting, postId: number) {
       .set(postData)
       .where(
         and(
-          eq(jobPosting.id, Number(postId)),
+          eq(jobPosting.id, postId),
           eq(jobPosting.userId, session.user.id)
         )
       );
