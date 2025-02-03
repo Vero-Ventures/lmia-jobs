@@ -1,24 +1,33 @@
 // import { runScraper } from "@/actions/scraper/run-scraper/setup";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   try {
-    const headers = request.headers;
-    console.log(headers);
+    const body = await request.json();
+    console.log(body);
 
-    const params = request.url;
-    console.log(params);
-
-    const _monitorPostAuth = process.env.MONIOR_POST_AUTH;
-
-    try {
-      // console.log(monitorPostUrl);
-      // await runScraper(monitorPostUrl);
-
-      return new Response("Completed", { status: 200 });
-    } catch (error) {
-      return new Response("Failed to run scraper on RSS feed: " + error, {
+    if (
+      !body.authorization ||
+      body.authorization !== process.env.MONIOR_POST_AUTH
+    ) {
+      return new Response("Invalid monitor posts call authorization.", {
         status: 500,
       });
+    }
+
+    if (!body.postLink) {
+      return new Response("Post Link Not Found On Monitor Posts Call.", {
+        status: 500,
+      });
+    } else {
+      try {
+        // await runScraper(monitorPostUrl);
+
+        return new Response("Completed", { status: 200 });
+      } catch (error) {
+        return new Response("Failed to run scraper on RSS feed: " + error, {
+          status: 500,
+        });
+      }
     }
   } catch (error) {
     return new Response("Failed to fetch RSS feed: " + error, {
