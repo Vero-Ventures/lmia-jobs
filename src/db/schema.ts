@@ -77,30 +77,30 @@ export const paymentTypeEnum = pgEnum("payment_type", paymentTypes);
 export const provinceEnum = pgEnum("province", provinceValues);
 
 export const jobPosting = pgTable("job_posting", {
-  id: serial().primaryKey(),
-  jobBankId: text(),
-  userId: text().references(() => user.id, { onDelete: "cascade" }),
-  email: text().notNull(),
-  title: text().notNull(),
-  orgName: text().notNull(),
-  province: provinceEnum().notNull(),
-  city: text().notNull(),
-  address: text().notNull(),
+  id: serial("id").primaryKey(),
+  jobBankId: text("job_bank_id"),
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
+  title: text("title").notNull(),
+  orgName: text("org_name").notNull(),
+  province: provinceEnum("province").notNull(),
+  city: text("city").notNull(),
+  address: text("address").notNull(),
   startDate: date({ mode: "date" }).notNull(),
-  vacancies: integer(),
-  employmentType: employmentTypeEnum().notNull(),
-  workHours: integer(),
-  maxWorkHours: integer(),
-  paymentType: paymentTypeEnum().notNull(),
-  minPayValue: integer().notNull(),
-  maxPayValue: integer(),
-  description: text().notNull(),
-  language: languageEnum().notNull(),
-  hidden: boolean().notNull(),
-  paymentConfirmed: boolean().notNull(),
+  vacancies: integer("vacancies"),
+  employmentType: employmentTypeEnum("").notNull(),
+  workHours: integer("work_hours"),
+  maxWorkHours: integer("max_work_hours"),
+  paymentType: paymentTypeEnum("payment_type").notNull(),
+  minPayValue: integer("min_pay_value").notNull(),
+  maxPayValue: integer("max_pay_value"),
+  description: text("description").notNull(),
+  language: languageEnum("language").notNull(),
+  hidden: boolean("hidden").notNull(),
+  paymentConfirmed: boolean("payment_confirmed").notNull(),
   expiresAt: date({ mode: "date" }).notNull(),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp()
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
 });
@@ -108,29 +108,28 @@ export const jobPosting = pgTable("job_posting", {
 export const jobBoardEnum = pgEnum("job_board", JOB_BOARDS);
 
 export const jobBoardPosting = pgTable("job_board_posting", {
-  id: serial().primaryKey(),
-  jobBoard: jobBoardEnum().notNull(),
-  jobPostingId: integer().references(() => jobPosting.id, {
+  id: serial("id").primaryKey(),
+  jobBoard: jobBoardEnum("job_board").notNull(),
+  jobPostingId: integer("job_posting_id").references(() => jobPosting.id, {
     onDelete: "cascade",
   }),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp()
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
 });
 
 export const stripeCustomer = pgTable("stripe_customer", {
-  id: serial().primaryKey(),
-  userId: text()
+  id: text("id").primaryKey(),
+  userId: text("user_id")
     .unique()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  stripeId: text().notNull().unique(),
 });
 
 export const userMailing = pgTable("user_mailing", {
-  id: serial().primaryKey(),
-  email: text().unique().notNull(),
+  id: serial("id").primaryKey(),
+  email: text("email").unique().notNull(),
   createdAt: timestamp().notNull().defaultNow(),
   newlyCreated: boolean("newly_created").notNull().default(true),
   activated: boolean("activated").notNull().default(false),

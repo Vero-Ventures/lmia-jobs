@@ -3,23 +3,24 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { jobPosting } from "@/db/schema";
+import { jobBoardPosting, jobPosting } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import type { CreatePost, EditPost } from "@/app/lib/job-postings/schema";
 import type {
-  EmploymentType,
-  Language,
-  PaymentType,
-  Province,
-} from "@/app/lib/constants";
+  CreateJobPosting,
+  EditJobPosting,
+} from "@/app/lib/job-postings/schema";
+import type { JobBoard } from "@/app/lib/constants";
 
-export async function createJobPost(formData: CreatePost) {
+export async function createJobPost(
+  formData: CreateJobPosting,
+  selectedJobBoards: JobBoard[]
+) {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session) return null;
+    if (!session) return redirect("/sign-in");
 
     const { monthsToPost, ...rest } = formData;
 
@@ -28,24 +29,29 @@ export async function createJobPost(formData: CreatePost) {
 
     const postData = {
       ...rest,
-      title: formData.jobTitle,
-      orgName: formData.organizationName,
-      address: formData.address ? formData.address : "",
-      startDate: new Date(formData.startDate),
-      province: formData.province as Province,
-      employmentType: formData.employmentType as EmploymentType,
-      paymentType: formData.paymentType as PaymentType,
-      language: formData.language as Language,
+      userId: session.user.id,
+      vacancies: !formData.vacancies
+        ? null
+        : Math.ceil(Number(formData.vacancies)),
+      workHours: !formData.workHours
+        ? null
+        : Math.ceil(Number(formData.workHours)),
+      minPayValue: Math.ceil(Number(formData.minPayValue)),
+      maxPayValue: !formData.maxPayValue
+        ? null
+        : Math.ceil(Number(formData.maxPayValue)),
       expiresAt: expiryDate,
       paymentConfirmed: false,
-      hidden: true,
+      hidden: false,
     };
 
-    const jobPostingId = await db
+    const { id: jobPostingId } = await db
       .insert(jobPosting)
       .values(postData)
       .returning({ id: jobPosting.id })
       .then((res) => res[0]);
+
+    await createJobBoardPostings({ id: jobPostingId, selectedJobBoards });
 
     return jobPostingId;
   } catch (error) {
@@ -53,7 +59,47 @@ export async function createJobPost(formData: CreatePost) {
   }
 }
 
-export async function updateJobPost(formData: EditPost, postId: string) {
+export async function createJobBoardPostings({
+  id,
+  selectedJobBoards,
+}: {
+  id: number;
+  selectedJobBoards: JobBoard[];
+}) {
+  await Promise.all(
+    selectedJobBoards.map(async (jobBoard) => {
+      return await db.insert(jobBoardPosting).values({
+        jobBoard,
+        jobPostingId: id,
+      });
+    })
+  );
+}
+
+export async function removeJobBoardPostings(id: number) {
+  await db.delete(jobBoardPosting).where(eq(jobBoardPosting.jobPostingId, id));
+}
+
+export async function updateJobBoardPostings({
+  id,
+  selectedJobBoards,
+  monthsToPost,
+}: {
+  id: number;
+  selectedJobBoards: JobBoard[];
+  monthsToPost: number;
+}) {
+  await removeJobBoardPostings(id);
+  await createJobBoardPostings({ id, selectedJobBoards });
+  const expiryDate = new Date();
+  expiryDate.setMonth(new Date().getMonth() + Math.max(12, monthsToPost));
+  await db
+    .update(jobPosting)
+    .set({ expiresAt: expiryDate })
+    .where(eq(jobPosting.id, id));
+}
+
+export async function updateJobPost(formData: EditJobPosting, postId: number) {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -64,14 +110,17 @@ export async function updateJobPost(formData: EditPost, postId: string) {
 
     const postData = {
       ...formData,
-      id: Number(formData.id),
-      title: formData.jobTitle,
-      orgName: formData.organizationName,
-      startDate: new Date(formData.startDate),
-      province: formData.province as Province,
-      employmentType: formData.employmentType as EmploymentType,
-      paymentType: formData.paymentType as PaymentType,
-      language: formData.language as Language,
+      userId: session.user.id,
+      vacancies: !formData.vacancies
+        ? null
+        : Math.ceil(Number(formData.vacancies)),
+      workHours: !formData.workHours
+        ? null
+        : Math.ceil(Number(formData.workHours)),
+      minPayValue: Math.ceil(Number(formData.minPayValue)),
+      maxPayValue: !formData.maxPayValue
+        ? null
+        : Math.ceil(Number(formData.maxPayValue)),
     };
 
     await db
@@ -86,4 +135,9 @@ export async function updateJobPost(formData: EditPost, postId: string) {
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function deletePost(id: number) {
+  await removeJobBoardPostings(id);
+  await db.delete(jobPosting).where(eq(jobPosting.id, id));
 }

@@ -18,32 +18,6 @@ export const JOB_BOARD_DOMAINS: Record<string, JobBoard | "admin"> = {
   "immigrantopportunities.ca": "newcomers",
   "youthopportunities.ca": "youth",
 };
-// export const JOB_BOARD_TITLES = {
-//   admin: {
-//     title: "Manage Opportunities",
-//     domain: "manageopportunities.ca",
-//   },
-//   accessible: {
-//     title: "Accessible Opportunities",
-//     domain: "accessibleopportunities.ca",
-//   },
-//   asylum: {
-//     title: "Asylum Opportunities",
-//     domain: "asylumopportunities.ca",
-//   },
-//   indigenous: {
-//     title: "Indigenous Opportunities",
-//     domain: "indigenousopportunities.ca",
-//   },
-//   newcomers: {
-//     title: "Newcomers Opportunities",
-//     domain: "immigrantopportunities.ca",
-//   },
-//   youth: {
-//     title: "Youth Opportunities",
-//     domain: "youthopportunities.ca",
-//   },
-// };
 
 export const JOB_BOARDS = [
   "accessible",

@@ -8,15 +8,15 @@ import {
   Text,
 } from "@react-email/components";
 
-interface VerifyEmailProps {
+interface SignInEmailProps {
   otp: string;
 }
 
-export default function VerifyEmail({ otp = "12345678" }: VerifyEmailProps) {
+export default function SignInEmail({ otp = "12345678" }: SignInEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Verify your email</Preview>
+      <Preview>Sign In to Manage Opportunites</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={coverSection}>
@@ -27,11 +27,10 @@ export default function VerifyEmail({ otp = "12345678" }: VerifyEmailProps) {
                   fontSize: "30px",
                   fontWeight: "bold",
                 }}>
-                Email Verification
+                Sign In
               </Text>
               <Text style={mainText}>
-                Thank you for signing up! To complete your registration, please
-                use the otp code below to verify your email address:
+                Please use the otp code below to sign in:
               </Text>
               <Section style={codeBox}>
                 <Text style={confirmationCodeText}>{otp}</Text>

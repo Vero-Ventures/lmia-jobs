@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { JobPosting } from "@/db/schema";
+import P from "@/components/paragraph";
 
 export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
   const currentDate = new Date();
@@ -21,6 +22,11 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
             </CardTitle>
             <CardDescription>{jobPosting.orgName}</CardDescription>
             <div>
+              {jobPosting.paymentConfirmed ? (
+                <Badge variant="success">Paid</Badge>
+              ) : (
+                <Badge variant="warning">Not Paid</Badge>
+              )}
               {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
               {currentDate > jobPosting.expiresAt && (
                 <Badge variant="destructive">Expired</Badge>
@@ -28,18 +34,20 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
             </div>
           </div>
           <div className="space-x-4 text-sm text-gray-500">
-            <Badge variant="outline">
-              {jobPosting.city}, {jobPosting.province}
+            <Badge>
+              {jobPosting.city && jobPosting.city + ", "} {jobPosting.province}
             </Badge>
           </div>
         </div>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {jobPosting.employmentType} - From ${`${jobPosting.minPayValue}`}{" "}
-            {jobPosting.maxPayValue ? `to $${jobPosting.maxPayValue}` : ""}{" "}
-          </p>
+          <P>
+            ${`${formatMoney(jobPosting.minPayValue)}`}{" "}
+            {jobPosting.maxPayValue &&
+              `to $${formatMoney(jobPosting.maxPayValue)}`}
+            {jobPosting.paymentType === "Hourly" ? " hourly" : " annually"}
+          </P>
         </div>
       </CardContent>
     </Card>

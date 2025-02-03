@@ -3,7 +3,7 @@
 import { useSession, signOut } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { useState } from "react";
-import { updateEmail, updatePassword } from "@/actions/handle-account";
+import { updateEmail } from "@/actions/handle-account";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,34 +12,28 @@ import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Eye, EyeOff } from "lucide-react";
 
 export default function Page() {
-  const { data: session, isPending } = useSession();
-
-  if (!session && !isPending) {
-    redirect("/sign-in");
-  }
+  const { data, isPending } = useSession();
 
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmailUpdate, setConfirmEmailUpdate] = useState(false);
   const [emailUpdateError, setEmailUpdateError] = useState("");
   const [updateLogOutTimer, setUpdateLogOutTimer] = useState(-1);
 
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [passwordUpdateError, setPasswordUpdateError] = useState("");
-  const [passwordUpdateSuccess, setPasswordUpdateSuccess] = useState(false);
-  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  if (!data && !isPending) {
+    redirect("/sign-in");
+  }
 
   const handleEmailUpdate = async () => {
-    const updateEmailResult = await updateEmail(session!.user.id, newEmail);
+    if (!data) {
+      return;
+    }
+    const updateEmailResult = await updateEmail(data.user.id, newEmail);
 
     if (updateEmailResult === "success") {
       let countdown = 5;
@@ -60,19 +54,6 @@ export default function Page() {
       });
     } else {
       setEmailUpdateError(updateEmailResult);
-    }
-  };
-
-  const handlePasswordUpdate = async () => {
-    const updatePasswordResult = await updatePassword(
-      newPassword,
-      confirmNewPassword
-    );
-
-    if (updatePasswordResult === "success") {
-      setPasswordUpdateSuccess(true);
-    } else {
-      setPasswordUpdateError(updatePasswordResult);
     }
   };
 
@@ -155,97 +136,6 @@ export default function Page() {
                 Update
               </Button>
             )}
-          </CardFooter>
-        </Card>
-        <Card className="mx-auto max-w-xl">
-          <CardHeader>
-            <CardTitle className="text-lg md:text-xl">Reset Password</CardTitle>
-            <CardDescription className="text-xs md:text-sm">
-              Enter your new password.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Input
-                    className="pr-14"
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    autoComplete="new-password"
-                    placeholder="Password"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-2 top-2 h-6 w-6">
-                    {showPassword ? <EyeOff /> : <Eye />}
-                  </Button>
-                </div>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Confirm Password</Label>
-                <div className="relative">
-                  <Input
-                    className="pr-14"
-                    id="password_confirmation"
-                    type={showConfirmedPassword ? "text" : "password"}
-                    value={confirmNewPassword}
-                    onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    autoComplete="new-password"
-                    placeholder="Confirm Password"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => setShowConfirmedPassword((prev) => !prev)}
-                    className="absolute right-2 top-2 h-6 w-6">
-                    {showConfirmedPassword ? <EyeOff /> : <Eye />}
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="mx-auto my-6 w-fit text-center text-lg font-semibold text-red-400">
-              {passwordUpdateError === "not matching" && (
-                <p>Your passwords must match.</p>
-              )}
-              {passwordUpdateError === "short password" && (
-                <p>
-                  Your password must <br />
-                  be at least eight characters.
-                </p>
-              )}
-              {passwordUpdateError === "weak password" && (
-                <p>
-                  Your password must <br />
-                  contain at least one <br />
-                  letter or number.
-                </p>
-              )}
-              {passwordUpdateError === "error" && (
-                <p>
-                  An error occurred while <br />
-                  updating your password. <br />
-                  Please try again.
-                </p>
-              )}
-            </div>
-
-            <div className="mx-auto my-6 w-fit text-center text-lg font-semibold italic text-gray-400">
-              {passwordUpdateSuccess && (
-                <p className="mb-2">
-                  Your password has been <br />
-                  updated successfully.
-                </p>
-              )}
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" onClick={handlePasswordUpdate}>
-              Confirm
-            </Button>
           </CardFooter>
         </Card>
       </div>

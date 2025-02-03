@@ -2,47 +2,46 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db";
 import { nextCookies } from "better-auth/next-js";
+import { emailOTP } from "better-auth/plugins";
 
 import { Resend } from "resend";
-import ResetPassword from "@/components/emails/reset-password";
 import VerifyEmail from "@/components/emails/verify-email";
+import SignInEmail from "@/components/emails/sign-in-email";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 export const auth = betterAuth({
-  trustedOrigins: [process.env.BETTER_AUTH_URL!],
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
-  emailVerification: {
-    sendOnSignUp: true,
-    sendVerificationEmail: async ({ user, url }) => {
-      await resend.emails.send({
-        from: "Opportunities <no-reply@manageopportunities.ca>",
-        to: [user.email],
-        subject: "Verify your email address",
-        react: <VerifyEmail url={url} />,
-      });
-    },
-  },
-  emailAndPassword: {
-    enabled: true,
-    autoSignIn: false,
-    requireEmailVerification: true,
-    sendResetPassword: async ({ user, url }) => {
-      await resend.emails.send({
-        from: "Opportunities <no-reply@manageopportunities.ca>",
-        to: [user.email],
-        subject: "Reset Your Opportunities Password",
-        react: <ResetPassword url={url} />,
-      });
-    },
-  },
   session: {
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60,
     },
   },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "sign-in") {
+          // Send the OTP for sign-in
+          await resend.emails.send({
+            from: "Manage Opportunities <no-reply@manageopportunities.ca>",
+            to: [email],
+            subject: "Sign in to Manage Opportunities",
+            react: <SignInEmail otp={otp} />,
+          });
+        } else if (type === "email-verification") {
+          // Send the OTP for email verification
+          await resend.emails.send({
+            from: "Manage Opportunities <no-reply@manageopportunities.ca>",
+            to: [email],
+            subject: "Verify your email address",
+            react: <VerifyEmail otp={otp} />,
+          });
+        }
+      },
+    }),
+  ],
 });

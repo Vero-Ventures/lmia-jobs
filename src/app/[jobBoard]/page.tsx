@@ -3,11 +3,10 @@ import Form from "next/form";
 import FilterSelect from "./components/filter-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { FilterIcon } from "lucide-react";
 import { JobListCard } from "./components/job-list-card";
 import Link from "next/link";
 import type { EmploymentType, JobBoard, Province } from "../lib/constants";
+import P from "@/components/paragraph";
 
 export default async function Page({
   params,
@@ -23,14 +22,14 @@ export default async function Page({
   const { jobBoard } = await params;
   const search = await searchParams;
   const title = search.title ?? "";
-  const province = search.province ?? "All";
-  const employmentType = search.employmentType ?? "All";
+  const province = search.province;
+  const employmentType = search.employmentType;
 
   const result = await selectAllJobPostings({
     jobBoard,
     title,
-    province,
-    employmentType,
+    province: province ?? "All",
+    employmentType: employmentType ?? "All",
   });
 
   return (
@@ -53,21 +52,16 @@ export default async function Page({
           <Button>Search</Button>
         </Form>
         <div className="flex gap-2 font-semibold">
-          <FilterIcon />
-          <span>Filters</span>
-        </div>
-        <div className="flex gap-2 font-semibold">
           <FilterSelect
-            initalValue={employmentType}
+            initialValue={employmentType}
             filterType="employmentType"
           />
-          <FilterSelect initalValue={province} filterType="province" />
+          <FilterSelect initialValue={province} filterType="province" />
         </div>
       </div>
-      <Separator className="mt-4" />
-      <section className="container mx-auto p-4">
+      <section className="container mx-auto mt-8 p-4">
         {result.length > 0 ? (
-          <div className="mt-2 space-y-8">
+          <div className="space-y-8">
             {result.map(({ job_posting }) => {
               return (
                 <Link key={job_posting.id} href={`/posts/${job_posting.id}`}>
@@ -77,7 +71,7 @@ export default async function Page({
             })}
           </div>
         ) : (
-          <p className="mt-10 text-center">No jobs matched the filter.</p>
+          <P className="text-center">No jobs matched the filter.</P>
         )}
       </section>
     </main>

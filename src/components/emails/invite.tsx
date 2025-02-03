@@ -46,11 +46,9 @@ export default function InviteEmail({
               job postings across each job board and join us at Opportunities.
             </Text>
             <Text style={text}>
-              To get you started we have have an account ready for you with
-              these postings already created. Join now to activate your pre-made
-              account and keep these postings up as long as you want. If you do
-              not activate the account, before {expiredDate}, it will be deleted
-              and the postings will be lost.
+              Join now to create an account and keep these postings up as long
+              as you want. If you do not create an the account and claim your
+              posts before {expiredDate}, the postings will be lost.
             </Text>
             <Section style={postSection}>
               {postNames.map((postName) => (

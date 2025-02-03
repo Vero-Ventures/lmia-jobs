@@ -46,10 +46,9 @@ export default function ReminderEmail({
               job postings across each job board and join us at Opportunities.
             </Text>
             <Text style={text}>
-              To get you started we created an account ready for you to get
-              started with these postings already created. If you do not join
-              and activate by {expiredDate}, this account will be deleted. The
-              following job postings will be lost.
+              Join now to create an account and keep these postings up as long
+              as you want. If you do not create an the account and claim your
+              posts before {expiredDate}, the postings will be lost.
             </Text>
             <Section style={postSection}>
               {postNames.map((postName) => (

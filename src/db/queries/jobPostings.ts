@@ -19,7 +19,8 @@ export async function selectAllJobPostings({
 
   const filters: SQL[] = [
     eq(jobBoardPosting.jobBoard, jobBoard),
-    eq(jobPosting.paymentConfirmed, true),
+    eq(jobPosting.hidden, false),
+    // eq(jobPosting.paymentConfirmed, true),
     gt(jobPosting.expiresAt, currentDate),
   ];
 
