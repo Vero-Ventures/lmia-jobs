@@ -21,6 +21,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Heading from "@/components/heading";
 import { toast } from "sonner";
+import { useState } from "react";
 
 type FormSchema = z.infer<typeof formSchema>;
 
@@ -32,6 +33,7 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,7 +46,7 @@ export default function Page() {
   // Define submission handler.
   const handleSubmit = async (values: FormSchema) => {
     // Update loading state and extract form data.
-
+    setIsLoading(true);
     toast.promise(sendContactEmail(values), {
       loading: "Sending email...",
       success:
@@ -54,6 +56,7 @@ export default function Page() {
           return err.message;
         }
       },
+      finally: () => setIsLoading(false),
     });
   };
 
@@ -132,8 +135,8 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>

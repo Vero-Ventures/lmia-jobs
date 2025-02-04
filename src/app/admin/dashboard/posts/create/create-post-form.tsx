@@ -44,6 +44,7 @@ import MoneyInput from "@/components/money-input";
 import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 
 export function CreatePostForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<CreateJobPosting>({
     resolver: zodResolver(createJobPostingSchema),
     defaultValues: {
@@ -70,6 +71,7 @@ export function CreatePostForm() {
   const monthsToPost = form.watch("monthsToPost");
 
   async function onSubmit(values: CreateJobPosting) {
+    setIsLoading(true);
     toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
       success: async (id) => {
@@ -85,6 +87,7 @@ export function CreatePostForm() {
       error: (error) => {
         if (error instanceof Error) return error.message;
       },
+      finally: () => setIsLoading(false),
     });
   }
 
@@ -465,7 +468,7 @@ export function CreatePostForm() {
               </Button>
               <FormSubmitButton
                 className="order-1 w-full sm:order-2"
-                isPending={form.formState.isSubmitting}
+                isPending={isLoading}
                 loadingValue="Creating job posting..."
                 value="Create"
               />
