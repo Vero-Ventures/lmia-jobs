@@ -20,9 +20,9 @@ export async function POST(request: Request) {
     } else {
       try {
         const postId = body.postLink.split("jobposting/")[1];
-        await runScraper(postId);
+        runScraper(postId);
 
-        return new Response("", { status: 200 });
+        return new Response("Run process started.", { status: 200 });
       } catch (error) {
         return new Response("Failed to run scraper on RSS feed: " + error, {
           status: 500,
