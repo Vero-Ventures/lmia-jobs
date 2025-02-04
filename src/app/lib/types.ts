@@ -17,11 +17,11 @@ export type JobPosting = {
   startDate: Date;
   vacancies: number | null;
   employmentType: EmploymentType;
-  workHours: number | null;
-  maxWorkHours: number | null;
+  workHours: string | null;
+  maxWorkHours: string | null;
   paymentType: PaymentType;
-  minPayValue: number;
-  maxPayValue: number | null;
+  minPayValue: string;
+  maxPayValue: string | null;
   description: string;
   language: Language;
   hidden: boolean;

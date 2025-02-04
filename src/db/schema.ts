@@ -6,14 +6,15 @@ import {
   provinceValues,
 } from "@/app/lib/constants";
 import {
+  text,
   boolean,
-  date,
+  serial,
   integer,
+  decimal,
+  date,
+  timestamp,
   pgEnum,
   pgTable,
-  serial,
-  text,
-  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -89,11 +90,11 @@ export const jobPosting = pgTable("job_posting", {
   startDate: date({ mode: "date" }).notNull(),
   vacancies: integer("vacancies"),
   employmentType: employmentTypeEnum("").notNull(),
-  workHours: integer("work_hours"),
-  maxWorkHours: integer("max_work_hours"),
+  workHours: decimal("work_hours", { precision: 4, scale: 1 }),
+  maxWorkHours: decimal("max_work_hours", { precision: 4, scale: 1 }),
   paymentType: paymentTypeEnum("payment_type").notNull(),
-  minPayValue: integer("min_pay_value").notNull(),
-  maxPayValue: integer("max_pay_value"),
+  minPayValue: decimal("min_pay_value", { precision: 9, scale: 2 }).notNull(),
+  maxPayValue: decimal("max_pay_value", { precision: 9, scale: 2 }),
   description: text("description").notNull(),
   language: languageEnum("language").notNull(),
   hidden: boolean("hidden").notNull(),

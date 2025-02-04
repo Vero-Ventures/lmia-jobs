@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import P from "./paragraph";
 import Heading from "./heading";
-import { formatDate, formatMoney } from "@/lib/utils";
+import { formatDate, formatMoney, formatTime } from "@/lib/utils";
 import PayButton from "./pay-button";
 
 export default function SingleJobPosting({
@@ -97,9 +97,9 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <CircleDollarSignIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                ${formatMoney(jobPosting.minPayValue)}{" "}
+                ${formatMoney(Number(jobPosting.minPayValue))}{" "}
                 {jobPosting.maxPayValue
-                  ? `to $${formatMoney(jobPosting.maxPayValue)}`
+                  ? `to $${formatMoney(Number(jobPosting.maxPayValue))}`
                   : ""}{" "}
                 {jobPosting.paymentType === "Hourly" ? "hourly" : "annually"}
               </span>
@@ -109,7 +109,13 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <ClockIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                {`${jobPosting.workHours ? jobPosting.workHours + " Hours / Week" : "N/A"}`}
+                {jobPosting.workHours
+                  ? formatTime(Number(jobPosting.workHours))
+                  : ""}
+                {jobPosting.maxWorkHours
+                  ? ` to ${formatTime(Number(jobPosting.maxWorkHours))}`
+                  : ""}
+                {`${jobPosting.workHours ? " Hours / Week" : "N/A"}`}
               </span>
             </div>
             <div className="flex items-center gap-2">
