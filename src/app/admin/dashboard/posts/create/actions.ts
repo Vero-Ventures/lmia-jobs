@@ -30,16 +30,10 @@ export async function createJobPost(
     const postData = {
       ...rest,
       userId: session.user.id,
-      vacancies: !formData.vacancies
-        ? null
-        : Math.ceil(Number(formData.vacancies)),
-      workHours: !formData.workHours
-        ? null
-        : Math.ceil(Number(formData.workHours)),
-      minPayValue: Math.ceil(Number(formData.minPayValue)),
-      maxPayValue: !formData.maxPayValue
-        ? null
-        : Math.ceil(Number(formData.maxPayValue)),
+      vacancies: !formData.vacancies ? null : Number(formData.vacancies),
+      workHours: !formData.workHours ? null : String(formData.workHours),
+      minPayValue: String(formData.minPayValue),
+      maxPayValue: !formData.maxPayValue ? null : String(formData.maxPayValue),
       expiresAt: expiryDate,
       paymentConfirmed: false,
       hidden: false,
@@ -114,13 +108,9 @@ export async function updateJobPost(formData: EditJobPosting, postId: number) {
       vacancies: !formData.vacancies
         ? null
         : Math.ceil(Number(formData.vacancies)),
-      workHours: !formData.workHours
-        ? null
-        : Math.ceil(Number(formData.workHours)),
-      minPayValue: Math.ceil(Number(formData.minPayValue)),
-      maxPayValue: !formData.maxPayValue
-        ? null
-        : Math.ceil(Number(formData.maxPayValue)),
+      workHours: !formData.workHours ? null : String(formData.workHours),
+      minPayValue: String(formData.minPayValue),
+      maxPayValue: !formData.maxPayValue ? null : String(formData.maxPayValue),
     };
 
     await db
