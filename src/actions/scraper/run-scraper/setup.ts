@@ -15,11 +15,12 @@ export const runScraper = async (postId: string) => {
 
     const pageHandler = new BrowserHandler(page);
 
-    const postsToSave = await scrapeJobBankPost(pageHandler, postId);
+    const postToSave = await scrapeJobBankPost(pageHandler, postId);
 
-    const dataHandler = new DataHandler(postsToSave);
+    const dataHandler = new DataHandler(postToSave);
 
     try {
+      console.log(JSON.stringify(postToSave));
       await dataHandler.createPosts();
     } catch (error) {
       console.error("Error Creating Posts: " + error);
@@ -61,7 +62,7 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
 
     return [browser, context, page];
   } catch (error) {
-    console.error("Browser Launch Failed:", error);
+    console.error("Browser Launch Failed: " + error);
     throw error;
   }
 }

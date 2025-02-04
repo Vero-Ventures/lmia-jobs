@@ -1,4 +1,4 @@
-// import { runScraper } from "@/actions/scraper/run-scraper/setup";
+import { runScraper } from "@/actions/scraper/run-scraper/setup";
 
 export async function POST(request: Request) {
   try {
@@ -19,11 +19,8 @@ export async function POST(request: Request) {
       });
     } else {
       try {
-        console.log(body.postLink);
-        console.log(body.postLink.split("jobposting/")[1]);
-
-        // const postId = body.postLink.split('jobposting/')[1]
-        // await runScraper(postId);
+        const postId = body.postLink.split("jobposting/")[1];
+        await runScraper(postId);
 
         return new Response("", { status: 200 });
       } catch (error) {

@@ -17,7 +17,7 @@ export async function scrapeJobBankPost(
       CONFIG.urls.searchResult + postId + "?source=searchresults"
     );
 
-    const email = await getPageEmail(browserHandler, postId);
+    const email = await getPageEmail(browserHandler);
 
     const postDetails = await getPageDetails(browserHandler, postId, email);
 
@@ -27,15 +27,12 @@ export async function scrapeJobBankPost(
   }
 }
 
-async function getPageEmail(
-  browserHandler: BrowserHandler,
-  postId: string
-): Promise<string> {
+async function getPageEmail(browserHandler: BrowserHandler): Promise<string> {
   try {
     const email = await getEmail(browserHandler);
 
     if (!email) {
-      throw "Post With ID: " + postId + " Has Invalid Email";
+      throw "Post Has Invalid Email";
     }
 
     const userEmails = await db.select({ email: user.email }).from(user);
@@ -61,11 +58,11 @@ async function getPageDetails(
     const details = await getJobDetails(browserHandler, postId, email);
 
     if (!details) {
-      throw "Post With ID: " + postId + " Has Invalid Details";
+      throw "Post Has Invalid Details";
     }
 
     return details;
   } catch (error) {
-    throw "Error getting getting Email or Details: " + error;
+    throw "Error Getting Post Details: " + error;
   }
 }

@@ -23,8 +23,7 @@ export async function getEmail(
       return null;
     }
   } catch (error) {
-    console.error("Error: " + error);
-    return null;
+    throw error;
   }
 }
 
@@ -75,8 +74,7 @@ export async function getJobDetails(
 
     return data;
   } catch (error) {
-    console.error("Error on Page : " + postId + ",\n" + error);
-    return null;
+    throw error;
   }
 }
 
@@ -113,8 +111,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
     if (organizationNameValue) {
       orgName = organizationNameValue;
     }
-  } catch (error) {
-    console.error("Organization Name Text Not Found: " + error);
+  } catch {
     try {
       const getOrganizationLink = await browserHandler.waitAndGetElement(
         CONFIG.selectors.jobDetails.header.organizationNameLink
@@ -127,7 +124,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
         orgName = organizationNameValue;
       }
     } catch (error) {
-      console.error("Organization Name Link Not Found: " + error);
+      throw "Organization Name And Link Not Found: " + error;
     }
   }
 
