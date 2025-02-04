@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { sendContactEmail } from "@/actions/mailer";
@@ -34,8 +32,6 @@ const formSchema = z.object({
 });
 
 export default function Page() {
-  // Define loading state and form information.
-  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,19 +44,15 @@ export default function Page() {
   // Define submission handler.
   const handleSubmit = async (values: FormSchema) => {
     // Update loading state and extract form data.
-    setIsLoading(true);
+
     toast.promise(sendContactEmail(values), {
       loading: "Sending email...",
-      success: () => {
-        return "You're email has been sent! We'll get back to you as soon as possible.";
-      },
+      success:
+        "You're email has been sent! We'll get back to you as soon as possible.",
       error: (err) => {
         if (err instanceof Error) {
           return err.message;
         }
-      },
-      finally: () => {
-        setIsLoading(false);
       },
     });
   };
@@ -140,8 +132,8 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit"}
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>
