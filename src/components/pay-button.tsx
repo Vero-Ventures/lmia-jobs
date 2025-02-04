@@ -23,14 +23,24 @@ import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 import { toast } from "sonner";
 import { updateJobBoardPostings } from "@/app/admin/dashboard/posts/create/actions";
 
-export default function PayButton({ id }: { id: number }) {
-  const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>([]);
+export default function PayButton({
+  id,
+  initialSelectedJobBoards,
+}: {
+  id: number;
+  initialSelectedJobBoards?: JobBoard[];
+}) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>(
+    initialSelectedJobBoards ?? []
+  );
   const [monthsToPost, setMonthsToPost] = useState(1);
 
   async function handlePayForPost() {
     if (monthsToPost <= 0 || selectedJobBoards.length === 0) {
       return;
     }
+    setIsLoading(true);
     toast.promise(
       updateJobBoardPostings({ id, monthsToPost, selectedJobBoards }),
       {
@@ -46,6 +56,7 @@ export default function PayButton({ id }: { id: number }) {
         error: (error) => {
           if (error instanceof Error) return error.message;
         },
+        finally: () => setIsLoading(false),
       }
     );
 
@@ -57,9 +68,15 @@ export default function PayButton({ id }: { id: number }) {
     });
   }
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          setSelectedJobBoards([]);
+          setMonthsToPost(1);
+        }
+      }}>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={isLoading}>
           <HandCoins />
           <span>Pay</span>
         </Button>
@@ -114,7 +131,7 @@ export default function PayButton({ id }: { id: number }) {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handlePayForPost} type="submit">
+          <Button disabled={isLoading} onClick={handlePayForPost} type="submit">
             Pay
           </Button>
         </DialogFooter>

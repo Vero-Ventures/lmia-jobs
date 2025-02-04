@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { sendContactEmail } from "@/actions/mailer";
@@ -19,12 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { ToastAction } from "@/components/ui/toasts/toast";
-import { useToast } from "@/components/ui/toasts/use-toast";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Heading from "@/components/heading";
+import { toast } from "sonner";
+import { useState } from "react";
+
+type FormSchema = z.infer<typeof formSchema>;
 
 // Define the 'contact us' form via Zod schema.
 const formSchema = z.object({
@@ -34,9 +33,8 @@ const formSchema = z.object({
 });
 
 export default function Page() {
-  // Define loading state and form information.
-  const [loading, setLoading] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -45,56 +43,21 @@ export default function Page() {
     },
   });
 
-  const { toast } = useToast();
-
-  // Define an error element to be displayed if the Email cannot be sent.
-  const toastError = (values: z.infer<typeof formSchema>) => {
-    toast({
-      variant: "destructive",
-      title: "Something went wrong.",
-      description: "There was a problem sending your message.",
-      action: (
-        <ToastAction
-          id="RetryEmail"
-          altText="Retry sending email"
-          onClick={() => {
-            handleSubmit(values);
-          }}>
-          Retry
-        </ToastAction>
-      ),
-    });
-  };
-
   // Define submission handler.
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: FormSchema) => {
     // Update loading state and extract form data.
-    setLoading(true);
-    const { email, subject, body } = values;
-
-    try {
-      // Call the Email handler and check for an error response.
-      const response = await sendContactEmail(email, subject, body);
-
-      if (!response) {
-        // On error use the toast error element to display an error message to the user.
-        toastError(values);
-      } else {
-        // Inform the user of the success and reset the form.
-        toast({
-          title: "Email sent!",
-          description: "We'll get back to you as soon as possible.",
-        });
-        form.reset();
-      }
-    } catch (error) {
-      // On error, log a message and display the toast error element.
-      console.error("Error Sending Message:", error);
-      toastError(values);
-    } finally {
-      // Always set loading to be false after submission handling.
-      setLoading(false);
-    }
+    setIsLoading(true);
+    toast.promise(sendContactEmail(values), {
+      loading: "Sending email...",
+      success:
+        "You're email has been sent! We'll get back to you as soon as possible.",
+      error: (err) => {
+        if (err instanceof Error) {
+          return err.message;
+        }
+      },
+      finally: () => setIsLoading(false),
+    });
   };
 
   return (
@@ -104,7 +67,6 @@ export default function Page() {
       </Heading>
       <Form {...form}>
         <form
-          id="ContactForm"
           onSubmit={form.handleSubmit(handleSubmit)}
           className="flex flex-col gap-6">
           <FormField
@@ -173,8 +135,8 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={loading}>
-            {loading ? "Submitting..." : "Submit"}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>
