@@ -7,7 +7,10 @@ export const baseSchema = createInsertSchema(jobPosting, {
     .number()
     .min(0, { message: "Available Position must be greater than or equal 0" })
     .optional(),
-  workHours: z.coerce
+  minWorkHours: z.coerce
+    .number()
+    .min(0, { message: "Weekly hours must be greater than 0" }),
+  maxWorkHours: z.coerce
     .number()
     .min(0, { message: "Weekly hours must be greater than 0" })
     .optional(),

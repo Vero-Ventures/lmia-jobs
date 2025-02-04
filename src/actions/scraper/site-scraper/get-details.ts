@@ -56,7 +56,7 @@ export async function getJobDetails(
         : headerInfo.postedDate,
       vacancies: Number(otherDetails.vacancies),
       employmentType: otherDetails.employmentType,
-      workHours: paymentDetails.workHours,
+      minWorkHours: paymentDetails.minWorkHours,
       maxWorkHours: paymentDetails.maxWorkHours
         ? paymentDetails.maxWorkHours
         : null,
@@ -210,13 +210,13 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
   minPay: string;
   maxPay: string | undefined;
   paymentType: string;
-  workHours: string;
+  minWorkHours: string;
   maxWorkHours: string | undefined;
 }> {
   let minPay = "null";
   let maxPay = undefined;
   let paymentType = "null";
-  let workHours = "null";
+  let minWorkHours = "null";
   let maxWorkHours = undefined;
 
   try {
@@ -266,10 +266,10 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       const workHoursNum = workHoursValue.split("hours")[0].trim();
 
       if (workHoursNum.includes(" to ")) {
-        workHours = workHoursNum.split(" to ")[0];
+        minWorkHours = workHoursNum.split(" to ")[0];
         maxWorkHours = workHoursNum.split(" to ")[1];
       } else {
-        workHours = workHoursNum;
+        minWorkHours = workHoursNum;
       }
     }
   } catch (error) {
@@ -280,7 +280,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
     minPay,
     maxPay,
     paymentType,
-    workHours,
+    minWorkHours,
     maxWorkHours,
   };
 }

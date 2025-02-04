@@ -109,13 +109,13 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <ClockIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                {jobPosting.workHours
-                  ? formatTime(Number(jobPosting.workHours))
+                {jobPosting.minWorkHours
+                  ? formatTime(Number(jobPosting.minWorkHours))
                   : ""}
                 {jobPosting.maxWorkHours
                   ? ` to ${formatTime(Number(jobPosting.maxWorkHours))}`
                   : ""}
-                {`${jobPosting.workHours ? " Hours / Week" : "N/A"}`}
+                {` Hours / Week`}
               </span>
             </div>
             <div className="flex items-center gap-2">

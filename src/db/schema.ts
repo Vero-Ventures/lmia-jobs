@@ -90,7 +90,7 @@ export const jobPosting = pgTable("job_posting", {
   startDate: date({ mode: "date" }).notNull(),
   vacancies: integer("vacancies"),
   employmentType: employmentTypeEnum("").notNull(),
-  workHours: decimal("work_hours", { precision: 4, scale: 1 }),
+  minWorkHours: decimal("min_work_hours", { precision: 4, scale: 1 }).notNull(),
   maxWorkHours: decimal("max_work_hours", { precision: 4, scale: 1 }),
   paymentType: paymentTypeEnum("payment_type").notNull(),
   minPayValue: decimal("min_pay_value", { precision: 9, scale: 2 }).notNull(),

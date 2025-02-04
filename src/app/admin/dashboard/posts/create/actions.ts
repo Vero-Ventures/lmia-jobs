@@ -31,7 +31,10 @@ export async function createJobPost(
       ...rest,
       userId: session.user.id,
       vacancies: !formData.vacancies ? null : Number(formData.vacancies),
-      workHours: !formData.workHours ? null : String(formData.workHours),
+      minWorkHours: String(formData.minWorkHours),
+      maxWorkHours: !formData.maxWorkHours
+        ? null
+        : String(formData.maxWorkHours),
       minPayValue: String(formData.minPayValue),
       maxPayValue: !formData.maxPayValue ? null : String(formData.maxPayValue),
       expiresAt: expiryDate,
@@ -108,7 +111,10 @@ export async function updateJobPost(formData: EditJobPosting, postId: number) {
       vacancies: !formData.vacancies
         ? null
         : Math.ceil(Number(formData.vacancies)),
-      workHours: !formData.workHours ? null : String(formData.workHours),
+      minWorkHours: String(formData.minWorkHours),
+      maxWorkHours: !formData.maxWorkHours
+        ? null
+        : String(formData.maxWorkHours),
       minPayValue: String(formData.minPayValue),
       maxPayValue: !formData.maxPayValue ? null : String(formData.maxPayValue),
     };
