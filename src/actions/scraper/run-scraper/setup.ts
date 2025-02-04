@@ -2,11 +2,11 @@ import { chromium as playwright } from "playwright-core";
 import type { Browser, BrowserContext, Page } from "playwright-core";
 import chromium from "@sparticuz/chromium";
 import UserAgent from "user-agents";
-import { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
-import { DataHandler } from "@/actions/scraper/scraping-handlers/data-handler";
-import { scrapeGovJobBank } from "@/actions/scraper/site-scrapers/handler";
+import { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
+import { DataHandler } from "@/actions/scraper/site-scraper/update-database";
+import { scrapeJobBankPost } from "@/actions/scraper/site-scraper/handler";
 
-export const runScraper = async () => {
+export const runScraper = async (postId: string) => {
   let browser: Browser | undefined;
   try {
     const [newBrowser, _context, page] = await createChromiunm();
@@ -15,9 +15,18 @@ export const runScraper = async () => {
 
     const pageHandler = new BrowserHandler(page);
 
-    await runSiteScrapers(pageHandler);
+    const postToSave = await scrapeJobBankPost(pageHandler, postId);
+
+    const dataHandler = new DataHandler(postToSave);
+
+    try {
+      console.log(JSON.stringify(postToSave));
+      await dataHandler.createPosts();
+    } catch (error) {
+      console.error("Error Creating Posts: " + error);
+    }
   } catch (error) {
-    console.error("Create Scraper Error: " + error);
+    console.error("Error Creating Scraper: " + error);
   } finally {
     if (browser) {
       browser.close();
@@ -53,19 +62,7 @@ async function createChromiunm(): Promise<[Browser, BrowserContext, Page]> {
 
     return [browser, context, page];
   } catch (error) {
-    console.error("Browser Launch Failed:", error);
+    console.error("Browser Launch Failed: " + error);
     throw error;
-  }
-}
-
-async function runSiteScrapers(handler: BrowserHandler) {
-  const postsToSave = await scrapeGovJobBank(handler);
-
-  const dataHandler = new DataHandler(postsToSave);
-
-  try {
-    await dataHandler.createPosts();
-  } catch (error) {
-    console.error("Error Creating Posts: " + error);
   }
 }

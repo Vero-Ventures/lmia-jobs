@@ -1,4 +1,4 @@
-import type { BrowserHandler } from "@/actions/scraper/scraping-handlers/browser-handler";
+import type { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
 
 export async function getDescription(
@@ -48,7 +48,7 @@ async function getBaseOverviewValues(
 
   try {
     const getEducation = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.education
+      CONFIG.selectors.jobDetails.description.education
     );
     const educationValue = (await getEducation.allInnerTexts()).pop();
     if (educationValue) {
@@ -60,7 +60,7 @@ async function getBaseOverviewValues(
 
   try {
     const getExperience = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.experience
+      CONFIG.selectors.jobDetails.description.experience
     );
     const experienceValue = (await getExperience.allInnerTexts()).pop();
     if (experienceValue) {
@@ -72,11 +72,11 @@ async function getBaseOverviewValues(
 
   try {
     const getOnSite = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.onSite
+      CONFIG.selectors.jobDetails.description.onSite
     );
     const filteredToOnSite = getOnSite.filter({
       has: browserHandler.page.locator(
-        CONFIG.selectors.govJobBank.jobDetails.description.onSiteFilter
+        CONFIG.selectors.jobDetails.description.onSiteFilter
       ),
     });
     const onSiteValue = (await filteredToOnSite.allInnerTexts()).pop();
@@ -107,7 +107,7 @@ async function getEnviromentAndSetting(
 
   try {
     const getEnviromentLists = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.enviroment,
+      CONFIG.selectors.jobDetails.description.enviroment,
       1500
     );
     const enviromentInnerText = await getEnviromentLists.allInnerTexts();
@@ -125,7 +125,7 @@ async function getEnviromentAndSetting(
 
   try {
     const getSettingLists = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.setting,
+      CONFIG.selectors.jobDetails.description.setting,
       1500
     );
     const settingInnerText = await getSettingLists.allInnerTexts();
@@ -159,7 +159,7 @@ async function getCredentials(
 
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.credentials,
+      CONFIG.selectors.jobDetails.description.credentials,
       1500
     );
 
@@ -204,7 +204,7 @@ async function getBenefits(
 
   try {
     const getCredentialsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.benefits,
+      CONFIG.selectors.jobDetails.description.benefits,
       1500
     );
 
@@ -265,7 +265,7 @@ async function getTasksAndSupervision(
 
   try {
     const getTasksList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.tasksAndSupervision
+      CONFIG.selectors.jobDetails.description.tasksAndSupervision
     );
 
     const tasksInnerHtml = await getTasksList.innerHTML();
@@ -315,7 +315,7 @@ async function getSkills(
 
   try {
     const getSkillsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.specializedSkills,
+      CONFIG.selectors.jobDetails.description.specializedSkills,
       1500
     );
     const skillsInnerHtml = await getSkillsList.innerHTML();
@@ -366,7 +366,7 @@ async function getAdditionalInformation(
 
   try {
     const getAdditionalInformation = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.govJobBank.jobDetails.description.additionalInformation
+      CONFIG.selectors.jobDetails.description.additionalInformation
     );
 
     const infoInnerHtml = await getAdditionalInformation.innerHTML();
