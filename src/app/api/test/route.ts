@@ -1,12 +1,11 @@
 // import { runScraper } from "@/actions/scraper/run-scraper/setup";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   // await runScraper("12345678");
 
-  const url = new URL(request.url);
-  const params = Object.fromEntries(url.searchParams.entries());
+  const body = await request.json();
 
-  console.log("Query Parameters:", params);
+  console.log("Query Parameters:", JSON.stringify(body));
 
   return new Response(JSON.stringify("Completed"), { status: 200 });
 }
