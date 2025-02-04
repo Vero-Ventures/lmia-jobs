@@ -29,6 +29,14 @@ export default function SingleJobPosting({
   isOwner?: boolean;
 }) {
   const currentDate = new Date();
+
+  const formatDisplayDate = () => {
+    const databaseDate = new Date(jobPosting.startDate);
+    databaseDate.setDate(databaseDate.getDate() + 1);
+    const localDate = new Date(databaseDate).toDateString().split(" ");
+    return localDate[1] + " " + localDate[2] + ", " + localDate[3];
+  };
+
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-20">
       {isOwner && isAdmin && (
@@ -123,10 +131,7 @@ export default function SingleJobPosting({
               <span className="text-gray-600">
                 {`${
                   jobPosting.startDate
-                    ? "Start Date: " +
-                      formatDate(jobPosting.startDate, {
-                        dateStyle: "medium",
-                      })
+                    ? "Start Date: " + formatDisplayDate()
                     : "N/A"
                 }`}
               </span>

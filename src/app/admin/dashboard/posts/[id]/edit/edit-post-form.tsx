@@ -134,7 +134,14 @@ export function EditPostForm({
                           min="1900-01-01"
                           defaultValue={formatDate(field.value)}
                           onChange={(e) => {
-                            field.onChange(new Date(e.target.value));
+                            if (e.target.value) {
+                              const formattedDate = new Date(
+                                e.target.value + "T00:00:00"
+                              );
+                              if (formattedDate) {
+                                field.onChange(formattedDate);
+                              }
+                            }
                           }}
                         />
                       </FormControl>
