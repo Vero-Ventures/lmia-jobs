@@ -13,8 +13,6 @@ export class DataHandler {
   constructor(public post: JobPostData) {}
 
   async createPosts(): Promise<void> {
-    console.log(JSON.stringify(this.post));
-
     try {
       const newPost = await this.handlePostCreation(this.post);
 
@@ -61,8 +59,8 @@ export class DataHandler {
           : null,
         description: postData.description,
         language: postData.language as Language,
-        hidden: false,
-        paymentConfirmed: true,
+        hidden: true,
+        paymentConfirmed: false,
         expiresAt: expireryDate,
       };
     } catch (error) {
