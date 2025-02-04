@@ -34,10 +34,10 @@ export default async function EditPost({ params }: PageProps) {
           startDate: jobPosting.startDate,
           vacancies: jobPosting.vacancies || 0,
           employmentType: jobPosting.employmentType,
-          workHours: jobPosting.workHours || 0,
+          workHours: Number(jobPosting.workHours) || 0,
           paymentType: jobPosting.paymentType,
-          minPayValue: jobPosting.minPayValue,
-          maxPayValue: jobPosting.maxPayValue || 0,
+          minPayValue: Number(jobPosting.minPayValue),
+          maxPayValue: Number(jobPosting.maxPayValue) || 0,
           description: jobPosting.description,
           language: jobPosting.language,
         }}
