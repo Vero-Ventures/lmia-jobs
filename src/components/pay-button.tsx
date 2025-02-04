@@ -30,6 +30,7 @@ export default function PayButton({
   id: number;
   initialSelectedJobBoards?: JobBoard[];
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>(
     initialSelectedJobBoards ?? []
   );
@@ -39,6 +40,7 @@ export default function PayButton({
     if (monthsToPost <= 0 || selectedJobBoards.length === 0) {
       return;
     }
+    setIsLoading(true);
     toast.promise(
       updateJobBoardPostings({ id, monthsToPost, selectedJobBoards }),
       {
@@ -54,6 +56,7 @@ export default function PayButton({
         error: (error) => {
           if (error instanceof Error) return error.message;
         },
+        finally: () => setIsLoading(false),
       }
     );
 
@@ -73,7 +76,7 @@ export default function PayButton({
         }
       }}>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={isLoading}>
           <HandCoins />
           <span>Pay</span>
         </Button>
@@ -128,7 +131,7 @@ export default function PayButton({
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handlePayForPost} type="submit">
+          <Button disabled={isLoading} onClick={handlePayForPost} type="submit">
             Pay
           </Button>
         </DialogFooter>
