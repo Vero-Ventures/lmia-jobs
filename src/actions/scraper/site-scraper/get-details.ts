@@ -50,24 +50,19 @@ export async function getJobDetails(
       orgName: headerInfo.orgName,
       province: locationDetails.province,
       city: locationDetails.city,
-      address: locationDetails.address,
+      address: locationDetails.address ? locationDetails.address : null,
       startDate: otherDetails.startDate
         ? otherDetails.startDate
         : headerInfo.postedDate,
-      vacancies:
-        otherDetails.vacancies !== "null" ? Number(otherDetails.vacancies) : 0,
+      vacancies: Number(otherDetails.vacancies),
       employmentType: otherDetails.employmentType,
-      workHours: paymentDetails.workHours,
+      minWorkHours: paymentDetails.minWorkHours,
       maxWorkHours: paymentDetails.maxWorkHours
         ? paymentDetails.maxWorkHours
         : null,
       paymentType: paymentDetails.paymentType,
-      minPayValue:
-        paymentDetails.minPay !== "null" ? Number(paymentDetails.minPay) : 0,
-      maxPayValue:
-        paymentDetails.maxPay !== undefined
-          ? Number(paymentDetails.maxPay)
-          : undefined,
+      minPayValue: paymentDetails.minPay,
+      maxPayValue: paymentDetails.maxPay ? paymentDetails.maxPay : null,
       description: description,
       language: otherDetails.language,
     };
@@ -215,13 +210,13 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
   minPay: string;
   maxPay: string | undefined;
   paymentType: string;
-  workHours: number;
-  maxWorkHours: number | undefined;
+  minWorkHours: string;
+  maxWorkHours: string | undefined;
 }> {
   let minPay = "null";
   let maxPay = undefined;
   let paymentType = "null";
-  let workHours = 0;
+  let minWorkHours = "null";
   let maxWorkHours = undefined;
 
   try {
@@ -271,10 +266,10 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
       const workHoursNum = workHoursValue.split("hours")[0].trim();
 
       if (workHoursNum.includes(" to ")) {
-        workHours = Number(workHoursNum.split(" to ")[0]);
-        maxWorkHours = Number(workHoursNum.split(" to ")[1]);
+        minWorkHours = workHoursNum.split(" to ")[0];
+        maxWorkHours = workHoursNum.split(" to ")[1];
       } else {
-        workHours = Number(workHoursNum);
+        minWorkHours = workHoursNum;
       }
     }
   } catch (error) {
@@ -285,7 +280,7 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
     minPay,
     maxPay,
     paymentType,
-    workHours,
+    minWorkHours,
     maxWorkHours,
   };
 }

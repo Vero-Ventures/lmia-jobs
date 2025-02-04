@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import P from "./paragraph";
 import Heading from "./heading";
-import { formatDate, formatMoney } from "@/lib/utils";
+import { formatDate, formatMoney, formatTime } from "@/lib/utils";
 import PayButton from "./pay-button";
 
 export default function SingleJobPosting({
@@ -29,6 +29,14 @@ export default function SingleJobPosting({
   isOwner?: boolean;
 }) {
   const currentDate = new Date();
+
+  const formatDisplayDate = () => {
+    const databaseDate = new Date(jobPosting.startDate);
+    databaseDate.setDate(databaseDate.getDate() + 1);
+    const localDate = new Date(databaseDate).toDateString().split(" ");
+    return localDate[1] + " " + localDate[2] + ", " + localDate[3];
+  };
+
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-4 py-20">
       {isOwner && isAdmin && (
@@ -97,9 +105,9 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <CircleDollarSignIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                ${formatMoney(jobPosting.minPayValue)}{" "}
+                ${formatMoney(Number(jobPosting.minPayValue))}{" "}
                 {jobPosting.maxPayValue
-                  ? `to $${formatMoney(jobPosting.maxPayValue)}`
+                  ? `to $${formatMoney(Number(jobPosting.maxPayValue))}`
                   : ""}{" "}
                 {jobPosting.paymentType === "Hourly" ? "hourly" : "annually"}
               </span>
@@ -109,7 +117,13 @@ export default function SingleJobPosting({
             <div className="flex items-center gap-2">
               <ClockIcon className="size-6 text-gray-600" />
               <span className="text-gray-600">
-                {`${jobPosting.workHours ? jobPosting.workHours + " Hours / Week" : "N/A"}`}
+                {jobPosting.minWorkHours
+                  ? formatTime(Number(jobPosting.minWorkHours))
+                  : ""}
+                {jobPosting.maxWorkHours
+                  ? ` to ${formatTime(Number(jobPosting.maxWorkHours))}`
+                  : ""}
+                {` Hours / Week`}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -117,10 +131,7 @@ export default function SingleJobPosting({
               <span className="text-gray-600">
                 {`${
                   jobPosting.startDate
-                    ? "Start Date: " +
-                      formatDate(jobPosting.startDate, {
-                        dateStyle: "medium",
-                      })
+                    ? "Start Date: " + formatDisplayDate()
                     : "N/A"
                 }`}
               </span>

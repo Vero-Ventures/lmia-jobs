@@ -48,15 +48,11 @@ export class DataHandler {
         startDate: new Date(postData.startDate),
         vacancies: postData.vacancies,
         employmentType: postData.employmentType as EmploymentType,
-        workHours: Math.floor(postData.workHours),
-        maxWorkHours: postData.maxWorkHours
-          ? Math.floor(postData.maxWorkHours)
-          : null,
+        minWorkHours: postData.minWorkHours,
+        maxWorkHours: postData.maxWorkHours ? postData.maxWorkHours : null,
         paymentType: postData.paymentType as PaymentType,
-        minPayValue: Math.floor(postData.minPayValue),
-        maxPayValue: postData.maxPayValue
-          ? Math.floor(postData.maxPayValue)
-          : null,
+        minPayValue: postData.minPayValue,
+        maxPayValue: postData.maxPayValue ? postData.maxPayValue : null,
         description: postData.description,
         language: postData.language as Language,
         hidden: true,

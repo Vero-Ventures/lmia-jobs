@@ -134,7 +134,14 @@ export function EditPostForm({
                           min="1900-01-01"
                           defaultValue={formatDate(field.value)}
                           onChange={(e) => {
-                            field.onChange(new Date(e.target.value));
+                            if (e.target.value) {
+                              const formattedDate = new Date(
+                                e.target.value + "T00:00:00"
+                              );
+                              if (formattedDate) {
+                                field.onChange(formattedDate);
+                              }
+                            }
                           }}
                         />
                       </FormControl>
@@ -144,11 +151,29 @@ export function EditPostForm({
                 />
                 <FormField
                   control={form.control}
-                  name="workHours"
+                  name="minWorkHours"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Minimum Work Hours</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={0}
+                          placeholder="Enter weekly hours"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="maxWorkHours"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Work Hours{" "}
+                        Max Work Hours{" "}
                         <span className="text-xs font-normal italic">
                           (Optional)
                         </span>

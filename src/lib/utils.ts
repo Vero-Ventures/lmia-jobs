@@ -17,6 +17,15 @@ export function formatMoney(num: number) {
   return moneyFormatter.format(num);
 }
 
+export function formatTime(num: number) {
+  const roundedNum = (num * 100) / 100;
+  if (roundedNum % 1 === 0) {
+    return String(roundedNum);
+  } else {
+    return String(num);
+  }
+}
+
 export async function tryCatch<T>(promise: Promise<T>) {
   let data = null;
   let error = null;
