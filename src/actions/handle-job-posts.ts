@@ -14,7 +14,7 @@ export async function editPostVisibility(
       .update(jobPosting)
       .set({ hidden: hidePost })
       .where(eq(jobPosting.id, id));
-    revalidatePath(`/dashboard/posts/${jobPosting.id}`);
+    revalidatePath(`/dashboard/posts/${id}`);
     return "success";
   } catch (error) {
     console.error(error);

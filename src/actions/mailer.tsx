@@ -126,21 +126,19 @@ export async function optOutOfReminders(email: string): Promise<string> {
   }
 }
 
-export async function sendContactEmail(
-  email: string,
-  subject: string,
-  body: string
-): Promise<boolean> {
-  try {
-    await resend.emails.send({
-      from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-      to: `${process.env.RESEND_ADDRESS}`,
-      subject: "Contact Us: " + subject + " - From: " + email,
-      text: body,
-    });
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function sendContactEmail({
+  email,
+  subject,
+  body,
+}: {
+  email: string;
+  subject: string;
+  body: string;
+}) {
+  await resend.emails.send({
+    from: email,
+    to: `Opportunities <contact@manageopportunities.ca>`,
+    subject: `Contact Us: " + ${subject}`,
+    text: body,
+  });
 }

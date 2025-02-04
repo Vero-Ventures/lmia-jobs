@@ -37,12 +37,14 @@ import type { EditJobPosting } from "@/app/lib/job-postings/schema";
 import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
 import { formatDate } from "@/lib/utils";
 import MoneyInput from "@/components/money-input";
+import { useState } from "react";
 
 export function EditPostForm({
   initialValues,
 }: {
   initialValues: EditJobPosting;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const params = useParams<{ id: string }>();
   const postId = Number.parseInt(params.id);
 
@@ -53,6 +55,7 @@ export function EditPostForm({
   const router = useRouter();
 
   async function onSubmit(values: EditJobPosting) {
+    setIsLoading(true);
     toast.promise(updateJobPost(values, postId), {
       loading: "Updating job posting...",
       success: () => {
@@ -63,6 +66,7 @@ export function EditPostForm({
       error: (error) => {
         if (error instanceof Error) return error.message;
       },
+      finally: () => setIsLoading(false),
     });
   }
 
@@ -379,7 +383,7 @@ export function EditPostForm({
               </Button>
               <FormSubmitButton
                 className="order-1 w-full sm:order-2"
-                isPending={form.formState.isSubmitting}
+                isPending={isLoading}
                 loadingValue="Updating job posting..."
                 value="Edit"
               />
