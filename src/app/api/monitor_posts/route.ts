@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     } else {
       try {
         const postId = body.postLink.split("jobposting/")[1];
-        runScraper(postId);
+        await runScraper(postId);
 
         return new Response("Run process started.", { status: 200 });
       } catch (error) {
