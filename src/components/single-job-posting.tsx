@@ -27,7 +27,7 @@ export default function SingleJobPosting({
   isOwner = false,
 }: {
   jobPosting: JobPosting;
-  jobBoards: JobBoard[];
+  jobBoards?: JobBoard[];
   isAdmin?: boolean;
   isOwner?: boolean;
 }) {
