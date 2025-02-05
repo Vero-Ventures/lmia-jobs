@@ -9,7 +9,6 @@ import { scrapeJobBankPost } from "@/actions/scraper/site-scraper/handler";
 export const runScraper = async (postId: string) => {
   let browser: Browser | undefined;
   try {
-    console.log("Start Scraper Process");
     const [newBrowser, _context, page] = await createChromiunm();
 
     browser = newBrowser;
@@ -21,7 +20,6 @@ export const runScraper = async (postId: string) => {
     const dataHandler = new DataHandler(postToSave);
 
     try {
-      console.log(JSON.stringify(postToSave));
       await dataHandler.createPosts();
     } catch (error) {
       console.error("Error Creating Posts: " + error);
@@ -29,7 +27,6 @@ export const runScraper = async (postId: string) => {
   } catch (error) {
     console.error("Error Creating Scraper: " + error);
   } finally {
-    console.log("Complete Scraper Process");
     if (browser) {
       browser.close();
     }

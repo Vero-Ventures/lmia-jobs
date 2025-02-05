@@ -2,7 +2,6 @@ import { runScraper } from "@/actions/scraper/run-scraper/setup";
 
 export async function POST(request: Request) {
   try {
-    console.log("Recive API Call");
     const body = await request.json();
 
     if (
@@ -23,17 +22,14 @@ export async function POST(request: Request) {
         const postId = body.postLink.split("jobposting/")[1];
         await runScraper(postId);
 
-        console.log("Complete API Call");
         return new Response("Run process started.", { status: 200 });
       } catch (error) {
-        console.log("Complete API Call");
         return new Response("Failed to run scraper on RSS feed: " + error, {
           status: 500,
         });
       }
     }
   } catch (error) {
-    console.log("Complete API Call");
     return new Response("Failed to fetch RSS feed: " + error, {
       status: 500,
     });
