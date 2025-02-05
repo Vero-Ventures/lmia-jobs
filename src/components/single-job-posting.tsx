@@ -170,7 +170,11 @@ export default function SingleJobPosting({
             <Heading variant="h3" className="text-primary">
               Job Description
             </Heading>
-            <P dangerouslySetInnerHTML={{ __html: jobPosting.description }} />
+            <P
+              dangerouslySetInnerHTML={{
+                __html: jobPosting.description.replace(/\n/g, "<br />"),
+              }}
+            />
           </div>
         </div>
         <div>
