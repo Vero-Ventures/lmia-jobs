@@ -1,0 +1,1 @@
+ALTER TYPE "public"."job_board" ADD VALUE 'all' BEFORE 'accessible';

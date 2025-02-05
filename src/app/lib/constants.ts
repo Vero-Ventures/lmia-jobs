@@ -1,4 +1,6 @@
 export const JOB_BOARD_TITLES: Record<JobBoard, string> = {
+  all: "All Opportunities",
+
   accessible: "Accessible Opportunities",
 
   asylum: "Asylum Opportunities",
@@ -12,6 +14,7 @@ export const JOB_BOARD_TITLES: Record<JobBoard, string> = {
 
 export const JOB_BOARD_DOMAINS: Record<string, JobBoard | "admin"> = {
   "manageopportunities.ca": "admin",
+  "allopportunities.ca": "all",
   "accessibleopportunities.ca": "accessible",
   "asylumopportunities.ca": "asylum",
   "indigenousopportunities.ca": "indigenous",
@@ -20,6 +23,7 @@ export const JOB_BOARD_DOMAINS: Record<string, JobBoard | "admin"> = {
 };
 
 export const JOB_BOARDS = [
+  "all",
   "accessible",
   "asylum",
   "indigenous",

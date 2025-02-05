@@ -443,35 +443,37 @@ export function CreatePostForm() {
                 Posting Preferences
               </h2>
               <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {JOB_BOARDS.map((jobBoard) => (
-                  <div
-                    className="flex items-center space-x-2 capitalize"
-                    key={jobBoard}>
-                    <Checkbox
-                      id={jobBoard}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setSelectedJobBoards([
-                            ...selectedJobBoards,
-                            jobBoard,
-                          ]);
-                        } else {
-                          setSelectedJobBoards(
-                            selectedJobBoards.filter(
-                              (selectedJobBoard) =>
-                                selectedJobBoard !== jobBoard
-                            )
-                          );
-                        }
-                      }}
-                    />
-                    <label
-                      htmlFor={jobBoard}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      {jobBoard}
-                    </label>
-                  </div>
-                ))}
+                {JOB_BOARDS.filter((board) => board !== "all").map(
+                  (jobBoard) => (
+                    <div
+                      className="flex items-center space-x-2 capitalize"
+                      key={jobBoard}>
+                      <Checkbox
+                        id={jobBoard}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedJobBoards([
+                              ...selectedJobBoards,
+                              jobBoard,
+                            ]);
+                          } else {
+                            setSelectedJobBoards(
+                              selectedJobBoards.filter(
+                                (selectedJobBoard) =>
+                                  selectedJobBoard !== jobBoard
+                              )
+                            );
+                          }
+                        }}
+                      />
+                      <label
+                        htmlFor={jobBoard}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        {jobBoard}
+                      </label>
+                    </div>
+                  )
+                )}
               </div>
             </div>
 

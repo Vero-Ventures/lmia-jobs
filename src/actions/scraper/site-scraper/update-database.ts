@@ -29,6 +29,7 @@ export class DataHandler {
         { jobBoard: JOB_BOARDS[2], jobPostingId: newPosting.id },
         { jobBoard: JOB_BOARDS[3], jobPostingId: newPosting.id },
         { jobBoard: JOB_BOARDS[4], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[5], jobPostingId: newPosting.id },
       ];
 
       await db.insert(jobBoardPosting).values(jobPostingBoards);
