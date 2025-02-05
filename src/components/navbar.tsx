@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { Button } from "./ui/button";
 import { SignOut } from "./sign-out";
 
-export default async function Navbar() {
+export default async function Navbar({ title }: { title?: string | null }) {
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -18,13 +18,22 @@ export default async function Navbar() {
 
   return (
     <header className="flex h-16 flex-col items-center bg-white px-4 sm:h-14 sm:flex-row lg:px-6">
-      <Link
-        className="flex items-center justify-center"
-        href={data ? "/dashboard" : "/"}>
-        <span className="text-xl font-bold tracking-tighter">
-          Manage Opportunities
-        </span>
-      </Link>
+      {!title ? (
+        <Link
+          className="flex items-center justify-center"
+          href={data ? "/dashboard" : "/"}>
+          <span className="text-xl font-bold tracking-tighter">
+            Manage Opportunities
+          </span>
+        </Link>
+      ) : (
+        <Link href={`/`}>
+          <span className="text-xl font-bold tracking-tighter text-primary">
+            {title}
+          </span>
+        </Link>
+      )}
+
       <nav className="flex items-center justify-center gap-4 py-2 sm:ml-auto sm:mt-0 sm:gap-6">
         {links.map((link) => (
           <Button key={link.text} asChild variant="link">
