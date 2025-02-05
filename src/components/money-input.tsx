@@ -16,6 +16,7 @@ type TextInputProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   placeholder: string;
+  isRequired?: boolean;
 };
 
 export default function MoneyInput<T extends FieldValues>(
@@ -28,7 +29,10 @@ export default function MoneyInput<T extends FieldValues>(
       render={({ field }) => {
         return (
           <FormItem>
-            <FormLabel>{props.label}</FormLabel>
+            <FormLabel>
+              {props.label}{" "}
+              {props.isRequired && <span className="text-destructive">*</span>}
+            </FormLabel>
             <FormControl>
               <CurrencyInput
                 defaultValue={field.value}
