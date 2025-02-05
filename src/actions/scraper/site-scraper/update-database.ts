@@ -17,17 +17,16 @@ export class DataHandler {
     try {
       const newPost = await this.handlePostCreation(this.post);
 
-      await db.insert(jobPosting).values(newPost);
-
+      const newPosting = await db
+        .insert(jobPosting)
+        .values(newPost)
+        .returning()
+        .then((res) => res[0]);
       try {
-        const newPosting = await db
-          .insert(userMailing)
-          .values({ email: this.post.email })
-          .returning()
-          .then((res) => res[0]);
+        await db.insert(userMailing).values({ email: this.post.email });
 
-        console.log(newPosting.id)
-        console.log(JOB_BOARDS[0])
+        console.log(newPosting.id);
+        console.log(JOB_BOARDS[0]);
 
         const jobPostingBoards = [
           { jobBoard: JOB_BOARDS[0], jobPostingId: newPosting.id },
