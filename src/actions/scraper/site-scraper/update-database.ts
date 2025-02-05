@@ -1,11 +1,12 @@
 import { db } from "@/db/index";
-import { jobPosting, userMailing } from "@/db/schema";
+import { jobBoardPosting, jobPosting, userMailing } from "@/db/schema";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
-import type {
-  EmploymentType,
-  Language,
-  PaymentType,
-  Province,
+import {
+  JOB_BOARDS,
+  type EmploymentType,
+  type Language,
+  type PaymentType,
+  type Province,
 } from "@/app/lib/constants";
 import type { JobPosting as JobPostingData } from "@/app/lib/types";
 
@@ -16,12 +17,26 @@ export class DataHandler {
     try {
       const newPost = await this.handlePostCreation(this.post);
 
-      await db.insert(jobPosting).values(newPost);
+      const newPosting = await db
+        .insert(jobPosting)
+        .values(newPost)
+        .returning()
+        .then((res) => res[0]);
+
+      const jobPostingBoards = [
+        { jobBoard: JOB_BOARDS[0], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[1], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[2], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[3], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[4], jobPostingId: newPosting.id },
+      ];
+
+      await db.insert(jobBoardPosting).values(jobPostingBoards);
 
       try {
         await db.insert(userMailing).values({ email: this.post.email });
-      } catch (error) {
-        throw error;
+      } catch {
+        console.error("Did Not Create User Mailing, Existing Email.");
       }
 
       return;
@@ -55,8 +70,8 @@ export class DataHandler {
         maxPayValue: postData.maxPayValue ? postData.maxPayValue : null,
         description: postData.description,
         language: postData.language as Language,
-        hidden: true,
-        paymentConfirmed: false,
+        hidden: false,
+        paymentConfirmed: true,
         expiresAt: expireryDate,
       };
     } catch (error) {

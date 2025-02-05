@@ -20,7 +20,6 @@ export const runScraper = async (postId: string) => {
     const dataHandler = new DataHandler(postToSave);
 
     try {
-      console.log(JSON.stringify(postToSave));
       await dataHandler.createPosts();
     } catch (error) {
       console.error("Error Creating Posts: " + error);
