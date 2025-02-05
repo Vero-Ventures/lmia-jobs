@@ -86,7 +86,9 @@ export function EditPostForm({
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Job Title</FormLabel>
+                      <FormLabel>
+                        Job Title <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder="Enter a job title" {...field} />
                       </FormControl>
@@ -99,7 +101,10 @@ export function EditPostForm({
                   name="employmentType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Employment Type</FormLabel>
+                      <FormLabel>
+                        Employment Type{" "}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}>
@@ -127,7 +132,9 @@ export function EditPostForm({
                   name="startDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Start Date</FormLabel>
+                      <FormLabel>
+                        Start Date <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="date"
@@ -154,7 +161,10 @@ export function EditPostForm({
                   name="minWorkHours"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Minimum Work Hours</FormLabel>
+                      <FormLabel>
+                        Minimum Work Hours{" "}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -172,12 +182,7 @@ export function EditPostForm({
                   name="maxWorkHours"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Max Work Hours{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Max Work Hours</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -195,12 +200,7 @@ export function EditPostForm({
                   name="vacancies"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Vacancies{" "}
-                        <span className="text-xs font-normal italic">
-                          (Optional)
-                        </span>
-                      </FormLabel>
+                      <FormLabel>Vacancies</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -218,7 +218,9 @@ export function EditPostForm({
                   name="language"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Language</FormLabel>
+                      <FormLabel>
+                        Language <span className="text-destructive">*</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}>
@@ -244,7 +246,9 @@ export function EditPostForm({
                   name="description"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>
+                        Description <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Enter a job description"
@@ -268,7 +272,10 @@ export function EditPostForm({
                   name="orgName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Organization Name</FormLabel>
+                      <FormLabel>
+                        Organization Name{" "}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter a organization name"
@@ -284,7 +291,10 @@ export function EditPostForm({
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Contact Email</FormLabel>
+                      <FormLabel>
+                        Contact Email{" "}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="email"
@@ -314,7 +324,9 @@ export function EditPostForm({
                   name="city"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City</FormLabel>
+                      <FormLabel>
+                        City <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder="Enter a city" {...field} />
                       </FormControl>
@@ -327,7 +339,9 @@ export function EditPostForm({
                   name="province"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Province</FormLabel>
+                      <FormLabel>
+                        Province <span className="text-destructive">*</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}>
@@ -363,7 +377,9 @@ export function EditPostForm({
                   name="paymentType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Payment Type</FormLabel>
+                      <FormLabel>
+                        Payment Type <span className="text-destructive">*</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}>
@@ -389,6 +405,7 @@ export function EditPostForm({
                   name="minPayValue"
                   label="Minimum Pay"
                   placeholder="Enter the minimum pay"
+                  isRequired
                 />
                 <MoneyInput
                   form={form}
