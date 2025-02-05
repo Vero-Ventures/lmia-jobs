@@ -24,7 +24,7 @@ import {
 export default function SignIn() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useState<{ email: string | null }>({ email: null });
   const [code, setCode] = useState("");
 
@@ -54,43 +54,41 @@ export default function SignIn() {
           </InputOTP>
         </div>
         <div className="flex justify-center">
-          <Button
-            variant="link"
-            type="button"
-            disabled={loading}
-            onClick={async () => {
-              await emailOtp.sendVerificationOtp(
-                {
-                  email,
-                  type: "sign-in",
-                },
-                {
-                  onResponse: () => {
-                    setLoading(false);
+          {!isLoading && (
+            <Button
+              variant="link"
+              type="button"
+              disabled={isLoading}
+              onClick={async () => {
+                await emailOtp.sendVerificationOtp(
+                  {
+                    email,
+                    type: "sign-in",
                   },
-                  onRequest: () => {
-                    setLoading(true);
-                  },
-                  onError: (ctx) => {
-                    toast.error(ctx.error.message);
-                  },
-                  onSuccess: async () => {
-                    setState({ email });
-                  },
-                }
-              );
-            }}>
-            {loading ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              "Resend verification code"
-            )}
-          </Button>
+                  {
+                    onResponse: () => {
+                      setIsLoading(false);
+                    },
+                    onRequest: () => {
+                      setIsLoading(true);
+                    },
+                    onError: (ctx) => {
+                      toast.error(ctx.error.message);
+                    },
+                    onSuccess: async () => {
+                      setState({ email });
+                    },
+                  }
+                );
+              }}>
+              Resend verification code
+            </Button>
+          )}
         </div>
         <Button
           type="submit"
           className="w-full"
-          disabled={loading}
+          disabled={isLoading}
           onClick={async () => {
             await signIn.emailOtp(
               {
@@ -99,10 +97,10 @@ export default function SignIn() {
               },
               {
                 onResponse: () => {
-                  setLoading(false);
+                  setIsLoading(false);
                 },
                 onRequest: () => {
-                  setLoading(true);
+                  setIsLoading(true);
                 },
                 onError: (ctx) => {
                   toast.error(ctx.error.message);
@@ -113,7 +111,7 @@ export default function SignIn() {
               }
             );
           }}>
-          {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+          {isLoading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
         </Button>
       </CardContent>
     </Card>
@@ -143,7 +141,7 @@ export default function SignIn() {
         <Button
           type="submit"
           className="w-full"
-          disabled={loading}
+          disabled={isLoading}
           onClick={async () => {
             await emailOtp.sendVerificationOtp(
               {
@@ -152,10 +150,10 @@ export default function SignIn() {
               },
               {
                 onResponse: () => {
-                  setLoading(false);
+                  setIsLoading(false);
                 },
                 onRequest: () => {
-                  setLoading(true);
+                  setIsLoading(true);
                 },
                 onError: (ctx) => {
                   toast.error(ctx.error.message);
@@ -166,7 +164,7 @@ export default function SignIn() {
               }
             );
           }}>
-          {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
+          {isLoading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
         </Button>
       </CardContent>
     </Card>
