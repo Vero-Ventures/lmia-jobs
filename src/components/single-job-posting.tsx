@@ -64,31 +64,36 @@ export default function SingleJobPosting({
           })}{" "}
           by {jobPosting.orgName}
         </P>
-        <div className="flex gap-2">
-          {isAdmin ? (
-            jobPosting.paymentConfirmed ? (
+        {isAdmin && (
+          <div className="flex gap-2">
+            {jobPosting.paymentConfirmed ? (
               <Badge variant="success">Paid</Badge>
             ) : (
               <Badge variant="warning">Not Paid</Badge>
-            )
-          ) : null}
-          {isAdmin && jobPosting.hidden && (
-            <Badge variant="secondary">Hidden</Badge>
-          )}
-        </div>
-        {isAdmin && isOwner && (
-          <div className="flex w-fit flex-col">
-            <div className="mt-2 text-start text-sm text-gray-600">
-              Expires on:{" "}
-              {formatDate(jobPosting.expiresAt, {
-                dateStyle: "medium",
-              })}
-            </div>
-            <div className="mt-2 text-center font-semibold text-red-500">
-              {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
-            </div>
+            )}
+            {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
           </div>
         )}
+        <div className="flex w-fit flex-col">
+          <div className="mt-1 text-start text-sm text-gray-600">
+            Expires on:{" "}
+            {formatDate(jobPosting.expiresAt, {
+              dateStyle: "medium",
+            })}
+          </div>
+          <div className="mt-2 text-center font-semibold text-red-500">
+            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
+          </div>
+          <div className="mt-1 text-start text-sm text-gray-600">
+            Current Date:{" "}
+            {formatDate(currentDate, {
+              dateStyle: "medium",
+            })}
+          </div>
+          <div className="mt-2 text-center font-semibold text-red-500">
+            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
+          </div>
+        </div>
         <div className="grid gap-6 text-sm md:grid-cols-2">
           <div className="flex flex-col justify-center space-y-4">
             <div className="flex items-center gap-2">
