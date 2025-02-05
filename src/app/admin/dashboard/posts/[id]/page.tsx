@@ -1,5 +1,8 @@
 import SingleJobPosting from "@/components/single-job-posting";
-import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
+import {
+  selectUserSingleJobPosting,
+  selectUserSingleJobPostingBoards,
+} from "@/db/queries/jobPostings";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -21,9 +24,14 @@ export default async function SinglePostPage({ params }: PageProps) {
     id,
     userId: data.user.id,
   });
+
+  const jobPostingBoards = await selectUserSingleJobPostingBoards({
+    id,
+  });
   return (
     <SingleJobPosting
       isAdmin
+      jobBoards={jobPostingBoards}
       isOwner={data.user.id === jobPosting.userId}
       jobPosting={jobPosting}
     />

@@ -18,13 +18,16 @@ import P from "./paragraph";
 import Heading from "./heading";
 import { formatDate, formatMoney, formatTime } from "@/lib/utils";
 import PayButton from "./pay-button";
+import type { JobBoard } from "@/app/lib/constants";
 
 export default function SingleJobPosting({
   jobPosting,
+  jobBoards = [],
   isAdmin = false,
   isOwner = false,
 }: {
   jobPosting: JobPosting;
+  jobBoards: JobBoard[];
   isAdmin?: boolean;
   isOwner?: boolean;
 }) {
@@ -35,6 +38,24 @@ export default function SingleJobPosting({
     databaseDate.setDate(databaseDate.getDate() + 1);
     const localDate = new Date(databaseDate).toDateString().split(" ");
     return localDate[1] + " " + localDate[2] + ", " + localDate[3];
+  };
+
+  const formatJobBoards = () => {
+    let formattedBoards = "";
+    const length = jobBoards.length;
+    if (length > 0) {
+      for (let i = 0; i < length; i++) {
+        formattedBoards +=
+          jobBoards[i].charAt(0).toUpperCase() + jobBoards[i].slice(1);
+
+        if (i < length - 1) {
+          formattedBoards += ", ";
+        } else {
+          formattedBoards += ".";
+        }
+      }
+    }
+    return formattedBoards;
   };
 
   return (
@@ -193,6 +214,12 @@ export default function SingleJobPosting({
               </div>
             </div>
           </div>
+
+          {isAdmin && jobBoards.length > 0 && (
+            <div className="mt-2 flex gap-2">
+              Posted To Boards: {formatJobBoards()}
+            </div>
+          )}
         </div>
       </div>
     </div>

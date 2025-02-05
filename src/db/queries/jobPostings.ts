@@ -79,6 +79,21 @@ export async function selectUserSingleJobPosting({
     .then((res) => res[0]);
 }
 
+export async function selectUserSingleJobPostingBoards({ id }: { id: number }) {
+  const jobPostingBoards = await db
+    .select()
+    .from(jobBoardPosting)
+    .where(eq(jobBoardPosting.jobPostingId, id));
+
+  const jobBoards: JobBoard[] = [];
+
+  for (const board of jobPostingBoards) {
+    jobBoards.push(board.jobBoard);
+  }
+
+  return jobBoards;
+}
+
 export async function selectSingleJobPosting(id: number) {
   return await db
     .select()
