@@ -62,7 +62,7 @@ export default async function Page({
                 <Link
                   key={jobPosting.id}
                   href={`/dashboard/posts/${jobPosting.id}`}>
-                  <JobListCard jobPosting={jobPosting} />
+                  <JobListCard jobPosting={jobPosting} isAdmin />
                 </Link>
               );
             })}
