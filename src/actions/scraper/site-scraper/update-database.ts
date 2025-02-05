@@ -26,6 +26,9 @@ export class DataHandler {
           .returning()
           .then((res) => res[0]);
 
+        console.log(newPosting.id)
+        console.log(JOB_BOARDS[0])
+
         const jobPostingBoards = [
           { jobBoard: JOB_BOARDS[0], jobPostingId: newPosting.id },
           { jobBoard: JOB_BOARDS[1], jobPostingId: newPosting.id },
