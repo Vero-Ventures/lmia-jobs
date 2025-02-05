@@ -14,6 +14,12 @@ function Footer() {
           <h3 className="mb-2 text-xl font-semibold">Job Sites</h3>
           <a
             target="_blank"
+            href="https://allopportunities.ca"
+            className="ml-1 pb-1.5 text-base">
+            All Opportunities
+          </a>
+          <a
+            target="_blank"
             href="https://accessibleopportunities.ca"
             className="ml-1 pb-1.5 text-base">
             Accessible Opportunities
