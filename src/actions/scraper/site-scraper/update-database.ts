@@ -22,23 +22,21 @@ export class DataHandler {
         .values(newPost)
         .returning()
         .then((res) => res[0]);
+
+      const jobPostingBoards = [
+        { jobBoard: JOB_BOARDS[0], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[1], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[2], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[3], jobPostingId: newPosting.id },
+        { jobBoard: JOB_BOARDS[4], jobPostingId: newPosting.id },
+      ];
+
+      await db.insert(jobBoardPosting).values(jobPostingBoards);
+
       try {
         await db.insert(userMailing).values({ email: this.post.email });
-
-        console.log(newPosting.id);
-        console.log(JOB_BOARDS[0]);
-
-        const jobPostingBoards = [
-          { jobBoard: JOB_BOARDS[0], jobPostingId: newPosting.id },
-          { jobBoard: JOB_BOARDS[1], jobPostingId: newPosting.id },
-          { jobBoard: JOB_BOARDS[2], jobPostingId: newPosting.id },
-          { jobBoard: JOB_BOARDS[3], jobPostingId: newPosting.id },
-          { jobBoard: JOB_BOARDS[4], jobPostingId: newPosting.id },
-        ];
-
-        await db.insert(jobBoardPosting).values(jobPostingBoards);
-      } catch (error) {
-        throw error;
+      } catch {
+        console.error("Did Not Create User Mailing, Existing Email.");
       }
 
       return;
