@@ -10,7 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import type { JobPosting } from "@/db/schema";
 import P from "@/components/paragraph";
 
-export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
+export function JobListCard({
+  jobPosting,
+  isAdmin,
+}: {
+  jobPosting: JobPosting;
+  isAdmin?: boolean;
+}) {
   const currentDate = new Date();
   return (
     <Card className={cn("mt-2 cursor-pointer space-y-3")}>
@@ -22,12 +28,16 @@ export function JobListCard({ jobPosting }: { jobPosting: JobPosting }) {
             </CardTitle>
             <CardDescription>{jobPosting.orgName}</CardDescription>
             <div>
-              {jobPosting.paymentConfirmed ? (
-                <Badge variant="success">Paid</Badge>
-              ) : (
-                <Badge variant="warning">Not Paid</Badge>
+              {isAdmin ? (
+                jobPosting.paymentConfirmed ? (
+                  <Badge variant="success">Paid</Badge>
+                ) : (
+                  <Badge variant="warning">Not Paid</Badge>
+                )
+              ) : null}
+              {isAdmin && jobPosting.hidden && (
+                <Badge variant="secondary">Hidden</Badge>
               )}
-              {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
               {currentDate > jobPosting.expiresAt && (
                 <Badge variant="destructive">Expired</Badge>
               )}
