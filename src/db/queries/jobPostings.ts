@@ -17,8 +17,6 @@ export async function selectAllJobPostings({
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
-  console.log(jobBoard);
-
   const filters: SQL[] = [
     eq(jobBoardPosting.jobBoard, jobBoard),
     eq(jobPosting.hidden, false),

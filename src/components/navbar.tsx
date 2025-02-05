@@ -13,7 +13,7 @@ export default async function Navbar({ title }: { title?: string | null }) {
   const links = [
     { text: "Home", url: data ? "/dashboard" : "/" },
     { text: "Pricing", url: "/pricing" },
-    { text: "Contact", url: "/contact-us" },
+    { text: "Contact Us", url: "/contact-us" },
   ];
 
   return (
