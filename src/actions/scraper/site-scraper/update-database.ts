@@ -1,11 +1,12 @@
 import { db } from "@/db/index";
-import { jobPosting, userMailing } from "@/db/schema";
+import { jobBoardPosting, jobPosting, userMailing } from "@/db/schema";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
-import type {
-  EmploymentType,
-  Language,
-  PaymentType,
-  Province,
+import {
+  JOB_BOARDS,
+  type EmploymentType,
+  type Language,
+  type PaymentType,
+  type Province,
 } from "@/app/lib/constants";
 import type { JobPosting as JobPostingData } from "@/app/lib/types";
 
@@ -19,7 +20,21 @@ export class DataHandler {
       await db.insert(jobPosting).values(newPost);
 
       try {
-        await db.insert(userMailing).values({ email: this.post.email });
+        const newPosting = await db
+          .insert(userMailing)
+          .values({ email: this.post.email })
+          .returning()
+          .then((res) => res[0]);
+
+        const jobPostingBoards = [
+          { jobBoard: JOB_BOARDS[0], jobPostingId: newPosting.id },
+          { jobBoard: JOB_BOARDS[1], jobPostingId: newPosting.id },
+          { jobBoard: JOB_BOARDS[2], jobPostingId: newPosting.id },
+          { jobBoard: JOB_BOARDS[3], jobPostingId: newPosting.id },
+          { jobBoard: JOB_BOARDS[4], jobPostingId: newPosting.id },
+        ];
+
+        await db.insert(jobBoardPosting).values(jobPostingBoards);
       } catch (error) {
         throw error;
       }
@@ -55,8 +70,8 @@ export class DataHandler {
         maxPayValue: postData.maxPayValue ? postData.maxPayValue : null,
         description: postData.description,
         language: postData.language as Language,
-        hidden: true,
-        paymentConfirmed: false,
+        hidden: false,
+        paymentConfirmed: true,
         expiresAt: expireryDate,
       };
     } catch (error) {
