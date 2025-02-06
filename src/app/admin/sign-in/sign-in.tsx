@@ -108,6 +108,7 @@ export default function SignIn() {
                 },
                 onSuccess: async () => {
                   router.replace("/dashboard");
+                  router.refresh();
                 },
               }
             );
