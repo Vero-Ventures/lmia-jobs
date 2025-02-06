@@ -35,7 +35,7 @@ export default async function Layout({
       <header className="p-4">
         <Navbar title={title} />
       </header>
-      {children}
+      <main className="min-h-dvh">{children}</main>
     </div>
   );
 }
