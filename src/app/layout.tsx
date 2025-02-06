@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "antialiased")}>
+      <body className={cn(inter.className, "antialiased flex flex-col min-h-dvh")}>
         {children}
         <Footer />
         <Toaster />

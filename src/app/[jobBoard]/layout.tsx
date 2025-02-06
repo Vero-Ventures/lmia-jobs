@@ -33,7 +33,7 @@ export default async function Layout({
   return (
     <div className={jobBoard}>
       <Navbar title={title} />
-      <main className="min-h-dvh">{children}</main>
+      <main>{children}</main>
     </div>
   );
 }
