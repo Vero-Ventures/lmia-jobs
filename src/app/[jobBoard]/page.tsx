@@ -33,8 +33,8 @@ export default async function Page({
   });
 
   return (
-    <>
-      <div className="container mx-auto space-y-4 pt-4 text-primary">
+    <div className="py-10">
+      <div className="container mx-auto space-y-4 text-primary">
         <Form action={`/`} className="flex gap-2">
           <Input name="jobTitle" placeholder="Search Jobs..." />
           <Input
@@ -74,6 +74,6 @@ export default async function Page({
           <P className="text-center">No jobs matched the filter.</P>
         )}
       </section>
-    </>
+    </div>
   );
 }
