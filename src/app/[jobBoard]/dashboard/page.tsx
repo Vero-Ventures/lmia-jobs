@@ -34,27 +34,31 @@ export default async function Page({
 
   return (
     <main className="flex-1 px-4 pb-4">
-      <div className="container mx-auto my-4 w-full rounded-xl p-2">
-        <div className="flex justify-between gap-4">
-          <h1 className="text-xl font-bold text-primary">
+      <div className="container mx-auto mt-4 w-full rounded-xl p-2 sm:w-4/5 md:w-3/4">
+        <div className="flex justify-between gap-4 sm:px-6">
+          <h1 className="text-xl font-bold text-primary sm:mt-2 md:text-2xl">
             Your Postings ({jobPostings.length})
           </h1>
           <Button asChild>
-            <Link href={"/dashboard/posts/create"}>Create Post</Link>
+            <Link
+              className="!text-lg sm:!p-6 sm:text-lg"
+              href={"/dashboard/posts/create"}>
+              Create Post
+            </Link>
           </Button>
         </div>
-        <div className="space-y-4 pt-4 text-primary">
-          <Form action={`/`} className="flex gap-2">
+        <div className="mt-2 space-y-4 pt-4 text-primary">
+          <Form action={`/`} className="flex gap-4 sm:gap-6">
             <Input
               name="jobTitle"
               placeholder="Search Jobs..."
               defaultValue={title}
             />
-            <Button>Search</Button>
+            <Button className="!text-lg sm:!px-6">Search</Button>
           </Form>
         </div>
       </div>
-      <section className="container mx-auto mt-8 p-4">
+      <section className="container mx-auto p-4">
         {jobPostings.length > 0 ? (
           <div className="space-y-8">
             {jobPostings.map((jobPosting) => {

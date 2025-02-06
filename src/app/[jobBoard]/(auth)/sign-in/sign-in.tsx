@@ -32,7 +32,7 @@ export default function SignIn() {
     <Card className="mx-auto max-w-md">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
-        <CardDescription className="text-xs md:text-sm">
+        <CardDescription className="text-sm">
           Login using the code sent to your email address.
         </CardDescription>
       </CardHeader>
@@ -56,6 +56,7 @@ export default function SignIn() {
         <div className="flex justify-center">
           {!isLoading && (
             <Button
+              className="text-base italic text-gray-700"
               variant="link"
               type="button"
               disabled={isLoading}
@@ -120,13 +121,15 @@ export default function SignIn() {
     <Card className="mx-auto max-w-md">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
-        <CardDescription className="text-xs md:text-sm">
+        <CardDescription className="text-sm">
           Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
+          <Label className="!text-lg" htmlFor="email">
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
@@ -141,7 +144,7 @@ export default function SignIn() {
 
         <Button
           type="submit"
-          className="w-full"
+          className="!mt-6 w-full"
           disabled={isLoading}
           onClick={async () => {
             await emailOtp.sendVerificationOtp(
