@@ -61,7 +61,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto min-h-dvh max-w-xl py-20">
+    <main className="mx-auto max-w-xl py-20">
       <Heading variant="h1" className="mb-4 text-center">
         Contact Us
       </Heading>

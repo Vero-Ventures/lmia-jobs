@@ -18,11 +18,14 @@ export async function selectAllJobPostings({
   currentDate.setHours(0, 0, 0, 0);
 
   const filters: SQL[] = [
-    eq(jobBoardPosting.jobBoard, jobBoard),
     eq(jobPosting.hidden, false),
     eq(jobPosting.paymentConfirmed, true),
     gt(jobPosting.expiresAt, currentDate),
   ];
+
+  if (jobBoard !== "all") {
+    filters.push(eq(jobBoardPosting.jobBoard, jobBoard));
+  }
 
   if (employmentType !== "All") {
     filters.push(eq(jobPosting.employmentType, employmentType));

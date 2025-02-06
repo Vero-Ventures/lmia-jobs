@@ -32,10 +32,8 @@ export default async function Layout({
   }
   return (
     <div className={jobBoard}>
-      <header className="p-4">
-        <Navbar title={title} />
-      </header>
-      {children}
+      <Navbar title={title} />
+      <main className="min-h-dvh">{children}</main>
     </div>
   );
 }

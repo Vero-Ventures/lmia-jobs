@@ -21,7 +21,7 @@ import {
 } from "@/app/lib/constants";
 import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 import { toast } from "sonner";
-import { updateJobBoardPostings } from "@/app/admin/dashboard/posts/create/actions";
+import { updateJobBoardPostings } from "@/app/[jobBoard]/dashboard/posts/create/actions";
 
 export default function PayButton({
   id,

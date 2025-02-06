@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { deletePost } from "@/app/admin/dashboard/posts/create/actions";
+import { deletePost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
 
 export function DeletePost({ id }: { id: number }) {
   const router = useRouter();
