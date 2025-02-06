@@ -29,8 +29,8 @@ export default async function Navbar({ title }: { title: string }) {
             key={link.text}
             asChild
             variant="link"
-            className="h-fit hover:bg-gray-300 sm:mt-2 sm:pb-3">
-            <Link className="font-sans !text-lg sm:!text-xl" href={link.url}>
+            className="sm:mt-2 sm:pb-3">
+            <Link className="font-sans text-lg sm:text-xl" href={link.url}>
               {link.text}
             </Link>
           </Button>
@@ -51,7 +51,7 @@ export default async function Navbar({ title }: { title: string }) {
           <>
             <Button asChild>
               <Link
-                className="!px-4 font-sans !text-lg sm:mt-2 sm:!text-xl md:!p-6"
+                className="px-4 font-sans text-lg sm:mt-2 sm:text-xl md:p-6"
                 href="/sign-in">
                 Log In
               </Link>
