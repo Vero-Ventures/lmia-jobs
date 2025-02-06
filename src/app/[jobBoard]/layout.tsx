@@ -1,7 +1,7 @@
 import { JOB_BOARD_TITLES, type JobBoard } from "@/app/lib/constants";
 import { notFound } from "next/navigation";
 import type React from "react";
-import Link from "next/link";
+import Navbar from "@/components/navbar";
 
 export async function generateMetadata({
   params,
@@ -33,11 +33,7 @@ export default async function Layout({
   return (
     <div className={jobBoard}>
       <header className="p-4">
-        <Link href={`/`}>
-          <span className="text-xl font-bold tracking-tighter text-primary">
-            {title}
-          </span>
-        </Link>
+        <Navbar title={title} />
       </header>
       {children}
     </div>

@@ -63,6 +63,7 @@ export async function createJobBoardPostings({
   id: number;
   selectedJobBoards: JobBoard[];
 }) {
+  selectedJobBoards.push("all");
   await Promise.all(
     selectedJobBoards.map(async (jobBoard) => {
       return await db.insert(jobBoardPosting).values({

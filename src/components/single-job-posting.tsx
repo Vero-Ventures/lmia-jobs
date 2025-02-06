@@ -18,13 +18,16 @@ import P from "./paragraph";
 import Heading from "./heading";
 import { formatDate, formatMoney, formatTime } from "@/lib/utils";
 import PayButton from "./pay-button";
+import type { JobBoard } from "@/app/lib/constants";
 
 export default function SingleJobPosting({
   jobPosting,
+  jobBoards = [],
   isAdmin = false,
   isOwner = false,
 }: {
   jobPosting: JobPosting;
+  jobBoards?: JobBoard[];
   isAdmin?: boolean;
   isOwner?: boolean;
 }) {
@@ -35,6 +38,24 @@ export default function SingleJobPosting({
     databaseDate.setDate(databaseDate.getDate() + 1);
     const localDate = new Date(databaseDate).toDateString().split(" ");
     return localDate[1] + " " + localDate[2] + ", " + localDate[3];
+  };
+
+  const formatJobBoards = () => {
+    let formattedBoards = "";
+    const length = jobBoards.length;
+    if (length > 0) {
+      for (let i = 0; i < length; i++) {
+        formattedBoards +=
+          jobBoards[i].charAt(0).toUpperCase() + jobBoards[i].slice(1);
+
+        if (i < length - 1) {
+          formattedBoards += ", ";
+        } else {
+          formattedBoards += ".";
+        }
+      }
+    }
+    return formattedBoards;
   };
 
   return (
@@ -64,31 +85,36 @@ export default function SingleJobPosting({
           })}{" "}
           by {jobPosting.orgName}
         </P>
-        <div className="flex gap-2">
-          {isAdmin ? (
-            jobPosting.paymentConfirmed ? (
+        {isAdmin && (
+          <div className="flex gap-2">
+            {jobPosting.paymentConfirmed ? (
               <Badge variant="success">Paid</Badge>
             ) : (
               <Badge variant="warning">Not Paid</Badge>
-            )
-          ) : null}
-          {isAdmin && jobPosting.hidden && (
-            <Badge variant="secondary">Hidden</Badge>
-          )}
-        </div>
-        {isAdmin && isOwner && (
-          <div className="flex w-fit flex-col">
-            <div className="mt-2 text-start text-sm text-gray-600">
-              Expires on:{" "}
-              {formatDate(jobPosting.expiresAt, {
-                dateStyle: "medium",
-              })}
-            </div>
-            <div className="mt-2 text-center font-semibold text-red-500">
-              {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
-            </div>
+            )}
+            {jobPosting.hidden && <Badge variant="secondary">Hidden</Badge>}
           </div>
         )}
+        <div className="flex w-fit flex-col">
+          <div className="mt-1 text-start text-sm text-gray-600">
+            Expires on:{" "}
+            {formatDate(jobPosting.expiresAt, {
+              dateStyle: "medium",
+            })}
+          </div>
+          <div className="mt-2 text-center font-semibold text-red-500">
+            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
+          </div>
+          <div className="mt-1 text-start text-sm text-gray-600">
+            Current Date:{" "}
+            {formatDate(currentDate, {
+              dateStyle: "medium",
+            })}
+          </div>
+          <div className="mt-2 text-center font-semibold text-red-500">
+            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
+          </div>
+        </div>
         <div className="grid gap-6 text-sm md:grid-cols-2">
           <div className="flex flex-col justify-center space-y-4">
             <div className="flex items-center gap-2">
@@ -165,7 +191,11 @@ export default function SingleJobPosting({
             <Heading variant="h3" className="text-primary">
               Job Description
             </Heading>
-            <P dangerouslySetInnerHTML={{ __html: jobPosting.description }} />
+            <P
+              dangerouslySetInnerHTML={{
+                __html: jobPosting.description.replace(/\n/g, "<br />"),
+              }}
+            />
           </div>
         </div>
         <div>
@@ -184,6 +214,12 @@ export default function SingleJobPosting({
               </div>
             </div>
           </div>
+
+          {isAdmin && jobBoards.length > 0 && (
+            <div className="mt-2 flex gap-2">
+              Posted To Boards: {formatJobBoards()}
+            </div>
+          )}
         </div>
       </div>
     </div>
