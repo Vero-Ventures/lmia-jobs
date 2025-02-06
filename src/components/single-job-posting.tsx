@@ -59,7 +59,7 @@ export default function SingleJobPosting({
   };
 
   return (
-    <div className="mx-auto my-12 max-w-4xl space-y-8 rounded-lg border-2 border-gray-300 p-6">
+    <div className="mx-6 my-12 w-fit max-w-4xl space-y-8 justify-self-center rounded-lg border-2 border-gray-300 p-6">
       {isOwner && isAdmin && (
         <div className="flex justify-end gap-2 px-4">
           {!jobPosting.paymentConfirmed && <PayButton id={jobPosting.id} />}
@@ -116,7 +116,7 @@ export default function SingleJobPosting({
             })}
           </div>
         </div>
-        <div className="grid gap-6 text-sm md:grid-cols-2">
+        <div className="grid gap-6 rounded-lg border-2 border-gray-300 p-4 text-sm md:grid-cols-2">
           <div className="flex flex-col justify-center space-y-4">
             <div className="flex items-center gap-2">
               <BriefcaseIcon className="size-6 text-gray-600" />
@@ -193,7 +193,7 @@ export default function SingleJobPosting({
               Job Description
             </Heading>
             <P
-              className="w-fit rounded-lg border-2 border-gray-200 p-4 text-primary"
+              className="w-fit rounded-lg border-2 border-gray-300 p-4 text-primary"
               dangerouslySetInnerHTML={{
                 __html: jobPosting.description.replace(/\n/g, "<br />"),
               }}

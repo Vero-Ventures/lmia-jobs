@@ -98,7 +98,7 @@ export function CreatePostForm({
   }
 
   return (
-    <Card className="mx-auto max-w-3xl">
+    <Card className="m-6 max-w-3xl rounded-lg border-2 border-gray-300 sm:mx-auto sm:w-4/5">
       <CardHeader>
         <CardTitle>Create a Job Posting</CardTitle>
       </CardHeader>
@@ -113,7 +113,7 @@ export function CreatePostForm({
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="mb:text-base">
                         Job Title <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
@@ -127,8 +127,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="employmentType"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">
                         Employment Type{" "}
                         <span className="text-destructive">*</span>
                       </FormLabel>
@@ -158,8 +158,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="startDate"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">
                         Start Date <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
@@ -185,10 +185,28 @@ export function CreatePostForm({
                 />
                 <FormField
                   control={form.control}
+                  name="vacancies"
+                  render={({ field }) => (
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">Vacancies</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={0}
+                          placeholder="Enter a hiring date"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="minWorkHours"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
+                      <FormLabel className="mb:text-base">
                         Minimum Work Hours{" "}
                         <span className="text-destructive">*</span>
                       </FormLabel>
@@ -208,8 +226,10 @@ export function CreatePostForm({
                   control={form.control}
                   name="maxWorkHours"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Max Work Hours</FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">
+                        Max Work Hours
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -224,28 +244,10 @@ export function CreatePostForm({
                 />
                 <FormField
                   control={form.control}
-                  name="vacancies"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vacancies</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter a hiring date"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="language"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2 md:col-span-2 md:mx-auto md:w-1/2">
+                      <FormLabel className="mb:text-base">
                         Language <span className="text-destructive">*</span>
                       </FormLabel>
                       <Select
@@ -272,12 +274,14 @@ export function CreatePostForm({
                   control={form.control}
                   name="description"
                   render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel>
+                    <FormItem className="mt-2 md:col-span-2">
+                      <FormLabel className="mb:text-base">
                         Description <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
                         <Textarea
+                          rows={5}
+                          className="max-h-80"
                           placeholder="Enter a job description"
                           {...field}
                         />
@@ -298,8 +302,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="orgName"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">
                         Organization Name{" "}
                         <span className="text-destructive">*</span>
                       </FormLabel>
@@ -317,8 +321,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">
                         Contact Email{" "}
                         <span className="text-destructive">*</span>
                       </FormLabel>
@@ -337,8 +341,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="address"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">Address</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter an address" {...field} />
                       </FormControl>
@@ -350,8 +354,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2">
+                      <FormLabel className="mb:text-base">
                         City <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
@@ -365,8 +369,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="province"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2 md:col-span-2 md:mx-auto md:w-1/2">
+                      <FormLabel className="mb:text-base">
                         Province <span className="text-destructive">*</span>
                       </FormLabel>
                       <Select
@@ -403,8 +407,8 @@ export function CreatePostForm({
                   control={form.control}
                   name="paymentType"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
+                    <FormItem className="mt-2 md:col-span-2 md:mx-auto md:w-1/2">
+                      <FormLabel className="mb:text-base">
                         Payment Type <span className="text-destructive">*</span>
                       </FormLabel>
                       <Select
@@ -443,18 +447,30 @@ export function CreatePostForm({
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="items-center space-y-6">
               <h2 className="mt-6 text-xl font-semibold">
                 Posting Preferences
               </h2>
-              <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="ml-4 grid grid-cols-1 items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mb-1 flex justify-start space-x-2 capitalize">
+                  <Checkbox
+                    checked={selectedJobBoards.length !== 0}
+                    id={"all"}
+                  />
+                  <label
+                    htmlFor={"all"}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    All Opportunities
+                  </label>
+                </div>
                 {JOB_BOARDS.filter((board) => board !== "all").map(
                   (jobBoard) => (
                     <div
-                      className="flex items-center space-x-2 capitalize"
+                      className="mb-1 flex justify-start space-x-2 capitalize"
                       key={jobBoard}>
                       <Checkbox
                         id={jobBoard}
+                        checked={selectedJobBoards.includes(jobBoard)}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             setSelectedJobBoards([
@@ -474,7 +490,7 @@ export function CreatePostForm({
                       <label
                         htmlFor={jobBoard}
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        {jobBoard}
+                        {jobBoard} Opportunities
                       </label>
                     </div>
                   )
@@ -482,7 +498,7 @@ export function CreatePostForm({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
+            <div className="!mt-8 grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="monthsToPost"
@@ -503,9 +519,9 @@ export function CreatePostForm({
                   </FormItem>
                 )}
               />
-              <div className="space-y-2 sm:text-right">
+              <div className="mx-auto w-fit space-y-2 rounded-lg border-2 border-gray-300 p-2 px-6">
                 <h2 className="text-2xl font-bold">Total Price</h2>
-                <p className="text-xl font-semibold">
+                <p className="text-center text-xl font-semibold sm:text-2xl">
                   ${selectedJobBoards.length * monthsToPost * PRICE_PER_MONTH}
                 </p>
               </div>

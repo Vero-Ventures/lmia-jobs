@@ -28,8 +28,8 @@ export default function MoneyInput<T extends FieldValues>(
       name={props.name}
       render={({ field }) => {
         return (
-          <FormItem>
-            <FormLabel>
+          <FormItem className="mt-2">
+            <FormLabel className="mb:text-base">
               {props.label}{" "}
               {props.isRequired && <span className="text-destructive">*</span>}
             </FormLabel>
