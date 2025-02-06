@@ -61,9 +61,9 @@ export default function SingleJobPosting({
   return (
     <div className="mx-6 my-12 w-fit max-w-4xl space-y-8 justify-self-center rounded-lg border-2 border-gray-300 p-6">
       {isOwner && isAdmin && (
-        <div className="flex justify-end gap-2 px-4">
+        <div className="mx-auto flex justify-evenly">
           {!jobPosting.paymentConfirmed && <PayButton id={jobPosting.id} />}
-          <Button asChild>
+          <Button className="min-w-24" asChild>
             <Link href={`/dashboard/posts/${jobPosting.id}/edit`}>
               <Pencil />
               <span>Edit</span>

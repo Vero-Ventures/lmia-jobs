@@ -83,9 +83,9 @@ export default async function Navbar({ title }: { title: string }) {
           </>
         ) : (
           <>
-            <Button asChild className="mb:ml-0">
+            <Button asChild className="">
               <Link
-                className="mx-auto !px-4 font-sans !text-lg hover:bg-gray-500 mb:w-1/4 mb:max-w-28 sm:mt-2 sm:!text-xl md:!p-6"
+                className="mx-auto mb-2 !px-4 font-sans !text-lg hover:bg-gray-500 mb:w-1/4 mb:max-w-28 sm:mb-0 sm:mt-2 sm:!text-xl md:!p-6"
                 href="/sign-in">
                 Log In
               </Link>

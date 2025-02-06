@@ -1,7 +1,9 @@
 import { JOB_BOARD_TITLES, type JobBoard } from "@/app/lib/constants";
 import { notFound } from "next/navigation";
 import type React from "react";
-import Navbar from "@/components/navbar";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -19,21 +21,17 @@ export async function generateMetadata({
 }
 
 export default async function Layout({
-  params,
   children,
 }: {
-  params: Promise<{ jobBoard: JobBoard }>;
   children: React.ReactNode;
 }) {
-  const { jobBoard } = await params;
-  const title = JOB_BOARD_TITLES[jobBoard];
-  if (!title) {
-    notFound();
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!data) {
+    redirect("/sign-in");
   }
-  return (
-    <div className={`${jobBoard} flex flex-grow flex-col`}>
-      <Navbar title={title} />
-      <main className="my-auto flex flex-col justify-center">{children}</main>
-    </div>
-  );
+
+  return <div>{children}</div>;
 }

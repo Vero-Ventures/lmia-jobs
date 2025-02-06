@@ -29,8 +29,8 @@ export default function SignIn() {
   const [code, setCode] = useState("");
 
   return state.email ? (
-    <Card className="mx-auto max-w-md">
-      <CardHeader>
+    <Card className="mx-auto max-w-md !p-2">
+      <CardHeader className="">
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
         <CardDescription className="text-sm">
           Login using the code sent to your email address.
@@ -118,7 +118,7 @@ export default function SignIn() {
       </CardContent>
     </Card>
   ) : (
-    <Card className="mx-auto max-w-md">
+    <Card className="mx-auto max-w-md !p-2">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
         <CardDescription className="text-sm">
