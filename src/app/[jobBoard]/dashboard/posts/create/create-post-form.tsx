@@ -44,9 +44,9 @@ import MoneyInput from "@/components/money-input";
 import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 
 export function CreatePostForm({
-  initialJobBoard,
+  initialJobBoards,
 }: {
-  initialJobBoard: JobBoard;
+  initialJobBoards: JobBoard[];
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<CreateJobPosting>({
@@ -71,9 +71,8 @@ export function CreatePostForm({
       monthsToPost: 1,
     },
   });
-  const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>([
-    initialJobBoard,
-  ]);
+  const [selectedJobBoards, setSelectedJobBoards] =
+    useState<JobBoard[]>(initialJobBoards);
 
   const monthsToPost = form.watch("monthsToPost");
 
