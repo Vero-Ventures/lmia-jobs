@@ -43,7 +43,11 @@ import { useState } from "react";
 import MoneyInput from "@/components/money-input";
 import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 
-export function CreatePostForm() {
+export function CreatePostForm({
+  initialJobBoards,
+}: {
+  initialJobBoards: JobBoard[];
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<CreateJobPosting>({
     resolver: zodResolver(createJobPostingSchema),
@@ -67,7 +71,8 @@ export function CreatePostForm() {
       monthsToPost: 1,
     },
   });
-  const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>([]);
+  const [selectedJobBoards, setSelectedJobBoards] =
+    useState<JobBoard[]>(initialJobBoards);
 
   const monthsToPost = form.watch("monthsToPost");
 

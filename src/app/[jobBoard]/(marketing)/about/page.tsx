@@ -1,5 +1,5 @@
-import About from "@/app/admin/(marketing)/about/about.mdx";
-import { mdxComponents } from "@/app/admin/(marketing)/components/mdx";
+import About from "@/app/[jobBoard]/(marketing)/about/about.mdx";
+import { mdxComponents } from "@/app/[jobBoard]/(marketing)/components/mdx";
 
 export default async function Page() {
   return (

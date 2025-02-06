@@ -1,5 +1,5 @@
-import { DeletePost } from "@/app/admin/dashboard/posts/[id]/components/delete-post";
-import HidePost from "@/app/admin/dashboard/posts/[id]/components/hide-post";
+import { DeletePost } from "@/app/[jobBoard]/dashboard/posts/[id]/components/delete-post";
+import HidePost from "@/app/[jobBoard]/dashboard/posts/[id]/components/hide-post";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { JobPosting } from "@/db/schema";

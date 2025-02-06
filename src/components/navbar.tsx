@@ -5,16 +5,16 @@ import { headers } from "next/headers";
 import { Button } from "./ui/button";
 import { SignOut } from "./sign-out";
 
-export default async function Navbar({ title }: { title?: string | null }) {
+const links = [
+  { text: "Home", url: "/" },
+  { text: "Pricing", url: "/pricing" },
+  { text: "Contact Us", url: "/contact-us" },
+];
+
+export default async function Navbar({ title }: { title: string }) {
   const data = await auth.api.getSession({
     headers: await headers(),
   });
-
-  const links = [
-    { text: "Home", url: data ? "/dashboard" : "/" },
-    { text: "Pricing", url: "/pricing" },
-    { text: "Contact Us", url: "/contact-us" },
-  ];
 
   return (
     <header className="flex min-h-32 flex-col items-center bg-gray-200 bg-opacity-60 px-2 mb:h-28 sm:h-24 sm:flex-row sm:px-4 md:h-20 md:px-6 lg:px-10">

@@ -34,7 +34,7 @@ export default async function PaymentConfirmedPage({
   console.log("[stripe/success] Checkout session id", params.stripe_session_id);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center text-xl">
+    <div className="flex items-center justify-center text-xl">
       <Suspense fallback={<div>One moment...</div>}>
         <ConfirmStripeSession />
       </Suspense>
