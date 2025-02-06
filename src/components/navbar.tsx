@@ -51,7 +51,7 @@ export default async function Navbar({ title }: { title?: string | null }) {
               </Link>
             </Button>
           ))}
-          {!data && (
+          {data && (
             <div>
               <Button
                 asChild
@@ -67,7 +67,7 @@ export default async function Navbar({ title }: { title?: string | null }) {
           )}
         </div>
 
-        {!data ? (
+        {data ? (
           <>
             <SignOut />
           </>
