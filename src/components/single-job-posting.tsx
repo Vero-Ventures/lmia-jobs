@@ -59,7 +59,7 @@ export default function SingleJobPosting({
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 px-4 py-20">
+    <div className="mx-auto my-12 max-w-4xl space-y-8 rounded-lg border-2 border-gray-300 p-6">
       {isOwner && isAdmin && (
         <div className="flex justify-end gap-2 px-4">
           {!jobPosting.paymentConfirmed && <PayButton id={jobPosting.id} />}
@@ -78,7 +78,7 @@ export default function SingleJobPosting({
           {jobPosting.title}
         </Heading>
 
-        <P className="mt-2 text-gray-600">
+        <P className="text-gray-600">
           Posted on{" "}
           {formatDate(jobPosting.createdAt, {
             dateStyle: "medium",
@@ -96,23 +96,24 @@ export default function SingleJobPosting({
           </div>
         )}
         <div className="flex w-fit flex-col">
-          <div className="mt-1 text-start text-sm text-gray-600">
+          <div className="mt-1 text-start text-sm italic text-gray-600">
             Expires on:{" "}
             {formatDate(jobPosting.expiresAt, {
               dateStyle: "medium",
             })}
+            {currentDate > new Date(jobPosting.expiresAt) ? (
+              <Badge variant="destructive" className="ml-4">
+                Expired
+              </Badge>
+            ) : (
+              ""
+            )}
           </div>
-          <div className="mt-2 text-center font-semibold text-red-500">
-            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
-          </div>
-          <div className="mt-1 text-start text-sm text-gray-600">
+          <div className="mb-2 mt-2 text-start text-sm italic text-gray-600">
             Current Date:{" "}
             {formatDate(currentDate, {
               dateStyle: "medium",
             })}
-          </div>
-          <div className="mt-2 text-center font-semibold text-red-500">
-            {currentDate > new Date(jobPosting.expiresAt) ? "Expired" : ""}
           </div>
         </div>
         <div className="grid gap-6 text-sm md:grid-cols-2">
@@ -188,10 +189,11 @@ export default function SingleJobPosting({
             </div>
           )}
           <div className="space-y-2">
-            <Heading variant="h3" className="text-primary">
+            <Heading variant="h3" className="">
               Job Description
             </Heading>
             <P
+              className="w-fit rounded-lg border-2 border-gray-200 p-4 text-primary"
               dangerouslySetInnerHTML={{
                 __html: jobPosting.description.replace(/\n/g, "<br />"),
               }}
@@ -200,12 +202,15 @@ export default function SingleJobPosting({
         </div>
         <div>
           <div className="flex flex-col gap-2">
-            <div className="flex">
-              <MailIcon className="mr-2 mt-0.5" />
-              <h5 className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
-                Apply by email
-              </h5>
-              <div className="flex items-center gap-3 text-sm">
+            <div className="flex flex-col mb:flex-row">
+              <div className="flex">
+                <MailIcon className="mr-2 mt-0.5" />
+                <h5
+                  className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
+                  Apply by email
+                </h5>
+              </div>
+              <div className="mt-2 flex items-center gap-3 text-sm mb:mt-0">
                 <a
                   href={`mailto:${jobPosting.email}`}
                   className="text-lg text-blue-900 underline">
