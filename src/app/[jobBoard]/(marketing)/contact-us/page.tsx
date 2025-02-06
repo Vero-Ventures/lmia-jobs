@@ -61,85 +61,87 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-xl py-20">
-      <Heading variant="h1" className="mb-4 text-center">
-        Contact Us
-      </Heading>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex flex-col gap-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <span className="text-base font-semibold sm:text-lg">
-                    Email
-                  </span>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your email address"
-                    type="email"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <main className="mx-auto max-w-xl py-14">
+      <div className="rounded-lg border-2 border-gray-300 p-6">
+        <Heading variant="h1" className="mb-4 text-center">
+          Contact Us
+        </Heading>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col gap-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <span className="text-base font-semibold sm:text-lg">
+                      Email
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Your email address"
+                      type="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="subject"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <span className="text-base font-semibold sm:text-lg">
-                    Subject
-                  </span>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your reason for contact"
-                    type="text"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="subject"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <span className="text-base font-semibold sm:text-lg">
+                      Subject
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Your reason for contact"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="body"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <span className="text-base font-semibold sm:text-lg">
-                    Details
-                  </span>
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    className="max-h-64 min-h-36"
-                    placeholder="Your message details"
-                    rows={5}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit"}
-          </Button>
-        </form>
-      </Form>
+            <FormField
+              control={form.control}
+              name="body"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <span className="text-base font-semibold sm:text-lg">
+                      Details
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="max-h-64 min-h-36"
+                      placeholder="Your message details"
+                      rows={5}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Submitting..." : "Submit"}
+            </Button>
+          </form>
+        </Form>
+      </div>
     </main>
   );
 }

@@ -34,8 +34,8 @@ export default async function Page({
 
   return (
     <div className="py-10">
-      <div className="container mx-auto space-y-4 text-primary">
-        <Form action={`/`} className="flex gap-2">
+      <div className="container mx-auto space-y-4 text-primary sm:w-4/5 md:w-2/3">
+        <Form action={`/`} className="flex gap-4 sm:gap-6 md:gap-8">
           <Input name="jobTitle" placeholder="Search Jobs..." />
           <Input
             type="hidden"
@@ -51,15 +51,16 @@ export default async function Page({
           />
           <Button>Search</Button>
         </Form>
-        <div className="flex gap-2 font-semibold">
+        <div className="!mt-6 flex justify-evenly gap-2 font-semibold">
           <FilterSelect
             initialValue={employmentType}
             filterType="employmentType"
           />
+
           <FilterSelect initialValue={province} filterType="province" />
         </div>
       </div>
-      <section className="container mx-auto mt-8 p-4">
+      <section className="container mx-auto mt-4 p-4">
         {result.length > 0 ? (
           <div className="space-y-8">
             {result.map(({ job_posting }) => {
