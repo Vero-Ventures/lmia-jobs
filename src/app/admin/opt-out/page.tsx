@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { optOutOfReminders } from "@/actions/mailer";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/footer";
 
 export default function OptOut() {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -65,6 +66,7 @@ export default function OptOut() {
           </Button>
         </div>
       </main>
+      <Footer title={"Manage Opportunities"} />
     </div>
   );
 }

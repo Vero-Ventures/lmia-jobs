@@ -43,9 +43,9 @@ export default async function Navbar({ title }: { title: string }) {
               key={link.text}
               asChild
               variant="link"
-              className={`h-fit !px-2 hover:bg-gray-300 sm:mt-2 md:!px-4 ${data ? "w-fit" : ""}`}>
+              className={`h-fit px-2 hover:bg-gray-300 sm:mt-2 md:px-4 ${data ? "w-fit" : ""}`}>
               <Link
-                className={`font-sans !text-base mb:w-fit nb:!text-xl ${data ? "sm:!text-lg" : "mx-2 mb:!text-lg md:mx-0"}`}
+                className={`font-sans text-base mb:w-fit nb:text-xl ${data ? "sm:text-lg" : "mx-2 mb:text-lg md:mx-0"}`}
                 href={link.url}>
                 {link.text}
               </Link>
@@ -56,9 +56,9 @@ export default async function Navbar({ title }: { title: string }) {
               <Button
                 asChild
                 variant="link"
-                className="h-fit !px-2 hover:bg-gray-300 sm:mt-2 md:!px-4">
+                className="h-fit px-2 hover:bg-gray-300 sm:mt-2 md:px-4">
                 <Link
-                  className="font-sans !text-base sm:w-fit sm:!text-lg nb:!text-xl"
+                  className="font-sans text-base sm:w-fit sm:text-lg nb:text-xl"
                   href="/dashboard">
                   Dashboard
                 </Link>
@@ -66,9 +66,9 @@ export default async function Navbar({ title }: { title: string }) {
               <Button
                 asChild
                 variant="link"
-                className="h-fit !px-2 hover:bg-gray-300 sm:mt-2 md:!px-4">
+                className="h-fit px-2 hover:bg-gray-300 sm:mt-2 md:px-4">
                 <Link
-                  className="font-sans !text-base sm:w-fit sm:!text-lg nb:!text-xl"
+                  className="font-sans text-base sm:w-fit sm:text-lg nb:text-xl"
                   href="/dashboard/account">
                   Account
                 </Link>
@@ -85,7 +85,7 @@ export default async function Navbar({ title }: { title: string }) {
           <>
             <Button asChild className="">
               <Link
-                className="mx-auto mb-2 !px-6 !text-lg hover:bg-gray-400 mb:mx-4 mb:max-w-28 sm:mt-2 sm:!text-xl md:!p-6"
+                className="mx-auto mb-2 px-6 text-lg hover:bg-gray-400 mb:mx-4 mb:max-w-28 sm:mt-2 sm:text-xl md:p-6"
                 href="/sign-in">
                 Log In
               </Link>
