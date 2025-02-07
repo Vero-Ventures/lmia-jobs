@@ -43,39 +43,45 @@ export default async function Navbar({ title }: { title: string }) {
               key={link.text}
               asChild
               variant="link"
-              className="h-fit !px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:!px-4">
+              className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
               <Link
-                className="font-sans !text-base mb:!text-lg sm:w-fit nb:!text-xl"
+                className="nb:text-xl font-sans text-base mb:text-lg sm:w-fit"
                 href={link.url}>
                 {link.text}
               </Link>
             </Button>
           ))}
-          {data && (
-            <div>
-              <Button
-                asChild
-                variant="link"
-                className="h-fit !px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:!px-4">
-                <Link
-                  className="font-sans !text-base mb:!text-lg sm:w-fit nb:!text-xl"
-                  href="/dashboard/account">
-                  Account
-                </Link>
-              </Button>
-            </div>
-          )}
         </div>
 
         {data ? (
           <>
+            <Button
+              asChild
+              variant="link"
+              className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
+              <Link
+                className="nb:text-xl font-sans text-base mb:text-lg sm:w-fit"
+                href="/dashboard">
+                Dashboard
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="link"
+              className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
+              <Link
+                className="nb:text-xl font-sans text-base mb:text-lg sm:w-fit"
+                href="/dashboard/account">
+                Account
+              </Link>
+            </Button>
             <SignOut />
           </>
         ) : (
           <>
             <Button asChild className="mb:ml-0">
               <Link
-                className="mx-auto !px-4 font-sans !text-lg hover:bg-gray-500 mb:w-1/4 mb:max-w-28 sm:mt-2 sm:!text-xl md:!p-6"
+                className="mx-auto px-4 font-sans text-lg hover:bg-gray-500 mb:w-1/4 mb:max-w-28 sm:mt-2 sm:text-xl md:p-6"
                 href="/sign-in">
                 Log In
               </Link>
