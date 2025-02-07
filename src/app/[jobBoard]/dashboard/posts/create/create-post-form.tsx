@@ -470,7 +470,7 @@ export function CreatePostForm({
                       key={jobBoard}>
                       <Checkbox
                         id={jobBoard}
-                        checked={selectedJobBoards.includes(jobBoard)}
+                        defaultChecked={initialJobBoards.includes(jobBoard)}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             setSelectedJobBoards([

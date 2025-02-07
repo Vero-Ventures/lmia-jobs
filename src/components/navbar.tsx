@@ -79,6 +79,26 @@ export default async function Navbar({ title }: { title: string }) {
 
         {data ? (
           <>
+            <Button
+              asChild
+              variant="link"
+              className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
+              <Link
+                className="font-sans text-base mb:text-lg sm:w-fit nb:text-xl"
+                href="/dashboard">
+                Dashboard
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="link"
+              className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
+              <Link
+                className="font-sans text-base mb:text-lg sm:w-fit nb:text-xl"
+                href="/dashboard/account">
+                Account
+              </Link>
+            </Button>
             <SignOut />
           </>
         ) : (
