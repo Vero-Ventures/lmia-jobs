@@ -2,6 +2,7 @@ import { JOB_BOARD_TITLES, type JobBoard } from "@/app/lib/constants";
 import { notFound } from "next/navigation";
 import type React from "react";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export async function generateMetadata({
   params,
@@ -34,6 +35,7 @@ export default async function Layout({
     <div className={jobBoard}>
       <Navbar title={title} />
       <main>{children}</main>
+      <Footer title={title} />
     </div>
   );
 }

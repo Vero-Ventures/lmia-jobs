@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-function Footer() {
+function Footer({ title }: { title: string }) {
   return (
     <footer className="mt-auto w-full bg-gray-200 bg-opacity-60 p-6 md:py-6">
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm md:grid">
@@ -111,7 +111,7 @@ function Footer() {
         </div>
       </div>
       <p className="mt-8 text-center">
-        © {new Date().getFullYear()} LMIA Jobs - Developed by{" "}
+        © {new Date().getFullYear()} {title} - Developed by{" "}
         <a
           href="https://www.veroventures.com/"
           className="text-blue-600 hover:text-blue-700">

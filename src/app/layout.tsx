@@ -1,7 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
-import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
@@ -18,7 +17,6 @@ export default function RootLayout({
       <body
         className={cn(inter.className, "flex min-h-dvh flex-col antialiased")}>
         {children}
-        <Footer />
         <Toaster />
       </body>
     </html>
