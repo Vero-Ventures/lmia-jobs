@@ -4,12 +4,17 @@ import { getDescription } from "@/actions/scraper/site-scraper/get-description";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 import { PROVINCES } from "@/app/lib/constants";
 
+// Gets email by clicking the "Apply Now" button and extracting the email.
+// Takes: The Chromium Browser Handler.
+// Returns: The Post email or null on failure.
 export async function getEmail(
   browserHandler: BrowserHandler
 ): Promise<string | null> {
   try {
+    // Click the "How to Apply" button to reveal the email.
     await browserHandler.waitAndClickInput(CONFIG.input.howToApply);
 
+    // Wait for email to be present and extract the text.
     const email = await browserHandler.waitAndGetElement(
       CONFIG.selectors.postEmail,
       5000
@@ -17,9 +22,11 @@ export async function getEmail(
 
     const emailText = await email.innerText();
 
+    // If an email was present in application info, return it.
     if (emailText) {
       return emailText;
     } else {
+      // If no email is found, return a null value.
       return null;
     }
   } catch (error) {
@@ -27,22 +34,39 @@ export async function getEmail(
   }
 }
 
+// Takes: The Chromium Browser Handler.
 export async function getJobDetails(
   browserHandler: BrowserHandler,
   postId: string,
   postEmail: string
-): Promise<JobPostData | null> {
+): Promise<JobPostData> {
   try {
+    // Get the job details from the page.
+    // Breaks down the page into sections for easier handling of data extraction.
+
+    // Get info from the Post header: Title, Organization Name, and Date Posted.
     const headerInfo = await getJobHeaderDetails(browserHandler);
 
+    // Get location info from the Post: Province, City, and Address.
+    // Address values are optional and may be returned as undefined.
     const locationDetails = await getJobLocationDetails(browserHandler);
 
+    // Get other generic Post info: Employment Type, Start Date, Vacancies Name, and Language.
+    // Start date values are optional and may be returned as undefined.
     const otherDetails = await getOtherJobDetails(browserHandler);
 
+    // Get payment info from the Post: Min & Max Pay, Payment Type, and the Min & Max Work Hours.
+    // Max Pay and Max Work Hours values are optional and may be returned as undefined.
     const paymentDetails = await getJobPayDetails(browserHandler);
 
+    // Get the Post info related to the description.
+    // Description is formatted to a single string prior to return.
     const description = await getDescription(browserHandler);
 
+    // Format the data to the values expected by the database and return it.
+    // If no start date was found, start date was posted as ASAP.
+    //    In these cases, the date of posting is considered the start date.
+    // Also Converts any undefined values to null.
     const data = {
       postId,
       email: postEmail,
@@ -54,7 +78,7 @@ export async function getJobDetails(
       startDate: otherDetails.startDate
         ? otherDetails.startDate
         : headerInfo.postedDate,
-      vacancies: Number(otherDetails.vacancies),
+      vacancies: otherDetails.vacancies,
       employmentType: otherDetails.employmentType,
       minWorkHours: paymentDetails.minWorkHours,
       maxWorkHours: paymentDetails.maxWorkHours
@@ -73,6 +97,7 @@ export async function getJobDetails(
   }
 }
 
+// Takes: The Chromium Browser Handler.
 async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
   title: string;
   orgName: string;
@@ -154,6 +179,7 @@ async function getJobHeaderDetails(browserHandler: BrowserHandler): Promise<{
   };
 }
 
+// Takes: The Chromium Browser Handler.
 async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
   address: string | undefined;
   city: string;
@@ -206,6 +232,7 @@ async function getJobLocationDetails(browserHandler: BrowserHandler): Promise<{
   };
 }
 
+// Takes: The Chromium Browser Handler.
 async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
   minPay: string;
   maxPay: string | undefined;
@@ -285,15 +312,16 @@ async function getJobPayDetails(browserHandler: BrowserHandler): Promise<{
   };
 }
 
+// Takes: The Chromium Browser Handler.
 async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
   employmentType: string;
   startDate: string | undefined;
-  vacancies: string;
+  vacancies: number;
   language: string;
 }> {
   let employmentType = "null";
   let startDate = undefined;
-  let vacancies = "null";
+  let vacancies = 0;
   let language = "null";
 
   try {
@@ -330,7 +358,7 @@ async function getOtherJobDetails(browserHandler: BrowserHandler): Promise<{
 
     if (vacanciesValue) {
       const vacanciesNum = vacanciesValue.split("\n")[1].split(" ")[0];
-      vacancies = vacanciesNum ? vacanciesNum : "null";
+      vacancies = vacanciesNum ? Number(vacanciesNum) : 0;
     }
   } catch (error) {
     throw "Vacancies Not Found: " + error;

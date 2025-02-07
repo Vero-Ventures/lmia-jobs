@@ -34,6 +34,7 @@ export async function getDescription(
   }
 }
 
+// Define an object type for values found in the description overview.
 export type OverviewValues = {
   education: string;
   experience: string;
@@ -96,6 +97,7 @@ async function getBaseOverviewValues(
   };
 }
 
+// Define an object type for values found in the enviroment & setting.
 export type EnviromentAndSetting = {
   enviroment: string[] | null;
   setting: string[] | null;
@@ -150,6 +152,7 @@ async function getEnviromentAndSetting(
   };
 }
 
+// Define an object type for values found in the credentials.
 export type Credentials = {
   credentials: string[] | null;
 };
@@ -191,6 +194,7 @@ async function getCredentials(
   };
 }
 
+// Define an object type for values found in the skills & atrributes.
 export type SkillsAndAttributes = {
   skills: { skill: string; attributes: string[] }[] | null;
 };
@@ -238,6 +242,7 @@ async function getSkills(
   };
 }
 
+// Define an object type for values found in the tasks & supervision.
 export type TasksAndSupervision = {
   tasks: string[];
   supervision: string | null;
@@ -290,6 +295,7 @@ async function getTasksAndSupervision(
   };
 }
 
+// Define an object type for values found in the benefits.
 export type BenefitsValues = {
   health: string[] | null;
   financial: string[] | null;
@@ -353,6 +359,7 @@ async function getBenefits(
   };
 }
 
+// Define an object type for values found in the additional info.
 export type AdditionalInfo = {
   conditionsAndCapability: string[] | null;
   personalSuitability: string[] | null;

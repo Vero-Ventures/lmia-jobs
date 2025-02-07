@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       });
     } else {
       try {
-        // Extract the post ID and run the scraper on the post.
+        // Extract the post Id and run the scraper on the post.
         const postId = body.postLink.split("jobposting/")[1];
         await runScraper(postId);
 
