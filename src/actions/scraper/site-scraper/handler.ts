@@ -14,7 +14,7 @@ export async function scrapeJobBankPost(
 ): Promise<JobPostData> {
   try {
     await browserHandler.visitPage(
-      CONFIG.urls.searchResult + postId + "?source=searchresults"
+      CONFIG.url + postId + "?source=searchresults"
     );
 
     const email = await getPageEmail(browserHandler);

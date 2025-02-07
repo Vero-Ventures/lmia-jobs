@@ -8,7 +8,7 @@ export async function getEmail(
   browserHandler: BrowserHandler
 ): Promise<string | null> {
   try {
-    await browserHandler.waitAndClickInput(CONFIG.inputs.howToApply);
+    await browserHandler.waitAndClickInput(CONFIG.input.howToApply);
 
     const email = await browserHandler.waitAndGetElement(
       CONFIG.selectors.postEmail,

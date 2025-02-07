@@ -1,5 +1,6 @@
 import type { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
+import { createFormattedDescription } from "./create-description";
 
 export async function getDescription(
   browserHandler: BrowserHandler
@@ -11,21 +12,21 @@ export async function getDescription(
 
     const credentials = await getCredentials(browserHandler);
 
-    const benefitsValues = await getBenefits(browserHandler);
+    const skillsAndAttributes = await getSkills(browserHandler);
 
     const tasksAndSupervision = await getTasksAndSupervision(browserHandler);
 
-    const skillsAndAttributes = await getSkills(browserHandler);
+    const benefitsValues = await getBenefits(browserHandler);
 
-    const additionalInfo = await getAdditionalInformation(browserHandler);
+    const additionalInfo = await getAdditionalInfo(browserHandler);
 
     return createFormattedDescription(
       overviewValues,
       enviromentAndSetting,
       credentials,
-      benefitsValues,
-      tasksAndSupervision,
       skillsAndAttributes,
+      tasksAndSupervision,
+      benefitsValues,
       additionalInfo
     );
   } catch (error) {
@@ -33,7 +34,7 @@ export async function getDescription(
   }
 }
 
-type OverviewValues = {
+export type OverviewValues = {
   education: string;
   experience: string;
   onSite: string;
@@ -71,10 +72,11 @@ async function getBaseOverviewValues(
   }
 
   try {
-    const getOnSite = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.jobDetails.description.onSite
+    const getOnSiteContainer = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.jobDetails.description.onSiteContainer
     );
-    const filteredToOnSite = getOnSite.filter({
+
+    const filteredToOnSite = getOnSiteContainer.filter({
       has: browserHandler.page.locator(
         CONFIG.selectors.jobDetails.description.onSiteFilter
       ),
@@ -94,7 +96,7 @@ async function getBaseOverviewValues(
   };
 }
 
-type EnviromentAndSetting = {
+export type EnviromentAndSetting = {
   enviroment: string[] | null;
   setting: string[] | null;
 };
@@ -148,7 +150,7 @@ async function getEnviromentAndSetting(
   };
 }
 
-type Credentials = {
+export type Credentials = {
   credentials: string[] | null;
 };
 
@@ -189,7 +191,106 @@ async function getCredentials(
   };
 }
 
-type BenefitsValues = {
+export type SkillsAndAttributes = {
+  skills: { skill: string; attributes: string[] }[] | null;
+};
+
+async function getSkills(
+  browserHandler: BrowserHandler
+): Promise<SkillsAndAttributes> {
+  const skillsListValues: { skill: string; attributes: string[] }[] = [];
+
+  try {
+    const getSkillsList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.jobDetails.description.specializedSkills,
+      1500
+    );
+    const skillsInnerHtml = await getSkillsList.innerHTML();
+
+    const skillsCleanedHtml = skillsInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (skillsCleanedHtml) {
+      let currentSkillHeader = "";
+      let skillIndex = -1;
+      for (const listItem of skillsCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        if (tagAndText[0] === "<h4>") {
+          currentSkillHeader = tagAndText[1].trim();
+          skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
+          skillIndex += 1;
+        }
+
+        if (tagAndText[0] === "<span>" && currentSkillHeader) {
+          skillsListValues[skillIndex].attributes.push(tagAndText[1].trim());
+        }
+      }
+    }
+  } catch {}
+
+  return {
+    skills: skillsListValues.length > 0 ? skillsListValues : null,
+  };
+}
+
+export type TasksAndSupervision = {
+  tasks: string[];
+  supervision: string | null;
+};
+
+async function getTasksAndSupervision(
+  browserHandler: BrowserHandler
+): Promise<TasksAndSupervision> {
+  const tasksList: string[] = [];
+  let supervision = "null";
+
+  try {
+    const getTasksList = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.jobDetails.description.tasksAndSupervision
+    );
+
+    const tasksInnerHtml = await getTasksList.innerHTML();
+
+    const tasksCleanedHtml = tasksInnerHtml
+      .split(`\n`)
+      .filter((item) => item.trim() !== "")
+      .map((item) => item.replace(/\t/g, ""));
+
+    if (tasksCleanedHtml) {
+      let getSupervision = false;
+      for (const listItem of tasksCleanedHtml) {
+        const tagAndText = listItem
+          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
+          .split(",");
+
+        if (
+          tagAndText[0] === "<h4>" &&
+          tagAndText[1].trim() === "Supervision"
+        ) {
+          getSupervision = true;
+        } else if (getSupervision && tagAndText[0] === "<span>") {
+          supervision = tagAndText[1].trim();
+        } else if (tagAndText[0] === "<span>") {
+          tasksList.push(tagAndText[1].trim());
+        }
+      }
+    }
+  } catch (error) {
+    throw "Error finding Description: " + error;
+  }
+
+  return {
+    tasks: tasksList,
+    supervision: supervision !== "null" ? supervision : null,
+  };
+}
+
+export type BenefitsValues = {
   health: string[] | null;
   financial: string[] | null;
   other: string[] | null;
@@ -252,112 +353,13 @@ async function getBenefits(
   };
 }
 
-type TasksAndSupervision = {
-  tasks: string[];
-  supervision: string | null;
-};
-
-async function getTasksAndSupervision(
-  browserHandler: BrowserHandler
-): Promise<TasksAndSupervision> {
-  const tasksList: string[] = [];
-  let supervision = "null";
-
-  try {
-    const getTasksList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.jobDetails.description.tasksAndSupervision
-    );
-
-    const tasksInnerHtml = await getTasksList.innerHTML();
-
-    const tasksCleanedHtml = tasksInnerHtml
-      .split(`\n`)
-      .filter((item) => item.trim() !== "")
-      .map((item) => item.replace(/\t/g, ""));
-
-    if (tasksCleanedHtml) {
-      let getSupervision = false;
-      for (const listItem of tasksCleanedHtml) {
-        const tagAndText = listItem
-          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
-          .split(",");
-
-        if (
-          tagAndText[0] === "<h4>" &&
-          tagAndText[1].trim() === "Supervision"
-        ) {
-          getSupervision = true;
-        } else if (getSupervision && tagAndText[0] === "<span>") {
-          supervision = tagAndText[1].trim();
-        } else if (tagAndText[0] === "<span>") {
-          tasksList.push(tagAndText[1].trim());
-        }
-      }
-    }
-  } catch (error) {
-    throw "Error finding Description: " + error;
-  }
-
-  return {
-    tasks: tasksList,
-    supervision: supervision !== "null" ? supervision : null,
-  };
-}
-
-type SkillsAndAttributes = {
-  skills: { skill: string; attributes: string[] }[] | null;
-};
-
-async function getSkills(
-  browserHandler: BrowserHandler
-): Promise<SkillsAndAttributes> {
-  const skillsListValues: { skill: string; attributes: string[] }[] = [];
-
-  try {
-    const getSkillsList = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.jobDetails.description.specializedSkills,
-      1500
-    );
-    const skillsInnerHtml = await getSkillsList.innerHTML();
-
-    const skillsCleanedHtml = skillsInnerHtml
-      .split(`\n`)
-      .filter((item) => item.trim() !== "")
-      .map((item) => item.replace(/\t/g, ""));
-
-    if (skillsCleanedHtml) {
-      let currentSkillHeader = "";
-      let skillIndex = -1;
-      for (const listItem of skillsCleanedHtml) {
-        const tagAndText = listItem
-          .replace(/<(\w+)>((?:.|\n)*?)<\/\1>/g, "<$1>, $2, </$1>")
-          .split(",");
-
-        if (tagAndText[0] === "<h4>") {
-          currentSkillHeader = tagAndText[1].trim();
-          skillsListValues.push({ skill: currentSkillHeader, attributes: [] });
-          skillIndex += 1;
-        }
-
-        if (tagAndText[0] === "<span>" && currentSkillHeader) {
-          skillsListValues[skillIndex].attributes.push(tagAndText[1].trim());
-        }
-      }
-    }
-  } catch {}
-
-  return {
-    skills: skillsListValues.length > 0 ? skillsListValues : null,
-  };
-}
-
-type AdditionalInfo = {
+export type AdditionalInfo = {
   conditionsAndCapability: string[] | null;
   personalSuitability: string[] | null;
   other: { title: string; attributes: string[] }[] | null;
 };
 
-async function getAdditionalInformation(
+async function getAdditionalInfo(
   browserHandler: BrowserHandler
 ): Promise<AdditionalInfo> {
   const conditionsList: string[] = [];
@@ -365,11 +367,11 @@ async function getAdditionalInformation(
   const otherList: { title: string; attributes: string[] }[] = [];
 
   try {
-    const getAdditionalInformation = await browserHandler.waitAndGetElement(
-      CONFIG.selectors.jobDetails.description.additionalInformation
+    const getAdditionalInfo = await browserHandler.waitAndGetElement(
+      CONFIG.selectors.jobDetails.description.additionalInfo
     );
 
-    const infoInnerHtml = await getAdditionalInformation.innerHTML();
+    const infoInnerHtml = await getAdditionalInfo.innerHTML();
 
     const infoCleanedHtml = infoInnerHtml
       .split(`\n`)
@@ -420,115 +422,4 @@ async function getAdditionalInformation(
     personalSuitability: suitabilityList.length > 0 ? suitabilityList : null,
     other: otherList.length > 0 ? otherList : null,
   };
-}
-
-function createFormattedDescription(
-  overviewValues: OverviewValues,
-  enviromentAndSetting: EnviromentAndSetting,
-  credentials: Credentials,
-  benefitsValues: BenefitsValues,
-  tasksAndSupervision: TasksAndSupervision,
-  skillsAndAttributes: SkillsAndAttributes,
-  additionalInfo: AdditionalInfo
-): string {
-  try {
-    let description = `Education: ${overviewValues.education} \nExperience: ${overviewValues.experience} \n\nJob Site: ${overviewValues.onSite}
-    `;
-
-    if (enviromentAndSetting.enviroment) {
-      description += `\nWork Enviroment: ` + enviromentAndSetting.enviroment;
-    }
-
-    if (enviromentAndSetting.setting) {
-      description += `\nWork Setting: ` + enviromentAndSetting.setting;
-    }
-
-    if (credentials.credentials) {
-      description += `\n\nRequired Credentials: `;
-
-      for (const credential of credentials.credentials) {
-        description += `\n -${credential}`;
-      }
-    }
-
-    if (skillsAndAttributes.skills) {
-      description += `\n\nSpecialized Skills: `;
-
-      for (const skill of skillsAndAttributes.skills) {
-        description += `\n -${skill.skill}`;
-        for (const attribute of skill.attributes) {
-          description += `\n  --${attribute}`;
-        }
-      }
-    }
-
-    if (additionalInfo.conditionsAndCapability) {
-      description += `\n\nConditions and Psyical Capabilities: `;
-
-      for (const value of additionalInfo.conditionsAndCapability) {
-        description += `\n -${value}`;
-      }
-    }
-
-    if (tasksAndSupervision.tasks) {
-      description += `\n\nTasks: `;
-      for (const value of tasksAndSupervision.tasks) {
-        description += `\n -${value}`;
-      }
-      if (tasksAndSupervision.supervision) {
-        description += `\nSupervision: ${tasksAndSupervision.supervision}`;
-      }
-    }
-
-    if (additionalInfo.personalSuitability) {
-      description += `\n\nPersonal Suitability: `;
-
-      for (const value of additionalInfo.personalSuitability) {
-        description += `\n -${value}`;
-      }
-    }
-
-    if (
-      benefitsValues.health ||
-      benefitsValues.financial ||
-      benefitsValues.other
-    ) {
-      description += `\n\nBenefits: `;
-      if (benefitsValues.health) {
-        description += `\n -Health: `;
-        for (const attribute of benefitsValues.health) {
-          description += `\n  --${attribute}`;
-        }
-      }
-
-      if (benefitsValues.financial) {
-        description += `\n -Financial: `;
-        for (const attribute of benefitsValues.financial) {
-          description += `\n  --${attribute}`;
-        }
-      }
-
-      if (benefitsValues.other) {
-        description += `\n -Other: `;
-        for (const attribute of benefitsValues.other) {
-          description += `\n  --${attribute}`;
-        }
-      }
-    }
-
-    if (additionalInfo.other) {
-      description += `\n\nAdditional Info: `;
-
-      for (const value of additionalInfo.other) {
-        description += `\n -${value.title}`;
-        for (const attribute of value.attributes) {
-          description += `\n  --${attribute}`;
-        }
-      }
-    }
-
-    return description;
-  } catch (error) {
-    throw "Error creating Description: " + error;
-  }
 }

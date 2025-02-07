@@ -1,11 +1,8 @@
 export const CONFIG = {
-  urls: {
-    searchResult: "https://www.jobbank.gc.ca/jobsearch/jobposting/",
-  },
-  inputs: { howToApply: "button#applynowbutton" },
+  url: "https://www.jobbank.gc.ca/jobsearch/jobposting/",
+  input: { howToApply: "button#applynowbutton" },
   selectors: {
     jobPosting: "article",
-    postedToBank: "span.postedonJB",
     postEmail: `p a[href^="mailto:"]`,
     jobDetails: {
       jobDetailsList: "ul.job-posting-brief",
@@ -35,15 +32,15 @@ export const CONFIG = {
       description: {
         education: `ul[property="educationRequirements qualification"] li span`,
         experience: `p[property="experienceRequirements qualification"] span`,
-        onSite: `p span.description`,
+        onSiteContainer: `p span.description`,
         onSiteFilter: `span.fa-icon-desc.fa-icon.fas.fa-building`,
         enviroment: `div:has(> h4:has-text("Work site environment"))`,
         setting: `div:has(> h4:has-text("Work setting"))`,
         credentials: `div[property="skills"]:has(> h3:has-text("Credentials"))`,
-        benefits: `div[property="jobBenefits"]`,
-        tasksAndSupervision: `div[property="responsibilities"]`,
         specializedSkills: `div[property="experienceRequirements"]`,
-        additionalInformation: `div[property="skills"]:has(> h3:has-text("Additional information"))`,
+        tasksAndSupervision: `div[property="responsibilities"]`,
+        benefits: `div[property="jobBenefits"]`,
+        additionalInfo: `div[property="skills"]:has(> h3:has-text("Additional information"))`,
       },
     },
   },
