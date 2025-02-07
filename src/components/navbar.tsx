@@ -45,7 +45,7 @@ export default async function Navbar({ title }: { title: string }) {
               variant="link"
               className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
               <Link
-                className="nb:text-xl font-sans text-base mb:text-lg sm:w-fit"
+                className="font-sans text-base mb:text-lg sm:w-fit nb:text-xl"
                 href={link.url}>
                 {link.text}
               </Link>
@@ -60,7 +60,7 @@ export default async function Navbar({ title }: { title: string }) {
               variant="link"
               className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
               <Link
-                className="nb:text-xl font-sans text-base mb:text-lg sm:w-fit"
+                className="font-sans text-base mb:text-lg sm:w-fit nb:text-xl"
                 href="/dashboard">
                 Dashboard
               </Link>
@@ -70,7 +70,7 @@ export default async function Navbar({ title }: { title: string }) {
               variant="link"
               className="h-fit px-2 hover:bg-gray-300 sm:mt-2 sm:pb-3 md:px-4">
               <Link
-                className="nb:text-xl font-sans text-base mb:text-lg sm:w-fit"
+                className="font-sans text-base mb:text-lg sm:w-fit nb:text-xl"
                 href="/dashboard/account">
                 Account
               </Link>
