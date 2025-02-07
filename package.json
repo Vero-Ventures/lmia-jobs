@@ -35,7 +35,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/mdx": "^2.0.13",
     "@types/user-agents": "^1.0.4",
-    "@vercel/functions": "^1.6.0",
+    "@vercel/functions": "^2.0.0",
     "better-auth": "^1.1.10",
     "chromium": "^3.0.3",
     "class-variance-authority": "^0.7.0",
