@@ -14,7 +14,9 @@ export function SignOut() {
           fetchOptions: {
             onSuccess: () => {
               router.push("/");
-              router.refresh();
+              setTimeout(() => {
+                router.refresh();
+              }, 100);
             },
           },
         })

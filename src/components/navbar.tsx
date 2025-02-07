@@ -24,6 +24,12 @@ export default async function Navbar({ title }: { title: string }) {
       { text: "Dashboard", url: "/dashboard" },
       { text: "Account", url: "/dashboard/account" },
     ];
+  } else {
+    links = [
+      { text: "Job Board", url: "/" },
+      { text: "Pricing", url: "/pricing" },
+      { text: "Contact Us", url: "/contact-us" },
+    ];
   }
 
   return (
@@ -69,7 +75,7 @@ export default async function Navbar({ title }: { title: string }) {
           </>
         ) : (
           <>
-            <Button asChild className="">
+            <Button asChild>
               <Link
                 className="my-2 mb-3 hover:bg-gray-400 mb:mx-4 mb:max-w-28 mb:!px-6 mb:!text-lg sm:mt-4 sm:!text-xl md:!p-6"
                 href="/sign-in">
