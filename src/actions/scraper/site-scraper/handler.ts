@@ -8,17 +8,22 @@ import {
 import type { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import type { JobPostData } from "@/actions/scraper/helpers/types";
 
+// Visit the Job Bank Posting page, get the email and job details then retur them.
+// Takes: The Chromium Browser Handler and the Job Bank Post Id.
 export async function scrapeJobBankPost(
   browserHandler: BrowserHandler,
   postId: string = "test"
 ): Promise<JobPostData> {
   try {
+    // Visit the Job Bank Posting page using the Post Id.
     await browserHandler.visitPage(
-      CONFIG.urls.searchResult + postId + "?source=searchresults"
+      CONFIG.url + postId + "?source=searchresults"
     );
 
+    // Get the post email from "Apply Now" button.
     const email = await getPageEmail(browserHandler);
 
+    // Get post details and return a formatted object for database insertion.
     const postDetails = await getPageDetails(browserHandler, postId, email);
 
     return postDetails;
@@ -27,21 +32,28 @@ export async function scrapeJobBankPost(
   }
 }
 
+// Gets the email using the scraper and checks agains database users.
+// Takes: The Chromium Browser Handler.
+// Returns: The Post email.
 async function getPageEmail(browserHandler: BrowserHandler): Promise<string> {
   try {
+    // Use scraper to extract the user email, returning error if not found.
     const email = await getEmail(browserHandler);
 
     if (!email) {
       throw "Post Has Invalid Email";
     }
 
+    // Get all user emails in the database belonging to real accounts.
     const userEmails = await db.select({ email: user.email }).from(user);
 
     const emailArray: string[] = userEmails.map((row) => row.email);
 
+    // If the email belongs to a real user, throw an error.
     if (emailArray.includes(email)) {
       throw "Posting Email Belongs To Existing User";
     } else {
+      // Otherwise return the Post email.
       return email;
     }
   } catch (error) {
@@ -49,19 +61,16 @@ async function getPageEmail(browserHandler: BrowserHandler): Promise<string> {
   }
 }
 
+// Calls scraper to get idividual post details and format them as an object.
+// Takes: The Chromium Browser Handler.
+// Returns: The Post Details as a formatted object.
 async function getPageDetails(
   browserHandler: BrowserHandler,
   postId: string,
   email: string
 ): Promise<JobPostData> {
   try {
-    const details = await getJobDetails(browserHandler, postId, email);
-
-    if (!details) {
-      throw "Post Has Invalid Details";
-    }
-
-    return details;
+    return await getJobDetails(browserHandler, postId, email);
   } catch (error) {
     throw "Error Getting Post Details: " + error;
   }
