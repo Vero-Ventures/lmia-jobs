@@ -32,9 +32,9 @@ export default async function Layout({
     notFound();
   }
   return (
-    <div className={jobBoard}>
+    <div className={`${jobBoard} flex flex-grow flex-col`}>
       <Navbar title={title} />
-      <main>{children}</main>
+      <main className="my-auto flex flex-col justify-center">{children}</main>
       <Footer title={title} />
     </div>
   );

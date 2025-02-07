@@ -12,8 +12,9 @@ export default {
   theme: {
     screens: {
       mb: "480px",
+      nav_mb: "500px",
       sm: "640px",
-      nb: "680px",
+      nav_sm: "700px",
       md: "768px",
       lg: "1024px",
       xl: "1280px",

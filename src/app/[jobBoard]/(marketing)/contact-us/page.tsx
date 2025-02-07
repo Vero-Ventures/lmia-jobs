@@ -61,7 +61,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-xl py-14">
+    <main className="mx-auto w-5/6 max-w-xl py-14">
       <div className="rounded-lg border-2 border-gray-300 p-6">
         <Heading variant="h1" className="mb-4 text-center">
           Contact Us

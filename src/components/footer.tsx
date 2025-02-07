@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function Footer({ title }: { title: string }) {
   return (
-    <footer className="mt-auto w-full bg-gray-200 bg-opacity-60 p-6 md:py-6">
+    <footer className="mx-auto w-full bg-gray-200 bg-opacity-60 p-6 md:py-6">
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm md:grid">
         <div className="grid content-start justify-center gap-y-3 text-center text-base">
           <h3 className="mb-2 text-xl font-semibold">Company</h3>
@@ -17,44 +17,44 @@ function Footer({ title }: { title: string }) {
           </h3>
           <div className="flex-grid mt-2 flex grid-cols-2 gap-12">
             <div className="flex max-w-32 flex-col gap-2">
-              <a
+              <Link
                 target="_blank"
                 href="https://allopportunities.ca"
                 className="ml-1 pb-1.5 text-base">
                 All Opportunities
-              </a>
-              <a
+              </Link>
+              <Link
                 target="_blank"
                 href="https://asylumopportunities.ca"
                 className="ml-1 pb-1.5 text-base">
                 Asylum Opportunities
-              </a>
-              <a
+              </Link>
+              <Link
                 target="_blank"
                 href="https://indigenousopportunities.ca"
                 className="ml-1 pb-1.5 text-base">
                 Indigenous Opportunities
-              </a>
+              </Link>
             </div>
             <div className="flex max-w-32 flex-col gap-2">
-              <a
+              <Link
                 target="_blank"
                 href="https://accessibleopportunities.ca"
                 className="ml-1 pb-1.5 text-base">
                 Accessible Opportunities
-              </a>
-              <a
+              </Link>
+              <Link
                 target="_blank"
                 href="https://immigrantopportunities.ca"
                 className="ml-1 pb-1.5 text-base">
                 Immigrant Opportunities
-              </a>
-              <a
+              </Link>
+              <Link
                 target="_blank"
                 href="https://youthopportunities.ca"
                 className="ml-1 text-base">
                 Youth Opportunities
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -82,30 +82,40 @@ function Footer({ title }: { title: string }) {
           <h3 className="mb-2 text-xl font-semibold">
             Opportuntities <span className="mt-2 block">Job Sites</span>
           </h3>
-          <Link href="https://allopportunities.ca" className="ml-1 pb-1.5">
+          <Link
+            href="https://allopportunities.ca"
+            className="ml-1 pb-1.5"
+            target="_blank">
             All Opportunities
           </Link>
           <Link
             href="https://accessibleopportunities.ca"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pb-1.5 pt-1"
+            target="_blank">
             Accessible Opportunities
           </Link>
           <Link
             href="https://asylumopportunities.ca"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pb-1.5 pt-1"
+            target="_blank">
             Asylum Opportunities
           </Link>
           <Link
             href="https://immigrantopportunities.ca"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pb-1.5 pt-1"
+            target="_blank">
             Immigrant Opportunities
           </Link>
           <Link
             href="https://indigenousopportunities.ca"
-            className="ml-1 pb-1.5 pt-1">
+            className="ml-1 pb-1.5 pt-1"
+            target="_blank">
             Indigenous Opportunities
           </Link>
-          <Link href="https://youthopportunities.ca" className="ml-1 pt-1">
+          <Link
+            href="https://youthopportunities.ca"
+            className="ml-1 pt-1"
+            target="_blank">
             Youth Opportunities
           </Link>
         </div>

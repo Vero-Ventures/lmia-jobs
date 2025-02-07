@@ -29,7 +29,7 @@ export default function SignIn() {
   const [code, setCode] = useState("");
 
   return state.email ? (
-    <Card className="mx-auto max-w-md">
+    <Card className="mx-auto max-w-md p-2">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
         <CardDescription className="text-sm">
@@ -118,7 +118,7 @@ export default function SignIn() {
       </CardContent>
     </Card>
   ) : (
-    <Card className="mx-auto max-w-md">
+    <Card className="mx-auto max-w-md p-2">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign In</CardTitle>
         <CardDescription className="text-sm">

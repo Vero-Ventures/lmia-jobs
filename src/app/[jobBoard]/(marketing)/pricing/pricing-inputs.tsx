@@ -33,7 +33,7 @@ export default function PricingInputs({
   return (
     <>
       <div className="space-y-2">
-        <Label>Number Of Job Boards</Label>
+        <Label className="text-lg">Number Of Job Boards</Label>
         <Input
           type="number"
           value={boards}
@@ -45,7 +45,7 @@ export default function PricingInputs({
         />
       </div>
       <div className="space-y-2">
-        <Label>Months Posted</Label>
+        <Label className="text-lg">Months Posted</Label>
         <Input
           type="number"
           value={duration}

@@ -14,6 +14,7 @@ export default function HidePost({
 }) {
   return hidden ? (
     <Button
+      className="min-w-24"
       onClick={async () => {
         toast.promise(editPostVisibility(id, false), {
           loading: "Loading...",
@@ -28,6 +29,7 @@ export default function HidePost({
     </Button>
   ) : (
     <Button
+      className="min-w-24"
       onClick={async () => {
         toast.promise(editPostVisibility(id, true), {
           loading: "Loading...",

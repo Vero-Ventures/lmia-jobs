@@ -18,27 +18,31 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <main className="flex flex-col">
-      <div className="mx-auto max-w-xl space-y-4 py-10">
-        <div className="rounded-lg border-2 border-gray-300 p-6">
-          <Heading variant="h1">Pricing</Heading>
+      <div className="mx-auto w-5/6 max-w-xl space-y-4 py-10">
+        <div className="flex flex-col gap-y-4 rounded-lg border-2 border-gray-300 p-6">
+          <Heading variant="h1" className="text-center">
+            Pricing
+          </Heading>
           <P>
             The cost of an Opportunities job posting is based on its duration
             and the number of boards it appears on. The base price is $5 per
             month, multiplied by the number of boards selected.
           </P>
-          <P>
-            For example, a post hosted on 5 boards for 3 months would cost $75.
+          <P className="font-semibold">
+            Example: A post hosted on 5 boards for 3 months would cost $75.
           </P>
-          <div className="space-y-4">
+          <div className="mt-2 space-y-4">
             <PricingInputs
               postBoards={postBoards}
               postDuration={postDuration}
             />
           </div>
           <div>
-            <div className="space-y-2">
-              <h3 className="font-bold">Total Cost</h3>
-              <P>{"$" + totalCost + ".00"}</P>
+            <div className="mx-auto mt-4 w-fit space-y-2">
+              <h3 className="text-2xl font-bold">Total Cost</h3>
+              <P className="text-center text-xl font-semibold">
+                {"$" + totalCost + ".00"}
+              </P>
             </div>
           </div>
         </div>

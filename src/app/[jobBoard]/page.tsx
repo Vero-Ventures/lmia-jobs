@@ -60,7 +60,16 @@ export default async function Page({
           <FilterSelect initialValue={province} filterType="province" />
         </div>
       </div>
+
       <section className="container mx-auto mt-4 p-4">
+        <div className="ml-auto w-fit">
+          <Link href={`/dashboard/posts/create`}>
+            <Button className="mb-2 mr-6 !px-8 !py-6 text-xl font-bold">
+              Create A Post
+            </Button>
+          </Link>
+        </div>
+
         {result.length > 0 ? (
           <div className="space-y-8">
             {result.map(({ job_posting }) => {
