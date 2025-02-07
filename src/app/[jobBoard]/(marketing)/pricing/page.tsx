@@ -18,7 +18,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <main className="flex flex-col">
-      <div className="mx-auto max-w-xl space-y-4 py-10">
+      <div className="mx-auto w-5/6 max-w-xl space-y-4 py-10">
         <div className="flex flex-col gap-y-4 rounded-lg border-2 border-gray-300 p-6">
           <Heading variant="h1" className="text-center">
             Pricing
