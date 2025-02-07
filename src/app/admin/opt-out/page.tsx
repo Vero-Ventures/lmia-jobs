@@ -29,7 +29,7 @@ export default function OptOut() {
     }
   };
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-grow flex-col">
       <main className="mx-auto flex max-w-2xl flex-1 items-center justify-center px-4 text-center">
         <div className="flex-1 flex-col items-center rounded-xl border-4 border-blue-300 bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 p-6">
           <h1 className="mb-4 text-5xl font-bold leading-[4.5rem] tracking-tight text-gray-900">
@@ -65,16 +65,6 @@ export default function OptOut() {
           </Button>
         </div>
       </main>
-      <footer className="mx-auto max-w-2xl px-4 py-8 text-center text-sm text-gray-600">
-        <p>
-          © {new Date().getFullYear()} LMIA Jobs - Developed by{" "}
-          <a
-            href="https://www.veroventures.com/"
-            className="text-blue-600 hover:text-blue-700">
-            Vero Ventures
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }
