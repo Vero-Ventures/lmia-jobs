@@ -53,6 +53,7 @@ export default function PayButton({
           await createCheckoutSession({
             numJobBoards: selectedJobBoards.length,
             numMonths: monthsToPost,
+            jobPostingId: id,
             return_url: `/posts/${id}`,
           });
           return "Job posting updated successfully";

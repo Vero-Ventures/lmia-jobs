@@ -9,13 +9,17 @@ import { getUrl, stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+// Takes: The number of job boards posted to and the number of months posted.
+//        The return URL is optional and defaults to the dashboard.
 export async function createCheckoutSession({
   numJobBoards,
   numMonths,
+  jobPostingId,
   return_url = "/dashboard",
 }: {
   numJobBoards: number;
   numMonths: number;
+  jobPostingId: number;
   return_url?: string;
 }) {
   const data = await auth.api.getSession({
@@ -44,9 +48,12 @@ export async function createCheckoutSession({
     await storeStripeCustomerId(newCustomer.id, user.id);
     stripeCustomerId = newCustomer.id;
   }
+
+  // Define variable to store the session with the url to redirect to for checkout.
   let session;
   try {
     // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
+    // Pricing is set in cents so 500 = $5.00.
     session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       success_url: getUrl(
@@ -54,7 +61,14 @@ export async function createCheckoutSession({
       ),
       cancel_url: getUrl(return_url),
       mode: "payment",
-
+      payment_intent_data: {
+        metadata: {
+          numJobBoards,
+          numMonths,
+          jobPostingId,
+          userId: user.id,
+        },
+      },
       line_items: [
         {
           price_data: {
@@ -77,5 +91,6 @@ export async function createCheckoutSession({
     );
   }
 
+  // Redirect to the checkout page or the return URL if it cannot be found.
   return redirect(session.url ?? return_url);
 }

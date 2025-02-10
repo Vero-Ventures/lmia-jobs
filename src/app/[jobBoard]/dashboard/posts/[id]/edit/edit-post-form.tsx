@@ -36,7 +36,7 @@ import { useParams, useRouter } from "next/navigation";
 import type { EditJobPosting } from "@/app/lib/job-postings/schema";
 import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
 import { formatDate } from "@/lib/utils";
-import MoneyInput from "@/components/inputs/money-input";
+import MoneyInput from "@/components/money-input";
 import { useState } from "react";
 
 export function EditPostForm({
