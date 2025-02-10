@@ -9,14 +9,9 @@ export async function checkInactiveUserAges() {
     const mailingUsers = await db.select().from(userMailing);
 
     mailingUsers.forEach(async (mailingUser) => {
-      const createdAge = mailingUser.createdAt.getTime();
-      const now = Date.now();
-      const oneMonth = 31 * 24 * 60 * 60 * 1000;
-
-      console.log("Created Age: " + createdAge);
-      console.log("Now: " + now);
-      console.log("One Month: " + oneMonth);
-      console.log("Difference: " + (createdAge < now - oneMonth));
+      const _createdAge = mailingUser.createdAt.getTime();
+      const _now = Date.now();
+      const _oneMonth = 31 * 24 * 60 * 60 * 1000;
 
       // if (createdAge < now - oneMonth) {
       //   await db

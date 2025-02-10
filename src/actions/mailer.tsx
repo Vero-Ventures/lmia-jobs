@@ -33,14 +33,6 @@ export async function mailInvitesAndReminders() {
         )
       );
 
-    for (let i = 0; i < remindUsersMailing.length; i++) {
-      console.log("Remind User: " + remindUsersMailing[i].email);
-    }
-
-    for (let i = 0; i < newUsersMailing.length; i++) {
-      console.log("New User: " + newUsersMailing[i].email);
-    }
-
     const userPosts = await db.select().from(jobPosting);
 
     if (newUsersMailing.length > 0) {
@@ -81,7 +73,7 @@ export async function sendInvitesAndReminders(
       console.log("User Post: " + userPostings[i].title);
     }
 
-    if (userPostings.length === 0) {
+    if (userPostings.length > 0) {
       const totalPosts = userPostings.length;
 
       const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
@@ -92,7 +84,6 @@ export async function sendInvitesAndReminders(
       const expiredDate = new Date(expiredTimeStamp);
 
       console.log("Email: " + email);
-      console.log("Total Posts: " + totalPosts);
       console.log("topPostNames: " + topPostNames);
       console.log("Expired Date: " + expiredDate.toDateString());
 
