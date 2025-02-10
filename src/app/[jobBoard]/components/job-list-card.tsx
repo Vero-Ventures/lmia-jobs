@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { JobPosting } from "@/db/schema";
-import P from "@/components/paragraph";
+import P from "@/components/ui/html/paragraph";
 
 export function JobListCard({
   jobPosting,

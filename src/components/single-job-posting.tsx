@@ -12,9 +12,9 @@ import {
   User2Icon,
 } from "lucide-react";
 import Link from "next/link";
-import Heading from "@/components/heading";
-import Paragraph from "@/components/paragraph";
-import PayButton from "@/components/pay-button";
+import Heading from "@/components/ui/html/heading";
+import Paragraph from "@/components/ui/html/paragraph";
+import PayButton from "@/components/pay-dialogue";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatMoney, formatTime } from "@/lib/utils";

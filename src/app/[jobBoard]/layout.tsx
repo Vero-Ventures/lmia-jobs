@@ -1,8 +1,8 @@
 import { JOB_BOARD_TITLES, type JobBoard } from "@/app/lib/constants";
 import { notFound } from "next/navigation";
 import type React from "react";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Navbar from "@/components/page-wrappers/navbar";
+import Footer from "@/components/page-wrappers/footer";
 
 export async function generateMetadata({
   params,

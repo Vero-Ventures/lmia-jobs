@@ -7,7 +7,7 @@ import { selectUserJobPostings } from "@/db/queries/jobPostings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
-import P from "@/components/paragraph";
+import P from "@/components/ui/html/paragraph";
 
 export default async function Page({
   searchParams,

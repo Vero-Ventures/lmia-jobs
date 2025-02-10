@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Heading from "@/components/heading";
+import Heading from "@/components/ui/html/heading";
 import { toast } from "sonner";
 import { useState } from "react";
 

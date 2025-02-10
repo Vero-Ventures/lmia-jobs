@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { optOutOfReminders } from "@/actions/mailer";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/footer";
+import Footer from "@/components/page-wrappers/footer";
 
 export default function OptOut() {
   const [isUpdating, setIsUpdating] = useState(false);

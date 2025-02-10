@@ -31,12 +31,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { updateJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
-import FormSubmitButton from "@/components/form-submit-button";
+import FormSubmitButton from "@/components/inputs/form-submit-button";
 import { useParams, useRouter } from "next/navigation";
 import type { EditJobPosting } from "@/app/lib/job-postings/schema";
 import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
 import { formatDate } from "@/lib/utils";
-import MoneyInput from "@/components/money-input";
+import MoneyInput from "@/components/inputs/money-input";
 import { useState } from "react";
 
 export function EditPostForm({

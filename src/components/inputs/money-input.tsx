@@ -1,5 +1,6 @@
 "use client";
 
+import type { UseFormReturn, FieldValues, Path } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -7,7 +8,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { UseFormReturn, FieldValues, Path } from "react-hook-form";
 
 import CurrencyInput from "react-currency-input-field";
 
