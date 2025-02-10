@@ -7,5 +7,5 @@ export async function GET() {
 
   await runScraper(postId);
 
-  return new Response(JSON.stringify("Completed"), { status: 200 });
+  return new Response("Completed", { status: 200 });
 }

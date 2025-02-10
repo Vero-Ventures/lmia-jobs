@@ -1,30 +1,32 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPosting, user, userMailing } from "@/db/schema";
+import { jobPosting, userMailing } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
 export async function checkInactiveUserAges() {
   try {
-    const postedUsers = await db.select().from(user);
+    const mailingUsers = await db.select().from(userMailing);
 
-    postedUsers.forEach(async (postedUser) => {
+    mailingUsers.forEach(async (mailingUser) => {
+      const createdAge = mailingUser.createdAt.getTime();
       const now = Date.now();
-      const createdAge = postedUser.createdAt.getTime();
-      const timestampMillis = now - 31 * 24 * 60 * 60 * 1000;
+      const oneMonth = 31 * 24 * 60 * 60 * 1000;
 
-      if (createdAge < timestampMillis) {
+      if (createdAge < now - oneMonth) {
         await db
           .update(userMailing)
           .set({ ignore: true })
           .where(
             and(
-              eq(userMailing.email, user.email),
+              eq(userMailing.id, mailingUser.id),
               eq(userMailing.activated, false)
             )
           );
 
-        await db.delete(jobPosting).where(eq(jobPosting.userId, user.id));
+        await db
+          .delete(jobPosting)
+          .where(eq(jobPosting.email, mailingUser.email));
       }
     });
 
