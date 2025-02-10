@@ -13,22 +13,24 @@ export const baseSchema = createInsertSchema(jobPosting, {
   // Define fields with specific value requirements.
   vacancies: z.coerce
     .number()
-    .min(0, { message: "Number of vacancies must be greater than or equal 0" })
+    .min(0, {
+      message: "Number of vacancies must be equal to or greater than 0",
+    })
     .optional(),
   minWorkHours: z.coerce.number().min(1, {
-    message: "Minumum weekly hours must be greater than or equal 1",
+    message: "Minumum weekly hours must be equal to or greater than 1",
   }),
   maxWorkHours: z.coerce
     .number()
 
     .optional(),
   minPayValue: z.coerce.number().min(1, {
-    message: "Minimum pay must be greater than or equal to $1.00",
+    message: "Minimum pay must be equal to or greater than $1.00",
   }),
   maxPayValue: z.coerce
     .number()
     .min(0, {
-      message: "Maximum pay must at least greater than or equal to $0.00",
+      message: "Maximum pay must be equal to or greater than $0.00",
     })
     .optional(),
 })

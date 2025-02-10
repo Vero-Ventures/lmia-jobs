@@ -192,61 +192,80 @@ export function CreatePostForm({
                 <FormField
                   control={form.control}
                   name="vacancies"
-                  render={({ field }) => (
-                    <FormItem className="mt-2">
-                      <FormLabel className="mb:text-base">Vacancies</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter the number of vacancies"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    if (field.value && field.value < 0) {
+                      field.value = 0;
+                    }
+
+                    return (
+                      <FormItem className="mt-2">
+                        <FormLabel className="mb:text-base">
+                          Vacancies
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter the number of vacancies"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
                   name="minWorkHours"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="mb:text-base">
-                        Minimum Work Hours{" "}
-                        <span className="text-destructive">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter weekly hours"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    if (field.value && field.value < 0) {
+                      field.value = 0;
+                    }
+
+                    return (
+                      <FormItem>
+                        <FormLabel className="mb:text-base">
+                          Minimum Work Hours{" "}
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder="Enter weekly hours"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
                   name="maxWorkHours"
-                  render={({ field }) => (
-                    <FormItem className="mt-2">
-                      <FormLabel className="mb:text-base">
-                        Max Work Hours
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter weekly hours"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    if (field.value && field.value < 0) {
+                      field.value = 0;
+                    }
+
+                    return (
+                      <FormItem className="mt-2">
+                        <FormLabel className="mb:text-base">
+                          Max Work Hours
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder="Enter weekly hours"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
