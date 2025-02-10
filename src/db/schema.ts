@@ -1,13 +1,13 @@
 import {
-  employmentTypeLabels,
   JOB_BOARDS,
-  languages,
-  paymentTypes,
   provinceValues,
+  employmentTypes,
+  paymentTypes,
+  languages,
 } from "@/app/lib/constants";
 import {
-  text,
   boolean,
+  text,
   serial,
   integer,
   decimal,
@@ -66,16 +66,13 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
-export const languageEnum = pgEnum("language", languages);
+export const provinceEnum = pgEnum("province", provinceValues);
 
-export const employmentTypeEnum = pgEnum(
-  "employment_type",
-  employmentTypeLabels
-);
+export const employmentTypeEnum = pgEnum("employment_type", employmentTypes);
 
 export const paymentTypeEnum = pgEnum("payment_type", paymentTypes);
 
-export const provinceEnum = pgEnum("province", provinceValues);
+export const languageEnum = pgEnum("language", languages);
 
 export const jobPosting = pgTable("job_posting", {
   id: serial("id").primaryKey(),

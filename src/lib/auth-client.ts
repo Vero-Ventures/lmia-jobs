@@ -6,12 +6,12 @@ export const authClient = createAuthClient({
 });
 
 export const {
-  signIn,
-  signOut,
   signUp,
-  getSession,
-  useSession,
+  signIn,
   forgetPassword,
   resetPassword,
   emailOtp,
+  signOut,
+  getSession,
+  useSession,
 } = authClient;

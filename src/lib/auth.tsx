@@ -25,7 +25,7 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         if (type === "sign-in") {
-          // Send the OTP for sign-in
+          // Send the OTP for sign-in.
           await resend.emails.send({
             from: "Manage Opportunities <no-reply@manageopportunities.ca>",
             to: [email],
@@ -33,7 +33,7 @@ export const auth = betterAuth({
             react: <SignInEmail otp={otp} />,
           });
         } else if (type === "email-verification") {
-          // Send the OTP for email verification
+          // NOTE: Possible Delete.
           await resend.emails.send({
             from: "Manage Opportunities <no-reply@manageopportunities.ca>",
             to: [email],
