@@ -1,7 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
 import { HandCoins } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -9,20 +12,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { Checkbox } from "./ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   JOB_BOARDS,
   PRICE_PER_MONTH,
   type JobBoard,
 } from "@/app/lib/constants";
 import { createCheckoutSession } from "@/actions/stripe/create-checkout";
-import { toast } from "sonner";
 import { updateJobBoardPostings } from "@/app/[jobBoard]/dashboard/posts/create/actions";
 
+// Takes: A Job Posting ID and a nullable array of Job Board values.
 export default function PayButton({
   id,
   initialSelectedJobBoards,
@@ -30,6 +31,7 @@ export default function PayButton({
   id: number;
   initialSelectedJobBoards?: JobBoard[];
 }) {
+  // Track loading state, selected job boards, and months to post.
   const [isLoading, setIsLoading] = useState(false);
   const [selectedJobBoards, setSelectedJobBoards] = useState<JobBoard[]>(
     initialSelectedJobBoards ?? []
@@ -41,15 +43,16 @@ export default function PayButton({
       return;
     }
     setIsLoading(true);
+
+    // Update the job board postings, then create a checkout session on success.
     toast.promise(
       updateJobBoardPostings({ id, monthsToPost, selectedJobBoards }),
       {
         loading: "Updating job posting...",
         success: async () => {
           await createCheckoutSession({
-            jobPostingId: id,
-            numMonths: monthsToPost,
             numJobBoards: selectedJobBoards.length,
+            numMonths: monthsToPost,
           });
           return "Job posting updated successfully";
         },
@@ -60,8 +63,8 @@ export default function PayButton({
       }
     );
 
+    // NOTE: Why called twice.
     await createCheckoutSession({
-      jobPostingId: id,
       numJobBoards: selectedJobBoards.length,
       numMonths: monthsToPost,
       return_url: `/posts/${id}`,
@@ -85,54 +88,66 @@ export default function PayButton({
         <DialogHeader>
           <DialogTitle>Posting Preferences</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {JOB_BOARDS.map((jobBoard) => (
-              <div
-                className="flex items-center space-x-2 capitalize"
-                key={jobBoard}>
-                <Checkbox
-                  id={jobBoard}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setSelectedJobBoards([...selectedJobBoards, jobBoard]);
-                    } else {
-                      setSelectedJobBoards(
-                        selectedJobBoards.filter(
-                          (selectedJobBoard) => selectedJobBoard !== jobBoard
-                        )
-                      );
-                    }
-                  }}
-                />
-                <Label
-                  htmlFor={jobBoard}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  {jobBoard}
-                </Label>
-              </div>
-            ))}
+        <div className="grid gap-4 pt-2">
+          <Label htmlFor="monthsToPost" className="text-lg font-semibold">
+            Opportunities Job Boards
+          </Label>
+          <div className="grid grid-cols-2 items-center gap-4 lg:grid-cols-3">
+            {JOB_BOARDS.filter((jobBoard) => jobBoard !== "all").map(
+              (jobBoard) => (
+                <div
+                  className="flex items-center space-x-2 capitalize"
+                  key={jobBoard}>
+                  <Checkbox
+                    id={jobBoard}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedJobBoards([...selectedJobBoards, jobBoard]);
+                      } else {
+                        setSelectedJobBoards(
+                          selectedJobBoards.filter(
+                            (selectedJobBoard) => selectedJobBoard !== jobBoard
+                          )
+                        );
+                      }
+                    }}
+                  />
+                  <Label
+                    htmlFor={jobBoard}
+                    className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    {jobBoard}
+                  </Label>
+                </div>
+              )
+            )}
           </div>
 
-          <div className="grid items-center gap-4">
-            <Label htmlFor="monthsToPost">Months To Post</Label>
+          <div className="flex flex-col gap-2">
+            <Label
+              htmlFor="monthsToPost"
+              className="ml-2 mt-4 text-lg font-semibold">
+              Months To Post
+            </Label>
             <Input
               id="monthsToPost"
               value={monthsToPost}
               onChange={(e) => setMonthsToPost(+e.target.value)}
-              className="col-span-3"
             />
           </div>
-          <div className="space-y-2">
+          <div className="mx-auto mt-2 space-y-2 rounded-lg border-2 border-gray-300 p-2 px-6">
             <h2 className="text-2xl font-bold">Total Price</h2>
-            <p className="text-xl font-semibold">
+            <p className="text-center text-2xl font-semibold">
               ${selectedJobBoards.length * monthsToPost * PRICE_PER_MONTH}
             </p>
           </div>
         </div>
         <DialogFooter>
-          <Button disabled={isLoading} onClick={handlePayForPost} type="submit">
-            Pay
+          <Button
+            disabled={isLoading}
+            onClick={handlePayForPost}
+            type="submit"
+            className="mx-auto mt-2 w-4/5 py-6 text-xl">
+            Pay For Post
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -12,6 +12,8 @@ export function SignOut() {
       onClick={async () =>
         await signOut({
           fetchOptions: {
+            // Timeout function ensures refresh happens after session checks update to new state.
+            // Needed to properly update nav-bar state.
             onSuccess: () => {
               router.push("/");
               setTimeout(() => {

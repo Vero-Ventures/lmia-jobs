@@ -10,12 +10,10 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function createCheckoutSession({
-  jobPostingId,
   numMonths,
   numJobBoards,
   return_url = "/dashboard",
 }: {
-  jobPostingId: number;
   numJobBoards: number;
   numMonths: number;
   return_url?: string;
@@ -30,10 +28,10 @@ export async function createCheckoutSession({
 
   const user = data.user;
 
-  // Get the stripeCustomerId from your database
+  // Get the Stripe Customer Id from the database
   let stripeCustomerId = await getStripeCustomerId(user.id);
 
-  // Create a new Stripe customer if this user doesn't have one
+  // Create a new Stripe customer if the user does not have one
   if (!stripeCustomerId) {
     const newCustomer = await stripe.customers.create({
       email: user.email,
@@ -42,7 +40,7 @@ export async function createCheckoutSession({
       },
     });
 
-    // Store the relation between userId and stripeCustomerId in your KV
+    // Store the relation between user and Stripe Id in the database.
     await storeStripeCustomerId(newCustomer.id, user.id);
     stripeCustomerId = newCustomer.id;
   }
@@ -56,21 +54,14 @@ export async function createCheckoutSession({
       ),
       cancel_url: getUrl(return_url),
       mode: "payment",
-      payment_intent_data: {
-        metadata: {
-          numJobBoards,
-          numMonths,
-          jobPostingId,
-          userId: user.id,
-        },
-      },
+
       line_items: [
         {
           price_data: {
             currency: "cad",
             product_data: {
-              name: `Post on up to ${numJobBoards} job boards for ${numMonths} months.`,
-              description: `Create a job board posting to appear on up to ${numJobBoards} Opportunities job boards for the next
+              name: `Job post across ${numJobBoards} job boards for the next ${numMonths} months.`,
+              description: `Pay for the job posting to appear on the selected Opportunities job boards for the next
             ${numMonths} months.`,
             },
             unit_amount: numJobBoards * numMonths * 500,
