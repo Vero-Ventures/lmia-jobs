@@ -14,7 +14,12 @@ export async function mailInvitesAndReminders() {
     const newUsersMailing = await db
       .select()
       .from(userMailing)
-      .where(eq(userMailing.newlyCreated, true));
+      .where(
+        and(
+          eq(userMailing.newlyCreated, true),
+          eq(userMailing.activated, false)
+        )
+      );
 
     const remindUsersMailing = await db
       .select()
@@ -48,9 +53,8 @@ export async function mailInvitesAndReminders() {
     }
 
     return;
-  } catch (err) {
-    console.error("Mailing process failed.");
-    console.error(err);
+  } catch (error) {
+    console.error("Mailing process failed: " + error);
     return;
   }
 }
@@ -105,9 +109,8 @@ export async function sendInvitesAndReminders(
       }
     }
     return;
-  } catch (err) {
-    console.error("Mailing process failed.");
-    console.error(err);
+  } catch (error) {
+    console.error("Mailing process failed: " + error);
     return;
   }
 }
