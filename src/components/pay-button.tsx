@@ -53,6 +53,7 @@ export default function PayButton({
           await createCheckoutSession({
             numJobBoards: selectedJobBoards.length,
             numMonths: monthsToPost,
+            return_url: `/posts/${id}`,
           });
           return "Job posting updated successfully";
         },
@@ -62,13 +63,6 @@ export default function PayButton({
         finally: () => setIsLoading(false),
       }
     );
-
-    // NOTE: Why called twice.
-    await createCheckoutSession({
-      numJobBoards: selectedJobBoards.length,
-      numMonths: monthsToPost,
-      return_url: `/posts/${id}`,
-    });
   }
   return (
     <Dialog
