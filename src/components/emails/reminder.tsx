@@ -48,7 +48,8 @@ export default function ReminderEmail({
             <Text style={text}>
               Join now to create an account and keep these postings up as long
               as you want. If you do not create an the account and claim your
-              posts before {expiredDate}, the postings will be lost.
+              posts before <span className="font-bold">{expiredDate}</span>, the
+              postings will be lost.
             </Text>
             <Section style={postSection}>
               {postNames.map((postName) => (

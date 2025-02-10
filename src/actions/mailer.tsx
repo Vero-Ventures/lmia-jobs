@@ -4,8 +4,8 @@ import { db } from "@/db";
 import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { Resend } from "resend";
-// import InviteEmail from "@/components/emails/invite";
-// import ReminderEmail from "@/components/emails/reminder";
+import InviteEmail from "@/components/emails/invite";
+import ReminderEmail from "@/components/emails/reminder";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -63,7 +63,7 @@ export async function sendInvitesAndReminders(
   email: string,
   creationDate: Date,
   userPosts: JobPosting[],
-  _isInvite: boolean
+  isInvite: boolean
 ) {
   try {
     const userPostings = userPosts.filter((post) => post.email === email);
@@ -78,39 +78,35 @@ export async function sendInvitesAndReminders(
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
-      console.log("Email: " + email);
-      console.log("topPostNames: " + topPostNames);
-      console.log("Expired Date: " + expiredDate.toDateString());
-
-      // if (isInvite) {
-      //   await resend.emails.send({
-      //     from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-      //     to: [email],
-      //     subject: "Activate Your New Account",
-      //     react: (
-      //       <InviteEmail
-      //         email={email}
-      //         expiredDate={expiredDate.toDateString()}
-      //         postNames={topPostNames}
-      //         totalPosts={totalPosts}
-      //       />
-      //     ),
-      //   });
-      // } else {
-      //   await resend.emails.send({
-      //     from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-      //     to: [email],
-      //     subject: "Reminder About Your Account",
-      //     react: (
-      //       <ReminderEmail
-      //         email={email}
-      //         expiredDate={expiredDate.toDateString()}
-      //         postNames={topPostNames}
-      //         totalPosts={totalPosts}
-      //       />
-      //     ),
-      //   });
-      // }
+      if (isInvite) {
+        await resend.emails.send({
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+          to: [email],
+          subject: "Activate Your New Account",
+          react: (
+            <InviteEmail
+              email={email}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
+            />
+          ),
+        });
+      } else {
+        await resend.emails.send({
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+          to: [email],
+          subject: "Reminder About Your Account",
+          react: (
+            <ReminderEmail
+              email={email}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
+            />
+          ),
+        });
+      }
     }
     return;
   } catch (error) {

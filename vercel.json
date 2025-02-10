@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/send-mailing",
+      "path": "/api/send_mailing",
       "schedule": "0 12 * * *"
     }
   ]
