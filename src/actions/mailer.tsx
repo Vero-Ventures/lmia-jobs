@@ -3,11 +3,11 @@
 import { db } from "@/db";
 import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-// import { Resend } from "resend";
+import { Resend } from "resend";
 // import InviteEmail from "@/components/emails/invite";
 // import ReminderEmail from "@/components/emails/reminder";
 
-// const resend = new Resend(process.env.AUTH_RESEND_KEY);
+const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 export async function mailInvitesAndReminders() {
   try {
@@ -137,19 +137,19 @@ export async function optOutOfReminders(email: string): Promise<string> {
   }
 }
 
-// export async function sendContactEmail({
-//   email,
-//   subject,
-//   body,
-// }: {
-//   email: string;
-//   subject: string;
-//   body: string;
-// }) {
-//   await resend.emails.send({
-//     from: email,
-//     to: `Opportunities <contact@manageopportunities.ca>`,
-//     subject: `Contact Us: " + ${subject}`,
-//     text: body,
-//   });
-// }
+export async function sendContactEmail({
+  email,
+  subject,
+  body,
+}: {
+  email: string;
+  subject: string;
+  body: string;
+}) {
+  await resend.emails.send({
+    from: email,
+    to: `Opportunities <contact@manageopportunities.ca>`,
+    subject: `Contact Us: " + ${subject}`,
+    text: body,
+  });
+}
