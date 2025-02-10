@@ -3,11 +3,11 @@
 import { db } from "@/db";
 import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { Resend } from "resend";
-import InviteEmail from "@/components/emails/invite";
-import ReminderEmail from "@/components/emails/reminder";
+// import { Resend } from "resend";
+// import InviteEmail from "@/components/emails/invite";
+// import ReminderEmail from "@/components/emails/reminder";
 
-const resend = new Resend(process.env.AUTH_RESEND_KEY);
+// const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 export async function mailInvitesAndReminders() {
   try {
@@ -32,6 +32,9 @@ export async function mailInvitesAndReminders() {
           eq(userMailing.ignore, false)
         )
       );
+
+    console.log("New Users Mailing: " + newUsersMailing);
+    console.log("Remind Users Mailing: " + remindUsersMailing);
 
     const userPosts = await db.select().from(jobPosting);
 
@@ -63,7 +66,7 @@ export async function sendInvitesAndReminders(
   email: string,
   creationDate: Date,
   userPosts: JobPosting[],
-  isInvite: boolean
+  _isInvite: boolean
 ) {
   try {
     const userPostings = userPosts.filter((post) => post.email === email);
@@ -78,35 +81,40 @@ export async function sendInvitesAndReminders(
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
-      if (isInvite) {
-        await resend.emails.send({
-          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-          to: [email],
-          subject: "Activate Your New Account",
-          react: (
-            <InviteEmail
-              email={email}
-              expiredDate={expiredDate.toDateString()}
-              postNames={topPostNames}
-              totalPosts={totalPosts}
-            />
-          ),
-        });
-      } else {
-        await resend.emails.send({
-          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-          to: [email],
-          subject: "Reminder About Your Account",
-          react: (
-            <ReminderEmail
-              email={email}
-              expiredDate={expiredDate.toDateString()}
-              postNames={topPostNames}
-              totalPosts={totalPosts}
-            />
-          ),
-        });
-      }
+      console.log("Email: " + email);
+      console.log("Total Posts: " + totalPosts);
+      console.log("topPostNames: " + topPostNames);
+      console.log("Expired Date: " + expiredDate.toDateString());
+
+      // if (isInvite) {
+      //   await resend.emails.send({
+      //     from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+      //     to: [email],
+      //     subject: "Activate Your New Account",
+      //     react: (
+      //       <InviteEmail
+      //         email={email}
+      //         expiredDate={expiredDate.toDateString()}
+      //         postNames={topPostNames}
+      //         totalPosts={totalPosts}
+      //       />
+      //     ),
+      //   });
+      // } else {
+      //   await resend.emails.send({
+      //     from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+      //     to: [email],
+      //     subject: "Reminder About Your Account",
+      //     react: (
+      //       <ReminderEmail
+      //         email={email}
+      //         expiredDate={expiredDate.toDateString()}
+      //         postNames={topPostNames}
+      //         totalPosts={totalPosts}
+      //       />
+      //     ),
+      //   });
+      // }
     }
     return;
   } catch (error) {
@@ -129,19 +137,19 @@ export async function optOutOfReminders(email: string): Promise<string> {
   }
 }
 
-export async function sendContactEmail({
-  email,
-  subject,
-  body,
-}: {
-  email: string;
-  subject: string;
-  body: string;
-}) {
-  await resend.emails.send({
-    from: email,
-    to: `Opportunities <contact@manageopportunities.ca>`,
-    subject: `Contact Us: " + ${subject}`,
-    text: body,
-  });
-}
+// export async function sendContactEmail({
+//   email,
+//   subject,
+//   body,
+// }: {
+//   email: string;
+//   subject: string;
+//   body: string;
+// }) {
+//   await resend.emails.send({
+//     from: email,
+//     to: `Opportunities <contact@manageopportunities.ca>`,
+//     subject: `Contact Us: " + ${subject}`,
+//     text: body,
+//   });
+// }
