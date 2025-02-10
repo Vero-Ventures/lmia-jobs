@@ -68,11 +68,6 @@ export async function sendInvitesAndReminders(
   try {
     const userPostings = userPosts.filter((post) => post.email === email);
 
-    console.log("User Email + Posts: " + email);
-    for (let i = 0; i < userPostings.length; i++) {
-      console.log("User Post: " + userPostings[i].title);
-    }
-
     if (userPostings.length > 0) {
       const totalPosts = userPostings.length;
 
