@@ -33,8 +33,13 @@ export async function mailInvitesAndReminders() {
         )
       );
 
-    console.log("New Users Mailing: " + newUsersMailing);
-    console.log("Remind Users Mailing: " + remindUsersMailing);
+    for (let i = 0; i < remindUsersMailing.length; i++) {
+      console.log("Remind User: " + remindUsersMailing[i].email);
+    }
+
+    for (let i = 0; i < newUsersMailing.length; i++) {
+      console.log("New User: " + newUsersMailing[i].email);
+    }
 
     const userPosts = await db.select().from(jobPosting);
 
