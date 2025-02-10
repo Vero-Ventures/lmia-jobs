@@ -96,7 +96,8 @@ export function CreatePostForm({
         return "Job posting created successfully";
       },
       error: (error) => {
-        if (error instanceof Error) return error.message;
+        if (error instanceof Error)
+          return error.message + " Post was saved to dashboard";
       },
       finally: () => setIsLoading(false),
     });
