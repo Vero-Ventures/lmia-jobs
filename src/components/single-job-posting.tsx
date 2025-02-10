@@ -47,12 +47,17 @@ export default function SingleJobPosting({
   // Takes an array of Job Board values and formats them for display.
   // Capitalizes each Job Board, adds comma's and an ending period.
   const formatJobBoards = () => {
-    let formattedBoards = "";
-    const length = jobBoards.length;
+    // Remove the "all" value from the array, then sort by alphabetical order.
+    let formattedBoards = "All, ";
+    const sortedBoards = jobBoards.filter((board) => board !== "all").sort();
+
+    // If there are any other Job Boards, iterate over them and format them for display.
+    const length = sortedBoards.length;
     if (length > 0) {
+      console.log(jobBoards);
       for (let i = 0; i < length; i++) {
         formattedBoards +=
-          jobBoards[i].charAt(0).toUpperCase() + jobBoards[i].slice(1);
+          sortedBoards[i].charAt(0).toUpperCase() + sortedBoards[i].slice(1);
 
         if (i < length - 1) {
           formattedBoards += ", ";

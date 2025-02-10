@@ -59,7 +59,7 @@ export function CreatePostForm({
       city: "",
       address: "",
       startDate: new Date(),
-      vacancies: 0,
+      vacancies: 1,
       employmentType: "Full Time",
       minWorkHours: 0,
       maxWorkHours: 0,
@@ -78,6 +78,11 @@ export function CreatePostForm({
 
   async function onSubmit(values: CreateJobPosting) {
     setIsLoading(true);
+    if (!form.formState.isValid) {
+      setIsLoading(false);
+      return;
+    }
+
     toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
       success: async (id) => {
@@ -193,7 +198,7 @@ export function CreatePostForm({
                         <Input
                           type="number"
                           min={0}
-                          placeholder="Enter a hiring date"
+                          placeholder="Enter the number of vacancies"
                           {...field}
                         />
                       </FormControl>
@@ -498,20 +503,20 @@ export function CreatePostForm({
               </div>
             </div>
 
-            <div className="!mt-8 grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-1 items-center gap-4 sm:grid-cols-2 md:mt-12">
               <FormField
                 control={form.control}
                 name="monthsToPost"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="mb:text-base">
                       Months Posted <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min={1}
-                        placeholder="Enter a minimum pay"
+                        placeholder="Enter the number of posted months"
                         {...field}
                       />
                     </FormControl>
@@ -519,7 +524,7 @@ export function CreatePostForm({
                   </FormItem>
                 )}
               />
-              <div className="mx-auto w-fit space-y-2 rounded-lg border-2 border-gray-300 p-2 px-6">
+              <div className="mx-auto mt-2 w-fit space-y-2 rounded-lg border-2 border-gray-300 p-2 px-6 md:mt-0">
                 <h2 className="text-2xl font-bold">Total Price</h2>
                 <p className="text-center text-xl font-semibold sm:text-2xl">
                   ${selectedJobBoards.length * monthsToPost * PRICE_PER_MONTH}
