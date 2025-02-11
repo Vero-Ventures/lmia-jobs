@@ -136,6 +136,7 @@ export async function sendInvitesAndReminders(
             />
           ),
         });
+        console.log("Reminder Sent");
       }
     }
     return;
