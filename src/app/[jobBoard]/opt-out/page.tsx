@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { optOutOfReminders } from "@/actions/mailer";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/page-wrappers/footer";
 
 // Takes: The user email in the params.
 export default function OptOut({
@@ -29,10 +28,9 @@ export default function OptOut({
       // Call helper function to update user mailing as opted out.
       const result = await optOutOfReminders(email);
       setOptedOut(result);
-    } catch (err) {
-      if (err instanceof Error) {
-        setOptedOut("error");
-      }
+    } catch (error) {
+      console.error("Error Opting Out Of Reminders: " + error);
+      setOptedOut("error");
     } finally {
       setIsUpdating(false);
     }
@@ -74,7 +72,6 @@ export default function OptOut({
           </Button>
         </div>
       </main>
-      <Footer title={"Manage Opportunities"} />
     </div>
   );
 }
