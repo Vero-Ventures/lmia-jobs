@@ -32,6 +32,8 @@ export async function checkInactiveUserAges() {
         await db
           .delete(jobPosting)
           .where(eq(jobPosting.email, mailingUser.email));
+      } else {
+        console.log("Not Ignored: " + mailingUser.email);
       }
     });
 
