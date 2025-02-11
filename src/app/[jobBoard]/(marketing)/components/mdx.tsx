@@ -1,4 +1,4 @@
-import Heading from "@/components/heading";
+import Heading from "@/components/ui/html/heading";
 
 export const mdxComponents = {
   h1: (props: string[]) => <Heading variant="h1" className="mb-8" {...props} />,

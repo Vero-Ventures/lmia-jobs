@@ -5,7 +5,7 @@ import { nextCookies } from "better-auth/next-js";
 import { emailOTP } from "better-auth/plugins";
 
 import { Resend } from "resend";
-import VerifyEmail from "@/components/emails/verify-email";
+
 import SignInEmail from "@/components/emails/sign-in-email";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
@@ -25,20 +25,12 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         if (type === "sign-in") {
-          // Send the OTP for sign-in
+          // Send the OTP for sign-in.
           await resend.emails.send({
             from: "Manage Opportunities <no-reply@manageopportunities.ca>",
             to: [email],
             subject: "Sign in to Manage Opportunities",
             react: <SignInEmail otp={otp} />,
-          });
-        } else if (type === "email-verification") {
-          // Send the OTP for email verification
-          await resend.emails.send({
-            from: "Manage Opportunities <no-reply@manageopportunities.ca>",
-            to: [email],
-            subject: "Verify your email address",
-            react: <VerifyEmail otp={otp} />,
           });
         }
       },

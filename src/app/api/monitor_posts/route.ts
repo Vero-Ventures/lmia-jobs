@@ -1,5 +1,7 @@
 import { runScraper } from "@/actions/scraper/run-scraper/setup";
 
+// Endpoint called by Zapier RSS monitor to trigger the scraper.
+// Takes: An "authorization" key, and the link to the new post.
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -25,7 +27,6 @@ export async function POST(request: Request) {
         const postId = body.postLink.split("jobposting/")[1];
         await runScraper(postId);
 
-        // Return success if process completes.
         return new Response("Success.", { status: 200 });
       } catch (error) {
         return new Response("Failed to run scraper on RSS feed: " + error, {

@@ -1,10 +1,13 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -13,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,8 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import FormSubmitButton from "@/components/inputs/form-submit-button";
+import MoneyInput from "@/components/inputs/money-input";
+import { createJobPostingSchema } from "@/app/lib/job-postings/schema";
+import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
+import { createCheckoutSession } from "@/actions/stripe/create-checkout";
+import { createJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
+import { formatDate } from "@/lib/utils";
 import type { JobBoard } from "@/app/lib/constants";
 import {
   EMPLOYMENT_TYPES,
@@ -31,24 +41,19 @@ import {
   PRICE_PER_MONTH,
   PROVINCES,
 } from "@/app/lib/constants";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { createJobPost } from "./actions";
-import FormSubmitButton from "@/components/form-submit-button";
-import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
-import { createJobPostingSchema } from "@/app/lib/job-postings/schema";
-import { formatDate } from "@/lib/utils";
-import { useState } from "react";
-import MoneyInput from "@/components/money-input";
-import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 
+// Takes: An array of the inital job boards.
 export function CreatePostForm({
   initialJobBoards,
 }: {
   initialJobBoards: JobBoard[];
 }) {
+  // Track if the form is loading and which job boards are selected.
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedJobBoards, setSelectedJobBoards] =
+    useState<JobBoard[]>(initialJobBoards);
+
+  // Define the Zod schema for the form and set the default values.
   const form = useForm<CreateJobPosting>({
     resolver: zodResolver(createJobPostingSchema),
     defaultValues: {
@@ -59,7 +64,7 @@ export function CreatePostForm({
       city: "",
       address: "",
       startDate: new Date(),
-      vacancies: 0,
+      vacancies: 1,
       employmentType: "Full Time",
       minWorkHours: 0,
       maxWorkHours: 0,
@@ -71,13 +76,19 @@ export function CreatePostForm({
       monthsToPost: 1,
     },
   });
-  const [selectedJobBoards, setSelectedJobBoards] =
-    useState<JobBoard[]>(initialJobBoards);
 
+  // Track the number of months to post from the form.
   const monthsToPost = form.watch("monthsToPost");
 
   async function onSubmit(values: CreateJobPosting) {
+    // Set the form to loading and check if the form is valid.
     setIsLoading(true);
+    if (!form.formState.isValid) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Create the job posting and on success create a checkout session.
     toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
       success: async (id) => {
@@ -91,8 +102,11 @@ export function CreatePostForm({
         return "Job posting created successfully";
       },
       error: (error) => {
-        if (error instanceof Error) return error.message;
+        // Define error message displayed in the toast notification.
+        if (error instanceof Error)
+          return error.message + " Post was saved to dashboard";
       },
+      // Set the loading state to false when the promise is resolved.
       finally: () => setIsLoading(false),
     });
   }
@@ -186,61 +200,80 @@ export function CreatePostForm({
                 <FormField
                   control={form.control}
                   name="vacancies"
-                  render={({ field }) => (
-                    <FormItem className="mt-2">
-                      <FormLabel className="mb:text-base">Vacancies</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter a hiring date"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    if (field.value && field.value < 0) {
+                      field.value = 0;
+                    }
+
+                    return (
+                      <FormItem className="mt-2">
+                        <FormLabel className="mb:text-base">
+                          Vacancies
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter the number of vacancies"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
                   name="minWorkHours"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="mb:text-base">
-                        Minimum Work Hours{" "}
-                        <span className="text-destructive">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter weekly hours"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    if (field.value && field.value < 0) {
+                      field.value = 0;
+                    }
+
+                    return (
+                      <FormItem>
+                        <FormLabel className="mb:text-base">
+                          Minimum Work Hours{" "}
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder="Enter weekly hours"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
                   name="maxWorkHours"
-                  render={({ field }) => (
-                    <FormItem className="mt-2">
-                      <FormLabel className="mb:text-base">
-                        Max Work Hours
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={0}
-                          placeholder="Enter weekly hours"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    if (field.value && field.value < 0) {
+                      field.value = 0;
+                    }
+
+                    return (
+                      <FormItem className="mt-2">
+                        <FormLabel className="mb:text-base">
+                          Max Work Hours
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder="Enter weekly hours"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
                 <FormField
                   control={form.control}
@@ -270,17 +303,18 @@ export function CreatePostForm({
                     </FormItem>
                   )}
                 />
+
+                <h2 className="mt-6 text-xl font-semibold">
+                  Description <span className="text-destructive">*</span>
+                </h2>
                 <FormField
                   control={form.control}
                   name="description"
                   render={({ field }) => (
-                    <FormItem className="mt-2 md:col-span-2">
-                      <FormLabel className="mb:text-base">
-                        Description <span className="text-destructive">*</span>
-                      </FormLabel>
+                    <FormItem className="md:col-span-2">
                       <FormControl>
                         <Textarea
-                          rows={5}
+                          rows={8}
                           className="max-h-80"
                           placeholder="Enter a job description"
                           {...field}
@@ -498,20 +532,20 @@ export function CreatePostForm({
               </div>
             </div>
 
-            <div className="!mt-8 grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-1 items-center gap-4 sm:grid-cols-2 md:mt-12">
               <FormField
                 control={form.control}
                 name="monthsToPost"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="mb:text-base">
                       Months Posted <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min={1}
-                        placeholder="Enter a minimum pay"
+                        placeholder="Enter the number of posted months"
                         {...field}
                       />
                     </FormControl>
@@ -519,7 +553,7 @@ export function CreatePostForm({
                   </FormItem>
                 )}
               />
-              <div className="mx-auto w-fit space-y-2 rounded-lg border-2 border-gray-300 p-2 px-6">
+              <div className="mx-auto mt-2 w-fit space-y-2 rounded-lg border-2 border-gray-300 p-2 px-6 md:mt-0">
                 <h2 className="text-2xl font-bold">Total Price</h2>
                 <p className="text-center text-xl font-semibold sm:text-2xl">
                   ${selectedJobBoards.length * monthsToPost * PRICE_PER_MONTH}

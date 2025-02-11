@@ -1,6 +1,7 @@
 import { CONFIG } from "@/actions/scraper/helpers/config";
 import { db } from "@/db/index";
-import { user } from "@/db/schema";
+import { user, userMailing } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import {
   getEmail,
   getJobDetails,
@@ -47,11 +48,22 @@ async function getPageEmail(browserHandler: BrowserHandler): Promise<string> {
     // Get all user emails in the database belonging to real accounts.
     const userEmails = await db.select({ email: user.email }).from(user);
 
-    const emailArray: string[] = userEmails.map((row) => row.email);
+    const userEmailArray: string[] = userEmails.map((row) => row.email);
+
+    // Get all mailing user emails from ignored users.
+    const ignoredEmails = await db
+      .select({ email: user.email })
+      .from(userMailing)
+      .where(eq(userMailing.ignore, true));
+
+    const ignoredEmailArray: string[] = ignoredEmails.map((row) => row.email);
 
     // If the email belongs to a real user, throw an error.
-    if (emailArray.includes(email)) {
+    if (userEmailArray.includes(email)) {
       throw "Posting Email Belongs To Existing User";
+    } else if (ignoredEmailArray.includes(email)) {
+      // If the email belongs to an ignored user, throw an error.
+      throw "Posting Email Belongs To Ignored User";
     } else {
       // Otherwise return the Post email.
       return email;

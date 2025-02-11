@@ -1,6 +1,6 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({

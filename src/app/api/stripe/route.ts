@@ -1,13 +1,15 @@
-import { stripe } from "@/lib/stripe";
 import { tryCatch } from "@/lib/utils";
-import { headers } from "next/headers";
-import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
+import { NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { stripe } from "@/lib/stripe";
 import type Stripe from "stripe";
 import { syncStripeDataToDatabase } from "@/actions/stripe/update-job-board-posting";
 
 export async function POST(req: Request) {
   const body = await req.text();
+
+  // Get Stripe signature and return 400 if it doesn't exist.
   const signature = (await headers()).get("Stripe-Signature");
 
   if (!signature) return NextResponse.json({}, { status: 400 });

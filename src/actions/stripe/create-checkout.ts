@@ -9,15 +9,17 @@ import { getUrl, stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+// Takes: The number of job boards posted to and the number of months posted.
+//        The return URL is optional and defaults to the dashboard.
 export async function createCheckoutSession({
-  jobPostingId,
-  numMonths,
   numJobBoards,
+  numMonths,
+  jobPostingId,
   return_url = "/dashboard",
 }: {
-  jobPostingId: number;
   numJobBoards: number;
   numMonths: number;
+  jobPostingId: number;
   return_url?: string;
 }) {
   const data = await auth.api.getSession({
@@ -30,10 +32,10 @@ export async function createCheckoutSession({
 
   const user = data.user;
 
-  // Get the stripeCustomerId from your database
+  // Get the Stripe Customer Id from the database
   let stripeCustomerId = await getStripeCustomerId(user.id);
 
-  // Create a new Stripe customer if this user doesn't have one
+  // Create a new Stripe customer if the user does not have one
   if (!stripeCustomerId) {
     const newCustomer = await stripe.customers.create({
       email: user.email,
@@ -42,13 +44,16 @@ export async function createCheckoutSession({
       },
     });
 
-    // Store the relation between userId and stripeCustomerId in your KV
+    // Store the relation between user and Stripe Id in the database.
     await storeStripeCustomerId(newCustomer.id, user.id);
     stripeCustomerId = newCustomer.id;
   }
+
+  // Define variable to store the session with the url to redirect to for checkout.
   let session;
   try {
-    // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
+    // ALWAYS create a checkout with a Stripe Customer Id. They should enforce this.
+    // Pricing is set in cents so 500 = $5.00.
     session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       success_url: getUrl(
@@ -69,8 +74,8 @@ export async function createCheckoutSession({
           price_data: {
             currency: "cad",
             product_data: {
-              name: `Post on up to ${numJobBoards} job boards for ${numMonths} months.`,
-              description: `Create a job board posting to appear on up to ${numJobBoards} Opportunities job boards for the next
+              name: `Job post across ${numJobBoards} job boards for the next ${numMonths} months.`,
+              description: `Pay for the job posting to appear on the selected Opportunities job boards for the next
             ${numMonths} months.`,
             },
             unit_amount: numJobBoards * numMonths * 500,
@@ -86,5 +91,6 @@ export async function createCheckoutSession({
     );
   }
 
+  // Redirect to the checkout page or the return URL if it cannot be found.
   return redirect(session.url ?? return_url);
 }

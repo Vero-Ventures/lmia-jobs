@@ -1,7 +1,5 @@
-import { DeletePost } from "@/app/[jobBoard]/dashboard/posts/[id]/components/delete-post";
-import HidePost from "@/app/[jobBoard]/dashboard/posts/[id]/components/hide-post";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+"use client";
+
 import type { JobPosting } from "@/db/schema";
 import {
   BriefcaseIcon,
@@ -14,12 +12,17 @@ import {
   User2Icon,
 } from "lucide-react";
 import Link from "next/link";
-import P from "./paragraph";
-import Heading from "./heading";
+import Heading from "@/components/ui/html/heading";
+import Paragraph from "@/components/ui/html/paragraph";
+import PayButton from "@/components/pay-dialogue";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatDate, formatMoney, formatTime } from "@/lib/utils";
-import PayButton from "./pay-button";
 import type { JobBoard } from "@/app/lib/constants";
+import { DeletePost } from "@/app/[jobBoard]/dashboard/posts/[id]/components/delete-post";
+import HidePost from "@/app/[jobBoard]/dashboard/posts/[id]/components/hide-post";
 
+// Takes: A Job Posting Enum value, an array of Job Board values, and two boolean values.
 export default function SingleJobPosting({
   jobPosting,
   jobBoards = [],
@@ -33,6 +36,7 @@ export default function SingleJobPosting({
 }) {
   const currentDate = new Date();
 
+  // Takes a database date and converts it to format: Abbr. Month Day, Year
   const formatDisplayDate = () => {
     const databaseDate = new Date(jobPosting.startDate);
     databaseDate.setDate(databaseDate.getDate() + 1);
@@ -40,13 +44,20 @@ export default function SingleJobPosting({
     return localDate[1] + " " + localDate[2] + ", " + localDate[3];
   };
 
+  // Takes an array of Job Board values and formats them for display.
+  // Capitalizes each job board, adds comma's and an ending period.
   const formatJobBoards = () => {
-    let formattedBoards = "";
-    const length = jobBoards.length;
+    // Remove the "all" value from the array, then sort by alphabetical order.
+    let formattedBoards = "All, ";
+    const sortedBoards = jobBoards.filter((board) => board !== "all").sort();
+
+    // If there are any other job boards, iterate over them and format them for display.
+    const length = sortedBoards.length;
     if (length > 0) {
+      console.log(jobBoards);
       for (let i = 0; i < length; i++) {
         formattedBoards +=
-          jobBoards[i].charAt(0).toUpperCase() + jobBoards[i].slice(1);
+          sortedBoards[i].charAt(0).toUpperCase() + sortedBoards[i].slice(1);
 
         if (i < length - 1) {
           formattedBoards += ", ";
@@ -59,9 +70,9 @@ export default function SingleJobPosting({
   };
 
   return (
-    <div className="mx-6 my-12 w-fit max-w-4xl space-y-8 justify-self-center rounded-lg border-2 border-gray-300 p-6">
+    <div className="mx-auto my-12 w-11/12 max-w-4xl space-y-8 justify-self-center rounded-lg border-2 border-gray-300 p-4 md:w-fit md:p-6">
       {isOwner && isAdmin && (
-        <div className="mx-auto flex justify-evenly">
+        <div className="mx-auto grid grid-cols-2 grid-rows-2 justify-evenly gap-4 mb:flex mb:gap-0">
           {!jobPosting.paymentConfirmed && <PayButton id={jobPosting.id} />}
           <Button className="min-w-24" asChild>
             <Link href={`/dashboard/posts/${jobPosting.id}/edit`}>
@@ -78,13 +89,13 @@ export default function SingleJobPosting({
           {jobPosting.title}
         </Heading>
 
-        <P className="text-gray-600">
+        <Paragraph className="text-gray-600">
           Posted on{" "}
           {formatDate(jobPosting.createdAt, {
             dateStyle: "medium",
           })}{" "}
           by {jobPosting.orgName}
-        </P>
+        </Paragraph>
         {isAdmin && (
           <div className="flex gap-2">
             {jobPosting.paymentConfirmed ? (
@@ -185,14 +196,14 @@ export default function SingleJobPosting({
               <Heading variant="h3" className="text-primary">
                 Languages
               </Heading>
-              <P>{jobPosting.language}</P>
+              <Paragraph>{jobPosting.language}</Paragraph>
             </div>
           )}
           <div className="space-y-2">
             <Heading variant="h3" className="">
               Job Description
             </Heading>
-            <P
+            <Paragraph
               className="w-fit rounded-lg border-2 border-gray-300 p-4 text-primary"
               dangerouslySetInnerHTML={{
                 __html: jobPosting.description.replace(/\n/g, "<br />"),
@@ -202,11 +213,11 @@ export default function SingleJobPosting({
         </div>
         <div>
           <div className="flex flex-col gap-2">
-            <div className="flex flex-col mb:flex-row">
+            <div className="flex w-fit flex-col sm:flex-row">
               <div className="flex">
                 <MailIcon className="mr-2 mt-0.5" />
                 <h5
-                  className={`mr-4 mt-0.5 text-base font-bold dark:text-white`}>
+                  className={`mr-4 mt-0.5 w-[120px] text-base font-bold dark:text-white`}>
                   Apply by email
                 </h5>
               </div>
@@ -219,10 +230,11 @@ export default function SingleJobPosting({
               </div>
             </div>
           </div>
-
+          <hr className="mt-4" />
           {isAdmin && jobBoards.length > 0 && (
-            <div className="mt-2 flex gap-2">
-              Posted To Boards: {formatJobBoards()}
+            <div className="mt-2 flex gap-2 text-center">
+              Posted To Boards:{" "}
+              <span className="font-semibold">{formatJobBoards()}</span>
             </div>
           )}
         </div>

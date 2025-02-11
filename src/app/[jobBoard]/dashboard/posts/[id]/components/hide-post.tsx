@@ -1,10 +1,11 @@
 "use client";
 
-import { editPostVisibility } from "@/actions/handle-job-posts";
-import { Button } from "@/components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { editPostVisibility } from "@/actions/handle-job-posts";
 
+// Takes: The post Id and the current hidden state of the post.
 export default function HidePost({
   id,
   hidden,
@@ -12,7 +13,7 @@ export default function HidePost({
   id: number;
   hidden: boolean;
 }) {
-  return hidden ? (
+  return (
     <Button
       className="min-w-24"
       onClick={async () => {
@@ -24,23 +25,17 @@ export default function HidePost({
           error: "Unable to change post visibility",
         });
       }}>
-      <Eye />
-      <span>Show</span>
-    </Button>
-  ) : (
-    <Button
-      className="min-w-24"
-      onClick={async () => {
-        toast.promise(editPostVisibility(id, true), {
-          loading: "Loading...",
-          success: () => {
-            return "Your post is hidden";
-          },
-          error: "Unable to change post visibility",
-        });
-      }}>
-      <EyeOff />
-      <span>Hide</span>
+      {hidden ? (
+        <div className="flex flex-row items-center gap-2">
+          <Eye />
+          <span>Show</span>
+        </div>
+      ) : (
+        <div className="flex flex-row items-center gap-2">
+          <EyeOff />
+          <span>Hide</span>
+        </div>
+      )}
     </Button>
   );
 }

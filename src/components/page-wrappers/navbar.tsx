@@ -2,8 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { Button } from "./ui/button";
-import { SignOut } from "./sign-out";
+import { Button } from "@/components/ui/button";
+import { SignOut } from "@/components/inputs/sign-out";
 
 let links = [
   { text: "Job Board", url: "/" },
@@ -16,6 +16,7 @@ export default async function Navbar({ title }: { title: string }) {
     headers: await headers(),
   });
 
+  // Defines the session and non-session nav-bar links.
   if (data) {
     links = [
       { text: "Job Board", url: "/" },

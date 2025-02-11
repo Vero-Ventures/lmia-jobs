@@ -24,14 +24,19 @@ export default function FilterSelect({
 
   const paramString = filterType;
 
+  // Use paramater value to set filter as employment type or province.
+  // A seperate filter select component is used for each filter type.
   const selections =
     filterType === "employmentType" ? EMPLOYMENT_TYPES : PROVINCES;
 
+  // When user selects a filter:
   const createQueryString = useCallback(
     (name: string, value: string) => {
+      // Update the URL params with the selected filter.
       const params = new URLSearchParams(searchParams.toString());
       params.set(name, value);
 
+      // Return the updated URL params in a string for redirection.
       return params.toString();
     },
     [searchParams]

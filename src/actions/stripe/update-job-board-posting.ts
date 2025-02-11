@@ -17,13 +17,20 @@ export async function triggerStripeSyncForUser() {
 
   const user = data.user;
 
-  // Get the stripeCustomerId from your database
+  // Get the Stripe Customer Id from the database.
   const stripeCustomerId = await getStripeCustomerId(user.id);
-  if (!stripeCustomerId) return;
-  return await syncStripeDataToDatabase(stripeCustomerId);
+
+  // If the Stripe customer ID exists, sync the data.
+  if (stripeCustomerId) {
+    return await syncStripeDataToDatabase(stripeCustomerId);
+  } else {
+    return;
+  }
 }
 
+// Takes: The Stripe customer ID to sync data for.
 export async function syncStripeDataToDatabase(customerId: string) {
+  // Get the users Stripe purchases.
   const purchases = await stripe.charges.list({
     customer: customerId,
   });
@@ -34,11 +41,13 @@ export async function syncStripeDataToDatabase(customerId: string) {
 
   const purchase = purchases.data[0];
 
+  // Use the Stripe Id to get the job posting Id from the purchase metadata
   const paymentIntent = await stripe.paymentIntents.retrieve(
     purchase.payment_intent as string
   );
   const jobPostingId = paymentIntent.metadata.jobPostingId;
 
+  // Update the job posting in the database with payment confirmation as true.
   await db
     .update(jobPosting)
     .set({ paymentConfirmed: true })

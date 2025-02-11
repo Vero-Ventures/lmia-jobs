@@ -43,8 +43,8 @@ export const EMPLOYMENT_TYPES = [
   },
 ] as const;
 
-export const employmentTypeLabels = ["Full Time", "Part Time"] as const;
-export type EmploymentType = (typeof employmentTypeLabels)[number];
+export const employmentTypes = ["Full Time", "Part Time"] as const;
+export type EmploymentType = (typeof employmentTypes)[number];
 
 export const PROVINCES = [
   {

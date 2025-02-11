@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth-client";
 
 export function SignOut() {
@@ -12,6 +12,8 @@ export function SignOut() {
       onClick={async () =>
         await signOut({
           fetchOptions: {
+            // Timeout function ensures refresh happens after session checks update to new state.
+            // Needed to properly update nav-bar state.
             onSuccess: () => {
               router.push("/");
               setTimeout(() => {

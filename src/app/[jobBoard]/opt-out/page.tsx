@@ -3,22 +3,30 @@
 import { useState } from "react";
 import { optOutOfReminders } from "@/actions/mailer";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/footer";
+import Footer from "@/components/page-wrappers/footer";
 
-export default function OptOut() {
+// Takes: The user email in the params.
+export default function OptOut({
+  params,
+}: {
+  params: Promise<{ email: string }>;
+}) {
+  // Track if opt-out status is being updated and if the user has opted out.
   const [isUpdating, setIsUpdating] = useState(false);
   const [optedOut, setOptedOut] = useState("false");
 
   const handleOptOut = async () => {
+    // Set updating staus as true, and unset in finally block.
     setIsUpdating(true);
     try {
-      const params = new URLSearchParams(window.location.search);
-      const email = params.get("account");
+      // Get user email from URL query params. Throw an error if no email is found.
+      const { email } = await params;
 
       if (!email) {
         throw new Error("No email address found.");
       }
 
+      // Call helper function to update user mailing as opted out.
       const result = await optOutOfReminders(email);
       setOptedOut(result);
     } catch (err) {
