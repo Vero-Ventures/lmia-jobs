@@ -1,5 +1,5 @@
 import { type JobBoard } from "@/app/lib/constants";
-import { CreatePostForm } from "./create-post-form";
+import { CreatePostForm } from "@/app/[jobBoard]/dashboard/posts/create/create-post-form";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";

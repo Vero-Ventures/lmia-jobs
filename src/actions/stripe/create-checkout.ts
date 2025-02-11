@@ -52,7 +52,7 @@ export async function createCheckoutSession({
   // Define variable to store the session with the url to redirect to for checkout.
   let session;
   try {
-    // ALWAYS create a checkout with a stripeCustomerId. They should enforce this.
+    // ALWAYS create a checkout with a Stripe Customer Id. They should enforce this.
     // Pricing is set in cents so 500 = $5.00.
     session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,

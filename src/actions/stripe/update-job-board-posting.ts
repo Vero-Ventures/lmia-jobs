@@ -17,7 +17,7 @@ export async function triggerStripeSyncForUser() {
 
   const user = data.user;
 
-  // Get the stripeCustomerId from the database.
+  // Get the Stripe Customer Id from the database.
   const stripeCustomerId = await getStripeCustomerId(user.id);
 
   // If the Stripe customer ID exists, sync the data.
@@ -41,7 +41,7 @@ export async function syncStripeDataToDatabase(customerId: string) {
 
   const purchase = purchases.data[0];
 
-  // Use the stripe Id to get the job posting Id from the purchase metadata
+  // Use the Stripe Id to get the job posting Id from the purchase metadata
   const paymentIntent = await stripe.paymentIntents.retrieve(
     purchase.payment_intent as string
   );

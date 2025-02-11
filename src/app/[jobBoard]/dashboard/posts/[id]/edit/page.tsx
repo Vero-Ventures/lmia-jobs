@@ -2,7 +2,7 @@ import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { EditPostForm } from "./edit-post-form";
+import { EditPostForm } from "@/app/[jobBoard]/dashboard/posts/[id]/edit/edit-post-form";
 
 interface PageProps {
   params: Promise<{ id: number }>;

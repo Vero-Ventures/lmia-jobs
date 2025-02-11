@@ -1,5 +1,5 @@
 import Heading from "@/components/ui/html/heading";
-import PricingInputs from "./pricing-inputs";
+import PricingInputs from "@/app/[jobBoard]/(marketing)/pricing/pricing-inputs";
 import P from "@/components/ui/html/paragraph";
 
 interface PageProps {

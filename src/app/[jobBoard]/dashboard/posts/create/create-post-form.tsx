@@ -34,7 +34,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { createJobPost } from "./actions";
+import { createJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
 import FormSubmitButton from "@/components/inputs/form-submit-button";
 import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
 import { createJobPostingSchema } from "@/app/lib/job-postings/schema";

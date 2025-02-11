@@ -1,9 +1,9 @@
 import { selectAllJobPostings } from "@/db/queries/jobPostings";
 import Form from "next/form";
-import FilterSelect from "./components/filter-select";
+import FilterSelect from "@/app/[jobBoard]/components/filter-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { JobListCard } from "./components/job-list-card";
+import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
 import Link from "next/link";
 import type { EmploymentType, JobBoard, Province } from "@/app/lib/constants";
 import P from "@/components/ui/html/paragraph";

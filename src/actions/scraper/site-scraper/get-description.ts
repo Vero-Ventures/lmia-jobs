@@ -1,6 +1,6 @@
 import type { BrowserHandler } from "@/actions/scraper/helpers/browser-handler";
 import { CONFIG } from "@/actions/scraper/helpers/config";
-import { createFormattedDescription } from "./create-description";
+import { createFormattedDescription } from "@/actions/scraper/site-scraper/create-description";
 
 // Runs the get Description helper functions.
 // Takes: The Chromium Browser Handler.

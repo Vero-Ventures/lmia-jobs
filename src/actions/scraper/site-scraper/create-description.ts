@@ -6,7 +6,7 @@ import type {
   TasksAndSupervision,
   SkillsAndAttributes,
   AdditionalInfo,
-} from "./get-description";
+} from "@/actions/scraper/site-scraper/get-description";
 
 // Takes the various description values and creates a formatted string.
 // Takes: The formatted objects for the description values.
