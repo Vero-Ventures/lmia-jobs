@@ -45,13 +45,13 @@ export default function SingleJobPosting({
   };
 
   // Takes an array of Job Board values and formats them for display.
-  // Capitalizes each Job Board, adds comma's and an ending period.
+  // Capitalizes each job board, adds comma's and an ending period.
   const formatJobBoards = () => {
     // Remove the "all" value from the array, then sort by alphabetical order.
     let formattedBoards = "All, ";
     const sortedBoards = jobBoards.filter((board) => board !== "all").sort();
 
-    // If there are any other Job Boards, iterate over them and format them for display.
+    // If there are any other job boards, iterate over them and format them for display.
     const length = sortedBoards.length;
     if (length > 0) {
       console.log(jobBoards);

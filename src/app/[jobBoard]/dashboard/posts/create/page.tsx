@@ -4,11 +4,14 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+// Takes: The current job board inside the params.
 export default async function CreatePostPage({
   params,
 }: {
   params: Promise<{ jobBoard: JobBoard }>;
 }) {
+  // Get the current job board from the URL.
+  // Used in the form to set the initial job board.
   const { jobBoard } = await params;
 
   const data = await auth.api.getSession({

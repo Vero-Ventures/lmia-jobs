@@ -2,9 +2,9 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { jobBoardPosting, jobPosting } from "@/db/schema";
-import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import type {
   CreateJobPosting,
@@ -12,21 +12,27 @@ import type {
 } from "@/app/lib/job-postings/schema";
 import type { JobBoard } from "@/app/lib/constants";
 
+// Takes: The Create Job Posting form data, and an array of selected job boards.
+// Returns:
 export async function createJobPost(
   formData: CreateJobPosting,
   selectedJobBoards: JobBoard[]
-) {
+): Promise<number | null> {
   try {
+    // Redirect if no sesion is found.
     const session = await auth.api.getSession({
       headers: await headers(),
     });
     if (!session) return redirect("/sign-in");
 
+    // Get months to post from the form data and set an expiryDate.
+    // Expires in 12 months or the number of months to post, whichever is greater.
     const { monthsToPost, ...rest } = formData;
 
     const expiryDate = new Date();
     expiryDate.setMonth(new Date().getMonth() + Math.max(12, monthsToPost));
 
+    // Format the form data, and add the missing database fields.
     const postData = {
       ...rest,
       userId: session.user.id,
@@ -42,6 +48,8 @@ export async function createJobPost(
       hidden: false,
     };
 
+    // Insert the job posting into the database and return the result.
+    // Gets the Id and use it to create the related job board postings.
     const { id: jobPostingId } = await db
       .insert(jobPosting)
       .values(postData)
@@ -52,7 +60,8 @@ export async function createJobPost(
 
     return jobPostingId;
   } catch (error) {
-    console.error(error);
+    console.error("Error creating post: " + error);
+    return null;
   }
 }
 

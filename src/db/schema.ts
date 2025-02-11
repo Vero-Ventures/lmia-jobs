@@ -136,3 +136,5 @@ export const userMailing = pgTable("user_mailing", {
 });
 
 export type JobPosting = typeof jobPosting.$inferSelect;
+
+export type JobBoardPosting = typeof jobBoardPosting.$inferSelect;

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
 import P from "@/components/ui/html/paragraph";
 
+// Tales: The search params containing an option title and post Id in the params.
 export default async function Page({
   searchParams,
 }: {
@@ -25,6 +26,7 @@ export default async function Page({
     redirect("/sign-in");
   }
 
+  // Check for a title paramater to use in getting the user's job postings.
   const { title } = await searchParams;
 
   const jobPostings = await selectUserJobPostings({

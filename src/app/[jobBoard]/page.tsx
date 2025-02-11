@@ -1,13 +1,14 @@
-import { selectAllJobPostings } from "@/db/queries/jobPostings";
 import Form from "next/form";
-import FilterSelect from "@/app/[jobBoard]/components/filter-select";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Paragraph from "@/components/ui/html/paragraph";
+import FilterSelect from "@/app/[jobBoard]/components/filter-select";
 import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
-import Link from "next/link";
+import { selectAllJobPostings } from "@/db/queries/jobPostings";
 import type { EmploymentType, JobBoard, Province } from "@/app/lib/constants";
-import P from "@/components/ui/html/paragraph";
 
+// Takes: Job Board in params, Optional title, province, and employmentType in searchParams.
 export default async function Page({
   params,
   searchParams,
@@ -19,12 +20,14 @@ export default async function Page({
     province?: Province | "All";
   }>;
 }) {
+  // Extract the jobBoard and search parameters from the URL.
   const { jobBoard } = await params;
   const search = await searchParams;
   const title = search.title ?? "";
   const province = search.province;
   const employmentType = search.employmentType;
 
+  // Get all job postings for the job board that match the search parameters.
   const result = await selectAllJobPostings({
     jobBoard,
     title,
@@ -81,7 +84,9 @@ export default async function Page({
             })}
           </div>
         ) : (
-          <P className="text-center">No jobs matched the filter.</P>
+          <Paragraph className="text-center">
+            No jobs matched the filter.
+          </Paragraph>
         )}
       </section>
     </div>

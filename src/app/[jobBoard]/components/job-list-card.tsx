@@ -1,3 +1,5 @@
+"use client";
+
 import { cn, formatMoney } from "@/lib/utils";
 import {
   Card,

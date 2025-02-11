@@ -2,6 +2,7 @@ import type { EmploymentType, JobBoard, Province } from "@/app/lib/constants";
 import { db } from "@/db";
 import { jobBoardPosting, jobPosting } from "@/db/schema";
 import { eq, and, gt, type SQL, ilike, desc } from "drizzle-orm";
+import type { JobPosting, JobBoardPosting } from "@/db/schema";
 
 // Gets all job postings from the database.
 // Takes: A JobBoard Enum value, the title of the job posting,
@@ -17,7 +18,7 @@ export async function selectAllJobPostings({
   title: string;
   province: Province | "All";
   employmentType: EmploymentType | "All";
-}) {
+}): Promise<{ job_posting: JobPosting; job_board_posting: JobBoardPosting }[]> {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
 
@@ -43,12 +44,14 @@ export async function selectAllJobPostings({
     filters.push(ilike(jobPosting.title, "%" + title));
   }
 
-  return await db
+  const result = await db
     .select()
     .from(jobBoardPosting)
     .innerJoin(jobPosting, eq(jobBoardPosting.jobPostingId, jobPosting.id))
     .where(and(...filters))
     .orderBy(desc(jobBoardPosting.createdAt));
+
+  return result;
 }
 
 // Takes: A user Id as a string and a nullable string for the title of the job posting.
@@ -59,7 +62,7 @@ export async function selectUserJobPostings({
 }: {
   userId: string;
   title?: string;
-}) {
+}): Promise<JobPosting[]> {
   const filters: SQL[] = [eq(jobPosting.userId, userId)];
 
   if (title) {
@@ -80,7 +83,7 @@ export async function selectUserSingleJobPosting({
 }: {
   userId: string;
   id: number;
-}) {
+}): Promise<JobPosting> {
   return await db
     .select()
     .from(jobPosting)
@@ -90,7 +93,11 @@ export async function selectUserSingleJobPosting({
 
 // Takes: The Id of the job posting as a number.
 // Returns: An array of job boards that the job posting is posted on.
-export async function selectUserSingleJobPostingBoards({ id }: { id: number }) {
+export async function selectUserSingleJobPostingBoards({
+  id,
+}: {
+  id: number;
+}): Promise<JobBoard[]> {
   const jobPostingBoards = await db
     .select()
     .from(jobBoardPosting)
@@ -107,7 +114,7 @@ export async function selectUserSingleJobPostingBoards({ id }: { id: number }) {
 
 // Takes: The Id of the job posting as a number.
 // Returns: The specified job posting if it exists.
-export async function selectSingleJobPosting(id: number) {
+export async function selectSingleJobPosting(id: number): Promise<JobPosting> {
   return await db
     .select()
     .from(jobPosting)

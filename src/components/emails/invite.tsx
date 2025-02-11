@@ -82,7 +82,7 @@ export default function InviteEmail({
                 Opt Out From Further Messages:{" "}
                 <span style={linkText}>
                   <a
-                    href={`https://lmia-jobs.vercel.app/opt-out?account=${email}`}>
+                    href={`https://lmia-jobs.vercel.app/opt-out?email=${email}`}>
                     Opt Out
                   </a>
                 </span>

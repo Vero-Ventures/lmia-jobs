@@ -4,7 +4,9 @@ import { stripeCustomer } from "@/db/schema";
 
 // Takes: User Id as a string.
 // Returns: Stripe Customer Id as a string or null.
-export async function getStripeCustomerId(userId: string) {
+export async function getStripeCustomerId(
+  userId: string
+): Promise<string | null> {
   const result = await db
     .select()
     .from(stripeCustomer)
