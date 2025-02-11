@@ -108,7 +108,7 @@ export async function sendInvitesAndReminders(
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
         console.log("Sending Invite Email");
-        await resend.emails.send({
+        return await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Activate Your New Account",
@@ -123,7 +123,7 @@ export async function sendInvitesAndReminders(
         });
       } else {
         console.log("Sending Reminder Email");
-        await resend.emails.send({
+        return await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
           subject: "Reminder About Your Account",
@@ -136,7 +136,6 @@ export async function sendInvitesAndReminders(
             />
           ),
         });
-        console.log("Reminder Sent");
       }
     }
     return;
