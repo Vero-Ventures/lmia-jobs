@@ -58,14 +58,14 @@ export async function mailInvitesAndReminders() {
 
       // Send out an invite with the users top posts and expiry date.
       newUsersMailing.forEach(async (user) => {
-        sendInvitesAndReminders(user.email, user.createdAt, userPosts, true);
+        await sendInvitesAndReminders(user.email, user.createdAt, userPosts, true);
       });
     }
 
     // Send out reminders to users who have not opted out or been ignored.
     if (remindUsersMailing.length > 0) {
       remindUsersMailing.forEach(async (user) => {
-        sendInvitesAndReminders(user.email, user.createdAt, userPosts, false);
+        await sendInvitesAndReminders(user.email, user.createdAt, userPosts, false);
       });
     }
 
