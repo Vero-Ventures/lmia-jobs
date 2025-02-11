@@ -91,6 +91,8 @@ export async function sendInvitesAndReminders(
     // Filter to the posts of the current user.
     const userPostings = userPosts.filter((post) => post.email === email);
 
+    console.log("User Posts: " + userPostings.length);
+
     if (userPostings.length > 0) {
       // Get the users total number of posts and the first 3 post names (or less).
       const totalPosts = userPostings.length;
@@ -105,6 +107,7 @@ export async function sendInvitesAndReminders(
 
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
+        console.log("Sending Invite Email");
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
@@ -119,6 +122,7 @@ export async function sendInvitesAndReminders(
           ),
         });
       } else {
+        console.log("Sending Reminder Email");
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
