@@ -65,6 +65,7 @@ export async function createJobPost(
   }
 }
 
+// Takes: The Id of the job posting and an array of selected job boards.
 export async function createJobBoardPostings({
   id,
   selectedJobBoards,
@@ -72,7 +73,9 @@ export async function createJobBoardPostings({
   id: number;
   selectedJobBoards: JobBoard[];
 }) {
+  // Add the all board as a part of all job postings.
   selectedJobBoards.push("all");
+  // For each selected job board, insert a new job board posting.
   await Promise.all(
     selectedJobBoards.map(async (jobBoard) => {
       return await db.insert(jobBoardPosting).values({
@@ -83,10 +86,12 @@ export async function createJobBoardPostings({
   );
 }
 
+// Takes: The Id of the job posting.
 export async function removeJobBoardPostings(id: number) {
   await db.delete(jobBoardPosting).where(eq(jobBoardPosting.jobPostingId, id));
 }
 
+// Takes: The Id of the job posting, an array of job boards, and the number of months to post.
 export async function updateJobBoardPostings({
   id,
   selectedJobBoards,
@@ -96,8 +101,12 @@ export async function updateJobBoardPostings({
   selectedJobBoards: JobBoard[];
   monthsToPost: number;
 }) {
+  // Remove all existing job board postings for the job posting and create new ones.
   await removeJobBoardPostings(id);
   await createJobBoardPostings({ id, selectedJobBoards });
+
+  // Create a new expiry date for the job posting.
+  // X months in the future, Max of 12 or number of months to post.
   const expiryDate = new Date();
   expiryDate.setMonth(new Date().getMonth() + Math.max(12, monthsToPost));
   await db
@@ -106,8 +115,10 @@ export async function updateJobBoardPostings({
     .where(eq(jobPosting.id, id));
 }
 
+// Takes: The Edit Job Posting form data and the Id of the job posting.
 export async function updateJobPost(formData: EditJobPosting, postId: number) {
   try {
+    // Redirect if no sesion is found.
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -115,6 +126,7 @@ export async function updateJobPost(formData: EditJobPosting, postId: number) {
       redirect("/sign-in");
     }
 
+    // Format the form data and update the job posting in the database.
     const postData = {
       ...formData,
       userId: session.user.id,
@@ -140,7 +152,9 @@ export async function updateJobPost(formData: EditJobPosting, postId: number) {
   }
 }
 
+// Takes: The Id of the job posting.
 export async function deletePost(id: number) {
+  // Remove all job board postings for the job posting before deleting the job posting.
   await removeJobBoardPostings(id);
   await db.delete(jobPosting).where(eq(jobPosting.id, id));
 }

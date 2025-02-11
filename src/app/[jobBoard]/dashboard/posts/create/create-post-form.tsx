@@ -1,10 +1,13 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -13,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,8 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import FormSubmitButton from "@/components/inputs/form-submit-button";
+import MoneyInput from "@/components/inputs/money-input";
+import { createJobPostingSchema } from "@/app/lib/job-postings/schema";
+import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
+import { createCheckoutSession } from "@/actions/stripe/create-checkout";
+import { createJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
+import { formatDate } from "@/lib/utils";
 import type { JobBoard } from "@/app/lib/constants";
 import {
   EMPLOYMENT_TYPES,
@@ -31,24 +41,19 @@ import {
   PRICE_PER_MONTH,
   PROVINCES,
 } from "@/app/lib/constants";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { createJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
-import FormSubmitButton from "@/components/inputs/form-submit-button";
-import type { CreateJobPosting } from "@/app/lib/job-postings/schema";
-import { createJobPostingSchema } from "@/app/lib/job-postings/schema";
-import { formatDate } from "@/lib/utils";
-import { useState } from "react";
-import MoneyInput from "@/components/inputs/money-input";
-import { createCheckoutSession } from "@/actions/stripe/create-checkout";
 
+// Takes: An array of the inital job boards.
 export function CreatePostForm({
   initialJobBoards,
 }: {
   initialJobBoards: JobBoard[];
 }) {
+  // Track if the form is loading and which job boards are selected.
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedJobBoards, setSelectedJobBoards] =
+    useState<JobBoard[]>(initialJobBoards);
+
+  // Define the Zod schema for the form and set the default values.
   const form = useForm<CreateJobPosting>({
     resolver: zodResolver(createJobPostingSchema),
     defaultValues: {
@@ -71,18 +76,19 @@ export function CreatePostForm({
       monthsToPost: 1,
     },
   });
-  const [selectedJobBoards, setSelectedJobBoards] =
-    useState<JobBoard[]>(initialJobBoards);
 
+  // Track the number of months to post from the form.
   const monthsToPost = form.watch("monthsToPost");
 
   async function onSubmit(values: CreateJobPosting) {
+    // Set the form to loading and check if the form is valid.
     setIsLoading(true);
     if (!form.formState.isValid) {
       setIsLoading(false);
       return;
     }
 
+    // Create the job posting and on success create a checkout session.
     toast.promise(createJobPost(values, selectedJobBoards), {
       loading: "Creating job posting...",
       success: async (id) => {
@@ -96,9 +102,11 @@ export function CreatePostForm({
         return "Job posting created successfully";
       },
       error: (error) => {
+        // Define error message displayed in the toast notification.
         if (error instanceof Error)
           return error.message + " Post was saved to dashboard";
       },
+      // Set the loading state to false when the promise is resolved.
       finally: () => setIsLoading(false),
     });
   }
@@ -295,17 +303,18 @@ export function CreatePostForm({
                     </FormItem>
                   )}
                 />
+
+                <h2 className="mt-6 text-xl font-semibold">
+                  Description <span className="text-destructive">*</span>
+                </h2>
                 <FormField
                   control={form.control}
                   name="description"
                   render={({ field }) => (
-                    <FormItem className="mt-2 md:col-span-2">
-                      <FormLabel className="mb:text-base">
-                        Description <span className="text-destructive">*</span>
-                      </FormLabel>
+                    <FormItem className="md:col-span-2">
                       <FormControl>
                         <Textarea
-                          rows={5}
+                          rows={8}
                           className="max-h-80"
                           placeholder="Enter a job description"
                           {...field}

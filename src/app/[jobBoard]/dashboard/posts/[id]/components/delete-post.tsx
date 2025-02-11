@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,11 +15,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { deletePost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
 
+// Takes: The post Id.
 export function DeletePost({ id }: { id: number }) {
   const router = useRouter();
   return (
@@ -40,6 +41,7 @@ export function DeletePost({ id }: { id: number }) {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
+              // Try to delete the post and redirect the user to the dashboard on success.
               toast.promise(deletePost(id), {
                 loading: "Deleting post...",
                 success: () => {

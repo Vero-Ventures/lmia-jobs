@@ -1,10 +1,13 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -13,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,34 +24,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import FormSubmitButton from "@/components/inputs/form-submit-button";
+import MoneyInput from "@/components/inputs/money-input";
+import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
+import type { EditJobPosting } from "@/app/lib/job-postings/schema";
+import { updateJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
+import { formatDate } from "@/lib/utils";
 import {
   EMPLOYMENT_TYPES,
   languages,
   paymentTypes,
   PROVINCES,
 } from "@/app/lib/constants";
-import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link";
-import { updateJobPost } from "@/app/[jobBoard]/dashboard/posts/create/actions";
-import FormSubmitButton from "@/components/inputs/form-submit-button";
-import { useParams, useRouter } from "next/navigation";
-import type { EditJobPosting } from "@/app/lib/job-postings/schema";
-import { editJobPostingSchema } from "@/app/lib/job-postings/schema";
-import { formatDate } from "@/lib/utils";
-import MoneyInput from "@/components/inputs/money-input";
-import { useState } from "react";
 
+// Takes: The inital values of the job posting.
+// Params: The id of the job posting.
 export function EditPostForm({
   initialValues,
 }: {
   initialValues: EditJobPosting;
 }) {
-  const [isLoading, setIsLoading] = useState(false);
+  // Extract the Id from the params.
   const params = useParams<{ id: string }>();
   const postId = Number.parseInt(params.id);
 
+  // Track the loading state of the form and create the Zod form.
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<EditJobPosting>({
     resolver: zodResolver(editJobPostingSchema),
     defaultValues: { ...initialValues },
@@ -55,7 +58,9 @@ export function EditPostForm({
   const router = useRouter();
 
   async function onSubmit(values: EditJobPosting) {
+    // Set the loading state which is unset in finally block.
     setIsLoading(true);
+    // Update the job posting and on success redirect to the job posting page.
     toast.promise(updateJobPost(values, postId), {
       loading: "Updating job posting...",
       success: () => {
@@ -64,6 +69,7 @@ export function EditPostForm({
         return "Job posting updated successfully";
       },
       error: (error) => {
+        // Define error message displayed in the toast notification.
         if (error instanceof Error) return error.message;
       },
       finally: () => setIsLoading(false),
@@ -241,16 +247,19 @@ export function EditPostForm({
                     </FormItem>
                   )}
                 />
+
+                <h2 className="mt-6 text-xl font-semibold">
+                  Description <span className="text-destructive">*</span>
+                </h2>
                 <FormField
                   control={form.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>
-                        Description <span className="text-destructive">*</span>
-                      </FormLabel>
                       <FormControl>
                         <Textarea
+                          rows={8}
+                          className="max-h-80"
                           placeholder="Enter a job description"
                           {...field}
                         />

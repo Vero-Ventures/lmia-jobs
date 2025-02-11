@@ -1,15 +1,16 @@
-import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
 import { EditPostForm } from "@/app/[jobBoard]/dashboard/posts/[id]/edit/edit-post-form";
 
-interface PageProps {
-  params: Promise<{ id: number }>;
-}
 
-export default async function EditPost({ params }: PageProps) {
-  const { id } = await params;
+
+export default async function EditPost({
+  params,
+}: {
+  params: Promise<{ id: number }>;
+}) {
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -17,6 +18,10 @@ export default async function EditPost({ params }: PageProps) {
   if (!data) {
     redirect("/");
   }
+  
+  const { id } = await params;
+
+  // Get the job posting using the Id.
   const jobPosting = await selectUserSingleJobPosting({
     id: +id,
     userId: data.user.id,

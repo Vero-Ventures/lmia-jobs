@@ -1,18 +1,18 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import SingleJobPosting from "@/components/single-job-posting";
 import {
   selectUserSingleJobPosting,
   selectUserSingleJobPostingBoards,
 } from "@/db/queries/jobPostings";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
-interface PageProps {
+// Takes: A job post ID in the params.
+export default async function SinglePostPage({
+  params,
+}: {
   params: Promise<{ id: number }>;
-}
-
-export default async function SinglePostPage({ params }: PageProps) {
-  const { id } = await params;
+}) {
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -20,6 +20,10 @@ export default async function SinglePostPage({ params }: PageProps) {
   if (!data) {
     redirect("/sign-in");
   }
+
+  const { id } = await params;
+
+  // Get the job posting and job boards for the job posting using the Id.
   const jobPosting = await selectUserSingleJobPosting({
     id,
     userId: data.user.id,
