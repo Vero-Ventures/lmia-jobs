@@ -85,7 +85,7 @@ export async function createCheckoutSession({
       ],
     });
   } catch (error) {
-    console.log("Error creating checkout session:", error);
+    console.error("Error creating checkout session:", error);
     throw new Error(
       "Failed to create checkout session. Please refresh and try again."
     );

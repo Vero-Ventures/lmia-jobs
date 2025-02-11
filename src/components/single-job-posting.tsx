@@ -54,7 +54,6 @@ export default function SingleJobPosting({
     // If there are any other job boards, iterate over them and format them for display.
     const length = sortedBoards.length;
     if (length > 0) {
-      console.log(jobBoards);
       for (let i = 0; i < length; i++) {
         formattedBoards +=
           sortedBoards[i].charAt(0).toUpperCase() + sortedBoards[i].slice(1);

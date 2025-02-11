@@ -21,6 +21,8 @@ export default function OptOut({
       // Get user email from URL query params. Throw an error if no email is found.
       const { email } = await params;
 
+      console.log(email);
+
       if (!email) {
         throw new Error("No email address found.");
       }

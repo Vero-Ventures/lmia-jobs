@@ -35,6 +35,8 @@ export async function mailInvitesAndReminders() {
         )
       );
 
+    console.log("Found Users: " + remindUsersMailing.length);
+
     // Get all posts from the admin user, where posts for unregistered users are stored.
     const userPosts = await db
       .select()
@@ -50,14 +52,24 @@ export async function mailInvitesAndReminders() {
 
       // Send out an invite with the users top posts and expiry date.
       newUsersMailing.forEach(async (user) => {
-        await sendInvitesAndReminders(user.email, user.createdAt, userPosts, true);
+        await sendInvitesAndReminders(
+          user.email,
+          user.createdAt,
+          userPosts,
+          true
+        );
       });
     }
 
     // Send out reminders to users who have not opted out or been ignored.
     if (remindUsersMailing.length > 0) {
       remindUsersMailing.forEach(async (user) => {
-        await sendInvitesAndReminders(user.email, user.createdAt, userPosts, false);
+        await sendInvitesAndReminders(
+          user.email,
+          user.createdAt,
+          userPosts,
+          false
+        );
       });
     }
 
@@ -77,13 +89,8 @@ export async function sendInvitesAndReminders(
   isInvite: boolean
 ) {
   try {
-    console.log("Sending Email To: " + email);
-    console.log("Invite: " + isInvite);
-
     // Filter to the posts of the current user.
     const userPostings = userPosts.filter((post) => post.email === email);
-
-    console.log("User Posts: " + userPostings.length);
 
     if (userPostings.length > 0) {
       // Get the users total number of posts and the first 3 post names (or less).
