@@ -46,9 +46,9 @@ export default function InviteEmail({
               job postings across each job board and join us at Opportunities.
             </Text>
             <Text style={text}>
-              Join now to create an account and keep these postings up as long
-              as you want. If you do not create an the account and claim your
-              posts before <span className="font-bold">{expiredDate}</span>, the
+              Join now to claim these postings and keep them up as long as you
+              want. If you do not log into to your account and claim your posts
+              before <span className="font-bold">{expiredDate}</span>, the
               postings will be lost.
             </Text>
             <Section style={postSection}>
@@ -63,13 +63,12 @@ export default function InviteEmail({
             </Section>
             <Section style={accountSection}>
               <Text style={text}>
-                Use the your email to to log into your account and recive an
-                email verification message. Once verified, you will be able to
-                log in to your account.
+                Enter your email to recive a one time passcode. Use this
+                passcode to log in and activate your account.
               </Text>
               <Text style={linkText}>
-                <a href={`https://lmia-jobs.vercel.app/sign-in`}>
-                  Setup Your Account Now
+                <a href={`https://allopportunities.ca/sign-in`}>
+                  Join Opportunties Now
                 </a>
               </Text>
             </Section>
@@ -81,8 +80,7 @@ export default function InviteEmail({
               <Text style={footerText}>
                 Opt Out From Further Messages:{" "}
                 <span style={linkText}>
-                  <a
-                    href={`https://lmia-jobs.vercel.app/opt-out?email=${email}`}>
+                  <a href={`https://allopportunities.ca/pt-out?email=${email}`}>
                     Opt Out
                   </a>
                 </span>
