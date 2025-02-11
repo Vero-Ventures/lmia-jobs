@@ -4,8 +4,6 @@ import { auth } from "@/lib/auth";
 import { selectUserSingleJobPosting } from "@/db/queries/jobPostings";
 import { EditPostForm } from "@/app/[jobBoard]/dashboard/posts/[id]/edit/edit-post-form";
 
-
-
 export default async function EditPost({
   params,
 }: {
@@ -18,7 +16,7 @@ export default async function EditPost({
   if (!data) {
     redirect("/");
   }
-  
+
   const { id } = await params;
 
   // Get the job posting using the Id.
