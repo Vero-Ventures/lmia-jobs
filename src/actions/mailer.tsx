@@ -22,10 +22,6 @@ export async function mailInvitesAndReminders() {
         )
       );
 
-    for (let i = 0; i < newUsersMailing.length; i++) {
-      console.log("New User: " + newUsersMailing[i].email);
-    }
-
     // Get any remaining users who are not opted out or ignored due to age.
     const remindUsersMailing = await db
       .select()
@@ -38,10 +34,6 @@ export async function mailInvitesAndReminders() {
           eq(userMailing.ignore, false)
         )
       );
-
-    for (let i = 0; i < remindUsersMailing.length; i++) {
-      console.log("Remind User: " + remindUsersMailing[i].email);
-    }
 
     // Get all posts from the admin user, where posts for unregistered users are stored.
     const userPosts = await db
@@ -123,7 +115,7 @@ export async function sendInvitesAndReminders(
             ),
           })
           .then(() => {
-            console.log("Reminder Email Sent");
+            console.log("Invite Email Sent");
             return;
           });
       } else {
