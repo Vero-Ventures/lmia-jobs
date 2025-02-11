@@ -20,8 +20,11 @@ import {
 export default function Page() {
   const { data, isPending } = useSession();
 
+  // Track the new email and if the user has confirmed the email update.
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmailUpdate, setConfirmEmailUpdate] = useState(false);
+
+  // Track the email update error and the log out timer.
   const [emailUpdateError, setEmailUpdateError] = useState("");
   const [updateLogOutTimer, setUpdateLogOutTimer] = useState(-1);
 
@@ -30,12 +33,17 @@ export default function Page() {
   }
 
   const handleEmailUpdate = async () => {
+    // Handle users who are not signed in.
     if (!data) {
       return;
     }
+
+    // Update the users email.
     const updateEmailResult = await updateEmail(data.user.id, newEmail);
 
     if (updateEmailResult === "success") {
+      // Wait 5 seconds before logging the user out.
+      // Gives users a chance to see the success message.
       let countdown = 5;
       const intervalId = setInterval(() => {
         setUpdateLogOutTimer(countdown--);
@@ -45,6 +53,7 @@ export default function Page() {
         }
       }, 1000);
 
+      // Log out the user now that the email has been updated.
       await signOut({
         fetchOptions: {
           onSuccess: () => {
@@ -53,6 +62,7 @@ export default function Page() {
         },
       });
     } else {
+      // On error, update the error display message.
       setEmailUpdateError(updateEmailResult);
     }
   };
