@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import {OptOutPage} from "@/app/[jobBoard]/dashboard/opt-out/compontents/opt-out-page";
+import { OptOutPage } from "@/app/[jobBoard]/dashboard/opt-out/compontents/opt-out-page";
 
 // Takes: The user email in the params.
 export default async function OptOut({
