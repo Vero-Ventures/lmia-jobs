@@ -19,7 +19,6 @@ export default function InviteEmail({
   postNames: string[];
   totalPosts: number;
 }) {
-  console.log("Encoded Email: " + email);
   return (
     <Html>
       <Head />
