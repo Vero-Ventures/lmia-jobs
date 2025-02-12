@@ -1,7 +1,8 @@
 "use server";
 
 import { db } from "@/db";
-import { userMailing, jobPosting } from "@/db/schema";
+import { userMailing } from "@/db/schema";
+// import { userMailing, jobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
 export async function checkInactiveUserAges() {
@@ -29,9 +30,9 @@ export async function checkInactiveUserAges() {
           );
 
         // Remove all of the users scraped posts from the admin account.
-        await db
-          .delete(jobPosting)
-          .where(eq(jobPosting.email, mailingUser.email));
+        // await db
+        //   .delete(jobPosting)
+        //   .where(eq(jobPosting.email, mailingUser.email));
       }
     });
 

@@ -104,6 +104,9 @@ export async function sendInvitesAndReminders(
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
+      // Encode the email as a URI as part of the opt out link.
+      const encodedEmail = encodeURIComponent(email);
+
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
         console.log("Sending Invite Email");
@@ -113,7 +116,7 @@ export async function sendInvitesAndReminders(
           subject: "Activate Your New Account",
           react: (
             <InviteEmail
-              email={email}
+              email={encodedEmail}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -129,7 +132,7 @@ export async function sendInvitesAndReminders(
           subject: "Reminder About Your Account",
           react: (
             <ReminderEmail
-              email={email}
+              email={encodedEmail}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -138,8 +141,9 @@ export async function sendInvitesAndReminders(
         });
         console.log("Reminder Email Sent");
       }
+    } else {
+      return;
     }
-    return;
   } catch (error) {
     console.error("Mailing process failed: " + error);
     return;
