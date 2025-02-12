@@ -109,8 +109,6 @@ export async function sendInvitesAndReminders(
 
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
-        console.log("Sending Invite Email");
-        console.log("Encoded Email: " + encodedEmail);
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
@@ -124,10 +122,7 @@ export async function sendInvitesAndReminders(
             />
           ),
         });
-        console.log("Invite Email Sent");
       } else {
-        console.log("Encoded Email: " + encodedEmail);
-        console.log("Sending Reminder Email");
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
@@ -141,7 +136,6 @@ export async function sendInvitesAndReminders(
             />
           ),
         });
-        console.log("Reminder Email Sent");
       }
     } else {
       return;
@@ -155,8 +149,7 @@ export async function sendInvitesAndReminders(
 // Takes: The email of the user opting out of reminders.
 export async function optOutOfReminders(email: string): Promise<string> {
   try {
-    const decodedEmail = decodeURIComponent(email).replace("%2E", ".");
-    console.log("Decoded Email: " + decodedEmail);
+    const decodedEmail = decodeURIComponent(email).replace(",", ".");
 
     await db
       .update(userMailing)

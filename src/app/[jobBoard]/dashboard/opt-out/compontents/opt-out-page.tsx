@@ -8,7 +8,7 @@ import { optOutOfReminders } from "@/actions/mailer";
 export function OptOutPage({ email }: { email: string }) {
   // Track if opt-out status is being updated and if the user has opted out.
   const [isUpdating, setIsUpdating] = useState(false);
-  const [optedOut, setOptedOut] = useState("true");
+  const [optedOut, setOptedOut] = useState("false");
 
   const callOptOutHandler = async () => {
     // Set updating staus as true, and unset in finally block.
