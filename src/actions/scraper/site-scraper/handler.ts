@@ -52,7 +52,7 @@ async function getPageEmail(browserHandler: BrowserHandler): Promise<string> {
 
     // Get all mailing user emails from ignored users.
     const ignoredEmails = await db
-      .select({ email: user.email })
+      .select({ email: userMailing.email })
       .from(userMailing)
       .where(eq(userMailing.ignore, true));
 
