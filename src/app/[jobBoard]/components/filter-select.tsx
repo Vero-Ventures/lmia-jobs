@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { EMPLOYMENT_TYPES, PROVINCES } from "@/app/lib/constants";
 
+// Takes: The inital value for the filter and which filter type to use.
 export default function FilterSelect({
   initialValue,
   filterType,

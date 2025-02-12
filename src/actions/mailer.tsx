@@ -18,7 +18,7 @@ export async function mailInvitesAndReminders() {
       .where(
         and(
           eq(userMailing.newlyCreated, true),
-          eq(userMailing.activated, false),
+          eq(userMailing.activated, false)
         )
       );
 
@@ -31,10 +31,9 @@ export async function mailInvitesAndReminders() {
           eq(userMailing.newlyCreated, false),
           eq(userMailing.activated, false),
           eq(userMailing.optedOut, false),
-          eq(userMailing.ignore, false),
+          eq(userMailing.ignore, false)
         )
       );
-
 
     // Get all posts from the admin user, where posts for unregistered users are stored.
     const userPosts = await db
@@ -171,6 +170,7 @@ export async function sendContactEmail({
   subject: string;
   body: string;
 }) {
+  throw "test";
   await resend.emails.send({
     from: email,
     to: `Opportunities <contact@manageopportunities.ca>`,
