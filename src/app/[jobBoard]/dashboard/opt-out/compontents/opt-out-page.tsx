@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { optOutOfReminders } from "@/actions/mailer";
 
-// Takes: The a handler function for opting out.
-export function OptOutPage({ email }: { email: string }) {
+// Takes: The the mailer Id of the user opting out.
+export function OptOutPage({ userId }: { userId: string }) {
   // Track if opt-out status is being updated and if the user has opted out.
   const [isUpdating, setIsUpdating] = useState(false);
   const [optedOut, setOptedOut] = useState("false");
@@ -15,7 +15,7 @@ export function OptOutPage({ email }: { email: string }) {
     setIsUpdating(true);
     try {
       // Call the opt-out handler function.
-      const result = await optOutOfReminders(email);
+      const result = await optOutOfReminders(userId);
       setOptedOut(result);
     } catch (error) {
       console.error("Error Opting Out Of Reminders: " + error);

@@ -1,27 +1,23 @@
 import { redirect } from "next/navigation";
 import { OptOutPage } from "@/app/[jobBoard]/dashboard/opt-out/compontents/opt-out-page";
 
-// Takes: The user email in the params.
+// Takes: The user mailer Id in the params.
 export default async function OptOut({
   params,
 }: {
-  params: Promise<{ email: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  let email = "";
-  // Get user email from URL query params. Throw an error if no email is found.
-  email = (await params).email;
+  // Get mailer Id from URL query params. Throw an error if no mailer Id is found.
+  const userId = (await params).id;
 
-  email = decodeURIComponent(email.replace(",", "."));
-  console.log("Email: " + email);
-
-  if (!email) {
+  if (!userId) {
     redirect("/");
   }
 
   return (
     <div className="flex flex-grow flex-col">
       <main className="mx-auto flex max-w-2xl flex-1 items-center justify-center px-4 text-center">
-        <OptOutPage email={email} />
+        <OptOutPage userId={userId} />
       </main>
     </div>
   );

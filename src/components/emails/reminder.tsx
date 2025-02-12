@@ -9,12 +9,12 @@ import {
 } from "@react-email/components";
 
 export default function ReminderEmail({
-  email,
+  userId,
   expiredDate,
   postNames,
   totalPosts,
 }: {
-  email: string;
+  userId: number;
   expiredDate: string;
   postNames: string[];
   totalPosts: number;
@@ -81,7 +81,7 @@ export default function ReminderEmail({
                 Opt Out From Further Messages:{" "}
                 <span style={linkText}>
                   <a
-                    href={`https://allopportunities.ca/dashboard/opt-out/${email}`}>
+                    href={`https://allopportunities.ca/dashboard/opt-out/${userId}`}>
                     Opt Out
                   </a>
                 </span>

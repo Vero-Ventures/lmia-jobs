@@ -52,6 +52,7 @@ export async function mailInvitesAndReminders() {
       newUsersMailing.forEach(async (user) => {
         await sendInvitesAndReminders(
           user.email,
+          user.id,
           user.createdAt,
           userPosts,
           true
@@ -64,6 +65,7 @@ export async function mailInvitesAndReminders() {
       remindUsersMailing.forEach(async (user) => {
         await sendInvitesAndReminders(
           user.email,
+          user.id,
           user.createdAt,
           userPosts,
           false
@@ -78,10 +80,11 @@ export async function mailInvitesAndReminders() {
   }
 }
 
-// Takes: The users email, the date of the mailing users creation,
+// Takes: The users email and mailer Id, the date of the mailing users creation,
 //        All user posts from the admin account, and if the email is an invite or reminder.
 export async function sendInvitesAndReminders(
   email: string,
+  mailerId: number,
   creationDate: Date,
   userPosts: JobPosting[],
   isInvite: boolean
@@ -102,9 +105,6 @@ export async function sendInvitesAndReminders(
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
-      // Encode the email as a URI as part of the opt out link.
-      const encodedEmail = encodeURIComponent(email.replace(".", ","));
-
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
         await resend.emails.send({
@@ -113,7 +113,7 @@ export async function sendInvitesAndReminders(
           subject: "Activate Your New Account",
           react: (
             <InviteEmail
-              email={encodedEmail}
+              userId={mailerId}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -127,7 +127,7 @@ export async function sendInvitesAndReminders(
           subject: "Reminder About Your Account",
           react: (
             <ReminderEmail
-              email={encodedEmail}
+              userId={mailerId}
               expiredDate={expiredDate.toDateString()}
               postNames={topPostNames}
               totalPosts={totalPosts}
@@ -144,15 +144,13 @@ export async function sendInvitesAndReminders(
   }
 }
 
-// Takes: The email of the user opting out of reminders.
-export async function optOutOfReminders(email: string): Promise<string> {
+// Takes: The mailer Id of the user opting out of reminders.
+export async function optOutOfReminders(userId: string): Promise<string> {
   try {
-    const decodedEmail = decodeURIComponent(email).replace(",", ".");
-
     await db
       .update(userMailing)
       .set({ optedOut: true })
-      .where(eq(userMailing.email, decodedEmail));
+      .where(eq(userMailing.id, Number(userId)));
 
     return "true";
   } catch (error) {
