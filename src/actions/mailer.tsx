@@ -19,8 +19,6 @@ export async function mailInvitesAndReminders() {
         and(
           eq(userMailing.newlyCreated, true),
           eq(userMailing.activated, false),
-          // Limit to personal email for testing.
-          eq(userMailing.email, "bradenrogersdev@gmail.com")
         )
       );
 
@@ -34,13 +32,9 @@ export async function mailInvitesAndReminders() {
           eq(userMailing.activated, false),
           eq(userMailing.optedOut, false),
           eq(userMailing.ignore, false),
-          // Limit to personal email for testing.
-          eq(userMailing.email, "bradenrogersdev@gmail.com")
         )
       );
 
-    console.log("New Users: ", newUsersMailing.length);
-    console.log("Remind Users: ", remindUsersMailing.length);
 
     // Get all posts from the admin user, where posts for unregistered users are stored.
     const userPosts = await db
