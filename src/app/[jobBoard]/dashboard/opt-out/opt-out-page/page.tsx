@@ -10,8 +10,6 @@ export default function OptOutPage({ email }: { email: string }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [optedOut, setOptedOut] = useState("false");
 
-  console.log("Email: " + email);
-
   const callOptOutHandler = async () => {
     // Set updating staus as true, and unset in finally block.
     setIsUpdating(true);
@@ -26,6 +24,7 @@ export default function OptOutPage({ email }: { email: string }) {
       setIsUpdating(false);
     }
   };
+
   return (
     <div className="flex flex-grow flex-col">
       <main className="mx-auto flex max-w-2xl flex-1 items-center justify-center px-4 text-center">

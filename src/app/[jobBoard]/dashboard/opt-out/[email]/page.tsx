@@ -7,8 +7,9 @@ export default async function OptOut({
 }: {
   params: Promise<{ email: string }>;
 }) {
+  let email = "";
   // Get user email from URL query params. Throw an error if no email is found.
-  const { email } = await params;
+  email = (await params).email;
 
   if (!email) {
     redirect("/");
