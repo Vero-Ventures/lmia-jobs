@@ -106,15 +106,11 @@ export async function sendInvitesAndReminders(
 
       // Encode the email as a URI as part of the opt out link.
       const encodedEmail = encodeURIComponent(email).replace(".", "%2E");
-      console.log("Encoded Email: " + encodedEmail);
-      console.log("Email: " + email);
-
-      const decodedEmail = decodeURIComponent(encodedEmail).replace("%2E", ".");
-      console.log("Decoded Email: " + decodedEmail);
 
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
         console.log("Sending Invite Email");
+        console.log("Encoded Email: " + encodedEmail);
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
           to: [email],
@@ -130,6 +126,7 @@ export async function sendInvitesAndReminders(
         });
         console.log("Invite Email Sent");
       } else {
+        console.log("Encoded Email: " + encodedEmail);
         console.log("Sending Reminder Email");
         await resend.emails.send({
           from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
