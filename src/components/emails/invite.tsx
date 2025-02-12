@@ -80,7 +80,7 @@ export default function InviteEmail({
               <Text style={footerText}>
                 Opt Out From Further Messages:{" "}
                 <span style={linkText}>
-                  <a href={`https://allopportunities.ca/pt-out?email=${email}`}>
+                  <a href={`https://allopportunities.ca/${email}/opt-out`}>
                     Opt Out
                   </a>
                 </span>
