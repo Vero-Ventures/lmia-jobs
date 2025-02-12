@@ -105,7 +105,7 @@ export async function sendInvitesAndReminders(
       const expiredDate = new Date(expiredTimeStamp);
 
       // Encode the email as a URI as part of the opt out link.
-      const encodedEmail = encodeURIComponent(email);
+      const encodedEmail = encodeURIComponent(email).replace(".", "%2E");
 
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
@@ -153,10 +153,12 @@ export async function sendInvitesAndReminders(
 // Takes: The email of the user opting out of reminders.
 export async function optOutOfReminders(email: string): Promise<string> {
   try {
+    const decodedEmail = decodeURIComponent(email).replace("%2E", ".");
+
     await db
       .update(userMailing)
       .set({ optedOut: true })
-      .where(eq(userMailing.email, email));
+      .where(eq(userMailing.email, decodedEmail));
 
     return "true";
   } catch (error) {
