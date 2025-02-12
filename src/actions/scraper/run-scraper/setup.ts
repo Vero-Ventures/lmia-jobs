@@ -34,7 +34,7 @@ export const runScraper = async (postId: string) => {
     }
   } catch (error) {
     // Only throw errors with scraper creation, not running.
-    throw "Error Creating Scraper: " + error;
+    throw "Error Creating Or Running Scraper: " + error;
   } finally {
     // Close browser regardless of function result.
     if (browser) {
