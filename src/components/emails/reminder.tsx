@@ -81,7 +81,7 @@ export default function ReminderEmail({
                 Opt Out From Further Messages:{" "}
                 <span style={linkText}>
                   <a
-                    href={`https://allopportunities.ca/${email}/opt-out`}>
+                    href={`https://allopportunities.ca/opt-out/${encodeURI(email)}`}>
                     Opt Out
                   </a>
                 </span>
