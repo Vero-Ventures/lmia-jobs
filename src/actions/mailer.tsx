@@ -156,6 +156,7 @@ export async function sendInvitesAndReminders(
 export async function optOutOfReminders(email: string): Promise<string> {
   try {
     const decodedEmail = decodeURIComponent(email).replace("%2E", ".");
+    console.log("Decoded Email: " + decodedEmail);
 
     await db
       .update(userMailing)

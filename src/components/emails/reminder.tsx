@@ -19,7 +19,6 @@ export default function ReminderEmail({
   postNames: string[];
   totalPosts: number;
 }) {
-
   return (
     <Html>
       <Head />
@@ -81,7 +80,8 @@ export default function ReminderEmail({
               <Text style={footerText}>
                 Opt Out From Further Messages:{" "}
                 <span style={linkText}>
-                  <a href={`https://allopportunities.ca/dashboard/opt-out/${email}`}>
+                  <a
+                    href={`https://allopportunities.ca/dashboard/opt-out/${email}`}>
                     Opt Out
                   </a>
                 </span>
