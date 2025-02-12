@@ -11,6 +11,9 @@ export default async function OptOut({
   // Get user email from URL query params. Throw an error if no email is found.
   email = (await params).email;
 
+  email = decodeURIComponent(email.replace(",", "."));
+  console.log("Email: " + email);
+
   if (!email) {
     redirect("/");
   }
