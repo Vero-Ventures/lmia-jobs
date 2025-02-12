@@ -35,8 +35,6 @@ export async function mailInvitesAndReminders() {
         )
       );
 
-    console.log("Found Users: " + remindUsersMailing.length);
-
     // Get all posts from the admin user, where posts for unregistered users are stored.
     const userPosts = await db
       .select()
