@@ -107,44 +107,36 @@ export async function sendInvitesAndReminders(
       // Send out the appropriate email based on if it should be an invite or reminder.
       if (isInvite) {
         console.log("Sending Invite Email");
-        return await resend.emails
-          .send({
-            from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-            to: [email],
-            subject: "Activate Your New Account",
-            react: (
-              <InviteEmail
-                email={email}
-                expiredDate={expiredDate.toDateString()}
-                postNames={topPostNames}
-                totalPosts={totalPosts}
-              />
-            ),
-          })
-          .then(() => {
-            console.log("Invite Email Sent");
-            return;
-          });
+        await resend.emails.send({
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+          to: [email],
+          subject: "Activate Your New Account",
+          react: (
+            <InviteEmail
+              email={email}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
+            />
+          ),
+        });
+        console.log("Invite Email Sent");
       } else {
         console.log("Sending Reminder Email");
-        await resend.emails
-          .send({
-            from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
-            to: [email],
-            subject: "Reminder About Your Account",
-            react: (
-              <ReminderEmail
-                email={email}
-                expiredDate={expiredDate.toDateString()}
-                postNames={topPostNames}
-                totalPosts={totalPosts}
-              />
-            ),
-          })
-          .then(() => {
-            console.log("Reminder Email Sent");
-            return;
-          });
+        await resend.emails.send({
+          from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+          to: [email],
+          subject: "Reminder About Your Account",
+          react: (
+            <ReminderEmail
+              email={email}
+              expiredDate={expiredDate.toDateString()}
+              postNames={topPostNames}
+              totalPosts={totalPosts}
+            />
+          ),
+        });
+        console.log("Reminder Email Sent");
       }
     }
     return;
