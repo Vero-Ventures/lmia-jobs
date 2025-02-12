@@ -7,7 +7,7 @@ import { selectUserJobPostings } from "@/db/queries/jobPostings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { JobListCard } from "@/app/[jobBoard]/components/job-list-card";
-import P from "@/components/ui/html/paragraph";
+import Paragraph from "@/components/ui/html/paragraph";
 
 // Tales: The search params containing an option title and post Id in the params.
 export default async function Page({
@@ -74,7 +74,9 @@ export default async function Page({
             })}
           </div>
         ) : (
-          <P className="text-center">No jobs matched the filter.</P>
+          <Paragraph className="text-center">
+            No jobs matched the filter.
+          </Paragraph>
         )}
       </section>
     </main>

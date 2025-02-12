@@ -1,12 +1,12 @@
 import { selectSingleJobPosting } from "@/db/queries/jobPostings";
 import SingleJobPosting from "@/components/single-job-posting";
 
-interface PageProps {
-  params: Promise<{ id: number }>;
-}
-
 // Takes: The post Id in the params.
-export default async function SinglePostPage({ params }: PageProps) {
+export default async function SinglePostPage({
+  params,
+}: {
+  params: Promise<{ id: number }>;
+}) {
   // Get the post Id from the paramaters.
   const { id } = await params;
 

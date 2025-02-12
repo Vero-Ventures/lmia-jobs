@@ -8,17 +8,19 @@ import {
   Text,
 } from "@react-email/components";
 
+interface ReminderProps {
+  userId: number;
+  expiredDate: string;
+  postNames: string[];
+  totalPosts: number;
+}
+
 export default function ReminderEmail({
   userId,
   expiredDate,
   postNames,
   totalPosts,
-}: {
-  userId: number;
-  expiredDate: string;
-  postNames: string[];
-  totalPosts: number;
-}) {
+}: ReminderProps) {
   return (
     <Html>
       <Head />

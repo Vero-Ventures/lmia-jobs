@@ -8,17 +8,19 @@ import {
   Text,
 } from "@react-email/components";
 
+interface InviteProps {
+  userId: number;
+  expiredDate: string;
+  postNames: string[];
+  totalPosts: number;
+}
+
 export default function InviteEmail({
   userId,
   expiredDate,
   postNames,
   totalPosts,
-}: {
-  userId: number;
-  expiredDate: string;
-  postNames: string[];
-  totalPosts: number;
-}) {
+}: InviteProps) {
   return (
     <Html>
       <Head />

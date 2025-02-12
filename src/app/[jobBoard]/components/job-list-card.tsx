@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { JobPosting } from "@/db/schema";
-import P from "@/components/ui/html/paragraph";
+import Paragraph from "@/components/ui/html/paragraph";
 
+// Takes: The job posting and if the user is the post owner.
 export function JobListCard({
   jobPosting,
   isAdmin,
@@ -54,12 +55,12 @@ export function JobListCard({
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
-          <P>
+          <Paragraph>
             ${`${formatMoney(Number(jobPosting.minPayValue))}`}{" "}
             {jobPosting.maxPayValue &&
               `to $${formatMoney(Number(jobPosting.maxPayValue))}`}
             {jobPosting.paymentType === "Hourly" ? " hourly" : " annually"}
-          </P>
+          </Paragraph>
         </div>
       </CardContent>
     </Card>

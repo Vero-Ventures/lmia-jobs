@@ -1,10 +1,11 @@
 "use client";
+
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-
-import { sendContactEmail } from "@/actions/mailer";
-
+import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-
 import {
   Form,
   FormControl,
@@ -13,15 +14,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Heading from "@/components/ui/html/heading";
-import { toast } from "sonner";
-import { useState } from "react";
+import { sendContactEmail } from "@/actions/mailer";
 
 type FormSchema = z.infer<typeof formSchema>;
 
@@ -33,6 +29,7 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+  // Track loading state and define Zod form and schema.
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -45,17 +42,18 @@ export default function Page() {
 
   // Define submission handler.
   const handleSubmit = async (values: FormSchema) => {
-    // Update loading state and extract form data.
+    // Update loading state and call mailer handler.
     setIsLoading(true);
     toast.promise(sendContactEmail(values), {
       loading: "Sending email...",
       success:
         "You're email has been sent! We'll get back to you as soon as possible.",
-      error: (err) => {
-        if (err instanceof Error) {
-          return err.message;
-        }
+      error: (error) => {
+        // Log error details and return a basic error message to the user.
+        console.error("Error: " + error);
+        return "An error occurred while sending the message. Please try again.";
       },
+      // On completion, always reset loading state.
       finally: () => setIsLoading(false),
     });
   };
