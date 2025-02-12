@@ -15,7 +15,7 @@ export default async function Page({
 }: {
   params: Promise<{ jobBoard: JobBoard }>;
   searchParams: Promise<{
-    title?: string;
+    jobTitle?: string;
     employmentType?: EmploymentType | "All";
     province?: Province | "All";
   }>;
@@ -23,7 +23,7 @@ export default async function Page({
   // Extract the jobBoard and search parameters from the URL.
   const { jobBoard } = await params;
   const search = await searchParams;
-  const title = search.title ?? "";
+  const title = search.jobTitle ?? "";
   const province = search.province;
   const employmentType = search.employmentType;
 

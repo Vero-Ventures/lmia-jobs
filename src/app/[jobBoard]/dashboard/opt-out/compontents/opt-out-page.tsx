@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { optOutOfReminders } from "@/actions/mailer";
 
 // Takes: The a handler function for opting out.
-export default function OptOutPage({ email }: { email: string }) {
+export function OptOutPage({ email }: { email: string }) {
   // Track if opt-out status is being updated and if the user has opted out.
   const [isUpdating, setIsUpdating] = useState(false);
   const [optedOut, setOptedOut] = useState("false");
