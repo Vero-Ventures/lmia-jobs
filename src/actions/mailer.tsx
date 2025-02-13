@@ -19,7 +19,7 @@ export async function mailInvitesAndReminders() {
         and(
           eq(userMailing.newlyCreated, true),
           eq(userMailing.activated, false),
-          eq(userMailing.email, "bradenrogersdev@gmail.com")
+          
         )
       );
 
@@ -33,7 +33,7 @@ export async function mailInvitesAndReminders() {
           eq(userMailing.activated, false),
           eq(userMailing.optedOut, false),
           eq(userMailing.ignore, false),
-          eq(userMailing.email, "bradenrogersdev@gmail.com")
+         
         )
       );
 
