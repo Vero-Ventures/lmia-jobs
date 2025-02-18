@@ -53,7 +53,7 @@ export async function createCheckoutSession({
   let session;
   try {
     // ALWAYS create a checkout with a Stripe Customer Id. They should enforce this.
-    // Pricing is set in cents so 500 = $5.00.
+    // Pricing is set in cents so 400 = $4.00.
     session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       success_url: getUrl(
@@ -78,7 +78,7 @@ export async function createCheckoutSession({
               description: `Pay for the job posting to appear on the selected Opportunities job boards for the next
             ${numMonths} months.`,
             },
-            unit_amount: numJobBoards * numMonths * 500,
+            unit_amount: numJobBoards * numMonths * 400,
           },
           quantity: 1,
         },

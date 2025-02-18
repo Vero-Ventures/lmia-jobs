@@ -125,4 +125,4 @@ export type Province = (typeof provinceValues)[number];
 export const languages = ["English", "French", "English and French"] as const;
 export type Language = (typeof languages)[number];
 
-export const PRICE_PER_MONTH = 5;
+export const PRICE_PER_MONTH = 4;

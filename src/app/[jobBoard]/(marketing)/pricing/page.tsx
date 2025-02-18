@@ -17,7 +17,7 @@ export default async function Page({
   const postDuration = search.duration ? Number(search.duration) : 4;
 
   // Calculate the total cost of the post for the price calculator on page load.
-  const totalCost = postDuration * postBoards * 5.0;
+  const totalCost = postDuration * postBoards * 4.0;
 
   return (
     <main className="flex flex-col">
@@ -28,11 +28,11 @@ export default async function Page({
           </Heading>
           <Paragraph>
             The cost of an Opportunities job posting is based on its duration
-            and the number of boards it appears on. The base price is $5 per
+            and the number of boards it appears on. The base price is $4 per
             month, multiplied by the number of boards selected.
           </Paragraph>
           <Paragraph className="font-semibold">
-            Example: A post hosted on 5 boards for 3 months would cost $75.
+            Example: A post hosted on 5 boards for 3 months would cost $60.
           </Paragraph>
           <div className="mt-2 space-y-4">
             <PricingInputs
