@@ -18,8 +18,7 @@ export async function mailInvitesAndReminders() {
       .where(
         and(
           eq(userMailing.newlyCreated, true),
-          eq(userMailing.activated, false),
-          
+          eq(userMailing.activated, false)
         )
       );
 
@@ -32,8 +31,7 @@ export async function mailInvitesAndReminders() {
           eq(userMailing.newlyCreated, false),
           eq(userMailing.activated, false),
           eq(userMailing.optedOut, false),
-          eq(userMailing.ignore, false),
-         
+          eq(userMailing.ignore, false)
         )
       );
 
