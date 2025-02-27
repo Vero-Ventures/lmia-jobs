@@ -108,7 +108,7 @@ export default function Page() {
           )}
 
           {updateLogOutTimer >= 0 && (
-            <div className="mt-8 mb-8 flex flex-col text-center">
+            <div className="mb-8 mt-8 flex flex-col text-center">
               <h1 className="block text-lg font-semibold text-gray-800">
                 Email Update Successful
               </h1>

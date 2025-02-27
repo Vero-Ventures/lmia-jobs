@@ -109,7 +109,7 @@ export default function PayButton({
                   />
                   <Label
                     htmlFor={jobBoard}
-                    className="text-base leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     {jobBoard}
                   </Label>
                 </div>
@@ -120,7 +120,7 @@ export default function PayButton({
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="monthsToPost"
-              className="mt-4 ml-2 text-lg font-semibold">
+              className="ml-2 mt-4 text-lg font-semibold">
               Months To Post
             </Label>
             <Input

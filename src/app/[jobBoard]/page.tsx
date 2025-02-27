@@ -37,7 +37,7 @@ export default async function Page({
 
   return (
     <div className="py-10">
-      <div className="text-primary container mx-auto space-y-4 sm:w-4/5 md:w-2/3">
+      <div className="container mx-auto space-y-4 text-primary sm:w-4/5 md:w-2/3">
         <Form action={`/`} className="flex gap-4 sm:gap-6 md:gap-8">
           <Input name="jobTitle" placeholder="Search Jobs..." />
           <Input
@@ -67,7 +67,7 @@ export default async function Page({
       <section className="container mx-auto mt-4 p-4">
         <div className="ml-auto w-fit">
           <Link href={`/dashboard/posts/create`}>
-            <Button className="mr-6 mb-2 !px-8 !py-6 text-xl font-bold">
+            <Button className="mb-2 mr-6 !px-8 !py-6 text-xl font-bold">
               Create A Post
             </Button>
           </Link>

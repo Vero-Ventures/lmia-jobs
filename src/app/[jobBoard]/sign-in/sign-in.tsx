@@ -57,7 +57,7 @@ export default function SignIn() {
         <div className="flex justify-center">
           {!isLoading && (
             <Button
-              className="text-base text-gray-700 italic"
+              className="text-base italic text-gray-700"
               variant="link"
               type="button"
               disabled={isLoading}

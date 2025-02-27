@@ -71,7 +71,7 @@ export default function SingleJobPosting({
   return (
     <div className="mx-auto my-12 w-11/12 max-w-4xl space-y-8 justify-self-center rounded-lg border-2 border-gray-300 p-4 md:w-fit md:p-6">
       {isOwner && isAdmin && (
-        <div className="mb:flex mb:gap-0 mx-auto grid grid-cols-2 grid-rows-2 justify-evenly gap-4">
+        <div className="mx-auto grid grid-cols-2 grid-rows-2 justify-evenly gap-4 mb:flex mb:gap-0">
           {!jobPosting.paymentConfirmed && <PayButton id={jobPosting.id} />}
           <Button className="min-w-24" asChild>
             <Link href={`/dashboard/posts/${jobPosting.id}/edit`}>
@@ -106,7 +106,7 @@ export default function SingleJobPosting({
           </div>
         )}
         <div className="flex w-fit flex-col">
-          <div className="mt-1 text-start text-sm text-gray-600 italic">
+          <div className="mt-1 text-start text-sm italic text-gray-600">
             Expires on:{" "}
             {formatDate(jobPosting.expiresAt, {
               dateStyle: "medium",
@@ -119,7 +119,7 @@ export default function SingleJobPosting({
               ""
             )}
           </div>
-          <div className="mt-2 mb-2 text-start text-sm text-gray-600 italic">
+          <div className="mb-2 mt-2 text-start text-sm italic text-gray-600">
             Current Date:{" "}
             {formatDate(currentDate, {
               dateStyle: "medium",
@@ -203,7 +203,7 @@ export default function SingleJobPosting({
               Job Description
             </Heading>
             <Paragraph
-              className="text-primary w-fit rounded-lg border-2 border-gray-300 p-4"
+              className="w-fit rounded-lg border-2 border-gray-300 p-4 text-primary"
               dangerouslySetInnerHTML={{
                 __html: jobPosting.description.replace(/\n/g, "<br />"),
               }}
@@ -214,13 +214,13 @@ export default function SingleJobPosting({
           <div className="flex flex-col gap-2">
             <div className="flex w-fit flex-col sm:flex-row">
               <div className="flex">
-                <MailIcon className="mt-0.5 mr-2" />
+                <MailIcon className="mr-2 mt-0.5" />
                 <h5
-                  className={`mt-0.5 mr-4 w-[120px] text-base font-bold dark:text-white`}>
+                  className={`mr-4 mt-0.5 w-[120px] text-base font-bold dark:text-white`}>
                   Apply by email
                 </h5>
               </div>
-              <div className="mb:mt-0 mt-2 flex items-center gap-3 text-sm">
+              <div className="mt-2 flex items-center gap-3 text-sm mb:mt-0">
                 <a
                   href={`mailto:${jobPosting.email}`}
                   className="text-lg text-blue-900 underline">

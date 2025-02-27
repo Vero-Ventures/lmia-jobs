@@ -34,20 +34,20 @@ export default async function Navbar({ title }: { title: string }) {
   }
 
   return (
-    <header className="bg-opacity-60 flex flex-col items-center bg-gray-200 px-2 sm:px-4 md:px-6 lg:flex-row">
+    <header className="flex flex-col items-center bg-gray-200 bg-opacity-60 px-2 sm:px-4 md:px-6 lg:flex-row">
       {!title ? (
         <Link
-          className="mb:mt-4 flex items-center justify-center text-center lg:mt-0"
+          className="flex items-center justify-center text-center mb:mt-4 lg:mt-0"
           href={data ? "/dashboard" : "/"}>
-          <span className="mb:text-2xl text-xl font-bold tracking-tighter">
+          <span className="text-xl font-bold tracking-tighter mb:text-2xl">
             Manage Opportunities
           </span>
         </Link>
       ) : (
         <Link
-          className="mb:mt-4 mt-2 flex items-center justify-center text-center lg:mt-0"
+          className="mt-2 flex items-center justify-center text-center mb:mt-4 lg:mt-0"
           href={`/`}>
-          <span className="text-primary mb:text-2xl text-xl font-bold tracking-tighter">
+          <span className="text-xl font-bold tracking-tighter text-primary mb:text-2xl">
             {title}
           </span>
         </Link>
@@ -62,7 +62,7 @@ export default async function Navbar({ title }: { title: string }) {
               variant="link"
               className={`h-fit px-2 hover:bg-gray-300 sm:mt-2 md:px-4 ${data ? "w-fit" : "mx-2 min-w-20 sm:mx-0"}`}>
               <Link
-                className={`mb:w-fit nav_sm:text-xl font-sans ${data ? "nav_mb:text-lg" : "mb:!text-xl !text-lg"}`}
+                className={`font-sans mb:w-fit nav_sm:text-xl ${data ? "nav_mb:text-lg" : "!text-lg mb:!text-xl"}`}
                 href={link.url}>
                 {link.text}
               </Link>
@@ -78,7 +78,7 @@ export default async function Navbar({ title }: { title: string }) {
           <>
             <Button asChild>
               <Link
-                className="mb:mx-4 mb:max-w-28 mb:!px-6 mb:!text-lg my-2 mb-3 hover:bg-gray-400 sm:mt-4 sm:!text-xl md:!p-6"
+                className="my-2 mb-3 hover:bg-gray-400 mb:mx-4 mb:max-w-28 mb:!px-6 mb:!text-lg sm:mt-4 sm:!text-xl md:!p-6"
                 href="/sign-in">
                 Log In
               </Link>
