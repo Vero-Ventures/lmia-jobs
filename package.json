@@ -32,6 +32,7 @@
     "@radix-ui/react-toast": "^1.2.4",
     "@react-email/components": "0.0.33",
     "@sparticuz/chromium": "^132.0.0",
+    "@tailwindcss/postcss": "^4.0.9",
     "@tailwindcss/typography": "^0.5.16",
     "@types/mdx": "^2.0.13",
     "@types/user-agents": "^1.0.4",
