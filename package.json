@@ -17,7 +17,7 @@
     "email:dev": "email dev --dir ./src/components/emails"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
+    "@hookform/resolvers": "^4.0.0",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@neondatabase/serverless": "^0.10.4",
@@ -41,7 +41,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.39.0",
+    "drizzle-orm": "^0.40.0",
     "drizzle-zod": "^0.7.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.476.0",
