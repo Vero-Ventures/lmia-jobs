@@ -42,8 +42,8 @@ export default function InviteEmail({
               create the post you want to make once in our admin dashboard. Our
               system will then automatically populated it across our 5 different
               job boards for key groups. We aim to make it quick and easy to
-              advertise to key groups such as: At-Risk Youth, Asylum Seeksers,
-              Disbabled Indeviduals, Indigenous Groups, and Recent Immigrants.
+              advertise to key groups such as: At-Risk Youth, Asylum Seekers,
+              Disabled Individuals, Indigenous Groups, and Recent Immigrants.
               Avoid the hassle of having to create and keep track of multiple
               job postings across each job board and join us at Opportunities.
             </Text>
@@ -65,12 +65,12 @@ export default function InviteEmail({
             </Section>
             <Section style={accountSection}>
               <Text style={text}>
-                Enter your email to recive a one time passcode. Use this
+                Enter your email to receive a one time passcode. Use this
                 passcode to log in and activate your account.
               </Text>
               <Text style={linkText}>
                 <a href={`https://allopportunities.ca/sign-in`}>
-                  Join Opportunties Now
+                  Join Opportunities Now
                 </a>
               </Text>
             </Section>

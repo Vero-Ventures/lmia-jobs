@@ -1,11 +1,11 @@
-import { checkInactiveUserAges } from "@/actions/check-users";
-// import { mailInvitesAndReminders } from "@/actions/mailer";
+import { checkForInactiveUsers } from "@/actions/check-users";
+import { mailInvite } from "@/actions/mailer";
 
-// Cron job to check for inactive users and send invites and reminders.
-// Set to run daily at 12:00 AM.
+// Cron job to check for inactive users and send out an invite.
+// Set to run hourly.
 export async function GET() {
-  await checkInactiveUserAges();
-  // await mailInvitesAndReminders();
+  await checkForInactiveUsers();
+  await mailInvite();
 
   return new Response("Completed", { status: 200 });
 }
