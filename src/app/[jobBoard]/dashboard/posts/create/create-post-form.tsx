@@ -493,7 +493,7 @@ export function CreatePostForm({
                   />
                   <label
                     htmlFor={"all"}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     All Opportunities
                   </label>
                 </div>
@@ -523,7 +523,7 @@ export function CreatePostForm({
                       />
                       <label
                         htmlFor={jobBoard}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                         {jobBoard} Opportunities
                       </label>
                     </div>

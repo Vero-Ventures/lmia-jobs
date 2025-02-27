@@ -6,7 +6,7 @@ export const mdxComponents = {
   h2: (props: string[]) => <Heading variant="h2" className="mb-4" {...props} />,
   h3: (props: string[]) => <Heading variant="h3" className="mb-4" {...props} />,
   p: (props: string[]) => (
-    <p className="mb-8 text-base leading-7 text-foreground/80" {...props} />
+    <p className="text-foreground/80 mb-8 text-base leading-7" {...props} />
   ),
-  hr: (props: string[]) => <hr className="mb-2 mt-4" {...props} />,
+  hr: (props: string[]) => <hr className="mt-4 mb-2" {...props} />,
 };

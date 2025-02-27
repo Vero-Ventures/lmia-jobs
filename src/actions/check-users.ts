@@ -4,7 +4,8 @@ import { db } from "@/db";
 import { userMailing, jobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
-export async function checkInactiveUserAges() {
+// Finds the most recent valid mailing user and sends them an invite.
+export async function checkForInactiveUsers() {
   try {
     // Get all users to check for inactive accounts (over a month without activation).
     const mailingUsers = await db.select().from(userMailing);
