@@ -38,7 +38,7 @@ export default async function Page({
     <main className="flex-1 px-4 pb-4">
       <div className="container mx-auto mt-4 w-full rounded-xl p-2 sm:w-4/5 md:w-3/4">
         <div className="flex justify-between gap-4 sm:px-6">
-          <h1 className="text-xl font-bold text-primary sm:mt-2 md:text-2xl">
+          <h1 className="text-primary text-xl font-bold sm:mt-2 md:text-2xl">
             Your Postings ({jobPostings.length})
           </h1>
           <Button asChild>
@@ -49,7 +49,7 @@ export default async function Page({
             </Link>
           </Button>
         </div>
-        <div className="mt-2 space-y-4 pt-4 text-primary">
+        <div className="text-primary mt-2 space-y-4 pt-4">
           <Form action={`/`} className="flex gap-4 sm:gap-6">
             <Input
               name="jobTitle"
