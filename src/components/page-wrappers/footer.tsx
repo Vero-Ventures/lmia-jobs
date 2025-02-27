@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function Footer({ title }: { title: string }) {
   return (
-    <footer className="mx-auto w-full bg-gray-200 bg-opacity-60 p-6 md:py-6">
+    <footer className="bg-opacity-60 mx-auto w-full bg-gray-200 p-6 md:py-6">
       <div className="container mx-auto hidden max-w-7xl grid-cols-3 gap-8 text-sm md:grid">
         <div className="grid content-start justify-center gap-y-3 text-center text-base">
           <h3 className="mb-2 text-xl font-semibold">Company</h3>
@@ -90,25 +90,25 @@ function Footer({ title }: { title: string }) {
           </Link>
           <Link
             href="https://accessibleopportunities.ca"
-            className="ml-1 pb-1.5 pt-1"
+            className="ml-1 pt-1 pb-1.5"
             target="_blank">
             Accessible Opportunities
           </Link>
           <Link
             href="https://asylumopportunities.ca"
-            className="ml-1 pb-1.5 pt-1"
+            className="ml-1 pt-1 pb-1.5"
             target="_blank">
             Asylum Opportunities
           </Link>
           <Link
             href="https://immigrantopportunities.ca"
-            className="ml-1 pb-1.5 pt-1"
+            className="ml-1 pt-1 pb-1.5"
             target="_blank">
             Immigrant Opportunities
           </Link>
           <Link
             href="https://indigenousopportunities.ca"
-            className="ml-1 pb-1.5 pt-1"
+            className="ml-1 pt-1 pb-1.5"
             target="_blank">
             Indigenous Opportunities
           </Link>
