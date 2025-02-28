@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     // Check that the API request has the correct authorization value.
     if (
       !body.authorization ||
-      body.authorization !== process.env.MONIOR_POST_AUTH
+      body.authorization !== process.env.MONITOR_POST_AUTH
     ) {
       return new Response("Invalid monitor posts call authorization.", {
         status: 500,
