@@ -27,7 +27,7 @@ export const auth = betterAuth({
         if (type === "sign-in") {
           // Send the OTP for sign-in.
           await resend.emails.send({
-            from: "Manage Opportunities <no-reply@manageopportunities.ca>",
+            from: `Manage Opportunities <no-reply${process.env.RESEND_DOMAIN}>`,
             to: [email],
             subject: "Sign in to Manage Opportunities",
             react: <SignInEmail otp={otp} />,

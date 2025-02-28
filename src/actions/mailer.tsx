@@ -83,7 +83,7 @@ export async function sendInvite(
 
       // Send out the invite email to the user.
       await resend.emails.send({
-        from: `Opportunities <${process.env.RESEND_ADDRESS}>`,
+        from: `Opportunities <JobBank${process.env.RESEND_DOMAIN}>`,
         to: [email],
         subject: "Activate Your New Account",
         react: (
@@ -131,7 +131,7 @@ export async function sendContactEmail({
 }) {
   await resend.emails.send({
     from: email,
-    to: `Opportunities <contact@manageopportunities.ca>`,
+    to: `Opportunities <contact${process.env.RESEND_DOMAIN}>`,
     subject: `Contact Us: " + ${subject}`,
     text: body,
   });
