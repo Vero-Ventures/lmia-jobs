@@ -74,7 +74,7 @@ export async function createCheckoutSession({
           price_data: {
             currency: "cad",
             product_data: {
-              name: `Job post across ${numJobBoards} job boards for the next ${numMonths} months.`,
+              name: `Post your job posting across ${numJobBoards} job boards for the next ${numMonths} months.`,
               description: `Pay for the job posting to appear on the selected Opportunities job boards for the next
             ${numMonths} months.`,
             },
