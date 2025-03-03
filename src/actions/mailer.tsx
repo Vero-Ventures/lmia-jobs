@@ -141,9 +141,9 @@ export async function sendContactEmail({
   body: string;
 }) {
   await resend.emails.send({
-    from: email,
-    to: `Opportunities <contact${process.env.RESEND_DOMAIN}>`,
-    subject: `Contact Us: " + ${subject}`,
+    from: `Opportunities <JobBank${process.env.RESEND_DOMAIN}>`,
+    to: `Opportunities <JobBank${process.env.RESEND_DOMAIN}>`,
+    subject: `Contact Us: ${subject}, From: ${email}`,
     text: body,
   });
 }
