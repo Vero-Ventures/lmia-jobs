@@ -151,10 +151,13 @@ export async function sendInviteEmail(
     key: process.env.MAILGUN_KEY,
   });
 
+  console.log(emailContent);
+  console.log(emailAddress);
+
   try {
     const result = await mg.messages.create("allopportunities.ca", {
       from: `Join AllOpportunities <JobBank@${process.env.MAILING_DOMAIN}>`,
-      to: [emailAddress],
+      to: `Invite <${emailAddress}>`,
       subject: "Hello Braden Rogers",
       text: emailContent,
     });
