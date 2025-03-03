@@ -148,7 +148,7 @@ export async function sendInviteEmail(
   const mailgun = new Mailgun(FormData);
   const mg = mailgun.client({
     username: "api",
-    key: process.env.MAILER_KEY,
+    key: process.env.MAILGUN_KEY,
   });
 
   try {
