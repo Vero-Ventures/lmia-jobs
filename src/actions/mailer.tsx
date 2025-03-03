@@ -34,6 +34,21 @@ const emailTemplates = [
   inviteEmail_10,
 ];
 
+function getTemplate(
+  templateNum: number,
+  _userId: number,
+  _expiredDate: string,
+  _postNames: string[],
+  _totalPosts: number
+): string {
+  return emailTemplates[templateNum](
+    _userId,
+    _expiredDate,
+    _postNames,
+    _totalPosts
+  );
+}
+
 const resend = new Resend(process.env.RESEND_KEY);
 
 export async function mailInvite() {
@@ -110,19 +125,18 @@ export async function sendInvite(
       const expiredDate = new Date(expiredTimeStamp);
 
       // Get the current mailer template number and read its content.
-      const inviteTemplate = Number(process.env.INVITE_TEMPLATE_NUM!);
+      const inviteTemplate = Number(process.env.INVITE_TEMPLATE_NUM!) - 1;
 
-      const emailContent = emailTemplates[inviteTemplate];
-
-      // Call Mailgun handler to send the invite email.
-      sendInviteEmail(
-        emailContent,
-        email,
+      const emailContent = getTemplate(
+        inviteTemplate,
         mailerId,
         expiredDate.toDateString(),
         topPostNames,
         totalPosts
       );
+
+      // Call Mailgun handler to send the invite email.
+      sendInviteEmail(email, emailContent);
 
       // Determine and set the next mailer template number.
       const nextTemplate = inviteTemplate + 1 < 11 ? inviteTemplate + 1 : 1;
@@ -140,11 +154,7 @@ export async function sendInvite(
 //        The User top 3 post names, and the total number of posts.
 export async function sendInviteEmail(
   emailContent: string,
-  emailAddress: string,
-  _userId: number,
-  _expiredDate: string,
-  _postNames: string[],
-  _totalPosts: number
+  emailAddress: string
 ) {
   const mailgun = new Mailgun(FormData);
   const mg = mailgun.client({

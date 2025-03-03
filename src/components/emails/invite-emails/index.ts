@@ -1,19 +1,89 @@
-export { inviteEmail_1 } from "./test-1";
+export function inviteEmail_1(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 1 Text`;
+}
 
-export { inviteEmail_2 } from "./test-2";
+export function inviteEmail_2(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 2 Text`;
+}
 
-export { inviteEmail_3 } from "./test-3";
+export function inviteEmail_3(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 3 Text`;
+}
 
-export { inviteEmail_4 } from "./test-4";
+export function inviteEmail_4(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 4 Text`;
+}
 
-export { inviteEmail_5 } from "./test-5";
+export function inviteEmail_5(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 5 Text`;
+}
 
-export { inviteEmail_6 } from "./test-6";
+export function inviteEmail_6(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 6 Text`;
+}
 
-export { inviteEmail_7 } from "./test-7";
+export function inviteEmail_7(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 7 Text`;
+}
 
-export { inviteEmail_8 } from "./test-8";
+export function inviteEmail_8(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 8 Text`;
+}
 
-export { inviteEmail_9 } from "./test-9";
+export function inviteEmail_9(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 9 Text`;
+}
 
-export { inviteEmail_10 } from "./test-10";
+export function inviteEmail_10(
+  _mailerId: number,
+  _expiryDate: string,
+  _topPostNames: string[],
+  _totalPosts: number
+) {
+  return `Test 10 Text`;
+}
