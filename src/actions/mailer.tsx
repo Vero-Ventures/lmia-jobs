@@ -7,7 +7,6 @@ import { Resend } from "resend";
 import FormData from "form-data";
 // @ts-expect-error - Module imports and calls fileContent without issue, but reads as error in IDE due to "." in the name.
 import Mailgun from "mailgun.js";
-
 import {
   inviteEmail_1,
   inviteEmail_2,
