@@ -87,7 +87,7 @@ export async function sendInvite(
       // Get the current mailer template number and read its content.
       const inviteTemplate = Number(process.env.INVITE_TEMPLATE_NUM!);
       async function readFile() {
-        const filePath = `./src/components/emails/invite-emails/test-${inviteTemplate}.txt`;
+        const filePath = `@/components/emails/invite-emails/test-${inviteTemplate}.txt`;
         const fileContent: string = await fs.readFile(filePath, "utf-8");
         return fileContent;
       }
