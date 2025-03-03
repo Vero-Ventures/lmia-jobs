@@ -7,6 +7,7 @@ import { Resend } from "resend";
 import FormData from "form-data";
 // @ts-expect-error - Module imports and calls fileContent without issue, but reads as error in IDE due to "." in the name.
 import Mailgun from "mailgun.js";
+
 import {
   inviteEmail_1,
   inviteEmail_2,
@@ -155,12 +156,14 @@ export async function sendInviteEmail(
   console.log(emailAddress);
 
   try {
-    await mg.messages.create("allopportunities.ca", {
+    const data = await mg.messages.create("allopportunities.ca", {
       from: `Join Opportunities <jobbank@allopportunities.ca>`,
-      to: `Invite <${emailAddress}>`,
+      to: [`Invite <${emailAddress}>`],
       subject: "Login to Your Opportunities Account Now",
       text: emailContent,
     });
+
+    console.log(data);
   } catch (error) {
     console.log("Error On Invite Email: " + error);
   }
