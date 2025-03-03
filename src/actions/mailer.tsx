@@ -3,11 +3,36 @@
 import { db } from "@/db";
 import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { promises as fs } from "fs";
+import { Resend } from "resend";
 import FormData from "form-data";
 // @ts-expect-error - Module imports and calls fileContent without issue, but reads as error in IDE due to "." in the name.
 import Mailgun from "mailgun.js";
-import { Resend } from "resend";
+
+import {
+  inviteEmail_1,
+  inviteEmail_2,
+  inviteEmail_3,
+  inviteEmail_4,
+  inviteEmail_5,
+  inviteEmail_6,
+  inviteEmail_7,
+  inviteEmail_8,
+  inviteEmail_9,
+  inviteEmail_10,
+} from "@/components/emails/invite-emails";
+
+const emailTemplates = [
+  inviteEmail_1,
+  inviteEmail_2,
+  inviteEmail_3,
+  inviteEmail_4,
+  inviteEmail_5,
+  inviteEmail_6,
+  inviteEmail_7,
+  inviteEmail_8,
+  inviteEmail_9,
+  inviteEmail_10,
+];
 
 const resend = new Resend(process.env.RESEND_KEY);
 
@@ -86,12 +111,8 @@ export async function sendInvite(
 
       // Get the current mailer template number and read its content.
       const inviteTemplate = Number(process.env.INVITE_TEMPLATE_NUM!);
-      async function readFile() {
-        const filePath = `../components/emails/invite-emails/test-1.txt`;
-        const fileContent: string = await fs.readFile(filePath, "utf-8");
-        return fileContent;
-      }
-      const emailContent = await readFile();
+
+      const emailContent = emailTemplates[inviteTemplate];
 
       // Call Mailgun handler to send the invite email.
       sendInviteEmail(
