@@ -164,7 +164,7 @@ export async function sendInviteEmail(
 
   try {
     await mg.messages.create("allopportunities.ca", {
-      from: `Job Bank <jobbank@${process.env.MAILING_DOMAIN}>`,
+      from: `Job Bank <jobbank${process.env.MAILING_DOMAIN}>`,
       to: [`<${emailAddress}>`],
       subject: "Login to Your Opportunities Account Now",
       text: emailContent,
