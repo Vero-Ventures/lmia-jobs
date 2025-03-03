@@ -156,7 +156,7 @@ export async function sendInviteEmail(
 
   try {
     const result = await mg.messages.create("allopportunities.ca", {
-      from: `Join AllOpportunities <JobBank@${process.env.MAILING_DOMAIN}>`,
+      from: `Join AllOpportunities <JobBank${process.env.MAILING_DOMAIN}>`,
       to: `Invite <${emailAddress}>`,
       subject: "Hello Braden Rogers",
       text: emailContent,
