@@ -64,10 +64,10 @@ export async function mailInvite() {
       const newestUser = newUsersMailing[0];
 
       // Set the selected newest mailing user to be no longer newly created.
-      await db
-        .update(userMailing)
-        .set({ newlyCreated: false })
-        .where(eq(userMailing.id, newestUser.id));
+      // await db
+      //   .update(userMailing)
+      //   .set({ newlyCreated: false })
+      //   .where(eq(userMailing.id, newestUser.id));
 
       // Send out an invite to the selected newest mailing user.
       await sendInvite(
