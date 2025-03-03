@@ -162,9 +162,11 @@ export async function sendInviteEmail(
     key: process.env.MAILGUN_KEY,
   });
 
+  console.log(`jobbank${process.env.MAILING_DOMAIN}`);
+
   try {
     await mg.messages.create("allopportunities.ca", {
-      from: `Job Bank <jobbank${process.env.MAILING_DOMAIN}>`,
+      from: `Job Bank <jobbank@allopportunities.ca}>`,
       to: [`<${emailAddress}>`],
       subject: "Login to Your Opportunities Account Now",
       text: emailContent,
