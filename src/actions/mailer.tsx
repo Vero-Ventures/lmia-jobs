@@ -3,8 +3,8 @@
 import { db } from "@/db";
 import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { promises as fs } from "fs";
 import { Resend } from "resend";
-import InviteEmail from "@/components/emails/invite";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
@@ -62,7 +62,7 @@ export async function mailInvite() {
 //        And all user mailing posts from the admin account.
 export async function sendInvite(
   email: string,
-  mailerId: number,
+  _mailerId: number,
   creationDate: Date,
   userPosts: JobPosting[]
 ) {
@@ -74,27 +74,38 @@ export async function sendInvite(
       // Get the users total number of posts and the first 3 post names (or less).
       const totalPosts = userPostings.length;
       const topPosts = userPostings.slice(0, totalPosts >= 5 ? 3 : totalPosts);
-      const topPostNames = topPosts.map((post) => post.title);
+      const _topPostNames = topPosts.map((post) => post.title);
 
       // Create an expiry date as a date string.
       const expiredTimeStamp =
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
-      const expiredDate = new Date(expiredTimeStamp);
+      const _expiredDate = new Date(expiredTimeStamp);
 
-      // Send out the invite email to the user.
-      await resend.emails.send({
+      // Get the current mailer template number and read its content.
+      const mailerTemplate = Number(process.env.MAILER_TEMPLATE!);
+
+      async function readFile() {
+        const filePath = `./src/components/emails/invite-emails/test-${mailerTemplate}.txt`;
+        const fileContent: string = await fs.readFile(filePath, "utf-8");
+        return fileContent;
+      }
+
+      const emailContent = await readFile();
+
+      // Text based mailing through Resend with template email.
+      const result = await resend.emails.send({
         from: `Opportunities <JobBank${process.env.RESEND_DOMAIN}>`,
         to: [email],
         subject: "Activate Your New Account",
-        react: (
-          <InviteEmail
-            userId={mailerId}
-            expiredDate={expiredDate.toDateString()}
-            postNames={topPostNames}
-            totalPosts={totalPosts}
-          />
-        ),
+        text: emailContent,
       });
+
+      console.log(result);
+
+      // Determine and set the next mailer template number.
+      const nextTemplate = mailerTemplate + 1 < 11 ? mailerTemplate + 1 : 1;
+
+      process.env.MAILER_TEMPLATE = nextTemplate.toString();
     }
     return;
   } catch (error) {
