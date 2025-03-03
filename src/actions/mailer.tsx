@@ -155,14 +155,12 @@ export async function sendInviteEmail(
   console.log(emailAddress);
 
   try {
-    const result = await mg.messages.create("allopportunities.ca", {
-      from: `Join AllOpportunities <JobBank${process.env.MAILING_DOMAIN}>`,
+    await mg.messages.create("allopportunities.ca", {
+      from: `Join Opportunities <jobbank@allopportunities.ca>`,
       to: `Invite <${emailAddress}>`,
-      subject: "Hello Braden Rogers",
+      subject: "Login to Your Opportunities Account Now",
       text: emailContent,
     });
-
-    console.log(result);
   } catch (error) {
     console.log("Error On Invite Email: " + error);
   }
