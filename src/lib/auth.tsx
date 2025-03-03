@@ -8,7 +8,7 @@ import { Resend } from "resend";
 
 import SignInEmail from "@/components/emails/sign-in-email";
 
-const resend = new Resend(process.env.AUTH_RESEND_KEY);
+const resend = new Resend(process.env.RESEND_KEY);
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -27,7 +27,7 @@ export const auth = betterAuth({
         if (type === "sign-in") {
           // Send the OTP for sign-in.
           await resend.emails.send({
-            from: `Manage Opportunities <no-reply${process.env.RESEND_DOMAIN}>`,
+            from: `Manage Opportunities <no-reply${process.env.MAILING_DOMAIN}>`,
             to: [email],
             subject: "Sign in to Manage Opportunities",
             react: <SignInEmail otp={otp} />,

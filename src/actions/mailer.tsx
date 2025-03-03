@@ -3,10 +3,13 @@
 import { db } from "@/db";
 import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { promises as fs } from "fs";
+import FormData from "form-data";
+// @ts-expect-error - Module imports and calls fileContent without issue, but reads as error in IDE due to "." in the name.
+import Mailgun from "mailgun.js";
 import { Resend } from "resend";
-import InviteEmail from "@/components/emails/invite";
 
-const resend = new Resend(process.env.AUTH_RESEND_KEY);
+const resend = new Resend(process.env.RESEND_KEY);
 
 export async function mailInvite() {
   try {
@@ -81,25 +84,62 @@ export async function sendInvite(
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
-      // Send out the invite email to the user.
-      await resend.emails.send({
-        from: `Opportunities <JobBank${process.env.RESEND_DOMAIN}>`,
-        to: [email],
-        subject: "Activate Your New Account",
-        react: (
-          <InviteEmail
-            userId={mailerId}
-            expiredDate={expiredDate.toDateString()}
-            postNames={topPostNames}
-            totalPosts={totalPosts}
-          />
-        ),
-      });
+      // Get the current mailer template number and read its content.
+      const inviteTemplate = Number(process.env.INVITE_TEMPLATE_NUM!);
+      async function readFile() {
+        const filePath = `./src/components/emails/invite-emails/test-${inviteTemplate}.txt`;
+        const fileContent: string = await fs.readFile(filePath, "utf-8");
+        return fileContent;
+      }
+      const emailContent = await readFile();
+
+      // Call Mailgun handler to send the invite email.
+      sendInviteEmail(
+        emailContent,
+        email,
+        mailerId,
+        expiredDate.toDateString(),
+        topPostNames,
+        totalPosts
+      );
+
+      // Determine and set the next mailer template number.
+      const nextTemplate = inviteTemplate + 1 < 11 ? inviteTemplate + 1 : 1;
+
+      process.env.INVITE_TEMPLATE = nextTemplate.toString();
     }
     return;
   } catch (error) {
     console.error("Mailing process failed: " + error);
     return;
+  }
+}
+
+// Takes: The email content, the email address, the mailer Id, the expiry date,
+//        The User top 3 post names, and the total number of posts.
+export async function sendInviteEmail(
+  emailContent: string,
+  emailAddress: string,
+  _userId: number,
+  _expiredDate: string,
+  _postNames: string[],
+  _totalPosts: number
+) {
+  const mailgun = new Mailgun(FormData);
+  const mg = mailgun.client({
+    username: "api",
+    key: process.env.INVITE_MAILER_KEY,
+  });
+
+  try {
+    await mg.messages.create("allopportunities.ca", {
+      from: `Join AllOpportunities <JobBank@${process.env.MAILING_DOMAIN}>`,
+      to: [emailAddress],
+      subject: "Hello Braden Rogers",
+      text: emailContent,
+    });
+  } catch (error) {
+    console.log("Error On Invite Email: " + error);
   }
 }
 
@@ -130,9 +170,9 @@ export async function sendContactEmail({
   body: string;
 }) {
   await resend.emails.send({
-    from: email,
-    to: `Opportunities <contact${process.env.RESEND_DOMAIN}>`,
-    subject: `Contact Us: " + ${subject}`,
+    from: `Opportunities <JobBank${process.env.MAILING_DOMAIN}>`,
+    to: `Opportunities <JobBank${process.env.MAILING_DOMAIN}>`,
+    subject: `Contact Us: ${subject}, From: ${email}`,
     text: body,
   });
 }
