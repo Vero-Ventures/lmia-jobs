@@ -7,7 +7,6 @@ import { updateEmail } from "@/actions/handle-account";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import {
   Card,
@@ -16,9 +15,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { manageBilling } from "./actions";
 
 export default function Page() {
   const { data, isPending } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   // Track the new email and if the user has confirmed the email update.
   const [newEmail, setNewEmail] = useState("");
@@ -67,15 +68,28 @@ export default function Page() {
     }
   };
 
+  const onSubscribe = async () => {
+    try {
+      setIsLoading(true);
+      const { url } = await manageBilling({
+        returnUrl: window.location.href,
+      });
+      window.location.href = url ?? "";
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("STRIPE_CLIENT_ERROR", error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main>
       <div className="space-y-4 p-20">
         <div className="flex justify-center">
-          <Button asChild size="lg">
-            <Link
-              href={"https://billing.stripe.com/p/login/7sI2bz5KPgXadXOeUU"}>
-              Manage Subsciption
-            </Link>
+          <Button disabled={isLoading} size="lg" onClick={onSubscribe}>
+            Manage Billing
           </Button>
         </div>
         <Card className="mx-auto max-w-xl">
