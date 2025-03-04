@@ -1,7 +1,12 @@
 "use server";
 
 import { db } from "@/db";
-import { jobPosting, userMailing, type JobPosting } from "@/db/schema";
+import {
+  jobPosting,
+  userMailing,
+  type JobPosting,
+  inviteTemplate,
+} from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { Resend } from "resend";
 import FormData from "form-data";
@@ -34,21 +39,6 @@ const emailTemplates = [
   inviteEmail_10,
 ];
 
-function getTemplate(
-  templateNum: number,
-  _userId: number,
-  _expiredDate: string,
-  _postNames: string[],
-  _totalPosts: number
-): string {
-  return emailTemplates[templateNum](
-    _userId,
-    _expiredDate,
-    _postNames,
-    _totalPosts
-  );
-}
-
 const resend = new Resend(process.env.RESEND_KEY);
 
 export async function mailInvite() {
@@ -80,10 +70,10 @@ export async function mailInvite() {
       const newestUser = newUsersMailing[0];
 
       // Set the selected newest mailing user to be no longer newly created.
-      // await db
-      //   .update(userMailing)
-      //   .set({ newlyCreated: false })
-      //   .where(eq(userMailing.id, newestUser.id));
+      await db
+        .update(userMailing)
+        .set({ newlyCreated: false })
+        .where(eq(userMailing.id, newestUser.id));
 
       // Send out an invite to the selected newest mailing user.
       await sendInvite(
@@ -124,11 +114,15 @@ export async function sendInvite(
         creationDate.getTime() + 31 * 24 * 60 * 60 * 1000;
       const expiredDate = new Date(expiredTimeStamp);
 
-      // Get the current mailer template number and read its content.
-      const inviteTemplate = Number(process.env.INVITE_TEMPLATE_NUM!) - 1;
+      // Get the current mailer template number from the database and call helper to get the content.
+      const inviteTemplateNum = await db
+        .select()
+        .from(inviteTemplate)
+        .where(eq(inviteTemplate.id, "template_num"))
+        .then((res) => Number(res[0].templateNum));
 
       const emailContent = getTemplate(
-        inviteTemplate,
+        inviteTemplateNum,
         mailerId,
         expiredDate.toDateString(),
         topPostNames,
@@ -138,10 +132,14 @@ export async function sendInvite(
       // Call Mailgun handler to send the invite email.
       sendInviteEmail(email, emailContent);
 
-      // Determine and set the next mailer template number.
-      const nextTemplate = inviteTemplate + 1 < 11 ? inviteTemplate + 1 : 1;
+      // Determine the next mailer template number and update the database.
+      const nextTemplate =
+        inviteTemplateNum + 1 <= 10 ? inviteTemplateNum + 1 : 1;
 
-      process.env.INVITE_TEMPLATE = nextTemplate.toString();
+      await db
+        .update(inviteTemplate)
+        .set({ templateNum: nextTemplate.toString() })
+        .where(eq(inviteTemplate.id, "template_num"));
     }
     return;
   } catch (error) {
@@ -150,41 +148,46 @@ export async function sendInvite(
   }
 }
 
+// Takes: The template number, the user Id, the expiry date, the top 3 post names, and the total number of posts.
+// Returns: The email content for the invite email.
+function getTemplate(
+  templateNum: number,
+  _userId: number,
+  _expiredDate: string,
+  _postNames: string[],
+  _totalPosts: number
+): string {
+  const templateIndex = templateNum - 1;
+  return emailTemplates[templateIndex](
+    _userId,
+    _expiredDate,
+    _postNames,
+    _totalPosts
+  );
+}
+
 // Takes: The email content, the email address, the mailer Id, the expiry date,
 //        The User top 3 post names, and the total number of posts.
 export async function sendInviteEmail(
-  emailContent: string,
-  emailAddress: string
+  emailAddress: string,
+  emailContent: string
 ) {
+  // Create a new Mailgun client and try sending the email.
   const mailgun = new Mailgun(FormData);
   const mg = mailgun.client({
     username: "api",
-    key: process.env.MAILGUN_KEY!,
+    key: process.env.MAILGUN_KEY,
   });
 
-  console.log(emailAddress);
-  console.log(emailContent);
-
   try {
-    console.log("Sending Email");
-    // const data = await mg.messages.create("allopportunities.ca", {
-    //   from: `Job Bank <jobbank@allopportunities.ca>`,
-    //   to: [`Invite <bradenrogersdev@gmail.com>`],
-    //   subject: "Login to Your Opportunities Account Now",
-    //   text: emailContent,
-    // });
-
-    const data = await mg.messages.create("allopportunities.ca", {
-      from: "Mailgun Sandbox <postmaster@allopportunities.ca>",
-      to: ["Braden Rogers <braden.rogers@veroventures.com>"],
-      subject: "Hello Braden Rogers",
-      text: "emailContent",
+    await mg.messages.create("allopportunities.ca", {
+      from: `Job Board <JobBoard${process.env.MAILING_DOMAIN}>`,
+      to: emailAddress,
+      subject: "Login to Your Opportunities Account Now",
+      text: emailContent,
     });
-
-    console.log(data);
-    console.log("Email Sent");
   } catch (error) {
-    console.log("Error On Invite Email: " + error);
+    console.error("Error On Invite Email: " + error);
   }
 }
 

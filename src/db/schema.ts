@@ -138,3 +138,8 @@ export const userMailing = pgTable("user_mailing", {
 export type JobPosting = typeof jobPosting.$inferSelect;
 
 export type JobBoardPosting = typeof jobBoardPosting.$inferSelect;
+
+export const inviteTemplate = pgTable("invite_template", {
+  id: text("id").primaryKey().default("template_num"),
+  templateNum: text("template_num").notNull().unique(),
+});
