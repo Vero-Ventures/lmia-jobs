@@ -82,6 +82,8 @@ export async function mailInvite() {
         newestUser.createdAt,
         userPosts
       );
+    } else {
+      console.log("No new users to send invites to.");
     }
 
     return;
@@ -123,7 +125,7 @@ export async function sendInvite(
         .where(eq(inviteTemplate.id, "template_num"))
         .then((res) => Number(res[0].templateNum));
 
-      const [emailSubject, emailContent] = getTemplate(
+      const [emailSubject, emailContent] = getInviteEmail(
         inviteTemplateNum,
         mailerId,
         expiredDate.toDateString(),
@@ -152,19 +154,19 @@ export async function sendInvite(
 
 // Takes: The template number, the user Id, the expiry date, the top 3 post names, and the total number of posts.
 // Returns: The email content for the invite email.
-function getTemplate(
+function getInviteEmail(
   templateNum: number,
-  _userId: number,
-  _expiredDate: string,
-  _postNames: string[],
-  _totalPosts: number
+  userId: number,
+  expiredDate: string,
+  postNames: string[],
+  totalPosts: number
 ): string[] {
   const templateIndex = templateNum - 1;
   return emailTemplates[templateIndex](
-    _userId,
-    _expiredDate,
-    _postNames,
-    _totalPosts
+    userId,
+    expiredDate,
+    postNames,
+    totalPosts
   );
 }
 
