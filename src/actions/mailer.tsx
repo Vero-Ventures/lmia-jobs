@@ -167,10 +167,10 @@ export async function sendInviteEmail(
 
   try {
     const result = await mg.messages.create("allopportunities.ca", {
-      from: `Job Bank <jobbank@allopportunities.ca>`,
+      from: `Join Opportunities <JobBank@allopportunities.ca>`,
       to: [`Invite <${emailAddress}>`],
       subject: "Login to Your Opportunities Account Now",
-      text: emailContent,
+      text: "emailContent",
     });
 
     console.log("Email Sent: " + result);
