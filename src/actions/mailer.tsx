@@ -94,14 +94,16 @@ export async function mailInvite() {
 // Takes: The user email and mailer Id, the date of the mailing user creation,
 //        And all user mailing posts from the admin account.
 export async function sendInvite(
-  email: string,
+  emailAddress: string,
   mailerId: number,
   creationDate: Date,
   userPosts: JobPosting[]
 ) {
   try {
     // Filter to the posts of the current user.
-    const userPostings = userPosts.filter((post) => post.email === email);
+    const userPostings = userPosts.filter(
+      (post) => post.email === emailAddress
+    );
 
     if (userPostings.length > 0) {
       // Get the users total number of posts and the first 3 post names (or less).
@@ -121,7 +123,7 @@ export async function sendInvite(
         .where(eq(inviteTemplate.id, "template_num"))
         .then((res) => Number(res[0].templateNum));
 
-      const emailContent = getTemplate(
+      const [emailSubject, emailContent] = getTemplate(
         inviteTemplateNum,
         mailerId,
         expiredDate.toDateString(),
@@ -130,7 +132,7 @@ export async function sendInvite(
       );
 
       // Call Mailgun handler to send the invite email.
-      sendInviteEmail(email, emailContent);
+      sendInviteEmail(emailAddress, emailSubject, emailContent);
 
       // Determine the next mailer template number and update the database.
       const nextTemplate =
@@ -156,7 +158,7 @@ function getTemplate(
   _expiredDate: string,
   _postNames: string[],
   _totalPosts: number
-): string {
+): string[] {
   const templateIndex = templateNum - 1;
   return emailTemplates[templateIndex](
     _userId,
@@ -170,6 +172,7 @@ function getTemplate(
 //        The User top 3 post names, and the total number of posts.
 export async function sendInviteEmail(
   emailAddress: string,
+  emailSubject: string,
   emailContent: string
 ) {
   // Create a new Mailgun client and try sending the email.
@@ -183,7 +186,7 @@ export async function sendInviteEmail(
     await mg.messages.create("allopportunities.ca", {
       from: `Job Board <JobBoard${process.env.MAILING_DOMAIN}>`,
       to: emailAddress,
-      subject: "Login to Your Opportunities Account Now",
+      subject: emailSubject,
       text: emailContent,
     });
   } catch (error) {
