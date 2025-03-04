@@ -164,17 +164,23 @@ export async function sendInviteEmail(
 
   console.log(emailAddress);
   console.log(emailContent);
-  console.log(process.env.MAILGUN_KEY);
 
   try {
-    const result = await mg.messages.create("allopportunities.ca", {
-      from: `Join Opportunities <JobBank@allopportunities.ca>`,
-      to: [`Invite <bradenrogersdev@gmail.com>`],
-      subject: "Login to Your Opportunities Account Now",
-      text: "emailContent",
+    // const data = await mg.messages.create("allopportunities.ca", {
+    //   from: `Job Bank <jobbank@allopportunities.ca>`,
+    //   to: [`Invite <bradenrogersdev@gmail.com>`],
+    //   subject: "Login to Your Opportunities Account Now",
+    //   text: "emailContent",
+    // });
+
+    const data = await mg.messages.create("allopportunities.ca", {
+      from: "Mailgun Sandbox <postmaster@allopportunities.ca>",
+      to: ["Braden Rogers <braden.rogers@veroventures.com>"],
+      subject: "Hello Braden Rogers",
+      text: "Congratulations Braden Rogers, you just sent an email with Mailgun! You are truly awesome!",
     });
 
-    console.log("Email Sent: " + result);
+    console.log(data);
   } catch (error) {
     console.log("Error On Invite Email: " + error);
   }
