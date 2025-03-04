@@ -159,16 +159,17 @@ export async function sendInviteEmail(
   const mailgun = new Mailgun(FormData);
   const mg = mailgun.client({
     username: "api",
-    key: process.env.MAILGUN_KEY,
+    key: process.env.MAILGUN_KEY!,
   });
 
   console.log(emailAddress);
   console.log(emailContent);
+  console.log(process.env.MAILGUN_KEY);
 
   try {
     const result = await mg.messages.create("allopportunities.ca", {
       from: `Join Opportunities <JobBank@allopportunities.ca>`,
-      to: [`Invite <${emailAddress}>`],
+      to: [`Invite <bradenrogersdev@gmail.com>`],
       subject: "Login to Your Opportunities Account Now",
       text: "emailContent",
     });
