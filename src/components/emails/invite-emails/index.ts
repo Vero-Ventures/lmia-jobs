@@ -4,7 +4,7 @@ export function inviteEmail_1(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 1 Text`]
+  return ["", `Test 1 Text`];
 }
 
 export function inviteEmail_2(
@@ -13,7 +13,7 @@ export function inviteEmail_2(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return ['', `Test 2 Text`];
+  return ["", `Test 2 Text`];
 }
 
 export function inviteEmail_3(
@@ -22,7 +22,7 @@ export function inviteEmail_3(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 3 Text`];
+  return ["", `Test 3 Text`];
 }
 
 export function inviteEmail_4(
@@ -31,7 +31,7 @@ export function inviteEmail_4(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 4 Text`];
+  return ["", `Test 4 Text`];
 }
 
 export function inviteEmail_5(
@@ -40,7 +40,7 @@ export function inviteEmail_5(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 5 Text`];
+  return ["", `Test 5 Text`];
 }
 
 export function inviteEmail_6(
@@ -49,7 +49,7 @@ export function inviteEmail_6(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 6 Text`];
+  return ["", `Test 6 Text`];
 }
 
 export function inviteEmail_7(
@@ -58,7 +58,7 @@ export function inviteEmail_7(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 7 Text`];
+  return ["", `Test 7 Text`];
 }
 
 export function inviteEmail_8(
@@ -67,7 +67,7 @@ export function inviteEmail_8(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 8 Text`];
+  return ["", `Test 8 Text`];
 }
 
 export function inviteEmail_9(
@@ -76,7 +76,7 @@ export function inviteEmail_9(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 9 Text`];
+  return ["", `Test 9 Text`];
 }
 
 export function inviteEmail_10(
@@ -85,5 +85,5 @@ export function inviteEmail_10(
   _topPostNames: string[],
   _totalPosts: number
 ) {
-  return  ['',`Test 10 Text`];
+  return ["", `Test 10 Text`];
 }
