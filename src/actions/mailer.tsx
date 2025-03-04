@@ -166,6 +166,7 @@ export async function sendInviteEmail(
   console.log(emailContent);
 
   try {
+    console.log("Sending Email");
     // const data = await mg.messages.create("allopportunities.ca", {
     //   from: `Job Bank <jobbank@allopportunities.ca>`,
     //   to: [`Invite <bradenrogersdev@gmail.com>`],
@@ -177,10 +178,11 @@ export async function sendInviteEmail(
       from: "Mailgun Sandbox <postmaster@allopportunities.ca>",
       to: ["Braden Rogers <braden.rogers@veroventures.com>"],
       subject: "Hello Braden Rogers",
-      text: emailContent,
+      text: "emailContent",
     });
 
     console.log(data);
+    console.log("Email Sent");
   } catch (error) {
     console.log("Error On Invite Email: " + error);
   }
