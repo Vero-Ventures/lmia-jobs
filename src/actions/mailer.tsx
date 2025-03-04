@@ -170,14 +170,14 @@ export async function sendInviteEmail(
     //   from: `Job Bank <jobbank@allopportunities.ca>`,
     //   to: [`Invite <bradenrogersdev@gmail.com>`],
     //   subject: "Login to Your Opportunities Account Now",
-    //   text: "emailContent",
+    //   text: emailContent,
     // });
 
     const data = await mg.messages.create("allopportunities.ca", {
       from: "Mailgun Sandbox <postmaster@allopportunities.ca>",
       to: ["Braden Rogers <braden.rogers@veroventures.com>"],
       subject: "Hello Braden Rogers",
-      text: "Congratulations Braden Rogers, you just sent an email with Mailgun! You are truly awesome!",
+      text: emailContent,
     });
 
     console.log(data);
