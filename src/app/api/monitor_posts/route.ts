@@ -4,9 +4,10 @@ import { runScraper } from "@/actions/scraper/run-scraper/setup";
 // Takes: An request containing the "authorization" key and the link to the new post.
 export async function POST(request: Request) {
   try {
-    console.log("Body: " + request.body);
 
-    console.log("Text: " + (await request.text()));
+    const bodyText = JSON.parse(await request.text());
+
+    console.log("Text: " + bodyText);
 
     // Parse the body for the authentication key and post link.
     const body = await request.json();
