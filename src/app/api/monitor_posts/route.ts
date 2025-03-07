@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       try {
         // Extract the post Id and run the scraper on the post.
         const postId = body.postLink.split("jobposting/")[1];
-        runScraper(postId);
+        await runScraper(postId);
 
         return new Response("Success.", { status: 200 });
       } catch (error) {
