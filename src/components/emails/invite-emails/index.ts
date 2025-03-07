@@ -72,7 +72,7 @@ export function inviteEmail_2(
     
     <p>Whether or not your listing is connected to an LMIA application, using our specialized platforms ensures compliance, credibility, and better visibility among local Canadian talent.</p>
     
-    <p><a href="allopportunities.ca/sign-in" style="display: inline-block; 	font-size: 1 rem; font-weight: 600; padding: 10px 10px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Claim Your Listing Now</a></p>
+    <p><a href="https://calendly.com/veroventures/chat" style="display: inline-block; 	font-size: 1 rem; font-weight: 600; padding: 10px 10px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Book a Consultation</a></p>
 
     <p>Best regards,<br>
     Vero Ventures (proudly Canadian 🇨🇦)</p>
