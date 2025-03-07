@@ -128,7 +128,7 @@ export async function sendInvite(
       const [emailSubject, emailContent] = getInviteEmail(
         inviteTemplateNum,
         mailerId,
-        expiredDate.toDateString(),
+        expiredDate,
         topPostNames,
         totalPosts
       );
@@ -138,7 +138,9 @@ export async function sendInvite(
 
       // Determine the next mailer template number and update the database.
       const nextTemplate =
-        inviteTemplateNum + 1 <= 10 ? inviteTemplateNum + 1 : 1;
+        inviteTemplateNum + 1 <= Number(process.env.INVITE_TEMPLATES)
+          ? inviteTemplateNum + 1
+          : 1;
 
       await db
         .update(inviteTemplate)
@@ -156,17 +158,49 @@ export async function sendInvite(
 // Returns: The email content for the invite email.
 function getInviteEmail(
   templateNum: number,
-  userId: number,
-  expiredDate: string,
+  mailerId: number,
+  expiredDate: Date,
   postNames: string[],
   totalPosts: number
 ): string[] {
+  // Get the index of the selected template from template number
   const templateIndex = templateNum - 1;
+
+  // Get the expiry date suffix and a formatted date string.
+  const expiredDateDay = expiredDate.getDate() % 10;
+  let expiredDateSuffix;
+
+  switch (expiredDateDay) {
+    case 1:
+      expiredDateSuffix = "st";
+      break;
+    case 2:
+      expiredDateSuffix = "nd";
+      break;
+    case 3:
+      expiredDateSuffix = "rd";
+      break;
+    default:
+      expiredDateSuffix = "th";
+      break;
+  }
+
+  const formattedExpiredDate =
+    expiredDate.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+    }) + expiredDateSuffix;
+
+  // Create the opt out link for the user with the mailer Id.
+  const optOutLink =
+    "https://allopportunities.ca/dashboard/opt-out/" + mailerId;
+
+  // Get and return the email content from the selected template.
   return emailTemplates[templateIndex](
-    userId,
-    expiredDate,
     postNames,
-    totalPosts
+    totalPosts,
+    formattedExpiredDate,
+    optOutLink
   );
 }
 
@@ -189,7 +223,7 @@ export async function sendInviteEmail(
       from: `Job Board <JobBoard${process.env.MAILING_DOMAIN}>`,
       to: emailAddress,
       subject: emailSubject,
-      text: emailContent,
+      html: emailContent,
     });
   } catch (error) {
     console.error("Error On Invite Email: " + error);
