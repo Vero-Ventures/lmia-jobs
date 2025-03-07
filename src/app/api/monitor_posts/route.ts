@@ -4,22 +4,11 @@ import { runScraper } from "@/actions/scraper/run-scraper/setup";
 // Takes: An request containing the "authorization" key and the link to the new post.
 export async function POST(request: Request) {
   try {
+    console.log("Monitor Posts Call Received.");
+
+    // Parse the body for the authentication key and post link.
     const body = await request.json();
 
-    runHandler(body);
-
-    return new Response("Success.", { status: 200 });
-  } catch (error) {
-    return new Response("Failed to fetch RSS feed: " + error, {
-      status: 500,
-    });
-  }
-}
-
-// Runs the scraper on the post link provided in the body.
-// Takes: The body of the request containing the "authorization" key and the link to the new post.
-async function runHandler(body: { authorization: string; postLink: string }) {
-  try {
     // Check that the API request has the correct authorization value.
     if (
       !body.authorization ||
@@ -39,15 +28,15 @@ async function runHandler(body: { authorization: string; postLink: string }) {
       try {
         // Extract the post Id and run the scraper on the post.
         const postId = body.postLink.split("jobposting/")[1];
+        console.log("Running scraper on post: ", postId);
         await runScraper(postId);
 
+        console.log("Successfully ran scraper on post: ", postId);
         return new Response("Success.", { status: 200 });
       } catch (error) {
         return new Response("Failed to run scraper on RSS feed: " + error, {
           status: 500,
         });
-
-
       }
     }
   } catch (error) {
