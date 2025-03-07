@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       try {
         console.log("Get ID")
         // Extract the post Id and run the scraper on the post.
-        const postId = body.postLink.split("id=")[1];
+        const postId = body.postLink.split("jobposting/")[1];
 
         console.log("Post ID")
         console.log(postId)
