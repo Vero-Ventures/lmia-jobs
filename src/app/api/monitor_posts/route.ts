@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     // Check for a valid post link in the body.
     if (!body.postLink) {
       return new Response("Post Link Not Found On Monitor Posts Call.", {
-        status: 500,
+        status: 299,
       });
     } else {
       try {
@@ -34,13 +34,13 @@ export async function POST(request: Request) {
 
         return new Response("Success.", { status: 200 });
       } catch (error) {
-        return new Response("Failed to run scraper on RSS feed: " + error, {
-          status: 500,
+        return new Response("Error running scraper on post from RSS feed: " + error, {
+          status: 299,
         });
       }
     }
   } catch (error) {
-    return new Response("Failed to fetch RSS feed: " + error, {
+    return new Response("Unexpected Error: " + error, {
       status: 500,
     });
   }
