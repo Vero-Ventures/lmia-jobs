@@ -1,14 +1,23 @@
+// Takes: An array of post names and the total number of posts.
+// Returns: A formatted string of list items for the email.
 function formatPostNames(postNames: string[], totalPosts: number) {
-  let postNamesString;
-  if (totalPosts === 1) {
-    postNamesString = postNames[0];
-  } else if (totalPosts < 3) {
-    postNamesString = postNames.join(" and ");
-  } else {
-    postNamesString =
-      postNames[0] + ", " + postNames[1] + ", and " + postNames[2];
+  // Get the job post names as an array of HTML list item strings.
+  let postNameListItems = "";
+  for (const postName of postNames) {
+    postNameListItems += `<li style= "font-style: italic; font-weight: 700;"><strong>${postName}</strong></li>\n`;
   }
-  return postNamesString;
+
+  // If there are more than 3 posts, add a "more" list item.
+  if (totalPosts >= 3) {
+    postNameListItems += `<li style= "font-style: italic; font-weight: 700;"><strong>And ${totalPosts - 3} more!</strong></li>`;
+  }
+
+  // Return the formatted list items as an unordered list.
+  return `
+  <ul>
+    ${postNameListItems}
+  </ul>
+  `;
 }
 
 export function inviteEmail_1(
@@ -17,7 +26,8 @@ export function inviteEmail_1(
   expiryDate: string,
   optOutLink: string
 ) {
-  const _postNamesString = formatPostNames(topPostNames, totalPosts);
+  const postNamesString = formatPostNames(topPostNames, totalPosts);
+
   return [
     "Strengthen Your LMIA Application with Targeted Job Listings",
     `
@@ -25,8 +35,14 @@ export function inviteEmail_1(
     
     <p>We noticed your job listing on the official Job Bank Canada website and wanted to share how you can take it a step further to strengthen your LMIA application.</p>
     
-    <p>In today’s climate, where immigration programs are under political scrutiny, even small details and proactive efforts can make or break a case. Listing your job on specialized job boards - like <a href="https://youthopportunities.ca">YouthOpportunities.ca</a>, <a href="https://indigenousopportunities.ca">IndigenousOpportunities.ca</a>, and others - demonstrates to the Canadian government that you’ve made a genuine effort to hire local Canadian talent before seeking foreign workers.</p>
+    <p>In today’s climate, where immigration programs are under political scrutiny, even small details and proactive efforts can make or break a case.
+    <br>
+    Listing your job on specialized job boards - like <a href="https://youthopportunities.ca">YouthOpportunities.ca</a>, <a href="https://indigenousopportunities.ca">IndigenousOpportunities.ca</a>, and others - demonstrates to the Canadian government that you’ve made a genuine effort to hire local Canadian talent before seeking foreign workers.</p>
     
+    ${postNamesString}
+
+    <p><a href="allopportunities.ca/sign-in" style="display: inline-block; font-style: italic; font-size: 1 rem; font-weight: 600; padding: 5px 15px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">View Your Postings</a></p>
+
     <p><strong>Here’s why our platforms are the perfect choice:</strong></p>
     <ul>
         <li><strong>Enhanced Credibility:</strong> Targeted listings show proactive hiring efforts for vulnerable Canadian populations.</li>
@@ -36,12 +52,12 @@ export function inviteEmail_1(
     
     <p>Strengthen your LMIA application by claiming your listings before <strong>${expiryDate}</strong> to showcase your commitment to hiring locally!</p>
     
-    <p><a href="allopportunities.ca/sign-in" style="display: inline-block; 	font-size: 1 rem; font-weight: 600; padding: 10px 10px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Claim Your Listing Now</a></p>
-    
+    <p><a href="allopportunities.ca/sign-in" style="display: inline-block; font-size: 1.125rem; font-weight: 600; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Claim Your Listing Now</a></p>
+
     <p>Warm regards,<br>
     Vero Ventures (proudly Canadian 🇨🇦)</p>
 
-    <p><a href="${optOutLink}">Opt Out of Future Reminders</a></p>
+    <p><a href="${optOutLink}" style="font-style: italic;">Opt Out of Future Reminders</a></p>
     </body>
     `,
   ];
@@ -53,15 +69,21 @@ export function inviteEmail_2(
   expiryDate: string,
   optOutLink: string
 ) {
-  const _postNamesString = formatPostNames(topPostNames, totalPosts);
+  const postNamesString = formatPostNames(topPostNames, totalPosts);
 
   return [
     "Make Your Job Listing Work Harder for You",
     `
     <p>Hello,</p>
     
-    <p>We noticed a job posting from your company on the official Job Bank Canada website and wanted to introduce you to a way to make it even more impactful. By claiming your listing on our specialized job boards — like <a href="https://youthopportunities.ca">YouthOpportunities.ca</a>, <a href="https://newcomeropportunities.ca">NewcomerOpportunities.ca</a>, and others — you can reach targeted groups of Canadians while strengthening your LMIA application (if applicable).</p>
-    
+    <p>We noticed a job posting from your company on the official Job Bank Canada website and wanted to introduce you to a way to make it even more impactful.
+    <br>
+    By claiming your listing on our specialized job boards — like <a href="https://youthopportunities.ca">YouthOpportunities.ca</a>, <a href="https://newcomeropportunities.ca">NewcomerOpportunities.ca</a>, and others — you can reach targeted groups of Canadians while strengthening your LMIA application (if applicable).</p>
+
+    ${postNamesString}
+
+    <p><a href="allopportunities.ca/sign-in" style="display: inline-block; font-style: italic; font-size: 1 rem; font-weight: 600; padding: 5px 15px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">View Your Postings</a></p>
+
     <p><strong>Here’s how we can help:</strong></p>
     <ul>
         <li><strong>Automatic Integration:</strong> Your listing has already been scraped from Job Bank Canada—claim it in minutes!</li>
@@ -72,12 +94,12 @@ export function inviteEmail_2(
     
     <p>Whether or not your listing is connected to an LMIA application, using our specialized platforms ensures compliance, credibility, and better visibility among local Canadian talent.</p>
     
-    <p><a href="https://calendly.com/veroventures/chat" style="display: inline-block; 	font-size: 1 rem; font-weight: 600; padding: 10px 10px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Book a Consultation</a></p>
+    <p><a href="https://calendly.com/veroventures/chat" style="display: inline-block;	font-size: 1.125rem; font-weight: 600; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Book a Consultation</a></p>
 
     <p>Best regards,<br>
     Vero Ventures (proudly Canadian 🇨🇦)</p>
 
-    <p><a href="${optOutLink}">Opt Out of Future Reminders</a></p>
+    <p><a href="${optOutLink}" style="font-style: italic;">Opt Out of Future Reminders</a></p>
     </body>
     `,
   ];
