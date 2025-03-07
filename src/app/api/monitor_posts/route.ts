@@ -8,11 +8,13 @@ export async function POST(request: Request) {
 
     console.log("Text: " + text);
 
-    console.log(text);
-
     const bodyText = await JSON.parse(text);
 
     console.log("Body Text: " + bodyText);
+
+    console.log("Body Auth: " + bodyText.authorization);
+
+    console.log("Body Link: " + bodyText.postLink);
 
     // Parse the body for the authentication key and post link.
     const body = await request.json();
