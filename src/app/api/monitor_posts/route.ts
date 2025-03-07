@@ -6,6 +6,18 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
+    runHandler(body);
+
+    return new Response("Success.", { status: 200 });
+  } catch (error) {
+    return new Response("Failed to fetch RSS feed: " + error, {
+      status: 500,
+    });
+  }
+}
+
+async function runHandler(body: { authorization: string; postLink: string }) {
+  try {
     // Check that the API request has the correct authorization value.
     if (
       !body.authorization ||
@@ -32,8 +44,6 @@ export async function POST(request: Request) {
         return new Response("Failed to run scraper on RSS feed: " + error, {
           status: 500,
         });
-      } finally {
-
       }
     }
   } catch (error) {
