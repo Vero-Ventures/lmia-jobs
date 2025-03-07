@@ -8,6 +8,8 @@ export async function POST(request: Request) {
 
     console.log("Text: " + text);
 
+    console.log(text);
+
     const bodyText = await JSON.parse(text);
 
     console.log("Body Text: " + bodyText);
@@ -33,7 +35,7 @@ export async function POST(request: Request) {
     } else {
       try {
         // Extract the post Id and run the scraper on the post.
-        const postId = body.postLink.split("jobposting/")[1];
+        const postId = body.postLink.split("id=")[1];
         await runScraper(postId);
 
         return new Response("Success.", { status: 200 });
