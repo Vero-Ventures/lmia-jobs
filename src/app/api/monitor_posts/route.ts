@@ -10,9 +10,13 @@ export async function POST(request: Request) {
 
     console.log("Text")
 
+    console.log(text)
+
     const body = await JSON.parse(text);
 
     console.log("Body")
+
+    console.log(body)
 
     // Check that the API request has the correct authorization value.
     if (
