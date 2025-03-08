@@ -34,9 +34,12 @@ export async function POST(request: Request) {
 
         return new Response("Success.", { status: 200 });
       } catch (error) {
-        return new Response("Error running scraper on post from RSS feed: " + error, {
-          status: 299,
-        });
+        return new Response(
+          "Error running scraper on post from RSS feed: " + error,
+          {
+            status: 299,
+          }
+        );
       }
     }
   } catch (error) {
